@@ -1,6 +1,14 @@
 # Compiled class file
 *.class
 
+# System Properties
+sysProps.xml
+
+# Driectories
+/bin/
+/build/
+/dist/
+
 # Log file
 *.log
 
@@ -11,7 +19,6 @@
 .mtj.tmp/
 
 # Package Files #
-*.jar
 *.war
 *.ear
 *.zip
