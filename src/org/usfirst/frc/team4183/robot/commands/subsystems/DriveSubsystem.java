@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
-public class DriveSubSystem extends Subsystem{
+public class DriveSubsystem extends Subsystem{
 	public CANTalon leftFrontMot;
 	public CANTalon leftBackMot;
 	public CANTalon rightFrontMot;
@@ -17,7 +17,6 @@ public class DriveSubSystem extends Subsystem{
 	public DifferentialDrive m_drive = new DifferentialDrive();
 	
 	
-	public Diff
 	
 	@Override
 	protected void initDefaultCommand() {
