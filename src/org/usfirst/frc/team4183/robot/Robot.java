@@ -7,7 +7,11 @@
 
 package org.usfirst.frc.team4183.robot;
 
+import org.usfirst.frc.team4183.robot.subsystems.DriveSubsystem;
+
+
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -19,6 +23,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * project.
  */
 public class Robot extends IterativeRobot {
+
+	// Use this runMode variable to determine the 
+	// current running mode of the Robot.
+	public enum RunMode { DISABLED, AUTO, TELEOP, TEST };
+	public static RunMode runMode = RunMode.DISABLED;
+	
+	
+	public static DriveSubsystem driveSubsystem;
+	
+	
 	private static final String kDefaultAuto = "Default";
 	private static final String kCustomAuto = "My Auto";
 	private String m_autoSelected;
