@@ -7,6 +7,7 @@
 
 package org.usfirst.frc.team4183.robot;
 
+import org.usfirst.frc.team4183.robot.Robot.RunMode;
 import org.usfirst.frc.team4183.robot.subsystems.DriveSubsystem;
 
 
@@ -31,7 +32,11 @@ public class Robot extends IterativeRobot {
 	
 	
 	public static DriveSubsystem driveSubsystem;
+
+	public static OI oi;
 	
+	public static LightingControl lightingControl;	
+	public static NavxIMU imu;
 	
 	private static final String kDefaultAuto = "Default";
 	private static final String kCustomAuto = "My Auto";
@@ -44,28 +49,36 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void robotInit() {
+		oi = OI.instance();
+		
+		driveSubsystem = new DriveSubsystem();
+		
+		imu = new NavxIMU();
+		lightingControl = new LightingControl();
+		
 		m_chooser.addDefault("Default Auto", kDefaultAuto);
 		m_chooser.addObject("My Auto", kCustomAuto);
 		SmartDashboard.putData("Auto choices", m_chooser);
 	}
+	
+	@Override
+	public void disabledInit() {
+		runMode = RunMode.DISABLED;
 
-	/**
-	 * This autonomous (along with the chooser code above) shows how to select
-	 * between different autonomous modes using the dashboard. The sendable
-	 * chooser code works with the Java SmartDashboard. If you prefer the
-	 * LabVIEW Dashboard, remove all of the chooser code and uncomment the
-	 * getString line to get the auto name from the text box below the Gyro
-	 *
-	 * <p>You can add additional auto modes by adding additional comparisons to
-	 * the switch structure below with additional strings. If using the
-	 * SendableChooser make sure to add them to the chooser code above as well.
-	 */
+		// Set up OI for disabled mode
+		oi.setDisabledMode();
+		
+		// Clear out the scheduler.
+		// Will result in only Default Commands (==Idle-s) running,
+		// effectively forcing all State Machines into Idle state.
+		Scheduler.getInstance().removeAll();
+	}
+
 	@Override
 	public void autonomousInit() {
-		m_autoSelected = m_chooser.getSelected();
-		// autoSelected = SmartDashboard.getString("Auto Selector",
-		// defaultAuto);
-		System.out.println("Auto selected: " + m_autoSelected);
+		runMode = RunMode.AUTO;
+		
+		oi.setAutoMode();
 	}
 
 	/**
@@ -73,10 +86,18 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() 
-  {
+	{
 		Scheduler.getInstance().run();
-  }
+	}
 
+	@Override
+	public void teleopInit() {
+		runMode = RunMode.TELEOP;
+
+		// Set up OI for teleop mode
+		oi.setTeleopMode();
+	}
+	
 	/**
 	 * This function is called periodically during operator control.
 	 */
