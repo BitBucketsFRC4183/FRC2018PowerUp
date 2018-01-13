@@ -19,5 +19,12 @@ public class RobotMap {
 	//ClimbSubystem Motors ports
 	public final static int CLIMB_MOTOR_LEFT_ID        = 5;
 	public final static int CLIMB_MOTOR_RIGHT_ID       = 6;
-
+	
+	//IntakeSubsystem Motors ports
+	public final static int INTAKE_MOTOR_LIEFT_ID      = 7;
+	public final static int INTAKE_MOTOR_RIGHT_ID      = 8;
+	
+	// Pneumatics
+	public final static int INTAKE_PNEUMA_CLOSED_CHANNEL    = 1;
+	public final static int INTAKE_PNEUMA_OPEN_CHANNEL      = 0;
 }
