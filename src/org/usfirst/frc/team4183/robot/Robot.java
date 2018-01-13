@@ -69,7 +69,7 @@ public class Robot extends IterativeRobot {
 		
 		// Add all subsystems for debugging
 		addSubsystemToDebug(driveSubsystem);
-    addSubsystemToDebug(IntakeSubsystem);
+        addSubsystemToDebug(intakeSubsystem);
 		showDebugInfo();		
 	}
 	
