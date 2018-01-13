@@ -11,10 +11,10 @@ public class RobotMap {
 	
 	
 	//DriveSubystem Motors ports
-	public final static int LEFT_DRIVE_MOTOR_FRONT_ID  = 1;
-	public final static int LEFT_DRIVE_MOTOR_REAR_ID   = 2;
-	public final static int RIGHT_DRIVE_MOTOR_FRONT_ID = 3;
-	public final static int RIGHT_DRIVE_MOTOR_REAR_ID  = 4;
+	public final static int LEFT_DRIVE_MOTOR_FRONT_ID  = 3;
+	public final static int LEFT_DRIVE_MOTOR_REAR_ID   = 4;
+	public final static int RIGHT_DRIVE_MOTOR_FRONT_ID = 1;
+	public final static int RIGHT_DRIVE_MOTOR_REAR_ID  = 2;
 	
 	//ClimbSubystem Motors ports
 	public final static int CLIMB_MOTOR_LEFT_ID        = 5;
