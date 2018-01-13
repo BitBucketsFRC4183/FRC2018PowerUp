@@ -2,6 +2,11 @@ package org.usfirst.frc.team4183.robot;
 
 public class RobotMap {
 	
+	// Nominal value assuming 4" wheel:
+	// (4" * pi) in/rot = 12.57
+	// The precise value must be determined by calibration.
+	public static final double INCH_PER_WHEEL_ROT = 12.5 * 1.0353360615;
+	
 	// Constant as UPPERCASE_WITH_UNDERSCORES
 	
 	
