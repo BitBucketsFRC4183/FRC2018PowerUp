@@ -1,11 +1,10 @@
 package org.usfirst.frc.team4183.robot.subsystems;
 
-import com.ctre.CANTalon;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
-import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
@@ -16,7 +15,12 @@ import org.usfirst.frc.team4183.utils.Deadzone;
 
 public class DriveSubsystem extends Subsystem
 {
+	private final int PRIMARY_PID_LOOP = 0; // Constants to support new Talon interface types
+	private final int CASCADED_PID_LOOP = 1;
+	
 	private final double INCH_PER_WHEEL_ROT = RobotMap.INCH_PER_WHEEL_ROT;
+	
+	private final int CONTROLLER_TIMEOUT_MS = 100; // Default timeout to wait for configuration response
 
 	// Can adjust these to help the robot drive straight with zero turn stick.
 	// +Values will add +yaw correct (CCW viewed from top) when going forward.
@@ -33,29 +37,29 @@ public class DriveSubsystem extends Subsystem
 	private double yawSetPoint;
 	
 		
-	private final WPI_TalonSRX leftMotorFront;		// User follower mode
-	private final WPI_TalonSRX leftMotorBack;
+	private final WPI_TalonSRX leftFrontMotor;		// User follower mode
+	private final WPI_TalonSRX leftRearMotor;
 
-	private final WPI_TalonSRX rightMotorFront;		// Use follower mode
-	private final WPI_TalonSRX rightMotorBack;
+	private final WPI_TalonSRX rightFrontMotor;		// Use follower mode
+	private final WPI_TalonSRX rightRearMotor;
 
 	private final DifferentialDrive drive;
 	
     public DriveSubsystem()
     {
-	    	leftMotorFront = new WPI_TalonSRX(RobotMap.LEFT_DRIVE_MOTOR_FRONT_ID);
-	    	leftMotorBack = new WPI_TalonSRX(RobotMap.LEFT_DRIVE_MOTOR_BACK_ID);
+	    	leftFrontMotor = new WPI_TalonSRX(RobotMap.LEFT_DRIVE_MOTOR_FRONT_ID);
+	    	leftRearMotor = new WPI_TalonSRX(RobotMap.LEFT_DRIVE_MOTOR_REAR_ID);
 	    	
 	    	// Use follower mode to minimize shearing commands that could occur if
 	    	// separate commands are sent to each motor in a group
-	    	leftMotorBack.set(ControlMode.Follower, RobotMap.LEFT_DRIVE_MOTOR_FRONT_ID);
+	    	leftRearMotor.set(ControlMode.Follower, leftFrontMotor.getDeviceID());
 	    	
-	    	rightMotorFront  = new WPI_TalonSRX(RobotMap.RIGHT_DRIVE_MOTOR_FRONT_ID);
-	    	rightMotorBack   = new WPI_TalonSRX(RobotMap.RIGHT_DRIVE_MOTOR_FRONT_ID);
+	    	rightFrontMotor  = new WPI_TalonSRX(RobotMap.RIGHT_DRIVE_MOTOR_FRONT_ID);
+	    	rightRearMotor   = new WPI_TalonSRX(RobotMap.RIGHT_DRIVE_MOTOR_REAR_ID);
 	
 	    	// Use follower mode to minimize shearing commands that could occur if
 	    	// separate commands are sent to each motor in a group
-	    	rightMotorBack.set(ControlMode.Follower, RobotMap.RIGHT_DRIVE_MOTOR_FRONT_ID);
+	    	rightRearMotor.set(ControlMode.Follower, rightFrontMotor.getDeviceID());
 	
 	    	// The differential drive simply requires a left and right speed controller
 	    	// In this case we can use a single motor controller type on each side
@@ -67,7 +71,7 @@ public class DriveSubsystem extends Subsystem
 	    	// The left vs right can still be sheared by preemption but that is generally 
 	    	// less harmful on the entire robot as forces and slippage will be absorbed
 	    	// through the tires and frame (not JUST the gearbox)
-	    	drive = new DifferentialDrive(leftMotorFront, rightMotorFront);
+	    	drive = new DifferentialDrive(leftFrontMotor, rightFrontMotor);
     	
 	    	// Now get the other modes set up
 	    	setNeutral(NeutralMode.Brake);
@@ -163,67 +167,92 @@ public class DriveSubsystem extends Subsystem
 	
 	private void setAllMotorsZero() 
 	{
-		leftMotorFront.set(0.0);
-		leftMotorBack.set(0.0);
-		rightMotorFront.set(0.0);
-		rightMotorBack.set(0.0);			
+		leftFrontMotor.set(0.0);
+		leftRearMotor.set(0.0);
+		rightFrontMotor.set(0.0);
+		rightRearMotor.set(0.0);			
 	}
-	private void setupClosedLoopMaster( WPI_TalonSRX m) {
+	private void setupClosedLoopMaster( WPI_TalonSRX m) 
+	{
+		// TODO: New functions provide ErrorCode feedback if there is a problem setting up the controller
 		
 		m.set(ControlMode.Position,0.0);
-		m.setFeedbackDevice(WPI_TalonSRX.FeedbackDevice.QuadEncoder);
-		m.configEncoderCodesPerRev(ENCODER_PULSES_PER_REV);
-		m.reverseSensor(REVERSE_SENSOR); 
-		m.setPosition(0.0);
+		m.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, CONTROLLER_TIMEOUT_MS);
 		
-		m.setPID(0.4, 0.0, 0.0); // Might be able to increase gain a bit
-		m.setF(0.0);
-		m.setIZone(0);
-		m.setCloseLoopRampRate(50.0);    // Smoothes things a bit
-		m.setAllowableClosedLoopErr(8);  // Specified in CANTalon "ticks"
-		m.configNominalOutputVoltage(+4.0, -4.0);
-		m.configPeakOutputVoltage(+12.0, -12.0);			
+		// NOTE: The encoder codes per revolution interface no longer exists
+		// All of the interfaces operate in native units which are 4x the counts per revolution
+		// An encoder that returns 250 counts per rev will be 1000 native units per rev
+		// But the resolution is still 360/250 degrees
+		// An encoder that return 1024 counts per rev will be 4096 native units per rev
+		// But the resolution is still 360/1024 degrees.
+		// Basically, we just need to do the math ourselves
+		
+		m.setInverted(true);  // TODO: When do we turn this off?
+		m.setSelectedSensorPosition(0, 0, CONTROLLER_TIMEOUT_MS);	// Zero the sensor where we are right now
+		
+		// NOTE: PIDF constants should be determined based on native units
+		m.config_kP(0, 0.4, CONTROLLER_TIMEOUT_MS); // May be able to increase gain a bit	
+		m.config_kI(0, 0, CONTROLLER_TIMEOUT_MS);
+		m.config_kD(0, 0, CONTROLLER_TIMEOUT_MS); 
+		m.config_kF(0, 0, CONTROLLER_TIMEOUT_MS);
+		m.config_IntegralZone(0, 0, CONTROLLER_TIMEOUT_MS);
+		
+		m.configClosedloopRamp(0.250, CONTROLLER_TIMEOUT_MS); // Smoothes things a bit: Don't switch from neutral to full too quickly
+		
+		// TODO: Need to understand the implication of this error limit
+		// If it is in "ticks" or "pulse" or whatever, then how big are 8 ticks
+		// E.g., if encoder is 256 steps per revolution then 8/256 is 11.25 degress, which is actually
+		// quite large. So we need to figure this out if we want to have real control.
+		m.configAllowableClosedloopError(0, 8, CONTROLLER_TIMEOUT_MS);  // Specified in native "ticks"?
+		
+		m.configPeakOutputForward(1.0, CONTROLLER_TIMEOUT_MS);
+		m.configPeakOutputReverse(-1.0, CONTROLLER_TIMEOUT_MS);
+		m.configNominalOutputForward(1.0/3.0, CONTROLLER_TIMEOUT_MS);
+		m.configNominalOutputReverse(-1.0/3.0, CONTROLLER_TIMEOUT_MS);
+					
 	}
 	
-	public void doLockDrive(double value) {
-		leftFrontMotor.set(value);
-		leftRearMotor.set(leftFrontMotor.getDeviceID());
-		rightFrontMotor.set(value);
-		rightRearMotor.set(rightFrontMotor.getDeviceID());			
-	}
-	public void setLockDrive( boolean start) {
-
-		if( start) {
-			setupClosedLoopMaster(leftMotorFront);
-			setupClosedLoopMaster(rightMotorFront);
-
-			leftRearMotor.changeControlMode(CANTalon.TalonControlMode.Follower);
-			leftRearMotor.reverseOutput(false); // Follow the front
-			rightRearMotor.changeControlMode(CANTalon.TalonControlMode.Follower);
-			rightRearMotor.reverseOutput(false); // Follow the front
-		}
-		else {
-			leftFrontMotor.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
-			leftRearMotor.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
-			rightFrontMotor.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
-			rightRearMotor.changeControlMode(CANTalon.TalonControlMode.PercentVbus);							
-		}
-	}
-	
-
-
-	private void setNeutral(NeutralMode neutralMode) 
+	public void doLockDrive(double value) 
 	{
-//		Do not attempt to stop the motor. Instead allow it to coast to a stop
-//		without applying resistance. 
-//		Coast(1),
-//		Stop the motor's rotation by applying a force. 
-//		Brake(2);
-		
-		leftMotorFront.setNeutralMode(neutralMode);
-		leftMotorBack.setNeutralMode(neutralMode);
-		rightMotorFront.setNeutralMode(neutralMode);
-		rightMotorBack.setNeutralMode(neutralMode);
+		leftFrontMotor.set(value);
+		leftRearMotor.set(ControlMode.Follower, leftFrontMotor.getDeviceID());	// Reinforce
+		rightFrontMotor.set(value);
+		rightRearMotor.set(ControlMode.Follower, rightFrontMotor.getDeviceID());			
+	}
+	public void setLockDrive( boolean start) 
+	{
+
+		if( start) 
+		{
+			setupClosedLoopMaster(leftFrontMotor);
+			setupClosedLoopMaster(rightFrontMotor);
+
+			leftRearMotor.set(ControlMode.Follower, leftFrontMotor.getDeviceID());	// Reinforce
+			leftRearMotor.setInverted(false);; // Follow the front
+			rightRearMotor.set(ControlMode.Follower, rightFrontMotor.getDeviceID());			
+			rightRearMotor.setInverted(false); // Follow the front
+		}
+		else 
+		{
+			leftFrontMotor.set(ControlMode.PercentOutput,0.0);
+			leftRearMotor.set(ControlMode.PercentOutput,0.0);
+			rightFrontMotor.set(ControlMode.PercentOutput,0.0);
+			rightRearMotor.set(ControlMode.PercentOutput,0.0);							
+		}
+	}
+	
+
+	/** 
+	 * setNeutral is a pass through interface to each motor in the subsystem
+	 * 
+	 * @param neutralMode is either Coast or Brake. Braking will apply force to come to a stop at zero input
+	 */
+	private void setNeutral(NeutralMode neutralMode) 
+	{	
+		leftFrontMotor.setNeutralMode(neutralMode);
+		leftRearMotor.setNeutralMode(neutralMode);
+		rightFrontMotor.setNeutralMode(neutralMode);
+		rightRearMotor.setNeutralMode(neutralMode);
 		
 	}
 	private double yawCorrect() {
@@ -232,21 +261,22 @@ public class DriveSubsystem extends Subsystem
 	}
 	public double getRightPosition_inch() {
 		// Right motor encoder reads -position when going forward!
-		return -INCH_PER_WHEEL_ROT * rightMotorFront.getSelectedSensorPosition(ENCODER_PULSES_PER_REV);						
+		// TODO: This is wrong! Need new constants
+		return -INCH_PER_WHEEL_ROT * rightFrontMotor.getSelectedSensorPosition(PRIMARY_PID_LOOP);						
 	}
 
 	public double getFwdVelocity_ips() {
 		// Right side motor reads -velocity when going forward!
-		double fwdSpeedRpm = (leftMotorFront.getSelectedSensorVelocity(ENCODER_PULSES_PER_REV) - rightMotorFront.getSelectedSensorVelocity(ENCODER_PULSES_PER_REV))/2.0;
+		double fwdSpeedRpm = (leftFrontMotor.getSelectedSensorVelocity(PRIMARY_PID_LOOP) - rightFrontMotor.getSelectedSensorVelocity(PRIMARY_PID_LOOP))/2.0;
 		return (INCH_PER_WHEEL_ROT / 60.0) * fwdSpeedRpm;
 	}
 	public double getFwdCurrent() {
 		// OutputCurrent always positive so apply sign of drive voltage to get real answer.
 		// Also, right side has -drive when going forward!
-		double leftFront = leftMotorFront.getOutputCurrent() * Math.signum( leftMotorFront.getMotorOutputVoltage());
-		double leftRear = leftMotorBack.getOutputCurrent() * Math.signum( leftMotorBack.getMotorOutputVoltage());
-		double rightFront = -rightMotorFront.getOutputCurrent() * Math.signum( rightMotorFront.getMotorOutputVoltage());
-		double rightRear = -rightMotorBack.getOutputCurrent() * Math.signum( rightMotorBack.getMotorOutputVoltage());
+		double leftFront = leftFrontMotor.getOutputCurrent() * Math.signum( leftFrontMotor.getMotorOutputVoltage());
+		double leftRear = leftRearMotor.getOutputCurrent() * Math.signum( leftRearMotor.getMotorOutputVoltage());
+		double rightFront = -rightFrontMotor.getOutputCurrent() * Math.signum( rightFrontMotor.getMotorOutputVoltage());
+		double rightRear = -rightRearMotor.getOutputCurrent() * Math.signum( rightRearMotor.getMotorOutputVoltage());
 		return (leftFront + leftRear + rightFront + rightRear)/4.0;
 	}
 }
