@@ -7,12 +7,18 @@
 
 package org.usfirst.frc.team4183.robot;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.usfirst.frc.team4183.robot.Robot.RunMode;
 import org.usfirst.frc.team4183.robot.subsystems.DriveSubsystem;
+import org.usfirst.frc.team4183.utils.DoEveryN;
+import org.usfirst.frc.team4183.utils.Stopwatch;
 import org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -60,6 +66,11 @@ public class Robot extends IterativeRobot {
 		m_chooser.addDefault("Default Auto", kDefaultAuto);
 		m_chooser.addObject("My Auto", kCustomAuto);
 		SmartDashboard.putData("Auto choices", m_chooser);
+		
+		// Add all subsystems for debugging
+		addSubsystemToDebug(driveSubsystem);
+    addSubsystemToDebug(IntakeSubsystem);
+		showDebugInfo();		
 	}
 	
 	@Override
@@ -76,6 +87,13 @@ public class Robot extends IterativeRobot {
 	}
 
 	@Override
+	public void disabledPeriodic() {
+		runWatch.start();
+		Scheduler.getInstance().run();
+		runWatch.stop();
+	}
+	
+	@Override
 	public void autonomousInit() {
 		runMode = RunMode.AUTO;
 		
@@ -86,9 +104,10 @@ public class Robot extends IterativeRobot {
 	 * This function is called periodically during autonomous.
 	 */
 	@Override
-	public void autonomousPeriodic() 
-	{
+	public void autonomousPeriodic() {
+		runWatch.start();
 		Scheduler.getInstance().run();
+		runWatch.stop();
 	}
 
 	@Override
@@ -103,8 +122,10 @@ public class Robot extends IterativeRobot {
 	 * This function is called periodically during operator control.
 	 */
 	@Override
-	public void teleopPeriodic() {
-		Scheduler.getInstance().run();
+	public void teleopPeriodic() {			
+		runWatch.start();
+		Scheduler.getInstance().run();	
+		runWatch.stop();
 	}
 
 	/**
@@ -112,6 +133,70 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void testPeriodic() {
-		Scheduler.getInstance().run();
+		runWatch.start();
+		Scheduler.getInstance().run();	
+		runWatch.stop();
 	}
+	
+	// Called periodically all the time (regardless of mode)
+	@Override
+	public void robotPeriodic() {
+		loopWatch.stop();
+		loopWatch.start();
+		
+		periodicSDdebugLoop.update();
+	}
+	
+
+	// Some ancillary debugging stuff below here
+	
+	private Stopwatch runWatch = 
+			new Stopwatch( "Run", 
+			(name, max, min, avg) -> SmartDashboard.putNumber( "MaxRun", max) );
+	private Stopwatch loopWatch = 
+			new Stopwatch( "Loop", 
+			(name, max, min, avg) -> SmartDashboard.putNumber( "MaxLoop", max) );
+
+	private DoEveryN periodicSDdebugLoop = 
+			new DoEveryN( 10, () -> putPeriodicSDdebug());
+	
+	
+	private void putPeriodicSDdebug() {
+		
+		SmartDashboard.putString( "IMU_Yaw", 
+				String.format("%.1f", imu.getYawDeg()));
+		SmartDashboard.putString( "IMU_Yawrate", 
+				String.format("%.1f", imu.getYawRateDps()));
+//		SmartDashboard.putString( "Left_Position", 
+//				String.format("%.1f", driveSubsystem.getLeftPosition_inch()));
+//		SmartDashboard.putString( "Right_Position", 
+//				String.format("%.1f", driveSubsystem.getRightPosition_inch()));
+//		SmartDashboard.putString("Fwd_Velocity",
+//				String.format("%.1f", driveSubsystem.getFwdVelocity_ips()));
+//		SmartDashboard.putString( "Fwd_Current", 
+//				String.format( "%.1f", driveSubsystem.getFwdCurrent()));
+//		SmartDashboard.putString( "VisGearYaw",
+//				String.format("%.1f", visionSubsystem.getGearAngle_deg()));
+//		SmartDashboard.putString( "VisGearDist", 
+//				String.format("%.1f", visionSubsystem.getGearDistance_inch()));
+	}	
+	private Set<Subsystem> subSystems = new HashSet<>();
+
+	// Add Subsystem to the test set
+	public void addSubsystemToDebug(Subsystem subsys) {
+		subSystems.add(subsys);
+	}
+	
+	// Put debug info on SmartDashboard
+	private void showDebugInfo() 
+	{
+
+		// Show the Scheduler
+		SmartDashboard.putData(Scheduler.getInstance());
+
+		// Show the Subsystems
+		for (Subsystem subsys : subSystems)
+			SmartDashboard.putData(subsys);
+	}	
+
 }
