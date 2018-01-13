@@ -9,7 +9,7 @@ package org.usfirst.frc.team4183.robot;
 
 import org.usfirst.frc.team4183.robot.Robot.RunMode;
 import org.usfirst.frc.team4183.robot.subsystems.DriveSubsystem;
-
+import org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -32,7 +32,7 @@ public class Robot extends IterativeRobot {
 	
 	
 	public static DriveSubsystem driveSubsystem;
-
+	public static IntakeSubsystem intakeSubsystem; 
 	public static OI oi;
 	
 	public static LightingControl lightingControl;	
@@ -52,6 +52,7 @@ public class Robot extends IterativeRobot {
 		oi = OI.instance();
 		
 		driveSubsystem = new DriveSubsystem();
+		intakeSubsystem = new IntakeSubsystem();
 		
 		imu = new NavxIMU();
 		lightingControl = new LightingControl();
