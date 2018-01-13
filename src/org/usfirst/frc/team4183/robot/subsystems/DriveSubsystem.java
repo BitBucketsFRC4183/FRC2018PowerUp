@@ -105,7 +105,10 @@ public class DriveSubsystem extends Subsystem
 			// (this is +yaw when yaw is defined according to right-hand-rule
 			// with z-axis up, so arguably correct).
 			// Anyhow need the - sign on turnStick to make it turn correctly.
-			drive.arcadeDrive( fwdStick, -turnStick + yawCorrect(), false);
+			drive.arcadeDrive( fwdStick, turnStick + yawCorrect(), false);
+			leftRearMotor.set(ControlMode.Follower, leftFrontMotor.getDeviceID());	// Reinforce
+			rightRearMotor.set(ControlMode.Follower, rightFrontMotor.getDeviceID());			
+
 		}
 	}
 	public void doAutoTurn( double turn) {
@@ -187,7 +190,7 @@ public class DriveSubsystem extends Subsystem
 		// But the resolution is still 360/1024 degrees.
 		// Basically, we just need to do the math ourselves
 		
-		m.setInverted(true);  // TODO: When do we turn this off?
+		//m.setInverted(true);  // TODO: When do we turn this off?
 		m.setSelectedSensorPosition(0, 0, CONTROLLER_TIMEOUT_MS);	// Zero the sensor where we are right now
 		
 		// NOTE: PIDF constants should be determined based on native units
@@ -228,7 +231,7 @@ public class DriveSubsystem extends Subsystem
 			setupClosedLoopMaster(rightFrontMotor);
 
 			leftRearMotor.set(ControlMode.Follower, leftFrontMotor.getDeviceID());	// Reinforce
-			leftRearMotor.setInverted(false);; // Follow the front
+			leftRearMotor.setInverted(false); // Follow the front
 			rightRearMotor.set(ControlMode.Follower, rightFrontMotor.getDeviceID());			
 			rightRearMotor.setInverted(false); // Follow the front
 		}
