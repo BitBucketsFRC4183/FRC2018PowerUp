@@ -45,18 +45,18 @@ public class DriveSubsystem extends Subsystem
     public DriveSubsystem()
     {
 	    	leftFrontMotor = new WPI_TalonSRX(RobotMap.LEFT_DRIVE_MOTOR_FRONT_ID);
-	    	leftRearMotor = new WPI_TalonSRX(RobotMap.LEFT_DRIVE_MOTOR_BACK_ID);
+	    	leftRearMotor = new WPI_TalonSRX(RobotMap.LEFT_DRIVE_MOTOR_REAR_ID);
 	    	
 	    	// Use follower mode to minimize shearing commands that could occur if
 	    	// separate commands are sent to each motor in a group
-	    	leftRearMotor.set(ControlMode.Follower, RobotMap.LEFT_DRIVE_MOTOR_FRONT_ID);
+	    	leftRearMotor.set(ControlMode.Follower, leftFrontMotor.getDeviceID());
 	    	
 	    	rightFrontMotor  = new WPI_TalonSRX(RobotMap.RIGHT_DRIVE_MOTOR_FRONT_ID);
-	    	rightRearMotor   = new WPI_TalonSRX(RobotMap.RIGHT_DRIVE_MOTOR_FRONT_ID);
+	    	rightRearMotor   = new WPI_TalonSRX(RobotMap.RIGHT_DRIVE_MOTOR_REAR_ID);
 	
 	    	// Use follower mode to minimize shearing commands that could occur if
 	    	// separate commands are sent to each motor in a group
-	    	rightRearMotor.set(ControlMode.Follower, RobotMap.RIGHT_DRIVE_MOTOR_FRONT_ID);
+	    	rightRearMotor.set(ControlMode.Follower, rightFrontMotor.getDeviceID());
 	
 	    	// The differential drive simply requires a left and right speed controller
 	    	// In this case we can use a single motor controller type on each side
@@ -174,12 +174,19 @@ public class DriveSubsystem extends Subsystem
 		// TODO: New functions provide ErrorCode feedback if there is a problem setting up the controller
 		
 		m.set(ControlMode.Position,0.0);
-		m.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, CONTROLLER_TIMEOUT_MS); // TODO: Check ErrorCode
-		// TODO: does not exist: m.configEncoderCodesPerRev(ENCODER_PULSES_PER_REV);
-		m.setInverted(true);
-		m.setSelectedSensorPosition(0, 0, CONTROLLER_TIMEOUT_MS); // TODO: Check ErrorCode
+		m.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, CONTROLLER_TIMEOUT_MS);
 		
-		// TODO: Check ErrorCode
+		// NOTE: The encoder codes per revolution interface no longer exists
+		// All of the interfaces operate in native units which are 4x the counts per revolution
+		// An encoder that returns 250 counts per rev will be 1000 native units per rev
+		// But the resolution is still 360/250 degrees
+		// An encoder that return 1024 counts per rev will be 4096 native units per rev
+		// But the resolution is still 360/1024 degrees.
+		// Basically, we just need to do the math ourselves
+		
+		m.setInverted(true);
+		m.setSelectedSensorPosition(0, 0, CONTROLLER_TIMEOUT_MS);	// Zero the sensor where we are right now
+		
 		// NOTE: PIDF constants should be determined based on native units
 		m.config_kP(0, 0.4, CONTROLLER_TIMEOUT_MS); // May be able to increase gain a bit	
 		m.config_kI(0, 0, CONTROLLER_TIMEOUT_MS);
@@ -187,9 +194,12 @@ public class DriveSubsystem extends Subsystem
 		m.config_kF(0, 0, CONTROLLER_TIMEOUT_MS);
 		m.config_IntegralZone(0, 0, CONTROLLER_TIMEOUT_MS);
 		
-		m.configOpenloopRamp(0.250, CONTROLLER_TIMEOUT_MS);		// Smoothes things a bit: Don't switch from neutral to full too quickly
-		m.configClosedloopRamp(0.250, CONTROLLER_TIMEOUT_MS);
+		m.configClosedloopRamp(0.250, CONTROLLER_TIMEOUT_MS); // Smoothes things a bit: Don't switch from neutral to full too quickly
 		
+		// TODO: Need to understand the implication of this error limit
+		// If it is in "ticks" or "pulse" or whatever, then how big are 8 ticks
+		// E.g., if encoder is 256 steps per revolution then 8/256 is 11.25 degress, which is actually
+		// quite large. So we need to figure this out if we want to have real control.
 		m.configAllowableClosedloopError(0, 8, CONTROLLER_TIMEOUT_MS);  // Specified in native "ticks"?
 		
 		m.configPeakOutputForward(1.0, CONTROLLER_TIMEOUT_MS);
@@ -202,9 +212,9 @@ public class DriveSubsystem extends Subsystem
 	public void doLockDrive(double value) 
 	{
 		leftFrontMotor.set(value);
-		leftRearMotor.set(leftFrontMotor.getDeviceID());
+		leftRearMotor.set(ControlMode.Follower, leftFrontMotor.getDeviceID());	// Reinforce
 		rightFrontMotor.set(value);
-		rightRearMotor.set(rightFrontMotor.getDeviceID());			
+		rightRearMotor.set(ControlMode.Follower, rightFrontMotor.getDeviceID());			
 	}
 	public void setLockDrive( boolean start) 
 	{
@@ -214,9 +224,9 @@ public class DriveSubsystem extends Subsystem
 			setupClosedLoopMaster(leftFrontMotor);
 			setupClosedLoopMaster(rightFrontMotor);
 
-			leftRearMotor.set(ControlMode.Follower,0.0);
+			leftRearMotor.set(ControlMode.Follower, leftFrontMotor.getDeviceID());	// Reinforce
 			leftRearMotor.setInverted(false);; // Follow the front
-			rightRearMotor.set(ControlMode.Follower,0.0);
+			rightRearMotor.set(ControlMode.Follower, rightFrontMotor.getDeviceID());			
 			rightRearMotor.setInverted(false); // Follow the front
 		}
 		else 
