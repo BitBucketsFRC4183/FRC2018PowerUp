@@ -18,7 +18,7 @@ public class IntakeSubsystem extends Subsystem {
 
 	public IntakeSubsystem() {
 		
-		leftintakemotor = new WPI_TalonSRX(RobotMap.INTAKE_MOTOR_LIEFT_ID);
+		leftintakemotor = new WPI_TalonSRX(RobotMap.INTAKE_MOTOR_LEFT_ID);
 		rightintakemotor = new WPI_TalonSRX(RobotMap.INTAKE_MOTOR_RIGHT_ID);
 		intakegate = new DoubleSolenoid(RobotMap.INTAKE_PNEUMA_OPEN_CHANNEL, RobotMap.INTAKE_PNEUMA_CLOSED_CHANNEL);
 		
