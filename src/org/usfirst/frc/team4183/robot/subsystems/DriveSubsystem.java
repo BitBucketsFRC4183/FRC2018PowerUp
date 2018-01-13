@@ -15,6 +15,9 @@ import org.usfirst.frc.team4183.utils.Deadzone;
 
 public class DriveSubsystem extends Subsystem
 {
+	private final int PRIMARY_PID_LOOP = 0; // Constants to support new Talon interface types
+	private final int CASCADED_PID_LOOP = 1;
+	
 	private final double INCH_PER_WHEEL_ROT = RobotMap.INCH_PER_WHEEL_ROT;
 	
 	private final int CONTROLLER_TIMEOUT_MS = 100; // Default timeout to wait for configuration response
@@ -184,7 +187,7 @@ public class DriveSubsystem extends Subsystem
 		// But the resolution is still 360/1024 degrees.
 		// Basically, we just need to do the math ourselves
 		
-		m.setInverted(true);
+		m.setInverted(true);  // TODO: When do we turn this off?
 		m.setSelectedSensorPosition(0, 0, CONTROLLER_TIMEOUT_MS);	// Zero the sensor where we are right now
 		
 		// NOTE: PIDF constants should be determined based on native units
@@ -239,15 +242,13 @@ public class DriveSubsystem extends Subsystem
 	}
 	
 
-
+	/** 
+	 * setNeutral is a pass through interface to each motor in the subsystem
+	 * 
+	 * @param neutralMode is either Coast or Brake. Braking will apply force to come to a stop at zero input
+	 */
 	private void setNeutral(NeutralMode neutralMode) 
-	{
-//		Do not attempt to stop the motor. Instead allow it to coast to a stop
-//		without applying resistance. 
-//		Coast(1),
-//		Stop the motor's rotation by applying a force. 
-//		Brake(2);
-		
+	{	
 		leftFrontMotor.setNeutralMode(neutralMode);
 		leftRearMotor.setNeutralMode(neutralMode);
 		rightFrontMotor.setNeutralMode(neutralMode);
@@ -260,12 +261,13 @@ public class DriveSubsystem extends Subsystem
 	}
 	public double getRightPosition_inch() {
 		// Right motor encoder reads -position when going forward!
-		return -INCH_PER_WHEEL_ROT * rightFrontMotor.getSelectedSensorPosition(ENCODER_PULSES_PER_REV);						
+		// TODO: This is wrong! Need new constants
+		return -INCH_PER_WHEEL_ROT * rightFrontMotor.getSelectedSensorPosition(PRIMARY_PID_LOOP);						
 	}
 
 	public double getFwdVelocity_ips() {
 		// Right side motor reads -velocity when going forward!
-		double fwdSpeedRpm = (leftFrontMotor.getSelectedSensorVelocity(ENCODER_PULSES_PER_REV) - rightFrontMotor.getSelectedSensorVelocity(ENCODER_PULSES_PER_REV))/2.0;
+		double fwdSpeedRpm = (leftFrontMotor.getSelectedSensorVelocity(PRIMARY_PID_LOOP) - rightFrontMotor.getSelectedSensorVelocity(PRIMARY_PID_LOOP))/2.0;
 		return (INCH_PER_WHEEL_ROT / 60.0) * fwdSpeedRpm;
 	}
 	public double getFwdCurrent() {
