@@ -7,12 +7,14 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team4183.robot.Robot;
 import org.usfirst.frc.team4183.robot.RobotMap;
 import org.usfirst.frc.team4183.robot.commands.DriveSubsystem.Idle;
 import org.usfirst.frc.team4183.utils.Deadzone;
+import org.usfirst.frc.team4183.robot.subsystems.SubsystemUtilities.SubsystemTelemetryState;
 
 public class DriveSubsystem extends Subsystem
 {
@@ -46,6 +48,8 @@ public class DriveSubsystem extends Subsystem
 	private final WPI_TalonSRX rightRearMotor;
 
 	private final DifferentialDrive drive;
+	
+	public static SendableChooser<SubsystemTelemetryState> telemetryState;
 	
     public DriveSubsystem()
     {
@@ -83,6 +87,12 @@ public class DriveSubsystem extends Subsystem
     	
 	    	// Now get the other modes set up
 	    	setNeutral(NeutralMode.Brake);
+	    	telemetryState = new SendableChooser<SubsystemTelemetryState>();
+	    	
+	    	telemetryState.addDefault("Off", SubsystemTelemetryState.OFF);
+	    	telemetryState.addObject( "On",  SubsystemTelemetryState.ON);
+	    	
+	    	SmartDashboard.putData("DriveTelemetry", telemetryState);
     }
     private double shapeAxis( double x) {
 		x = Deadzone.f( x, .05);
@@ -329,19 +339,21 @@ public class DriveSubsystem extends Subsystem
 	
 	@Override
 	public void periodic() {
-		SmartDashboard.putNumber( "RightNativeUnits", 
-				getRightNativeUnits());
-		SmartDashboard.putNumber( "LeftNativeUnits", 
-				getLeftNativeUnits());
-		SmartDashboard.putNumber( "RightEncoderUnits", 
-				getRightEncoderUnits());
-		SmartDashboard.putNumber( "LeftEncoderUnits", 
-				getLeftEncoderUnits());
-		
-		SmartDashboard.putString("RightMode", 
-				getRightMode().name());
-		SmartDashboard.putString("LeftMode", 
-				getLeftMode().name());
+		if(telemetryState.getSelected() == SubsystemTelemetryState.ON) {
+			SmartDashboard.putNumber( "RightNativeUnits", 
+					getRightNativeUnits());
+			SmartDashboard.putNumber( "LeftNativeUnits", 
+					getLeftNativeUnits());
+			SmartDashboard.putNumber( "RightEncoderUnits", 
+					getRightEncoderUnits());
+			SmartDashboard.putNumber( "LeftEncoderUnits", 
+					getLeftEncoderUnits());
+			
+			SmartDashboard.putString("RightMode", 
+					getRightMode().name());
+			SmartDashboard.putString("LeftMode", 
+					getLeftMode().name());
+		}
 		
 	}
 }
