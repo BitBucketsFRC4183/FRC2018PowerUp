@@ -8,49 +8,37 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class Idle extends Command 
-{
+public class Stored extends Command {
 
-    public Idle() 
-    {
+    public Stored() {
         // Use requires() here to declare subsystem dependencies
-    	requires(Robot.intakeSubsystem);
-    	setRunWhenDisabled(true);  // Idle state needs this!
+        // eg. requires(chassis);
+    		requires(Robot.intakeSubsystem);	
     }
 
     // Called just before this Command runs the first time
-    protected void initialize() 
-    {
-    	Robot.intakeSubsystem.disable();
-    //	Robot.intakeSubsystem.opengate();
-
+    protected void initialize() {
+    	Robot.intakeSubsystem.closegate();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	
     }
 
     // Make this return true when this Command no longer needs to run execute()
-    protected boolean isFinished() 
-    {
-    	/// TODO: Resurrect this from last year
-    	if( Robot.runMode == Robot.RunMode.TELEOP || Robot.runMode == Robot.RunMode.AUTO) 
+    protected boolean isFinished() {
+    	if( Robot.oi.btnOpenGate.get()) {
     		return CommandUtils.stateChange(this, new Deployed());
-    	
-    	
-    	return false;
+    	}
+        return false;
     }
 
     // Called once after isFinished returns true
-    protected void end() 
-    {    
+    protected void end() {
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
-    protected void interrupted() 
-    {
-    	end();
+    protected void interrupted() {
     }
 }
