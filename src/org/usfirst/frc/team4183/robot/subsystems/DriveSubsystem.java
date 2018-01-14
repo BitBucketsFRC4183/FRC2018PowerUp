@@ -7,11 +7,14 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team4183.robot.Robot;
 import org.usfirst.frc.team4183.robot.RobotMap;
 import org.usfirst.frc.team4183.robot.commands.DriveSubsystem.Idle;
 import org.usfirst.frc.team4183.utils.Deadzone;
+import org.usfirst.frc.team4183.robot.subsystems.SubsystemUtilities.SubsystemTelemetryState;
 
 public class DriveSubsystem extends Subsystem
 {
@@ -34,6 +37,7 @@ public class DriveSubsystem extends Subsystem
 	// it's the 1st number after the "E4P" or "E4T"
 	private final int ENCODER_PULSES_PER_REV = 250; 
 	private final boolean REVERSE_SENSOR = false;  
+	private final int EDGES_PER_ENCODER_COUNT = 4;
 	private double yawSetPoint;
 	
 		
@@ -45,6 +49,8 @@ public class DriveSubsystem extends Subsystem
 
 	private final DifferentialDrive drive;
 	
+	public static SendableChooser<SubsystemTelemetryState> telemetryState;
+	
     public DriveSubsystem()
     {
 	    	leftFrontMotor = new WPI_TalonSRX(RobotMap.LEFT_DRIVE_MOTOR_FRONT_ID);
@@ -53,6 +59,9 @@ public class DriveSubsystem extends Subsystem
 	    	// Use follower mode to minimize shearing commands that could occur if
 	    	// separate commands are sent to each motor in a group
 	    	leftRearMotor.set(ControlMode.Follower, leftFrontMotor.getDeviceID());
+
+	    	leftFrontMotor.setSafetyEnabled(false);
+	    	leftRearMotor.setSafetyEnabled(false);
 	    	
 	    	rightFrontMotor  = new WPI_TalonSRX(RobotMap.RIGHT_DRIVE_MOTOR_FRONT_ID);
 	    	rightRearMotor   = new WPI_TalonSRX(RobotMap.RIGHT_DRIVE_MOTOR_REAR_ID);
@@ -60,6 +69,9 @@ public class DriveSubsystem extends Subsystem
 	    	// Use follower mode to minimize shearing commands that could occur if
 	    	// separate commands are sent to each motor in a group
 	    	rightRearMotor.set(ControlMode.Follower, rightFrontMotor.getDeviceID());
+	    	
+	    	rightFrontMotor.setSafetyEnabled(false);
+	    	rightRearMotor.setSafetyEnabled(false);
 	
 	    	// The differential drive simply requires a left and right speed controller
 	    	// In this case we can use a single motor controller type on each side
@@ -75,6 +87,12 @@ public class DriveSubsystem extends Subsystem
     	
 	    	// Now get the other modes set up
 	    	setNeutral(NeutralMode.Brake);
+	    	telemetryState = new SendableChooser<SubsystemTelemetryState>();
+	    	
+	    	telemetryState.addDefault("Off", SubsystemTelemetryState.OFF);
+	    	telemetryState.addObject( "On",  SubsystemTelemetryState.ON);
+	    	
+	    	SmartDashboard.putData("DriveTelemetry", telemetryState);
     }
     private double shapeAxis( double x) {
 		x = Deadzone.f( x, .05);
@@ -194,7 +212,7 @@ public class DriveSubsystem extends Subsystem
 		m.setSelectedSensorPosition(0, 0, CONTROLLER_TIMEOUT_MS);	// Zero the sensor where we are right now
 		
 		// NOTE: PIDF constants should be determined based on native units
-		m.config_kP(0, 0.4, CONTROLLER_TIMEOUT_MS); // May be able to increase gain a bit	
+		m.config_kP(0, 0.016, CONTROLLER_TIMEOUT_MS); // May be able to increase gain a bit	
 		m.config_kI(0, 0, CONTROLLER_TIMEOUT_MS);
 		m.config_kD(0, 0, CONTROLLER_TIMEOUT_MS); 
 		m.config_kF(0, 0, CONTROLLER_TIMEOUT_MS);
@@ -206,7 +224,7 @@ public class DriveSubsystem extends Subsystem
 		// If it is in "ticks" or "pulse" or whatever, then how big are 8 ticks
 		// E.g., if encoder is 256 steps per revolution then 8/256 is 11.25 degress, which is actually
 		// quite large. So we need to figure this out if we want to have real control.
-		m.configAllowableClosedloopError(0, 8, CONTROLLER_TIMEOUT_MS);  // Specified in native "ticks"?
+		m.configAllowableClosedloopError(0, 0, CONTROLLER_TIMEOUT_MS);  // Specified in native "ticks"?
 		
 		m.configPeakOutputForward(1.0, CONTROLLER_TIMEOUT_MS);
 		m.configPeakOutputReverse(-1.0, CONTROLLER_TIMEOUT_MS);
@@ -217,9 +235,9 @@ public class DriveSubsystem extends Subsystem
 	
 	public void doLockDrive(double value) 
 	{
-		leftFrontMotor.set(value);
+		leftFrontMotor.set(ControlMode.Position, value);
 		leftRearMotor.set(ControlMode.Follower, leftFrontMotor.getDeviceID());	// Reinforce
-		rightFrontMotor.set(value);
+		rightFrontMotor.set(ControlMode.Position, value);
 		rightRearMotor.set(ControlMode.Follower, rightFrontMotor.getDeviceID());			
 	}
 	public void setLockDrive( boolean start) 
@@ -267,6 +285,42 @@ public class DriveSubsystem extends Subsystem
 		// TODO: This is wrong! Need new constants
 		return -INCH_PER_WHEEL_ROT * rightFrontMotor.getSelectedSensorPosition(PRIMARY_PID_LOOP);						
 	}
+	
+	private int getMotorNativeUnits(WPI_TalonSRX m) {
+		return m.getSelectedSensorPosition(PRIMARY_PID_LOOP);
+	}
+	
+	public int getRightNativeUnits() {
+		return getMotorNativeUnits(rightFrontMotor);
+	}
+	
+	public int getLeftNativeUnits() {
+		return getMotorNativeUnits(leftFrontMotor);
+	}
+	
+	private double getMotorEncoderUnits(WPI_TalonSRX m) {
+		return getMotorNativeUnits(m)/EDGES_PER_ENCODER_COUNT;
+	}
+	
+	public double getRightEncoderUnits() {
+		return getMotorEncoderUnits(rightFrontMotor);
+	}
+	
+	public double getLeftEncoderUnits() {
+		return getMotorEncoderUnits(leftFrontMotor);
+	}
+	
+	private ControlMode getMotorMode(WPI_TalonSRX m) {
+		return m.getControlMode();
+	}
+	
+	public ControlMode getRightMode() {
+		return getMotorMode(rightFrontMotor);
+	}
+	
+	public ControlMode getLeftMode() {
+		return getMotorMode(leftFrontMotor);
+	}
 
 	public double getFwdVelocity_ips() {
 		// Right side motor reads -velocity when going forward!
@@ -281,6 +335,26 @@ public class DriveSubsystem extends Subsystem
 		double rightFront = -rightFrontMotor.getOutputCurrent() * Math.signum( rightFrontMotor.getMotorOutputVoltage());
 		double rightRear = -rightRearMotor.getOutputCurrent() * Math.signum( rightRearMotor.getMotorOutputVoltage());
 		return (leftFront + leftRear + rightFront + rightRear)/4.0;
+	}
+	
+	@Override
+	public void periodic() {
+		if(telemetryState.getSelected() == SubsystemTelemetryState.ON) {
+			SmartDashboard.putNumber( "RightNativeUnits", 
+					getRightNativeUnits());
+			SmartDashboard.putNumber( "LeftNativeUnits", 
+					getLeftNativeUnits());
+			SmartDashboard.putNumber( "RightEncoderUnits", 
+					getRightEncoderUnits());
+			SmartDashboard.putNumber( "LeftEncoderUnits", 
+					getLeftEncoderUnits());
+			
+			SmartDashboard.putString("RightMode", 
+					getRightMode().name());
+			SmartDashboard.putString("LeftMode", 
+					getLeftMode().name());
+		}
+		
 	}
 }
 
