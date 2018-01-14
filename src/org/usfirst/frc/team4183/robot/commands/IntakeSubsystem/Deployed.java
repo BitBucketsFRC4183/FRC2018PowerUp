@@ -1,6 +1,7 @@
 package org.usfirst.frc.team4183.robot.commands.IntakeSubsystem;
 
 import org.usfirst.frc.team4183.robot.Robot;
+import org.usfirst.frc.team4183.utils.CommandUtils;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -26,6 +27,9 @@ public class Deployed extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
+    	if( Robot.oi.btnCloseGate.get()) {
+    		return CommandUtils.stateChange(this, new Stored());
+    	}
         return false;
     }
 
