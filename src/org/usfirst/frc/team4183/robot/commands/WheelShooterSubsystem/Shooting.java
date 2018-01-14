@@ -40,8 +40,8 @@ public class Shooting extends Command
     protected boolean isFinished() 
     {
     	/// TODO: Resurrect this from last year
-    	if(Robot.oi.btnShooter.get()) {
-    		return CommandUtils.stateChange(this, new Deployed());
+    	if(Robot.oi.btnIdle.get()) {
+    		return CommandUtils.stateChange(this, new Idle());
 }
     	
     	return false;
