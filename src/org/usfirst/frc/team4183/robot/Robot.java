@@ -12,6 +12,7 @@ import java.util.Set;
 
 import org.usfirst.frc.team4183.robot.Robot.RunMode;
 import org.usfirst.frc.team4183.robot.subsystems.DriveSubsystem;
+import org.usfirst.frc.team4183.robot.subsystems.HardwareStatusSubsystem;
 import org.usfirst.frc.team4183.utils.DoEveryN;
 import org.usfirst.frc.team4183.utils.Stopwatch;
 import org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem;
@@ -38,7 +39,8 @@ public class Robot extends IterativeRobot {
 	
 	
 	public static DriveSubsystem driveSubsystem;
-	public static IntakeSubsystem intakeSubsystem; 
+	public static IntakeSubsystem intakeSubsystem;
+	public static HardwareStatusSubsystem hardwareStatusSubsystem;
 	public static OI oi;
 	
 	public static LightingControl lightingControl;	
@@ -57,8 +59,12 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		oi = OI.instance();
 		
+		hardwareStatusSubsystem = new HardwareStatusSubsystem();
+		
 		driveSubsystem = new DriveSubsystem();
+		hardwareStatusSubsystem.addSubsystemToStatusCheck(driveSubsystem);
 		intakeSubsystem = new IntakeSubsystem();
+		hardwareStatusSubsystem.addSubsystemToStatusCheck(intakeSubsystem);
 		
 		imu = new NavxIMU();
 		lightingControl = new LightingControl();
@@ -163,10 +169,10 @@ public class Robot extends IterativeRobot {
 	
 	private void putPeriodicSDdebug() {
 		
-		SmartDashboard.putString( "IMU_Yaw", 
-				String.format("%.1f", imu.getYawDeg()));
-		SmartDashboard.putString( "IMU_Yawrate", 
-				String.format("%.1f", imu.getYawRateDps()));
+//		SmartDashboard.putString( "IMU_Yaw", 
+//				String.format("%.1f", imu.getYawDeg()));
+//		SmartDashboard.putString( "IMU_Yawrate", 
+//				String.format("%.1f", imu.getYawRateDps()));
 //		SmartDashboard.putString( "Left_Position", 
 //				String.format("%.1f", driveSubsystem.getLeftPosition_inch()));
 //		SmartDashboard.putString( "Right_Position", 
