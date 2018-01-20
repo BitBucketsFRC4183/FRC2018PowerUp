@@ -16,6 +16,7 @@ import org.usfirst.frc.team4183.robot.subsystems.HardwareStatusSubsystem;
 import org.usfirst.frc.team4183.utils.DoEveryN;
 import org.usfirst.frc.team4183.utils.Stopwatch;
 import org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem;
+import org.usfirst.frc.team4183.robot.subsystems.WheelShooterSubsystem;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -41,7 +42,9 @@ public class Robot extends IterativeRobot {
 	public static DriveSubsystem driveSubsystem;
 	public static IntakeSubsystem intakeSubsystem;
 	public static HardwareStatusSubsystem hardwareStatusSubsystem;
-	public static OI oi;
+	public static WheelShooterSubsystem wheelShooterSubsystem;
+
+  public static OI oi;
 	
 	public static LightingControl lightingControl;	
 	public static NavxIMU imu;
@@ -49,8 +52,9 @@ public class Robot extends IterativeRobot {
 	private static final String kDefaultAuto = "Default";
 	private static final String kCustomAuto = "My Auto";
 	private String m_autoSelected;
-	private SendableChooser<String> m_chooser = new SendableChooser<>();
 
+	private SendableChooser<String> m_chooser = new SendableChooser<>();
+	
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
@@ -65,6 +69,8 @@ public class Robot extends IterativeRobot {
 		hardwareStatusSubsystem.addSubsystemToStatusCheck(driveSubsystem);
 		intakeSubsystem = new IntakeSubsystem();
 		hardwareStatusSubsystem.addSubsystemToStatusCheck(intakeSubsystem);
+		wheelShooterSubsystem = new WheelShooterSubsystem();
+		hardwareStatusSubsystem.addSubsystemToStatusCheck(wheelShooterSubsystem);
 		
 		imu = new NavxIMU();
 		lightingControl = new LightingControl();
@@ -72,6 +78,8 @@ public class Robot extends IterativeRobot {
 		m_chooser.addDefault("Default Auto", kDefaultAuto);
 		m_chooser.addObject("My Auto", kCustomAuto);
 		SmartDashboard.putData("Auto choices", m_chooser);
+		//SmartDashboard.putNumber("Default Value", 0);
+		SmartDashboard.putNumber("Shooter Speed", 0);
 		
 		// Add all subsystems for debugging
 		addSubsystemToDebug(driveSubsystem);
