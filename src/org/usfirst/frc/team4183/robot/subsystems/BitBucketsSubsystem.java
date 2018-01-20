@@ -9,12 +9,12 @@ import org.usfirst.frc.team4183.robot.subsystems.SubsystemUtilities.SubsystemTel
 /**
  *
  */
-public class ExampleSubsystem extends Subsystem {
+public abstract class BitBucketsSubsystem extends Subsystem {
 	
 	// Add global fields here (Motors, constants, choosers, etc) 
 	private static SendableChooser<SubsystemTelemetryState> telemetryState;
 	
-	public ExampleSubsystem() {
+	public BitBucketsSubsystem() {
 		telemetryState = new SendableChooser<SubsystemTelemetryState>();
 		
 		telemetryState.addDefault("Off", SubsystemTelemetryState.OFF);
@@ -29,16 +29,11 @@ public class ExampleSubsystem extends Subsystem {
 	*  Return true iff all devices are working properly. Otherwise
 	*  return false.
 	*/
-	public boolean subsystemDiagnosticsReport() {
-		return true;
-	}
+	public abstract boolean diagnostics();
 	
 	
 	@Override
-    public void initDefaultCommand() {
-        // Set the default command for a subsystem here.
-        //setDefaultCommand(new MySpecialCommand());
-    }
+    protected abstract void initDefaultCommand();
     
     // Runs every 20ms. Put debug information here
     @Override
