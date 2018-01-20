@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import java.util.ArrayList;
+
 import org.usfirst.frc.team4183.robot.Robot;
 import org.usfirst.frc.team4183.robot.RobotMap;
 import org.usfirst.frc.team4183.robot.commands.DriveSubsystem.Idle;
@@ -49,12 +51,17 @@ public class DriveSubsystem extends Subsystem
 
 	private final DifferentialDrive drive;
 	
-	public static SendableChooser<SubsystemTelemetryState> telemetryState;
+	private static SendableChooser<SubsystemTelemetryState> telemetryState;
+	private static ArrayList<WPI_TalonSRX> motors;
 	
     public DriveSubsystem()
     {
+    		motors = new ArrayList<WPI_TalonSRX>();
+    		
 	    	leftFrontMotor = new WPI_TalonSRX(RobotMap.LEFT_DRIVE_MOTOR_FRONT_ID);
 	    	leftRearMotor = new WPI_TalonSRX(RobotMap.LEFT_DRIVE_MOTOR_REAR_ID);
+	    	motors.add(leftFrontMotor);
+	    	motors.add(leftRearMotor);
 	    	
 	    	// Use follower mode to minimize shearing commands that could occur if
 	    	// separate commands are sent to each motor in a group
@@ -65,6 +72,8 @@ public class DriveSubsystem extends Subsystem
 	    	
 	    	rightFrontMotor  = new WPI_TalonSRX(RobotMap.RIGHT_DRIVE_MOTOR_FRONT_ID);
 	    	rightRearMotor   = new WPI_TalonSRX(RobotMap.RIGHT_DRIVE_MOTOR_REAR_ID);
+	    	motors.add(rightFrontMotor);
+	    	motors.add(rightRearMotor);
 	
 	    	// Use follower mode to minimize shearing commands that could occur if
 	    	// separate commands are sent to each motor in a group
@@ -335,6 +344,22 @@ public class DriveSubsystem extends Subsystem
 		double rightFront = -rightFrontMotor.getOutputCurrent() * Math.signum( rightFrontMotor.getMotorOutputVoltage());
 		double rightRear = -rightRearMotor.getOutputCurrent() * Math.signum( rightRearMotor.getMotorOutputVoltage());
 		return (leftFront + leftRear + rightFront + rightRear)/4.0;
+	}
+	
+
+	/* Any hardware devices used in this subsystem must
+	*  have a check here to see if it is still connected and 
+	*  working properly. For motors check for current draw.
+	*  Return true iff all devices are working properly. Otherwise
+	*  return false.
+	*/
+	public boolean subsystemDiagnosticsReport() {
+		for(WPI_TalonSRX motor: motors) {
+			if(motor.getOutputCurrent() == 0) {
+				return false; // Motor is not connected thus a fault
+			}
+		}
+		return true;
 	}
 	
 	@Override
