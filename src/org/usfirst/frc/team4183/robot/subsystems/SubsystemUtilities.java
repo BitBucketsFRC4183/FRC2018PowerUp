@@ -7,5 +7,11 @@ public class SubsystemUtilities {
 		OFF,
 		ON
 	}
+	
+	public enum BITMode
+	{
+		INIT, 
+		EXTENDED
+	}
 
 }

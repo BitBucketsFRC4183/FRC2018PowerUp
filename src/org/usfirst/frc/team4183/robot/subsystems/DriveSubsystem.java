@@ -5,7 +5,6 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
-import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -18,7 +17,7 @@ import org.usfirst.frc.team4183.robot.commands.DriveSubsystem.Idle;
 import org.usfirst.frc.team4183.utils.Deadzone;
 import org.usfirst.frc.team4183.robot.subsystems.SubsystemUtilities.SubsystemTelemetryState;
 
-public class DriveSubsystem extends Subsystem
+public class DriveSubsystem extends BitBucketsSubsystem
 {
 	private final int PRIMARY_PID_LOOP = 0; // Constants to support new Talon interface types
 	private final int CASCADED_PID_LOOP = 1;
@@ -26,6 +25,7 @@ public class DriveSubsystem extends Subsystem
 	private final double INCH_PER_WHEEL_ROT = RobotMap.INCH_PER_WHEEL_ROT;
 	
 	private final int CONTROLLER_TIMEOUT_MS = 100; // Default timeout to wait for configuration response
+	private final int MOTOR_BUILDUP_MS = 100;
 
 	// Can adjust these to help the robot drive straight with zero turn stick.
 	// +Values will add +yaw correct (CCW viewed from top) when going forward.
@@ -56,6 +56,8 @@ public class DriveSubsystem extends Subsystem
 	
     public DriveSubsystem()
     {
+    		setName("DriveSubsystem");
+    	
     		motors = new ArrayList<WPI_TalonSRX>();
     		
 	    	leftFrontMotor = new WPI_TalonSRX(RobotMap.LEFT_DRIVE_MOTOR_FRONT_ID);
@@ -95,7 +97,7 @@ public class DriveSubsystem extends Subsystem
 	    	drive = new DifferentialDrive(leftFrontMotor, rightFrontMotor);
     	
 	    	// Now get the other modes set up
-	    	setNeutral(NeutralMode.Brake);
+	    	setNeutral(NeutralMode.Coast);
 	    	telemetryState = new SendableChooser<SubsystemTelemetryState>();
 	    	
 	    	telemetryState.addDefault("Off", SubsystemTelemetryState.OFF);
@@ -195,6 +197,7 @@ public class DriveSubsystem extends Subsystem
 		setAllMotorsZero();
 	}
 	
+	// Might need to change from .set(value) to .set(mode, value)
 	private void setAllMotorsZero() 
 	{
 		leftFrontMotor.set(0.0);
@@ -351,15 +354,32 @@ public class DriveSubsystem extends Subsystem
 	*  have a check here to see if it is still connected and 
 	*  working properly. For motors check for current draw.
 	*  Return true iff all devices are working properly. Otherwise
-	*  return false.
+	*  return false. This sets all motors to percent output
 	*/
-	public boolean subsystemDiagnosticsReport() {
+	@Override
+	public void diagnosticsInit() {
+		
+		/* Init Diagnostics */
+		SmartDashboard.putBoolean("RunningDiag", true);
 		for(WPI_TalonSRX motor: motors) {
-			if(motor.getOutputCurrent() == 0) {
-				return false; // Motor is not connected thus a fault
-			}
+			motor.set(ControlMode.PercentOutput, RobotMap.MOTOR_TEST_PERCENT);
 		}
-		return true;
+	}
+	
+	@Override
+	public void diagnosticsCheck() {
+		
+		/* Diagnostics */
+		SmartDashboard.putBoolean(getName(), true); // All good until we find a fault
+		ArrayList<WPI_TalonSRX> faults = new ArrayList<WPI_TalonSRX>();
+		for(WPI_TalonSRX motor: motors) {
+			if(motor.getOutputCurrent() <= RobotMap.CIM_IDLE_CURR) {
+				faults.add(motor);
+				SmartDashboard.putBoolean(getName(), false);
+			}
+			motor.set(ControlMode.PercentOutput, 0.0);
+		}
+		Robot.hardwareStatusSubsystem.removeSubsystemFromDiagnostic(this);
 	}
 	
 	@Override
@@ -373,6 +393,9 @@ public class DriveSubsystem extends Subsystem
 					getRightEncoderUnits());
 			SmartDashboard.putNumber( "LeftEncoderUnits", 
 					getLeftEncoderUnits());
+			
+			SmartDashboard.putNumber("DriveCurrent" + getName(), 
+					rightFrontMotor.getOutputCurrent());
 			
 			SmartDashboard.putString("RightMode", 
 					getRightMode().name());

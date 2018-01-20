@@ -37,6 +37,8 @@ public class Robot extends IterativeRobot {
 	public enum RunMode { DISABLED, AUTO, TELEOP, TEST };
 	public static RunMode runMode = RunMode.DISABLED;
 	
+	public static int teleopInit, teleopPeriodic, autoInit, autoPeriodic, testInit, testPeriodic, disableInit, disablePeriodic;
+	
 	
 	public static DriveSubsystem driveSubsystem;
 	public static IntakeSubsystem intakeSubsystem;
@@ -62,9 +64,7 @@ public class Robot extends IterativeRobot {
 		hardwareStatusSubsystem = new HardwareStatusSubsystem();
 		
 		driveSubsystem = new DriveSubsystem();
-		hardwareStatusSubsystem.addSubsystemToStatusCheck(driveSubsystem);
 		intakeSubsystem = new IntakeSubsystem();
-		hardwareStatusSubsystem.addSubsystemToStatusCheck(intakeSubsystem);
 		
 		imu = new NavxIMU();
 		lightingControl = new LightingControl();
@@ -82,6 +82,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void disabledInit() {
 		runMode = RunMode.DISABLED;
+		disableInit++;
 
 		// Set up OI for disabled mode
 		oi.setDisabledMode();
@@ -94,6 +95,7 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void disabledPeriodic() {
+		disablePeriodic++;
 		runWatch.start();
 		Scheduler.getInstance().run();
 		runWatch.stop();
@@ -101,6 +103,7 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void autonomousInit() {
+		autoInit++;
 		runMode = RunMode.AUTO;
 		
 		oi.setAutoMode();
@@ -111,6 +114,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
+		autoPeriodic++;
 		runWatch.start();
 		Scheduler.getInstance().run();
 		runWatch.stop();
@@ -118,6 +122,7 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void teleopInit() {
+		teleopInit++;
 		runMode = RunMode.TELEOP;
 
 		// Set up OI for teleop mode
@@ -128,10 +133,19 @@ public class Robot extends IterativeRobot {
 	 * This function is called periodically during operator control.
 	 */
 	@Override
-	public void teleopPeriodic() {			
+	public void teleopPeriodic() {	
+		teleopPeriodic++;
 		runWatch.start();
 		Scheduler.getInstance().run();	
 		runWatch.stop();
+	}
+	
+	@Override
+	public void testInit() {
+		testInit++;
+		runMode = RunMode.TEST;
+		hardwareStatusSubsystem.addSubsystemToDiagnostics(driveSubsystem);
+//		hardwareStatusSubsystem.addSubsystemToDiagnostics(intakeSubsystem);
 	}
 
 	/**
@@ -142,15 +156,20 @@ public class Robot extends IterativeRobot {
 		runWatch.start();
 		Scheduler.getInstance().run();	
 		runWatch.stop();
+				
+		//hardwareStatusSubsystem.subsystemStatusCheck();
+
 	}
 	
 	// Called periodically all the time (regardless of mode)
 	@Override
 	public void robotPeriodic() {
+				
 		loopWatch.stop();
 		loopWatch.start();
 		
 		periodicSDdebugLoop.update();
+		
 	}
 	
 

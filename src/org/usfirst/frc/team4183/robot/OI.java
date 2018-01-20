@@ -35,6 +35,7 @@ public class OI {
 	
 	// Multi-subsystem (Gear & Ball)
 	public final LogicalButton btnIdle = new ModalButton(operatorController.bTrackpad);
+	public final LogicalButton btnStatus = new ModalButton(driverController.bTrackpad);
 	
 	
 	//****************************

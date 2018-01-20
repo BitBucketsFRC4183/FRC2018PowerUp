@@ -14,14 +14,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class HardwareStatusSubsystem extends Subsystem {
 
+	private static int numDiagnosticsLoops = 0;
 	
 	public static SendableChooser<SubsystemTelemetryState> telemetryState;
-	private static ArrayList<Subsystem> subsystems;
+	private static ArrayList<BitBucketsSubsystem> subsystemsList;
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
 
 	public HardwareStatusSubsystem() {
-		subsystems = new ArrayList<Subsystem>();
+		subsystemsList = new ArrayList<BitBucketsSubsystem>();
 		
 		telemetryState = new SendableChooser<SubsystemTelemetryState>();
     	
@@ -36,9 +37,23 @@ public class HardwareStatusSubsystem extends Subsystem {
 	 * not already in the list. Returns true if successfully added 
 	 * 
 	 */
-	public boolean addSubsystemToStatusCheck(Subsystem subsystem) {
-		if(!subsystems.contains(subsystem)) {
-			subsystems.add(subsystem);
+	public boolean addSubsystemToDiagnostics(BitBucketsSubsystem subsystem) {
+		if(!subsystemsList.contains(subsystem)) {
+			subsystemsList.add(subsystem);
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * Removes subsystem from diagnostics if in the list. Returns true if
+	 * successfully removed, false otherwise.
+	 * 
+	 */
+	public boolean removeSubsystemFromDiagnostic(BitBucketsSubsystem subsystem) {
+		if(subsystemsList.contains(subsystem)) {
+			subsystemsList.remove(subsystem);
 			return true;
 		} else {
 			return false;
@@ -46,8 +61,8 @@ public class HardwareStatusSubsystem extends Subsystem {
 	}
 	
 	public void subsystemStatusCheck() {
-		for(Subsystem system: subsystems) {
-			
+		for(BitBucketsSubsystem subsystem: subsystemsList) {
+			subsystem.diagnosticsCheck();
 		}
 	}
 	
@@ -58,6 +73,20 @@ public class HardwareStatusSubsystem extends Subsystem {
     
     @Override
     public void periodic() {
+    	// subsystemStatusCheck();
+    	
+    	if(Robot.runMode == Robot.RunMode.TEST ) {
+    		SmartDashboard.putBoolean("RunningDiag", true);
+    		numDiagnosticsLoops++;
+    		for(BitBucketsSubsystem subsystem: subsystemsList)
+    			subsystem.diagnosticsInit();
+    	}
+    	else if (Robot.runMode == Robot.RunMode.TEST && numDiagnosticsLoops >= 5) {
+    		numDiagnosticsLoops = 0;
+    		for(BitBucketsSubsystem subsystem: subsystemsList)
+    			subsystem.diagnosticsCheck();
+    	}
+    	
     	if(telemetryState.getSelected() == SubsystemTelemetryState.ON) {
     		SmartDashboard.putNumber("IMU_Yaw", 
     				Robot.imu.getYawDeg());
