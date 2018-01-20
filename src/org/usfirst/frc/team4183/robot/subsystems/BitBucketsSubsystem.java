@@ -29,7 +29,7 @@ public abstract class BitBucketsSubsystem extends Subsystem {
 	*  Return true iff all devices are working properly. Otherwise
 	*  return false.
 	*/
-	public abstract boolean diagnostics();
+	public abstract void diagnostics();
 	
 	
 	@Override
