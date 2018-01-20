@@ -7,6 +7,9 @@ public class RobotMap {
 	// The precise value must be determined by calibration.
 	public static final double INCH_PER_WHEEL_ROT = 12.5 * 1.0353360615;
 	
+	//inches per revolution for Elevator
+    public static final int INCH_EXTENSION_ROT = 200;
+	
 	// Constant as UPPERCASE_WITH_UNDERSCORES
 	
 	

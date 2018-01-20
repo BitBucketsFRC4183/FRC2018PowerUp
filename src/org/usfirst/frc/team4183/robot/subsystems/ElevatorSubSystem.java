@@ -12,10 +12,9 @@ public class ElevatorSubSystem extends BitBucketsSubsystem {
 
 	private final WPI_TalonSRX elevatorMotorA;
 	
-	//double check how many motors will be present
 	private final WPI_TalonSRX elevatorMotorB;
 	
-	private final int ticksPerInch = 200;
+	
 	
 	
 	public ElevatorSubSystem()
@@ -33,7 +32,7 @@ public class ElevatorSubSystem extends BitBucketsSubsystem {
 	
 	public int inchesToTicks(double inches)
 	{
-		return (int) (inches*ticksPerInch);
+		return (int) (inches/RobotMap.INCH_EXTENSION_ROT);
 	}
 	
 	public void goToPosition(int ticks)
@@ -49,6 +48,15 @@ public class ElevatorSubSystem extends BitBucketsSubsystem {
 	{
 		elevatorMotorA.set(ControlMode.PercentOutput,0);
 		elevatorMotorA.set(ControlMode.Follower,RobotMap.ELEVATOR_MOTOR_A_ID);
+	}
+	
+	public void setSystemPower(double power)
+	{
+		elevatorMotorA.set(ControlMode.PercentOutput,power);
+		if (elevatorMotorB.getControlMode() != ControlMode.Follower)
+		{
+			elevatorMotorB.set(ControlMode.Follower,RobotMap.ELEVATOR_MOTOR_A_ID);
+		}
 	}
 
 
