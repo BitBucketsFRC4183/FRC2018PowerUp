@@ -4,6 +4,7 @@ import org.usfirst.frc.team4183.robot.Robot;
 import org.usfirst.frc.team4183.utils.CommandUtils;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
@@ -22,6 +23,8 @@ public class Idle extends Command
     protected void initialize() 
     {
     	Robot.driveSubsystem.disable();
+    	SmartDashboard.putBoolean("EnterDiag", false);
+
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -35,9 +38,12 @@ public class Idle extends Command
     	/// TODO: Resurrect this from last year
     	if( Robot.runMode == Robot.RunMode.TELEOP) 
     		return CommandUtils.stateChange(this, new DriverControl());
-    	
     	if( Robot.runMode == Robot.RunMode.AUTO)
     		return CommandUtils.stateChange(this, new AutoControl());
+    	if( Robot.runMode == Robot.RunMode.TEST && Robot.driveSubsystem.runDiagnostics) {
+    		SmartDashboard.putBoolean("EnterDiagState", true);
+    		return CommandUtils.stateChange(this, new Diagnostics());
+    	}
     	
     	return false;
     }

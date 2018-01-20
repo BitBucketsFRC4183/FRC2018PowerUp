@@ -74,5 +74,10 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 	public void diagnosticsCheck() {
 		
 	}
+	@Override
+	public void periodic() {
+		// TODO Auto-generated method stub
+		
+	}
 }
 

@@ -15,6 +15,7 @@ import org.usfirst.frc.team4183.robot.Robot;
 import org.usfirst.frc.team4183.robot.RobotMap;
 import org.usfirst.frc.team4183.robot.commands.DriveSubsystem.Idle;
 import org.usfirst.frc.team4183.utils.Deadzone;
+import org.usfirst.frc.team4183.robot.subsystems.SubsystemUtilities.DiagnosticsState;
 import org.usfirst.frc.team4183.robot.subsystems.SubsystemUtilities.SubsystemTelemetryState;
 
 public class DriveSubsystem extends BitBucketsSubsystem
@@ -25,7 +26,6 @@ public class DriveSubsystem extends BitBucketsSubsystem
 	private final double INCH_PER_WHEEL_ROT = RobotMap.INCH_PER_WHEEL_ROT;
 	
 	private final int CONTROLLER_TIMEOUT_MS = 100; // Default timeout to wait for configuration response
-	private final int MOTOR_BUILDUP_MS = 100;
 
 	// Can adjust these to help the robot drive straight with zero turn stick.
 	// +Values will add +yaw correct (CCW viewed from top) when going forward.
@@ -42,6 +42,10 @@ public class DriveSubsystem extends BitBucketsSubsystem
 	private final int EDGES_PER_ENCODER_COUNT = 4;
 	private double yawSetPoint;
 	
+	/* Diagnostics Information */
+	private final int MOTOR_BUILDUP_MS = 100;
+	public boolean runDiagnostics = false;
+	public DiagnosticsState lastKnownState;
 		
 	private final WPI_TalonSRX leftFrontMotor;		// User follower mode
 	private final WPI_TalonSRX leftRearMotor;
@@ -64,6 +68,8 @@ public class DriveSubsystem extends BitBucketsSubsystem
 	    	leftRearMotor = new WPI_TalonSRX(RobotMap.LEFT_DRIVE_MOTOR_REAR_ID);
 	    	motors.add(leftFrontMotor);
 	    	motors.add(leftRearMotor);
+	    	
+	    	lastKnownState = DiagnosticsState.UNKNOWN;
 	    	
 	    	// Use follower mode to minimize shearing commands that could occur if
 	    	// separate commands are sent to each motor in a group
@@ -368,18 +374,20 @@ public class DriveSubsystem extends BitBucketsSubsystem
 	
 	@Override
 	public void diagnosticsCheck() {
+		runDiagnostics = false;
 		
 		/* Diagnostics */
-		SmartDashboard.putBoolean(getName(), true); // All good until we find a fault
+		SmartDashboard.putBoolean(getName() + "Diagnostics", true); // All good until we find a fault
+		lastKnownState= DiagnosticsState.PASS;
 		ArrayList<WPI_TalonSRX> faults = new ArrayList<WPI_TalonSRX>();
 		for(WPI_TalonSRX motor: motors) {
 			if(motor.getOutputCurrent() <= RobotMap.CIM_IDLE_CURR) {
 				faults.add(motor);
-				SmartDashboard.putBoolean(getName(), false);
+				SmartDashboard.putBoolean(getName() + "Diagnostics", false);
+				lastKnownState = DiagnosticsState.FAIL;
 			}
 			motor.set(ControlMode.PercentOutput, 0.0);
 		}
-		Robot.hardwareStatusSubsystem.removeSubsystemFromDiagnostic(this);
 	}
 	
 	@Override

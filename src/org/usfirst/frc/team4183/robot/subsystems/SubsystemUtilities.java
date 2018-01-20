@@ -14,4 +14,10 @@ public class SubsystemUtilities {
 		EXTENDED
 	}
 
+	public enum DiagnosticsState 
+	{ 
+		UNKNOWN,
+		PASS,
+		FAIL
+	}
 }
