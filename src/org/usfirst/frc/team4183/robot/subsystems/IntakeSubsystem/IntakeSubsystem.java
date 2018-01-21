@@ -7,7 +7,6 @@ import java.util.ArrayList;
 
 import org.usfirst.frc.team4183.robot.RobotMap;
 import org.usfirst.frc.team4183.robot.subsystems.BitBucketsSubsystem;
-import org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem.Idle;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 
