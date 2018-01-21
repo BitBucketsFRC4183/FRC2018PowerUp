@@ -8,7 +8,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 
-public class ElevatorSubSystem extends BitBucketsSubsystem {
+public class ElevatorSubsystem extends BitBucketsSubsystem {
 
 	private final WPI_TalonSRX elevatorMotorA;
 	
@@ -17,7 +17,7 @@ public class ElevatorSubSystem extends BitBucketsSubsystem {
 	
 	
 	
-	public ElevatorSubSystem()
+	public ElevatorSubsystem()
 	{
 		elevatorMotorA = new WPI_TalonSRX(RobotMap.ELEVATOR_MOTOR_A_ID);
 		elevatorMotorB = new WPI_TalonSRX(RobotMap.ELEVATOR_MOTOR_B_ID);	
