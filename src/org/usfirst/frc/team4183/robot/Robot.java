@@ -22,6 +22,7 @@ import org.usfirst.frc.team4183.robot.subsystems.WheelShooterSubsystem;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -38,7 +39,7 @@ public class Robot extends IterativeRobot {
 	// current running mode of the Robot.
 	public enum RunMode { DISABLED, AUTO, TELEOP, TEST };
 	public static RunMode runMode = RunMode.DISABLED;
-	
+	public static RunMode lastState = runMode;	
 	
 	public static DriveSubsystem driveSubsystem;
 	public static IntakeSubsystem intakeSubsystem;
@@ -65,10 +66,8 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		oi = OI.instance();
 		
-		hardwareStatusSubsystem = new HardwareStatusSubsystem();
 		
 		driveSubsystem = new DriveSubsystem();
-		hardwareStatusSubsystem.addSubsystemToStatusCheck(driveSubsystem);
 		intakeSubsystem = new IntakeSubsystem();
 		hardwareStatusSubsystem.addSubsystemToStatusCheck(intakeSubsystem);
 		wheelShooterSubsystem = new WheelShooterSubsystem();
@@ -90,12 +89,19 @@ public class Robot extends IterativeRobot {
 		showDebugInfo();		
 	}
 	
+	private void setSubsystemsDebug() {
+		driveSubsystem.diagnosticsFlagSet();
+		intakeSubsystem.diagnosticsFlagSet();
+		
+	}
+	
 	@Override
 	public void disabledInit() {
 		runMode = RunMode.DISABLED;
 
 		// Set up OI for disabled mode
 		oi.setDisabledMode();
+
 		
 		// Clear out the scheduler.
 		// Will result in only Default Commands (==Idle-s) running,
@@ -113,7 +119,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousInit() {
 		runMode = RunMode.AUTO;
-		
+
 		oi.setAutoMode();
 	}
 
@@ -139,10 +145,17 @@ public class Robot extends IterativeRobot {
 	 * This function is called periodically during operator control.
 	 */
 	@Override
-	public void teleopPeriodic() {			
+	public void teleopPeriodic() {	
 		runWatch.start();
 		Scheduler.getInstance().run();	
 		runWatch.stop();
+	}
+	
+	@Override
+	public void testInit() {
+		runMode = RunMode.TEST;
+		setSubsystemsDebug();
+		LiveWindow.setEnabled(false);
 	}
 
 	/**
@@ -153,11 +166,16 @@ public class Robot extends IterativeRobot {
 		runWatch.start();
 		Scheduler.getInstance().run();	
 		runWatch.stop();
+				
+		//hardwareStatusSubsystem.subsystemStatusCheck();
+
 	}
 	
 	// Called periodically all the time (regardless of mode)
 	@Override
 	public void robotPeriodic() {
+		SmartDashboard.putString("CurrMode", runMode.name());
+		
 		loopWatch.stop();
 		loopWatch.start();
 		
