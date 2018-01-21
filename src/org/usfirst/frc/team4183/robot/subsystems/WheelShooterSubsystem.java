@@ -33,6 +33,7 @@ public class WheelShooterSubsystem extends Subsystem {
 	//VVV SET THIS TO PRIVATE AND MAKE A PROPER DISABLE COMMAND THIS IS TEMPOARY 
 	public void disable() {
 		setAllMotorsZero();
+		
 	}
 	
 	private void setAllMotorsZero() 

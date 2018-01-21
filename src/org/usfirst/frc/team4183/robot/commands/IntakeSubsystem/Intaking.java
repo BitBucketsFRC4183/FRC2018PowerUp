@@ -8,9 +8,9 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class Stored extends Command {
+public class Intaking extends Command {
 
-    public Stored() {
+    public Intaking() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     		requires(Robot.intakeSubsystem);	
@@ -18,16 +18,16 @@ public class Stored extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	Robot.intakeSubsystem.closegate();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    }
+    	Robot.intakeSubsystem.setMotorSpeed(1);    
+    	}
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	if( Robot.oi.btnOpenGate.get()) {
+    	if( Robot.oi.btnIdle.get()) {
     		return CommandUtils.stateChange(this, new Deployed());
     	}
         return false;

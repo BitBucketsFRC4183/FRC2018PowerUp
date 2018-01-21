@@ -18,7 +18,7 @@ public class Deployed extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	Robot.intakeSubsystem.opengate();
+    	//Robot.intakeSubsystem.opengate();
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -27,9 +27,15 @@ public class Deployed extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	if( Robot.oi.btnCloseGate.get()) {
-    		return CommandUtils.stateChange(this, new Stored());
+    	if( Robot.oi.btnIntake.get()) {
+    		return CommandUtils.stateChange(this, new Intaking());
     	}
+    	if( Robot.oi.btnOuttake.get()) {
+    		return CommandUtils.stateChange(this, new Outtaking());
+    	}
+    //	if( Robot.oi.btnCloseGate.get()) {
+    	//	return CommandUtils.stateChange(this, new Idle());
+    	//}
         return false;
     }
 

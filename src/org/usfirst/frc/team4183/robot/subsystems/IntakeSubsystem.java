@@ -14,31 +14,36 @@ public class IntakeSubsystem extends Subsystem {
 	
 	private final WPI_TalonSRX leftintakemotor; 
 	private final WPI_TalonSRX rightintakemotor; 
-	private final DoubleSolenoid intakegate;
+	//private final DoubleSolenoid intakegate;
 
 	public IntakeSubsystem() {
 		
 		leftintakemotor = new WPI_TalonSRX(RobotMap.INTAKE_MOTOR_LEFT_ID);
 		rightintakemotor = new WPI_TalonSRX(RobotMap.INTAKE_MOTOR_RIGHT_ID);
-		intakegate = new DoubleSolenoid(RobotMap.INTAKE_PNEUMA_OPEN_CHANNEL, RobotMap.INTAKE_PNEUMA_CLOSED_CHANNEL);
+		leftintakemotor.setInverted(true);
+		//intakegate = new DoubleSolenoid(RobotMap.INTAKE_PNEUMA_OPEN_CHANNEL, RobotMap.INTAKE_PNEUMA_CLOSED_CHANNEL);
 		
 	}
 	public void disable() {
 		setAllMotorsZero();
-		closegate();
+		//closegate();
 	}
 	
-	public void closegate() {
-		intakegate.set(DoubleSolenoid.Value.kReverse);
-	}
-	public void opengate() {
-		intakegate.set(DoubleSolenoid.Value.kForward);
-	}
+	//public void closegate() {
+		//intakegate.set(DoubleSolenoid.Value.kReverse);
+	//}
+	//public void opengate() {
+		//intakegate.set(DoubleSolenoid.Value.kForward);
+	//}
 	
 	private void setAllMotorsZero() 
 	{
 		leftintakemotor.set(0.0);
 		rightintakemotor.set(0.0);
+	}
+	public void setMotorSpeed(double speed) {
+		leftintakemotor.set(speed);
+		rightintakemotor.set(speed);
 	}
 	
 	public void initDefaultCommand() {

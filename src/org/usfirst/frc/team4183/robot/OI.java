@@ -30,8 +30,10 @@ public class OI {
 	public final LogicalButton btnDriveLock = new ModalButton(driverController.bL2);	
 	
 	// Manipulator Subsystem
-	public final LogicalButton btnOpenGate = new ModalButton(operatorController.bCircle);
-	public final LogicalButton btnCloseGate = new ModalButton(operatorController.bTriangle);
+	//public final LogicalButton btnOpenGate = new ModalButton(operatorController.bCircle);
+	//public final LogicalButton btnCloseGate = new ModalButton(operatorController.bTriangle);
+	public final LogicalButton btnIntake = new ModalButton(operatorController.bL2);
+	public final LogicalButton btnOuttake = new ModalButton(operatorController.bR2);
 	
 	public final LogicalButton btnShooter = new ModalButton(operatorController.bSquare);
 	public final LogicalButton btnIdle = new ModalButton(operatorController.bTrackpad);
