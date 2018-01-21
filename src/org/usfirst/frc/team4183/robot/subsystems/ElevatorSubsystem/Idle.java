@@ -8,13 +8,13 @@ public class Idle extends Command{
 
 	public Idle()
 	{
-		requires(Robot.wheelShooterSubsystem);
+		requires(Robot.elevatorSubsystem);
 		setRunWhenDisabled(true);
 	}
 	
 	protected void initialize()
 	{
-		Robot.elevatorSubSystem.disable();
+		Robot.elevatorSubsystem.disable();
 	}
 	
 	public void execute()

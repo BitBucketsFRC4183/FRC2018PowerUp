@@ -10,13 +10,13 @@ public class Raise extends Command{
 
 	public Raise()
 	{
-		requires(Robot.elevatorSubSystem);
+		requires(Robot.elevatorSubsystem);
 		
 	}
 	
 	public void execute()
 	{
-		Robot.elevatorSubSystem.goToPosition((int)SmartDashboard.getNumber("Elevator Pos", 0));
+		Robot.elevatorSubsystem.goToPosition((int)SmartDashboard.getNumber("Elevator Pos", 0));
 	}
 
 	@Override

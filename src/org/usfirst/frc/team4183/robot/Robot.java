@@ -12,7 +12,7 @@ import java.util.Set;
 
 import org.usfirst.frc.team4183.robot.Robot.RunMode;
 import org.usfirst.frc.team4183.robot.subsystems.DriveSubsystem.DriveSubsystem;
-import org.usfirst.frc.team4183.robot.subsystems.ElevatorSubsystem.ElevatorSubSystem;
+import org.usfirst.frc.team4183.robot.subsystems.ElevatorSubsystem.ElevatorSubsystem;
 import org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem.IntakeSubsystem;
 import org.usfirst.frc.team4183.robot.subsystems.SpringShooterSubsystem.SpringShooterSubsystem;
 import org.usfirst.frc.team4183.robot.subsystems.WheelShooterSubsystem.WheelShooterSubsystem;
@@ -45,7 +45,7 @@ public class Robot extends IterativeRobot {
 	public static DriveSubsystem driveSubsystem;
 	public static IntakeSubsystem intakeSubsystem;
 	public static WheelShooterSubsystem wheelShooterSubsystem;
-	public static ElevatorSubSystem elevatorSubSystem;
+	public static ElevatorSubsystem elevatorSubsystem;
 	public static SpringShooterSubsystem springShooterSubsystem;
 
   public static OI oi;
@@ -74,7 +74,7 @@ public class Robot extends IterativeRobot {
 		driveSubsystem = new DriveSubsystem();
 		intakeSubsystem = new IntakeSubsystem();
 		wheelShooterSubsystem = new WheelShooterSubsystem();
-		elevatorSubSystem = new ElevatorSubSystem();
+		elevatorSubsystem = new ElevatorSubsystem();
 		springShooterSubsystem = new SpringShooterSubsystem();
 		
 		imu = new NavxIMU();
