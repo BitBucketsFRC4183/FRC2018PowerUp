@@ -1,5 +1,7 @@
 package org.usfirst.frc.team4183.robot.subsystems;
 
+import org.usfirst.frc.team4183.robot.commands.SpringShooterSubsystem.Idle;
+
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
@@ -14,11 +16,20 @@ public class SpringShooterSubsystem extends BitBucketsSubsystem {
         // Set the default command for a subsystem here.
         setDefaultCommand(new Idle());
     }
+    
+    
 
 	@Override
 	public boolean diagnostics() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+
+
+	public void disable() {
+		// TODO Auto-generated method stub
+		
 	}
 }
 
