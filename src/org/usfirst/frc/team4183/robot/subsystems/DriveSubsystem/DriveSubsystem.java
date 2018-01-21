@@ -22,9 +22,6 @@ import org.usfirst.frc.team4183.robot.subsystems.SubsystemUtilities.SubsystemTel
 
 public class DriveSubsystem extends BitBucketsSubsystem
 {
-	private final int PRIMARY_PID_LOOP = 0; // Constants to support new Talon interface types
-	private final int CASCADED_PID_LOOP = 1;
-	
 	private final double INCH_PER_WHEEL_ROT = RobotMap.INCH_PER_WHEEL_ROT;
 	
 	private final int CONTROLLER_TIMEOUT_MS = 100; // Default timeout to wait for configuration response
@@ -306,11 +303,11 @@ public class DriveSubsystem extends BitBucketsSubsystem
 	public double getRightPosition_inch() {
 		// Right motor encoder reads -position when going forward!
 		// TODO: This is wrong! Need new constants
-		return -INCH_PER_WHEEL_ROT * rightFrontMotor.getSelectedSensorPosition(PRIMARY_PID_LOOP);						
+		return -INCH_PER_WHEEL_ROT * rightFrontMotor.getSelectedSensorPosition(RobotMap.PRIMARY_PID_LOOP);						
 	}
 	
 	private int getMotorNativeUnits(WPI_TalonSRX m) {
-		return m.getSelectedSensorPosition(PRIMARY_PID_LOOP);
+		return m.getSelectedSensorPosition(RobotMap.PRIMARY_PID_LOOP);
 	}
 	
 	public int getRightNativeUnits() {
@@ -355,7 +352,7 @@ public class DriveSubsystem extends BitBucketsSubsystem
 
 	public double getFwdVelocity_ips() {
 		// Right side motor reads -velocity when going forward!
-		double fwdSpeedRpm = (leftFrontMotor.getSelectedSensorVelocity(PRIMARY_PID_LOOP) - rightFrontMotor.getSelectedSensorVelocity(PRIMARY_PID_LOOP))/2.0;
+		double fwdSpeedRpm = (leftFrontMotor.getSelectedSensorVelocity(RobotMap.PRIMARY_PID_LOOP) - rightFrontMotor.getSelectedSensorVelocity(RobotMap.PRIMARY_PID_LOOP))/2.0;
 		return (INCH_PER_WHEEL_ROT / 60.0) * fwdSpeedRpm;
 	}
 	public double getFwdCurrent() {
