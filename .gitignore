@@ -27,3 +27,13 @@ sysProps.xml
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+src/org/usfirst/frc/team4183/\.DS_Store
+
+src/org/usfirst/frc/team4183/robot/\.DS_Store
+
+src/\.DS_Store
+
+src/org/\.DS_Store
+
+\.DS_Store

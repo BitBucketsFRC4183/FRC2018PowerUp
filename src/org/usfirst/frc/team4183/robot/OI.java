@@ -33,9 +33,10 @@ public class OI {
 	public final LogicalButton btnOpenGate = new ModalButton(operatorController.bCircle);
 	public final LogicalButton btnCloseGate = new ModalButton(operatorController.bTriangle);
 	
-	// Multi-subsystem (Gear & Ball)
+	public final LogicalButton btnShooter = new ModalButton(operatorController.bSquare);
 	public final LogicalButton btnIdle = new ModalButton(operatorController.bTrackpad);
 	public final LogicalButton btnStatus = new ModalButton(driverController.bTrackpad);
+	
 	
 	
 	//****************************
