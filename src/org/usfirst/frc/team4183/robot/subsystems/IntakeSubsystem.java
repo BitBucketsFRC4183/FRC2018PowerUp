@@ -16,9 +16,9 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  */
 public class IntakeSubsystem extends BitBucketsSubsystem {
 	
-	private final WPI_TalonSRX leftIntakeMotor; 
-	private final WPI_TalonSRX rightIntakeMotor; 
-	private final DoubleSolenoid intakeGate;
+	private final WPI_TalonSRX leftintakemotor; 
+	private final WPI_TalonSRX rightintakemotor; 
+	//private final DoubleSolenoid intakegate;
 
 	private static ArrayList<WPI_TalonSRX> motors;
 	private static ArrayList<DoubleSolenoid> solenoids;
@@ -27,10 +27,10 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 		motors = new ArrayList<WPI_TalonSRX>();
 		solenoids = new ArrayList<DoubleSolenoid>();
 		
-		leftIntakeMotor = new WPI_TalonSRX(RobotMap.INTAKE_MOTOR_LEFT_ID);
-		rightIntakeMotor = new WPI_TalonSRX(RobotMap.INTAKE_MOTOR_RIGHT_ID);
-		motors.add(leftIntakeMotor);
-		motors.add(rightIntakeMotor);
+		leftintakemotor = new WPI_TalonSRX(RobotMap.INTAKE_MOTOR_LEFT_ID);
+		rightintakemotor = new WPI_TalonSRX(RobotMap.INTAKE_MOTOR_RIGHT_ID);
+		leftintakemotor.setInverted(true);
+		//intakegate = new DoubleSolenoid(RobotMap.INTAKE_PNEUMA_OPEN_CHANNEL, RobotMap.INTAKE_PNEUMA_CLOSED_CHANNEL);
 		
 		intakeGate = new DoubleSolenoid(RobotMap.INTAKE_PNEUMA_OPEN_CHANNEL, RobotMap.INTAKE_PNEUMA_CLOSED_CHANNEL);
 		solenoids.add(intakeGate);
@@ -38,20 +38,24 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 	}
 	public void disable() {
 		setAllMotorsZero();
-		closegate();
+		//closegate();
 	}
 	
-	public void closegate() {
-		intakeGate.set(DoubleSolenoid.Value.kReverse);
-	}
-	public void opengate() {
-		intakeGate.set(DoubleSolenoid.Value.kForward);
-	}
+	//public void closegate() {
+		//intakegate.set(DoubleSolenoid.Value.kReverse);
+	//}
+	//public void opengate() {
+		//intakegate.set(DoubleSolenoid.Value.kForward);
+	//}
 	
 	private void setAllMotorsZero() 
 	{
 		leftIntakeMotor.set(ControlMode.PercentOutput, 0.0);
 		rightIntakeMotor.set(ControlMode.PercentOutput, 0.0);
+	}
+	public void setMotorSpeed(double speed) {
+		leftintakemotor.set(speed);
+		rightintakemotor.set(speed);
 	}
 	
 	public void initDefaultCommand() {
