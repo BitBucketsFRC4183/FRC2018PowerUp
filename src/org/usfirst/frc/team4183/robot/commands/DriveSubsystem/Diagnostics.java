@@ -13,33 +13,31 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Diagnostics extends Command {
 
 	private int diagInitLoops;
-	private BitBucketsSubsystem subsystem;
 	
     public Diagnostics() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     	requires(Robot.driveSubsystem);
-    	subsystem = Robot.driveSubsystem;
     	diagInitLoops = 0;
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	SmartDashboard.putBoolean("EnterDiagState", true);
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	if(diagInitLoops < subsystem.DIAG_LOOPS_RUN) {
-    		subsystem.diagnosticsInit();
+    	if(diagInitLoops < Robot.driveSubsystem.DIAG_LOOPS_RUN) {
+    		Robot.driveSubsystem.diagnosticsInit();
     		diagInitLoops++;
     	}
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	if(diagInitLoops >= subsystem.DIAG_LOOPS_RUN) {
-    		subsystem.diagnosticsCheck();
+
+    	if(diagInitLoops >= Robot.driveSubsystem.DIAG_LOOPS_RUN) {
+    		Robot.driveSubsystem.diagnosticsCheck();
     		return CommandUtils.stateChange(this, new Idle());
     	}
         return false;

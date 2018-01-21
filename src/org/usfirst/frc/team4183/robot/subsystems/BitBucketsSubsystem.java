@@ -24,6 +24,8 @@ public abstract class BitBucketsSubsystem extends Subsystem {
 	
 	public abstract void diagnosticsCheck();
 	
+	public abstract void diagnosticsFlagSet();
+	
 	@Override
     protected abstract void initDefaultCommand();
     

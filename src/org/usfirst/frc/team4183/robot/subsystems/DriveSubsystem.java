@@ -46,6 +46,7 @@ public class DriveSubsystem extends BitBucketsSubsystem
 	private final int MOTOR_BUILDUP_MS = 100;
 	public boolean runDiagnostics = false;
 	public DiagnosticsState lastKnownState;
+	public int DIAG_LOOPS_RUN;
 		
 	private final WPI_TalonSRX leftFrontMotor;		// User follower mode
 	private final WPI_TalonSRX leftRearMotor;
@@ -63,6 +64,8 @@ public class DriveSubsystem extends BitBucketsSubsystem
     		setName("DriveSubsystem");
     	
     		motors = new ArrayList<WPI_TalonSRX>();
+    		
+    		DIAG_LOOPS_RUN = 10;
     		
 	    	leftFrontMotor = new WPI_TalonSRX(RobotMap.LEFT_DRIVE_MOTOR_FRONT_ID);
 	    	leftRearMotor = new WPI_TalonSRX(RobotMap.LEFT_DRIVE_MOTOR_REAR_ID);
@@ -206,10 +209,10 @@ public class DriveSubsystem extends BitBucketsSubsystem
 	// Might need to change from .set(value) to .set(mode, value)
 	private void setAllMotorsZero() 
 	{
-		leftFrontMotor.set(0.0);
-		leftRearMotor.set(0.0);
-		rightFrontMotor.set(0.0);
-		rightRearMotor.set(0.0);			
+		leftFrontMotor.set(ControlMode.PercentOutput, 0.0);
+		leftRearMotor.set(ControlMode.PercentOutput, 0.0);
+		rightFrontMotor.set(ControlMode.PercentOutput, 0.0);
+		rightRearMotor.set(ControlMode.PercentOutput, 0.0);			
 	}
 	private void setupClosedLoopMaster( WPI_TalonSRX m) 
 	{
@@ -332,12 +335,20 @@ public class DriveSubsystem extends BitBucketsSubsystem
 		return m.getControlMode();
 	}
 	
-	public ControlMode getRightMode() {
+	public ControlMode getRightFrontMode() {
 		return getMotorMode(rightFrontMotor);
 	}
 	
-	public ControlMode getLeftMode() {
+	public ControlMode getLeftFrontMode() {
 		return getMotorMode(leftFrontMotor);
+	}
+	
+	public ControlMode getLeftRearMode() {
+		return getMotorMode(leftRearMotor);
+	}
+	
+	public ControlMode getRightRearMode() {
+		return getMotorMode(rightRearMotor);
 	}
 
 	public double getFwdVelocity_ips() {
@@ -367,48 +378,108 @@ public class DriveSubsystem extends BitBucketsSubsystem
 		
 		/* Init Diagnostics */
 		SmartDashboard.putBoolean("RunningDiag", true);
-		for(WPI_TalonSRX motor: motors) {
-			motor.set(ControlMode.PercentOutput, RobotMap.MOTOR_TEST_PERCENT);
-		}
+		
+		rightFrontMotor.set(ControlMode.PercentOutput, RobotMap.MOTOR_TEST_PERCENT);
+		rightRearMotor.set(ControlMode.PercentOutput, -RobotMap.MOTOR_TEST_PERCENT);
+		leftFrontMotor.set(ControlMode.PercentOutput, -RobotMap.MOTOR_TEST_PERCENT);
+		leftRearMotor.set(ControlMode.PercentOutput, RobotMap.MOTOR_TEST_PERCENT);
+		
+//		for(WPI_TalonSRX motor: motors) {
+//			motor.set(ControlMode.PercentOutput, RobotMap.MOTOR_TEST_PERCENT);
+//		}
 	}
 	
 	@Override
 	public void diagnosticsCheck() {
+		/* Reset flag */
 		runDiagnostics = false;
 		
 		/* Diagnostics */
+		lastKnownState = DiagnosticsState.PASS;
 		SmartDashboard.putBoolean(getName() + "Diagnostics", true); // All good until we find a fault
-		lastKnownState= DiagnosticsState.PASS;
-		ArrayList<WPI_TalonSRX> faults = new ArrayList<WPI_TalonSRX>();
-		for(WPI_TalonSRX motor: motors) {
-			if(motor.getOutputCurrent() <= RobotMap.CIM_IDLE_CURR) {
-				faults.add(motor);
-				SmartDashboard.putBoolean(getName() + "Diagnostics", false);
-				lastKnownState = DiagnosticsState.FAIL;
-			}
-			motor.set(ControlMode.PercentOutput, 0.0);
+		
+		SmartDashboard.putBoolean("DiagnosticsFR", true);
+		if(rightFrontMotor.getOutputCurrent() <= RobotMap.MINUMUM_MOTOR_CURR) {
+			SmartDashboard.putBoolean("DiagnosticsFR", false);
+			SmartDashboard.putBoolean(getName() + "Diagnostics", false);
+			lastKnownState = DiagnosticsState.FAIL;
 		}
+		rightFrontMotor.set(ControlMode.PercentOutput, 0.0);
+		
+		SmartDashboard.putBoolean("DiagnosticsBR", true);
+		if(rightRearMotor.getOutputCurrent() <= RobotMap.MINUMUM_MOTOR_CURR) {
+			SmartDashboard.putBoolean("DiagnosticsBR", false);
+			SmartDashboard.putBoolean(getName() + "Diagnostics", false);
+			lastKnownState = DiagnosticsState.FAIL;
+		}
+		rightRearMotor.set(ControlMode.PercentOutput, 0.0);
+		
+		SmartDashboard.putBoolean("DiagnosticsFL", true);
+		if(leftFrontMotor.getOutputCurrent() <= RobotMap.MINUMUM_MOTOR_CURR) {
+			SmartDashboard.putBoolean("DiagnosticsFL", false);
+			SmartDashboard.putBoolean(getName() + "Diagnostics", false);
+			lastKnownState = DiagnosticsState.FAIL;
+		}
+		leftFrontMotor.set(ControlMode.PercentOutput, 0.0);
+		
+		SmartDashboard.putBoolean("DiagnosticsBL", true);
+		if(leftRearMotor.getOutputCurrent() <= RobotMap.MINUMUM_MOTOR_CURR) {
+			SmartDashboard.putBoolean("DiagnosticsBL", false);
+			SmartDashboard.putBoolean(getName() + "Diagnostics", false);
+			lastKnownState = DiagnosticsState.FAIL;
+		}
+		leftRearMotor.set(ControlMode.PercentOutput, 0.0);
+		
+		
+		
+//		for(int i = 0; i < motors.size(); i++) {
+//			if(motors.get(i).getOutputCurrent() <= RobotMap.CIM_IDLE_CURR) {
+//				faults[i] = true;
+//				SmartDashboard.putBoolean(getName() + "Diagnostics", false);
+//				lastKnownState = DiagnosticsState.FAIL;
+//			}
+//			motors.get(i).set(ControlMode.PercentOutput, 0.0);
+//		}
+//		SmartDashboard.putBooleanArray("Faults", faults);
+	}
+	
+	@Override
+	public void diagnosticsFlagSet() {
+		runDiagnostics = true;
 	}
 	
 	@Override
 	public void periodic() {
 		if(telemetryState.getSelected() == SubsystemTelemetryState.ON) {
-			SmartDashboard.putNumber( "RightNativeUnits", 
-					getRightNativeUnits());
-			SmartDashboard.putNumber( "LeftNativeUnits", 
-					getLeftNativeUnits());
-			SmartDashboard.putNumber( "RightEncoderUnits", 
-					getRightEncoderUnits());
-			SmartDashboard.putNumber( "LeftEncoderUnits", 
-					getLeftEncoderUnits());
+//			SmartDashboard.putNumber("ReadMotorCurrent", 
+//					rightRearMotor.getOutputCurrent());
+//			
+//			SmartDashboard.putNumber( "RightNativeUnits", 
+//					getRightNativeUnits());
+//			SmartDashboard.putNumber( "LeftNativeUnits", 
+//					getLeftNativeUnits());
+//			SmartDashboard.putNumber( "RightEncoderUnits", 
+//					getRightEncoderUnits());
+//			SmartDashboard.putNumber( "LeftEncoderUnits", 
+//					getLeftEncoderUnits());
 			
-			SmartDashboard.putNumber("DriveCurrent" + getName(), 
+			SmartDashboard.putNumber("FRCurrent", 
 					rightFrontMotor.getOutputCurrent());
+			SmartDashboard.putNumber("FLCurrent", 
+					leftFrontMotor.getOutputCurrent());
+			SmartDashboard.putNumber("BRCurrent", 
+					rightRearMotor.getOutputCurrent());
+			SmartDashboard.putNumber("BLCurrent", 
+					leftRearMotor.getOutputCurrent());
 			
-			SmartDashboard.putString("RightMode", 
-					getRightMode().name());
-			SmartDashboard.putString("LeftMode", 
-					getLeftMode().name());
+			SmartDashboard.putString("RightFrontMode", 
+					getRightFrontMode().name());
+			SmartDashboard.putString("LeftFrontMode", 
+					getLeftFrontMode().name());
+			SmartDashboard.putString("RightBackMode", 
+					getRightRearMode().name());
+			SmartDashboard.putString("LeftBackMode", 
+					getLeftRearMode().name());
 		}
 		
 	}

@@ -25,7 +25,7 @@ public class CommandUtils {
 		// Teleop or Autonomous.
 		// (Mode Test is currently pretty useless). 
 		
-		if( Robot.runMode == Robot.RunMode.DISABLED) {
+		if( Robot.runMode != Robot.RunMode.DISABLED) {
 			
 			toState.start();
 			return true;

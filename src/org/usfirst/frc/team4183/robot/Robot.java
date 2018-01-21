@@ -20,6 +20,7 @@ import org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -76,8 +77,8 @@ public class Robot extends IterativeRobot {
 	}
 	
 	private void setSubsystemsDebug() {
-		driveSubsystem.runDiagnostics = true;
-		intakeSubsystem.runDiagnostics = true;
+		driveSubsystem.diagnosticsFlagSet();
+		intakeSubsystem.diagnosticsFlagSet();
 		
 	}
 	
@@ -87,6 +88,7 @@ public class Robot extends IterativeRobot {
 
 		// Set up OI for disabled mode
 		oi.setDisabledMode();
+
 		
 		// Clear out the scheduler.
 		// Will result in only Default Commands (==Idle-s) running,
@@ -104,7 +106,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousInit() {
 		runMode = RunMode.AUTO;
-		
+
 		oi.setAutoMode();
 	}
 
@@ -140,7 +142,7 @@ public class Robot extends IterativeRobot {
 	public void testInit() {
 		runMode = RunMode.TEST;
 		setSubsystemsDebug();
-
+		LiveWindow.setEnabled(false);
 	}
 
 	/**
@@ -160,13 +162,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotPeriodic() {
 		SmartDashboard.putString("CurrMode", runMode.name());
-		SmartDashboard.putString("LastMode", lastState.name());
-		if(lastState != runMode) {
-			SmartDashboard.putBoolean("EnterDiag", true);
-			lastState = runMode;
-		}
 		
-		SmartDashboard.putBoolean("DriveDiagnosticsFlag", driveSubsystem.runDiagnostics);
 		loopWatch.stop();
 		loopWatch.start();
 		

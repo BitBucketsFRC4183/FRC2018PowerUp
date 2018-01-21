@@ -7,8 +7,8 @@ public class RobotMap {
 	// The precise value must be determined by calibration.
 	public static final double INCH_PER_WHEEL_ROT = 12.5 * 1.0353360615;
 	
-	public static final double CIM_IDLE_CURR = 0.125;
-	public static final double MOTOR_TEST_PERCENT = 0.05;
+	public static final double MINUMUM_MOTOR_CURR = 1.25;
+	public static final double MOTOR_TEST_PERCENT = 0.5;
 	
 	// Constant as UPPERCASE_WITH_UNDERSCORES
 	

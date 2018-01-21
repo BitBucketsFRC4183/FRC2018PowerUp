@@ -41,7 +41,7 @@ public class Idle extends Command
     	if( Robot.runMode == Robot.RunMode.AUTO)
     		return CommandUtils.stateChange(this, new AutoControl());
     	if( Robot.runMode == Robot.RunMode.TEST && Robot.driveSubsystem.runDiagnostics) {
-    		SmartDashboard.putBoolean("EnterDiagState", true);
+    		SmartDashboard.putBoolean("EnterDiag", true);
     		return CommandUtils.stateChange(this, new Diagnostics());
     	}
     	
