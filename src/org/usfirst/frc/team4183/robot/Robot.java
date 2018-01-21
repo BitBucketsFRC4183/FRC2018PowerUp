@@ -11,11 +11,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.usfirst.frc.team4183.robot.Robot.RunMode;
+
 import org.usfirst.frc.team4183.robot.subsystems.DriveSubsystem;
 import org.usfirst.frc.team4183.robot.subsystems.ElevatorSubSystem;
-import org.usfirst.frc.team4183.robot.subsystems.HardwareStatusSubsystem;
-import org.usfirst.frc.team4183.utils.DoEveryN;
-import org.usfirst.frc.team4183.utils.Stopwatch;
 import org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem;
 import org.usfirst.frc.team4183.robot.subsystems.WheelShooterSubsystem;
 
@@ -25,6 +23,9 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import org.usfirst.frc.team4183.utils.DoEveryN;
+import org.usfirst.frc.team4183.utils.Stopwatch;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -43,7 +44,6 @@ public class Robot extends IterativeRobot {
 	
 	public static DriveSubsystem driveSubsystem;
 	public static IntakeSubsystem intakeSubsystem;
-	public static HardwareStatusSubsystem hardwareStatusSubsystem;
 	public static WheelShooterSubsystem wheelShooterSubsystem;
 	public static ElevatorSubSystem elevatorSubSystem;
 
@@ -69,9 +69,7 @@ public class Robot extends IterativeRobot {
 		
 		driveSubsystem = new DriveSubsystem();
 		intakeSubsystem = new IntakeSubsystem();
-		hardwareStatusSubsystem.addSubsystemToStatusCheck(intakeSubsystem);
 		wheelShooterSubsystem = new WheelShooterSubsystem();
-		hardwareStatusSubsystem.addSubsystemToStatusCheck(wheelShooterSubsystem);
 		elevatorSubSystem = new ElevatorSubSystem();
 		
 		imu = new NavxIMU();
