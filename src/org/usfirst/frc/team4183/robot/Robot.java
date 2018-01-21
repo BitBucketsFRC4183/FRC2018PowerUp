@@ -15,6 +15,7 @@ import org.usfirst.frc.team4183.robot.Robot.RunMode;
 import org.usfirst.frc.team4183.robot.subsystems.DriveSubsystem;
 import org.usfirst.frc.team4183.robot.subsystems.ElevatorSubSystem;
 import org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem;
+import org.usfirst.frc.team4183.robot.subsystems.SpringShooterSubsystem;
 import org.usfirst.frc.team4183.robot.subsystems.WheelShooterSubsystem;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -46,11 +47,15 @@ public class Robot extends IterativeRobot {
 	public static IntakeSubsystem intakeSubsystem;
 	public static WheelShooterSubsystem wheelShooterSubsystem;
 	public static ElevatorSubSystem elevatorSubSystem;
+	public static SpringShooterSubsystem springShooterSubsystem;
 
   public static OI oi;
 	
 	public static LightingControl lightingControl;	
 	public static NavxIMU imu;
+
+
+	
 	
 	private static final String kDefaultAuto = "Default";
 	private static final String kCustomAuto = "My Auto";
@@ -71,6 +76,9 @@ public class Robot extends IterativeRobot {
 		intakeSubsystem = new IntakeSubsystem();
 		wheelShooterSubsystem = new WheelShooterSubsystem();
 		elevatorSubSystem = new ElevatorSubSystem();
+		hardwareStatusSubsystem.addSubsystemToStatusCheck(elevatorSubSystem);
+		springShooterSubsystem = new SpringShooterSubsystem();
+		hardwareStatusSubsystem.addSubsystemToStatusCheck(springShooterSubsystem);
 		
 		imu = new NavxIMU();
 		lightingControl = new LightingControl();
