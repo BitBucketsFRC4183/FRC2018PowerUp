@@ -17,17 +17,39 @@ public class SpringShooterSubsystem extends BitBucketsSubsystem {
         setDefaultCommand(new Idle());
     }
     
-    
-
-	@Override
-	public boolean diagnostics() {
+	public void disable() {
 		// TODO Auto-generated method stub
-		return false;
+		
 	}
 
 
 
-	public void disable() {
+	@Override
+	public void diagnosticsInit() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+	@Override
+	public void diagnosticsCheck() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+	@Override
+	public void diagnosticsFlagSet() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+	@Override
+	public void periodic() {
 		// TODO Auto-generated method stub
 		
 	}

@@ -76,9 +76,7 @@ public class Robot extends IterativeRobot {
 		intakeSubsystem = new IntakeSubsystem();
 		wheelShooterSubsystem = new WheelShooterSubsystem();
 		elevatorSubSystem = new ElevatorSubSystem();
-		hardwareStatusSubsystem.addSubsystemToStatusCheck(elevatorSubSystem);
 		springShooterSubsystem = new SpringShooterSubsystem();
-		hardwareStatusSubsystem.addSubsystemToStatusCheck(springShooterSubsystem);
 		
 		imu = new NavxIMU();
 		lightingControl = new LightingControl();
