@@ -1,4 +1,4 @@
-package org.usfirst.frc.team4183.robot.subsystems;
+package org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -6,10 +6,10 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import java.util.ArrayList;
 
 import org.usfirst.frc.team4183.robot.RobotMap;
-import org.usfirst.frc.team4183.robot.commands.IntakeSubsystem.Idle;
+import org.usfirst.frc.team4183.robot.subsystems.BitBucketsSubsystem;
+import org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem.Idle;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**
  *

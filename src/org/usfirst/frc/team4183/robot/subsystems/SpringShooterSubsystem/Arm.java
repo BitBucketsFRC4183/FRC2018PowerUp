@@ -1,4 +1,4 @@
-package org.usfirst.frc.team4183.robot.commands.SpringShooterSubsystem;
+package org.usfirst.frc.team4183.robot.subsystems.SpringShooterSubsystem;
 
 import org.usfirst.frc.team4183.robot.Robot;
 
@@ -7,9 +7,9 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class Fire extends Command {
+public class Arm extends Command {
 
-    public Fire() {
+    public Arm() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     		requires(Robot.springShooterSubsystem);
@@ -17,8 +17,10 @@ public class Fire extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    		//Flash red lights once
-		//Release brake
+		//Run motor until platform is at its lowest position
+		//Reload brake
+		//Set gearbox to neutral (pneumatics)
+		//Turn lights red
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -27,13 +29,13 @@ public class Fire extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    		//Should return true as soon as brake is released
+    		//Returns true when FIRE button is pressed
         return false;
     }
 
     // Called once after isFinished returns true
     protected void end() {
-    		//Goes to IDLE
+    		//Goes to FIRE
     }
 
     // Called when another command which requires one or more of the same

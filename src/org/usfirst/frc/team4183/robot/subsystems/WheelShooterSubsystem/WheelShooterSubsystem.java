@@ -1,7 +1,7 @@
-package org.usfirst.frc.team4183.robot.subsystems;
+package org.usfirst.frc.team4183.robot.subsystems.WheelShooterSubsystem;
 
 import org.usfirst.frc.team4183.robot.RobotMap;
-import org.usfirst.frc.team4183.robot.commands.WheelShooterSubsystem.Idle;
+import org.usfirst.frc.team4183.robot.subsystems.WheelShooterSubsystem.Idle;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;

@@ -1,24 +1,25 @@
-package org.usfirst.frc.team4183.robot.commands.IntakeSubsystem;
+package org.usfirst.frc.team4183.robot.subsystems.SpringShooterSubsystem;
 
 import org.usfirst.frc.team4183.robot.Robot;
-import org.usfirst.frc.team4183.utils.CommandUtils;
 
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
  *
  */
-public class Deployed extends Command {
+public class Fault extends Command {
 
-    public Deployed() {
+    public Fault() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
-    		requires(Robot.intakeSubsystem);	
+    		requires(Robot.springShooterSubsystem);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	//Robot.intakeSubsystem.opengate();
+    		//Flash red lights
+    		//Set gearbox to high torque
+    		//Reload brake
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -27,24 +28,17 @@ public class Deployed extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	if( Robot.oi.btnIntake.get()) {
-    		return CommandUtils.stateChange(this, new Intaking());
-    	}
-    	if( Robot.oi.btnOuttake.get()) {
-    		return CommandUtils.stateChange(this, new Outtaking());
-    	}
-    //	if( Robot.oi.btnCloseGate.get()) {
-    	//	return CommandUtils.stateChange(this, new Idle());
-    	//}
         return false;
     }
 
     // Called once after isFinished returns true
     protected void end() {
+    		//Goes to IDLE
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
+    		end();
     }
 }

@@ -1,4 +1,4 @@
-package org.usfirst.frc.team4183.robot.commands.SpringShooterSubsystem;
+package org.usfirst.frc.team4183.robot.subsystems.SpringShooterSubsystem;
 
 import org.usfirst.frc.team4183.robot.Robot;
 import org.usfirst.frc.team4183.utils.CommandUtils;

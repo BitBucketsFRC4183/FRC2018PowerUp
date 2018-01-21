@@ -1,8 +1,8 @@
-package org.usfirst.frc.team4183.robot.subsystems;
+package org.usfirst.frc.team4183.robot.subsystems.ElevatorSubsystem;
 
 import org.usfirst.frc.team4183.robot.RobotMap;
-
-import edu.wpi.first.wpilibj.command.Subsystem;
+import org.usfirst.frc.team4183.robot.subsystems.BitBucketsSubsystem;
+import org.usfirst.frc.team4183.robot.subsystems.SpringShooterSubsystem.Idle;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -68,8 +68,7 @@ public class ElevatorSubSystem extends BitBucketsSubsystem {
 
 	@Override
 	protected void initDefaultCommand() {
-		// TODO Auto-generated method stub
-		
+		setDefaultCommand(new Idle());		
 	}
 
 	@Override

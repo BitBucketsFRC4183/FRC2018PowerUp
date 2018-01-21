@@ -11,12 +11,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.usfirst.frc.team4183.robot.Robot.RunMode;
-
-import org.usfirst.frc.team4183.robot.subsystems.DriveSubsystem;
-import org.usfirst.frc.team4183.robot.subsystems.ElevatorSubSystem;
-import org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem;
-import org.usfirst.frc.team4183.robot.subsystems.SpringShooterSubsystem;
-import org.usfirst.frc.team4183.robot.subsystems.WheelShooterSubsystem;
+import org.usfirst.frc.team4183.robot.subsystems.DriveSubsystem.DriveSubsystem;
+import org.usfirst.frc.team4183.robot.subsystems.ElevatorSubsystem.ElevatorSubSystem;
+import org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem.IntakeSubsystem;
+import org.usfirst.frc.team4183.robot.subsystems.SpringShooterSubsystem.SpringShooterSubsystem;
+import org.usfirst.frc.team4183.robot.subsystems.WheelShooterSubsystem.WheelShooterSubsystem;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;

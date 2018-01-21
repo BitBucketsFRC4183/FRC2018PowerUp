@@ -1,4 +1,4 @@
-package org.usfirst.frc.team4183.robot.subsystems;
+package org.usfirst.frc.team4183.robot.subsystems.DriveSubsystem;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -13,8 +13,10 @@ import java.util.ArrayList;
 
 import org.usfirst.frc.team4183.robot.Robot;
 import org.usfirst.frc.team4183.robot.RobotMap;
-import org.usfirst.frc.team4183.robot.commands.DriveSubsystem.Idle;
 import org.usfirst.frc.team4183.utils.Deadzone;
+import org.usfirst.frc.team4183.robot.subsystems.BitBucketsSubsystem;
+import org.usfirst.frc.team4183.robot.subsystems.SubsystemUtilities;
+import org.usfirst.frc.team4183.robot.subsystems.DriveSubsystem.Idle;
 import org.usfirst.frc.team4183.robot.subsystems.SubsystemUtilities.DiagnosticsState;
 import org.usfirst.frc.team4183.robot.subsystems.SubsystemUtilities.SubsystemTelemetryState;
 

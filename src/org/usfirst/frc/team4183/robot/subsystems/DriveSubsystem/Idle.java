@@ -1,32 +1,29 @@
-package org.usfirst.frc.team4183.robot.commands.IntakeSubsystem;
+package org.usfirst.frc.team4183.robot.subsystems.DriveSubsystem;
 
 import org.usfirst.frc.team4183.robot.Robot;
 import org.usfirst.frc.team4183.utils.CommandUtils;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
  */
 public class Idle extends Command 
 {
-//NOTE: Idle goes to Deployed, which functionalny does the same thing as idle EXCEPT
-//opens the gate if that gets implemented. As of me writing this the team doesn't know if that
-//will be the case so I'm just implanting the deployed state now because it's	harder to jam it in
-//later.	
-    
-	public Idle() 
+
+    public Idle() 
     {
         // Use requires() here to declare subsystem dependencies
-    	requires(Robot.intakeSubsystem);
+    	requires(Robot.driveSubsystem);
     	setRunWhenDisabled(true);  // Idle state needs this!
     }
 
     // Called just before this Command runs the first time
     protected void initialize() 
     {
-    	Robot.intakeSubsystem.disable();
-    //	Robot.intakeSubsystem.opengate();
+    	Robot.driveSubsystem.disable();
+    	SmartDashboard.putBoolean("EnterDiag", false);
 
     }
 
@@ -39,9 +36,14 @@ public class Idle extends Command
     protected boolean isFinished() 
     {
     	/// TODO: Resurrect this from last year
-    	if( Robot.runMode == Robot.RunMode.TELEOP ) 
-    		return CommandUtils.stateChange(this, new Deployed());
-    	
+    	if( Robot.runMode == Robot.RunMode.TELEOP) 
+    		return CommandUtils.stateChange(this, new DriverControl());
+    	if( Robot.runMode == Robot.RunMode.AUTO)
+    		return CommandUtils.stateChange(this, new AutoControl());
+    	if( Robot.runMode == Robot.RunMode.TEST && Robot.driveSubsystem.runDiagnostics) {
+    		SmartDashboard.putBoolean("EnterDiag", true);
+    		return CommandUtils.stateChange(this, new Diagnostics());
+    	}
     	
     	return false;
     }

@@ -1,19 +1,18 @@
-package org.usfirst.frc.team4183.robot.commands.IntakeSubsystem;
+package org.usfirst.frc.team4183.robot.subsystems.SpringShooterSubsystem;
 
 import org.usfirst.frc.team4183.robot.Robot;
-import org.usfirst.frc.team4183.utils.CommandUtils;
 
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
  *
  */
-public class Intaking extends Command {
+public class Diagnostics extends Command {
 
-    public Intaking() {
+    public Diagnostics() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
-    		requires(Robot.intakeSubsystem);	
+    		requires(Robot.springShooterSubsystem);
     }
 
     // Called just before this Command runs the first time
@@ -22,14 +21,10 @@ public class Intaking extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.intakeSubsystem.setMotorSpeed(1);    
-    	}
+    }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	if( Robot.oi.btnIdle.get()) {
-    		return CommandUtils.stateChange(this, new Deployed());
-    	}
         return false;
     }
 
@@ -40,5 +35,6 @@ public class Intaking extends Command {
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
+    		end();
     }
 }

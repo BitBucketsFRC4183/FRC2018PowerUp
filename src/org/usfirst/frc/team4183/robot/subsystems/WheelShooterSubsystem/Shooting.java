@@ -1,49 +1,46 @@
-package org.usfirst.frc.team4183.robot.commands.DriveSubsystem;
+package org.usfirst.frc.team4183.robot.subsystems.WheelShooterSubsystem;
 
 import org.usfirst.frc.team4183.robot.Robot;
 import org.usfirst.frc.team4183.utils.CommandUtils;
-
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
  */
-public class Idle extends Command 
+public class Shooting extends Command 
 {
 
-    public Idle() 
+    public Shooting() 
     {
         // Use requires() here to declare subsystem dependencies
-    	requires(Robot.driveSubsystem);
+    	requires(Robot.wheelShooterSubsystem);
     	setRunWhenDisabled(true);  // Idle state needs this!
     }
 
     // Called just before this Command runs the first time
     protected void initialize() 
     {
-    	Robot.driveSubsystem.disable();
-    	SmartDashboard.putBoolean("EnterDiag", false);
+    	
+    
 
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	
+    	Robot.wheelShooterSubsystem.setMotorSpeed(SmartDashboard.getNumber("Shooter Speed", 0));
+    	//Robot.wheelShooterSubsystem.setMotorSpeed(0.2);
+    //System.out.println("Im Shooting");
+
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() 
     {
     	/// TODO: Resurrect this from last year
-    	if( Robot.runMode == Robot.RunMode.TELEOP) 
-    		return CommandUtils.stateChange(this, new DriverControl());
-    	if( Robot.runMode == Robot.RunMode.AUTO)
-    		return CommandUtils.stateChange(this, new AutoControl());
-    	if( Robot.runMode == Robot.RunMode.TEST && Robot.driveSubsystem.runDiagnostics) {
-    		SmartDashboard.putBoolean("EnterDiag", true);
-    		return CommandUtils.stateChange(this, new Diagnostics());
-    	}
+    	if(Robot.oi.btnIdle.get()) {
+    		return CommandUtils.stateChange(this, new Idle());
+}
     	
     	return false;
     }

@@ -1,19 +1,17 @@
-package org.usfirst.frc.team4183.robot.commands.WheelShooterSubsystem;
+package org.usfirst.frc.team4183.robot.subsystems.WheelShooterSubsystem;
 
 import org.usfirst.frc.team4183.robot.Robot;
-import org.usfirst.frc.team4183.robot.commands.IntakeSubsystem.Deployed;
 import org.usfirst.frc.team4183.utils.CommandUtils;
 import org.usfirst.frc.team4183.robot.OI;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
  */
-public class Shooting extends Command 
+public class Idle extends Command 
 {
 
-    public Shooting() 
+    public Idle() 
     {
         // Use requires() here to declare subsystem dependencies
     	requires(Robot.wheelShooterSubsystem);
@@ -23,16 +21,14 @@ public class Shooting extends Command
     // Called just before this Command runs the first time
     protected void initialize() 
     {
-    	
+    	Robot.wheelShooterSubsystem.disable();
     
 
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.wheelShooterSubsystem.setMotorSpeed(SmartDashboard.getNumber("Shooter Speed", 0));
-    	//Robot.wheelShooterSubsystem.setMotorSpeed(0.2);
-    //System.out.println("Im Shooting");
+      //System.out.println("Im Waiting");
 
     }
 
@@ -40,8 +36,8 @@ public class Shooting extends Command
     protected boolean isFinished() 
     {
     	/// TODO: Resurrect this from last year
-    	if(Robot.oi.btnIdle.get()) {
-    		return CommandUtils.stateChange(this, new Idle());
+    	if(Robot.oi.btnShooter.get()) {
+    		return CommandUtils.stateChange(this, new Shooting());
 }
     	
     	return false;

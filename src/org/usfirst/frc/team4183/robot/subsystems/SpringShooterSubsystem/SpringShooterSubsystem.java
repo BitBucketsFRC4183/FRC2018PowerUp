@@ -1,8 +1,7 @@
-package org.usfirst.frc.team4183.robot.subsystems;
+package org.usfirst.frc.team4183.robot.subsystems.SpringShooterSubsystem;
 
-import org.usfirst.frc.team4183.robot.commands.SpringShooterSubsystem.Idle;
-
-import edu.wpi.first.wpilibj.command.Command;
+import org.usfirst.frc.team4183.robot.subsystems.BitBucketsSubsystem;
+import org.usfirst.frc.team4183.robot.subsystems.SpringShooterSubsystem.Idle;
 
 /**
  *
