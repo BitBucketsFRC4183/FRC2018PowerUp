@@ -24,7 +24,6 @@ public class DriveSubsystem extends BitBucketsSubsystem
 {
 	private final double INCH_PER_WHEEL_ROT = RobotMap.INCH_PER_WHEEL_ROT;
 	
-	private final int CONTROLLER_TIMEOUT_MS = 100; // Default timeout to wait for configuration response
 
 	// Can adjust these to help the robot drive straight with zero turn stick.
 	// +Values will add +yaw correct (CCW viewed from top) when going forward.
@@ -218,7 +217,7 @@ public class DriveSubsystem extends BitBucketsSubsystem
 		// TODO: New functions provide ErrorCode feedback if there is a problem setting up the controller
 		
 		m.set(ControlMode.Position,0.0);
-		m.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, CONTROLLER_TIMEOUT_MS);
+		m.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, RobotMap.CONTROLLER_TIMEOUT_MS);
 		
 		// NOTE: The encoder codes per revolution interface no longer exists
 		// All of the interfaces operate in native units which are 4x the counts per revolution
@@ -229,27 +228,27 @@ public class DriveSubsystem extends BitBucketsSubsystem
 		// Basically, we just need to do the math ourselves
 		
 		//m.setInverted(true);  // TODO: When do we turn this off?
-		m.setSelectedSensorPosition(0, 0, CONTROLLER_TIMEOUT_MS);	// Zero the sensor where we are right now
+		m.setSelectedSensorPosition(0, 0, RobotMap.CONTROLLER_TIMEOUT_MS);	// Zero the sensor where we are right now
 		
 		// NOTE: PIDF constants should be determined based on native units
-		m.config_kP(0, 0.016, CONTROLLER_TIMEOUT_MS); // May be able to increase gain a bit	
-		m.config_kI(0, 0, CONTROLLER_TIMEOUT_MS);
-		m.config_kD(0, 0, CONTROLLER_TIMEOUT_MS); 
-		m.config_kF(0, 0, CONTROLLER_TIMEOUT_MS);
-		m.config_IntegralZone(0, 0, CONTROLLER_TIMEOUT_MS);
+		m.config_kP(0, 0.016, RobotMap.CONTROLLER_TIMEOUT_MS); // May be able to increase gain a bit	
+		m.config_kI(0, 0, RobotMap.CONTROLLER_TIMEOUT_MS);
+		m.config_kD(0, 0, RobotMap.CONTROLLER_TIMEOUT_MS); 
+		m.config_kF(0, 0, RobotMap.CONTROLLER_TIMEOUT_MS);
+		m.config_IntegralZone(0, 0, RobotMap.CONTROLLER_TIMEOUT_MS);
 		
-		m.configClosedloopRamp(0.250, CONTROLLER_TIMEOUT_MS); // Smoothes things a bit: Don't switch from neutral to full too quickly
+		m.configClosedloopRamp(0.250, RobotMap.CONTROLLER_TIMEOUT_MS); // Smoothes things a bit: Don't switch from neutral to full too quickly
 		
 		// TODO: Need to understand the implication of this error limit
 		// If it is in "ticks" or "pulse" or whatever, then how big are 8 ticks
 		// E.g., if encoder is 256 steps per revolution then 8/256 is 11.25 degress, which is actually
 		// quite large. So we need to figure this out if we want to have real control.
-		m.configAllowableClosedloopError(0, 0, CONTROLLER_TIMEOUT_MS);  // Specified in native "ticks"?
+		m.configAllowableClosedloopError(0, 0, RobotMap.CONTROLLER_TIMEOUT_MS);  // Specified in native "ticks"?
 		
-		m.configPeakOutputForward(1.0, CONTROLLER_TIMEOUT_MS);
-		m.configPeakOutputReverse(-1.0, CONTROLLER_TIMEOUT_MS);
-		m.configNominalOutputForward(1.0/3.0, CONTROLLER_TIMEOUT_MS);
-		m.configNominalOutputReverse(-1.0/3.0, CONTROLLER_TIMEOUT_MS);
+		m.configPeakOutputForward(1.0, RobotMap.CONTROLLER_TIMEOUT_MS);
+		m.configPeakOutputReverse(-1.0, RobotMap.CONTROLLER_TIMEOUT_MS);
+		m.configNominalOutputForward(1.0/3.0, RobotMap.CONTROLLER_TIMEOUT_MS);
+		m.configNominalOutputReverse(-1.0/3.0, RobotMap.CONTROLLER_TIMEOUT_MS);
 					
 	}
 	
