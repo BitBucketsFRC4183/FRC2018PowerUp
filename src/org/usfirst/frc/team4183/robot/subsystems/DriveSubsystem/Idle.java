@@ -23,7 +23,6 @@ public class Idle extends Command
     protected void initialize() 
     {
     	Robot.driveSubsystem.disable();
-    	SmartDashboard.putBoolean("EnterDiag", false);
 
     }
 
@@ -40,8 +39,7 @@ public class Idle extends Command
     		return CommandUtils.stateChange(this, new DriverControl());
     	if( Robot.runMode == Robot.RunMode.AUTO)
     		return CommandUtils.stateChange(this, new AutoControl());
-    	if( Robot.runMode == Robot.RunMode.TEST && Robot.driveSubsystem.runDiagnostics) {
-    		SmartDashboard.putBoolean("EnterDiag", true);
+    	if( Robot.runMode == Robot.RunMode.TEST && Robot.driveSubsystem.getDiagnosticsFlag()) {
     		return CommandUtils.stateChange(this, new Diagnostics());
     	}
     	
