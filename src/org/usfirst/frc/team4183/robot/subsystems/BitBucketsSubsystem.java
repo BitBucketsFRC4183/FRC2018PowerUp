@@ -12,9 +12,9 @@ import org.usfirst.frc.team4183.robot.subsystems.SubsystemUtilities.DiagnosticsS
  */
 public abstract class BitBucketsSubsystem extends Subsystem {
 	
-	public boolean runDiagnostics;
-	public DiagnosticsState lastKnownState;
-	public int DIAG_LOOPS_RUN;
+	private boolean runDiagnostics = false;
+	public DiagnosticsState lastKnownState = DiagnosticsState.UNKNOWN;
+	public int DIAG_LOOPS_RUN = 5;
 	
 	public BitBucketsSubsystem() {
 		
@@ -22,9 +22,13 @@ public abstract class BitBucketsSubsystem extends Subsystem {
 
 	public abstract void diagnosticsInit();
 	
+	public abstract void diagnosticsExecute();
+	
 	public abstract void diagnosticsCheck();
 	
-	public abstract void diagnosticsFlagSet();
+	public abstract void setDiagnosticsFlag(boolean enable);
+	
+	public abstract boolean getDiagnosticsFlag();
 	
 	@Override
     protected abstract void initDefaultCommand();
