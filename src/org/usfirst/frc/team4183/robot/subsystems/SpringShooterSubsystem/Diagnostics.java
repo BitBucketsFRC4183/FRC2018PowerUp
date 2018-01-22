@@ -2,6 +2,8 @@ package org.usfirst.frc.team4183.robot.subsystems.SpringShooterSubsystem;
 
 import org.usfirst.frc.team4183.robot.Robot;
 
+import org.usfirst.frc.team4183.utils.CommandUtils; 
+
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
@@ -9,10 +11,13 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class Diagnostics extends Command {
 
+	private int diagInitLoops; 
+	 
     public Diagnostics() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     		requires(Robot.springShooterSubsystem);
+    	    diagInitLoops = 0; 
     }
 
     // Called just before this Command runs the first time
