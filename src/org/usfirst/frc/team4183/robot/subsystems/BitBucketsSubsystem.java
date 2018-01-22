@@ -12,7 +12,7 @@ import org.usfirst.frc.team4183.robot.subsystems.SubsystemUtilities.DiagnosticsS
  */
 public abstract class BitBucketsSubsystem extends Subsystem {
 	
-	private boolean runDiagnostics = false;
+	protected boolean runDiagnostics = false;
 	public DiagnosticsState lastKnownState = DiagnosticsState.UNKNOWN;
 	public int DIAG_LOOPS_RUN = 5;
 	
