@@ -4,15 +4,21 @@ import org.usfirst.frc.team4183.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
 
+import org.usfirst.frc.team4183.utils.CommandUtils;
+
+
 /**
  *
  */
 public class Diagnostics extends Command {
 
+	private int diagInitLoops;
+	
     public Diagnostics() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
-    		requires(Robot.springShooterSubsystem);
+    	requires(Robot.springShooterSubsystem);
+    	diagInitLoops = 0;
     }
 
     // Called just before this Command runs the first time
@@ -21,10 +27,19 @@ public class Diagnostics extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	if(diagInitLoops < Robot.springShooterSubsystem.DIAG_LOOPS_RUN) {
+    		Robot.springShooterSubsystem.diagnosticsInit();
+    		diagInitLoops++;
+    	}
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
+
+    	if(diagInitLoops >= Robot.springShooterSubsystem.DIAG_LOOPS_RUN) {
+    		Robot.springShooterSubsystem.diagnosticsCheck();
+    		return CommandUtils.stateChange(this, new Idle());
+    	}
         return false;
     }
 
