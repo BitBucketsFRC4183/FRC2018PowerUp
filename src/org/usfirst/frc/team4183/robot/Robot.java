@@ -4,29 +4,23 @@
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
-
 package org.usfirst.frc.team4183.robot;
-
 import java.util.HashSet;
 import java.util.Set;
-
 import org.usfirst.frc.team4183.robot.Robot.RunMode;
 import org.usfirst.frc.team4183.robot.subsystems.DriveSubsystem.DriveSubsystem;
 import org.usfirst.frc.team4183.robot.subsystems.ElevatorSubsystem.ElevatorSubsystem;
 import org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem.IntakeSubsystem;
 import org.usfirst.frc.team4183.robot.subsystems.SpringShooterSubsystem.SpringShooterSubsystem;
 import org.usfirst.frc.team4183.robot.subsystems.WheelShooterSubsystem.WheelShooterSubsystem;
-
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 import org.usfirst.frc.team4183.utils.DoEveryN;
 import org.usfirst.frc.team4183.utils.Stopwatch;
-
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the IterativeRobot
@@ -35,7 +29,6 @@ import org.usfirst.frc.team4183.utils.Stopwatch;
  * project.
  */
 public class Robot extends IterativeRobot {
-
 	// Use this runMode variable to determine the 
 	// current running mode of the Robot.
 	public enum RunMode { DISABLED, AUTO, TELEOP, TEST };
@@ -112,6 +105,7 @@ public class Robot extends IterativeRobot {
 	{
 		driveSubsystem.diagnosticsFlagSet();
 		intakeSubsystem.diagnosticsFlagSet();
+		springShooterSubsystem.diagnosticsFlagSet();
 		
 		wheelShooterSubsystem.diagnosticsFlagSet();
 		springShooterSubsystem.diagnosticsFlagSet();
@@ -150,10 +144,8 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void disabledInit() {
 		runMode = RunMode.DISABLED;
-
 		// Set up OI for disabled mode
 		oi.setDisabledMode();
-
 		
 		// Clear out the scheduler.
 		// Will result in only Default Commands (==Idle-s) running,
@@ -162,7 +154,6 @@ public class Robot extends IterativeRobot {
 		
 		chooseSubsystem();
 	}
-
 	@Override
 	public void disabledPeriodic() {
 		runWatch.start();
@@ -173,12 +164,10 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousInit() {
 		runMode = RunMode.AUTO;
-
 		oi.setAutoMode();
 		
 		chooseSubsystem();
 	}
-
 	/**
 	 * This function is called periodically during autonomous.
 	 */
@@ -188,11 +177,9 @@ public class Robot extends IterativeRobot {
 		Scheduler.getInstance().run();
 		runWatch.stop();
 	}
-
 	@Override
 	public void teleopInit() {
 		runMode = RunMode.TELEOP;
-
 		// Set up OI for teleop mode
 		oi.setTeleopMode();
 		
@@ -219,7 +206,6 @@ public class Robot extends IterativeRobot {
 		LiveWindow.setEnabled(false);
 		
 	}
-
 	/**
 	 * This function is called periodically during test mode.
 	 */
@@ -230,7 +216,6 @@ public class Robot extends IterativeRobot {
 		runWatch.stop();
 				
 		//hardwareStatusSubsystem.subsystemStatusCheck();
-
 	}
 	
 	// Called periodically all the time (regardless of mode)
@@ -244,7 +229,6 @@ public class Robot extends IterativeRobot {
 		periodicSDdebugLoop.update();
 	}
 	
-
 	// Some ancillary debugging stuff below here
 	
 	private Stopwatch runWatch = 
@@ -253,7 +237,6 @@ public class Robot extends IterativeRobot {
 	private Stopwatch loopWatch = 
 			new Stopwatch( "Loop", 
 			(name, max, min, avg) -> SmartDashboard.putNumber( "MaxLoop", max) );
-
 	private DoEveryN periodicSDdebugLoop = 
 			new DoEveryN( 10, () -> putPeriodicSDdebug());
 	
@@ -278,7 +261,6 @@ public class Robot extends IterativeRobot {
 //				String.format("%.1f", visionSubsystem.getGearDistance_inch()));
 	}	
 	private Set<Subsystem> subSystems = new HashSet<>();
-
 	// Add Subsystem to the test set
 	public void addSubsystemToDebug(Subsystem subsys) {
 		subSystems.add(subsys);
@@ -287,13 +269,10 @@ public class Robot extends IterativeRobot {
 	// Put debug info on SmartDashboard
 	private void showDebugInfo() 
 	{
-
 		// Show the Scheduler
 		SmartDashboard.putData(Scheduler.getInstance());
-
 		// Show the Subsystems
 		for (Subsystem subsys : subSystems)
 			SmartDashboard.putData(subsys);
 	}	
-
 }

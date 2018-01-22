@@ -1,19 +1,15 @@
 package org.usfirst.frc.team4183.robot.subsystems.SpringShooterSubsystem;
-
 import org.usfirst.frc.team4183.robot.RobotMap;
 import org.usfirst.frc.team4183.robot.subsystems.BitBucketsSubsystem;
-
+import org.usfirst.frc.team4183.robot.subsystems.SpringShooterSubsystem.Idle;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-
 /**
  *
  */
 public class SpringShooterSubsystem extends BitBucketsSubsystem 
 {
-
 	private final WPI_TalonSRX motorA;		// User follower mode
 	private final WPI_TalonSRX motorB;
 	
@@ -38,12 +34,12 @@ public class SpringShooterSubsystem extends BitBucketsSubsystem
 		gearShifter = new DoubleSolenoid(RobotMap.SPRING_SHOOTER_SHIFTER_HIGH_PNEUMA_CHANNEL, 
 				                         RobotMap.SPRING_SHOOTER_SHIFTER_NEUTRAL_PNEUMA_CHANNEL);
 		
+		DIAG_LOOPS_RUN=20;
 		
 	}
 	
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
-
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
         setDefaultCommand(new Idle());
@@ -53,33 +49,25 @@ public class SpringShooterSubsystem extends BitBucketsSubsystem
 		// TODO Auto-generated method stub
 		
 	}
-
-
-
 	@Override
 	public void diagnosticsInit() {
 		// TODO Auto-generated method stub
 		
+		motorA.set(ControlMode.PercentOutput, RobotMap.MOTOR_TEST_PERCENT);//set one motor at time
+		
 	}
-
-
-
 	@Override
 	public void diagnosticsCheck() {
 		// TODO Auto-generated method stub
+		runDiagnostics=false;
+		motorA.set(ControlMode.PercentOutput, 0);
 		
 	}
-
-
-
 	@Override
 	public void diagnosticsFlagSet() {
 		// TODO Auto-generated method stub
-		
+		runDiagnostics=true;
 	}
-
-
-
 	@Override
 	public void periodic() {
 		// TODO Auto-generated method stub
@@ -95,4 +83,3 @@ public class SpringShooterSubsystem extends BitBucketsSubsystem
 		return present;
 	}
 }
-
