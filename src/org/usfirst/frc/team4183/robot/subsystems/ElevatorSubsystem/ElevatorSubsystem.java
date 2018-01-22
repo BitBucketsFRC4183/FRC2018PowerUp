@@ -78,11 +78,6 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 		
 	}
 
-	@Override
-	public void diagnosticsFlagSet() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void periodic() {
@@ -97,6 +92,24 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 
 	public boolean isPresent() {
 		return present;
+	}
+
+	@Override
+	public void diagnosticsExecute() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setDiagnosticsFlag(boolean enable) {
+		// TODO Auto-generated method stub
+		runDiagnostics = enable;
+	}
+
+	@Override
+	public boolean getDiagnosticsFlag() {
+		// TODO Auto-generated method stub
+		return runDiagnostics;
 	}
 	
 	

@@ -1,6 +1,7 @@
 package org.usfirst.frc.team4183.robot.subsystems.WheelShooterSubsystem;
 
 import org.usfirst.frc.team4183.robot.RobotMap;
+import org.usfirst.frc.team4183.robot.subsystems.BitBucketsSubsystem;
 import org.usfirst.frc.team4183.robot.subsystems.WheelShooterSubsystem.Idle;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -11,7 +12,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 /**
  *
  */
-public class WheelShooterSubsystem extends Subsystem {
+public class WheelShooterSubsystem extends BitBucketsSubsystem {
 
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
@@ -64,6 +65,36 @@ public class WheelShooterSubsystem extends Subsystem {
 	public boolean isPresent() {
 		
 		return present;
+	}
+	@Override
+	public void diagnosticsInit() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void diagnosticsExecute() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void diagnosticsCheck() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void setDiagnosticsFlag(boolean enable) {
+		// TODO Auto-generated method stub
+		runDiagnostics = enable;
+	}
+	@Override
+	public boolean getDiagnosticsFlag() {
+		// TODO Auto-generated method stub
+		return runDiagnostics;
+	}
+	@Override
+	public void periodic() {
+		// TODO Auto-generated method stub
+		
 	}
 }
 

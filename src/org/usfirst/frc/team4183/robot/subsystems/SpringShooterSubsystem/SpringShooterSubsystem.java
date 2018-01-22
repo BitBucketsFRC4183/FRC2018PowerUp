@@ -63,11 +63,7 @@ public class SpringShooterSubsystem extends BitBucketsSubsystem
 		motorA.set(ControlMode.PercentOutput, 0);
 		
 	}
-	@Override
-	public void diagnosticsFlagSet() {
-		// TODO Auto-generated method stub
-		runDiagnostics=true;
-	}
+
 	@Override
 	public void periodic() {
 		// TODO Auto-generated method stub
@@ -81,5 +77,23 @@ public class SpringShooterSubsystem extends BitBucketsSubsystem
 
 	public boolean isPresent() {
 		return present;
+	}
+
+	@Override
+	public void diagnosticsExecute() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setDiagnosticsFlag(boolean enable) {
+		// TODO Auto-generated method stub
+		runDiagnostics=enable;
+	}
+
+	@Override
+	public boolean getDiagnosticsFlag() {
+		// TODO Auto-generated method stub
+		return runDiagnostics;
 	}
 }

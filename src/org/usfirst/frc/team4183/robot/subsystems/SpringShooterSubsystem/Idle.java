@@ -28,9 +28,9 @@ public class Idle extends Command
     		//Returns true when cube is detected
     	if (Robot.springShooterSubsystem.isPresent())
     	{
-    	}
-    		if(Robot.runMode==Robot.RunMode.TEST && Robot.springShooterSubsystem.runDiagnostics==true) 
+    		if(Robot.runMode==Robot.RunMode.TEST && Robot.springShooterSubsystem.getDiagnosticsFlag()==true) 
     			return CommandUtils.stateChange(this, new Diagnostics());
+    	}
     		
     		return false;
     }
