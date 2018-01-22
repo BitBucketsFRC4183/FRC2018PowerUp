@@ -39,12 +39,6 @@ public class DriveSubsystem extends BitBucketsSubsystem
 	private final boolean REVERSE_SENSOR = false;  
 	private final int EDGES_PER_ENCODER_COUNT = 4;
 	private double yawSetPoint;
-	
-	/* Diagnostics Information */
-	private final int MOTOR_BUILDUP_MS = 100;
-	public boolean runDiagnostics = false;
-	public DiagnosticsState lastKnownState;
-	public int DIAG_LOOPS_RUN;
 		
 	private final WPI_TalonSRX leftFrontMotor;		// User follower mode
 	private final WPI_TalonSRX leftRearMotor;
@@ -55,23 +49,17 @@ public class DriveSubsystem extends BitBucketsSubsystem
 	private final DifferentialDrive drive;
 	
 	private static SendableChooser<SubsystemTelemetryState> telemetryState;
-	private static ArrayList<WPI_TalonSRX> motors;
 	
     public DriveSubsystem()
     {
     		setName("DriveSubsystem");
     	
-    		motors = new ArrayList<WPI_TalonSRX>();
     		
     		DIAG_LOOPS_RUN = 10;
     		
 	    	leftFrontMotor = new WPI_TalonSRX(RobotMap.LEFT_DRIVE_MOTOR_FRONT_ID);
 	    	leftRearMotor = new WPI_TalonSRX(RobotMap.LEFT_DRIVE_MOTOR_REAR_ID);
-	    	motors.add(leftFrontMotor);
-	    	motors.add(leftRearMotor);
-	    	
-	    	lastKnownState = DiagnosticsState.UNKNOWN;
-	    	
+	    		    	
 	    	// Use follower mode to minimize shearing commands that could occur if
 	    	// separate commands are sent to each motor in a group
 	    	leftRearMotor.set(ControlMode.Follower, leftFrontMotor.getDeviceID());
@@ -81,8 +69,6 @@ public class DriveSubsystem extends BitBucketsSubsystem
 	    	
 	    	rightFrontMotor  = new WPI_TalonSRX(RobotMap.RIGHT_DRIVE_MOTOR_FRONT_ID);
 	    	rightRearMotor   = new WPI_TalonSRX(RobotMap.RIGHT_DRIVE_MOTOR_REAR_ID);
-	    	motors.add(rightFrontMotor);
-	    	motors.add(rightRearMotor);
 	
 	    	// Use follower mode to minimize shearing commands that could occur if
 	    	// separate commands are sent to each motor in a group
@@ -374,6 +360,11 @@ public class DriveSubsystem extends BitBucketsSubsystem
 	@Override
 	public void diagnosticsInit() {
 		
+	}
+	
+	@Override
+	public void diagnosticsExecute() {
+
 		/* Init Diagnostics */
 		SmartDashboard.putBoolean("RunningDiag", true);
 		
@@ -381,10 +372,6 @@ public class DriveSubsystem extends BitBucketsSubsystem
 		rightRearMotor.set(ControlMode.PercentOutput, -RobotMap.MOTOR_TEST_PERCENT);
 		leftFrontMotor.set(ControlMode.PercentOutput, -RobotMap.MOTOR_TEST_PERCENT);
 		leftRearMotor.set(ControlMode.PercentOutput, RobotMap.MOTOR_TEST_PERCENT);
-		
-//		for(WPI_TalonSRX motor: motors) {
-//			motor.set(ControlMode.PercentOutput, RobotMap.MOTOR_TEST_PERCENT);
-//		}
 	}
 	
 	@Override
@@ -427,23 +414,16 @@ public class DriveSubsystem extends BitBucketsSubsystem
 			lastKnownState = DiagnosticsState.FAIL;
 		}
 		leftRearMotor.set(ControlMode.PercentOutput, 0.0);
-		
-		
-		
-//		for(int i = 0; i < motors.size(); i++) {
-//			if(motors.get(i).getOutputCurrent() <= RobotMap.CIM_IDLE_CURR) {
-//				faults[i] = true;
-//				SmartDashboard.putBoolean(getName() + "Diagnostics", false);
-//				lastKnownState = DiagnosticsState.FAIL;
-//			}
-//			motors.get(i).set(ControlMode.PercentOutput, 0.0);
-//		}
-//		SmartDashboard.putBooleanArray("Faults", faults);
 	}
 	
 	@Override
-	public void diagnosticsFlagSet() {
-		runDiagnostics = true;
+	public void setDiagnosticsFlag(boolean state) {
+		runDiagnostics = state;
+	}
+	
+	@Override
+	public boolean getDiagnosticsFlag() {
+		return runDiagnostics;
 	}
 	
 	@Override
@@ -460,6 +440,10 @@ public class DriveSubsystem extends BitBucketsSubsystem
 //					getRightEncoderUnits());
 //			SmartDashboard.putNumber( "LeftEncoderUnits", 
 //					getLeftEncoderUnits());
+			SmartDashboard.putNumber( "IMU_Yaw", 
+					Robot.imu.getYawDeg());
+			SmartDashboard.putNumber( "IMU_Yawrate", 
+					Robot.imu.getYawRateDps());
 			
 			SmartDashboard.putNumber("FRCurrent", 
 					rightFrontMotor.getOutputCurrent());
