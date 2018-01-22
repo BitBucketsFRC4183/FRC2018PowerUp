@@ -18,6 +18,7 @@ public class SpringShooterSubsystem extends BitBucketsSubsystem
 	private final WPI_TalonSRX motorB;
 	
 	private final DoubleSolenoid gearShifter;
+	private boolean present = false;
 	
 	// Constructor
 	public SpringShooterSubsystem()
@@ -83,6 +84,15 @@ public class SpringShooterSubsystem extends BitBucketsSubsystem
 	public void periodic() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public void setPresent(boolean b) {
+		present = b;
+		
+	}
+
+	public boolean isPresent() {
+		return present;
 	}
 }
 

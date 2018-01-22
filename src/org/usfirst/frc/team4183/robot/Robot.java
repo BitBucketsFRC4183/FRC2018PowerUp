@@ -42,25 +42,36 @@ public class Robot extends IterativeRobot {
 	public static RunMode runMode = RunMode.DISABLED;
 	public static RunMode lastState = runMode;	
 	
+
+	// All robots will have these subsystems
+	// Other may be optional or interchangable
 	public static DriveSubsystem driveSubsystem;
 	public static IntakeSubsystem intakeSubsystem;
+	
+	// The following subsystems are mutually exclusive
+	// with regard to overall robot function and need
+	// to be selected prior to initializing the robot
+	// It is NOT currently the intent to interchange the
+	// the shooter/elevators during competition, but during
+	// prototyping and practice it is essential
+	public enum SubsystemSelectionType
+	{
+		NONE,
+		WHEEL_SHOOTER,
+		SPRING_SHOOTER,
+		ELEVATOR
+	};
 	public static WheelShooterSubsystem wheelShooterSubsystem;
-	public static ElevatorSubsystem elevatorSubsystem;
 	public static SpringShooterSubsystem springShooterSubsystem;
+	public static ElevatorSubsystem elevatorSubsystem;
+	
+	private SendableChooser<SubsystemSelectionType> subsystemSelector = 
+			new SendableChooser<SubsystemSelectionType>();
 
-  public static OI oi;
+    public static OI oi;
 	
 	public static LightingControl lightingControl;	
 	public static NavxIMU imu;
-
-
-	
-	
-	private static final String kDefaultAuto = "Default";
-	private static final String kCustomAuto = "My Auto";
-	private String m_autoSelected;
-
-	private SendableChooser<String> m_chooser = new SendableChooser<>();
 	
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -70,32 +81,70 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		oi = OI.instance();
 		
-		
+		// Always instantiate drive and intake
 		driveSubsystem = new DriveSubsystem();
 		intakeSubsystem = new IntakeSubsystem();
+		
+		// For the other subsystems, we need to be told what
+		// is attached so we can suppress the state machine
+		subsystemSelector.addDefault("None",          SubsystemSelectionType.NONE);
+		subsystemSelector.addObject( "WheelShooter",  SubsystemSelectionType.WHEEL_SHOOTER);
+		subsystemSelector.addObject( "SpringShooter", SubsystemSelectionType.SPRING_SHOOTER);
+		subsystemSelector.addObject( "Elevator",      SubsystemSelectionType.ELEVATOR);
+		
 		wheelShooterSubsystem = new WheelShooterSubsystem();
 		elevatorSubsystem = new ElevatorSubsystem();
 		springShooterSubsystem = new SpringShooterSubsystem();
 		
 		imu = new NavxIMU();
 		lightingControl = new LightingControl();
-		
-		m_chooser.addDefault("Default Auto", kDefaultAuto);
-		m_chooser.addObject("My Auto", kCustomAuto);
-		SmartDashboard.putData("Auto choices", m_chooser);
-		//SmartDashboard.putNumber("Default Value", 0);
-		SmartDashboard.putNumber("Shooter Speed", 0);
-		
+				
 		// Add all subsystems for debugging
 		addSubsystemToDebug(driveSubsystem);
         addSubsystemToDebug(intakeSubsystem);
+        addSubsystemToDebug(wheelShooterSubsystem);
+        addSubsystemToDebug(springShooterSubsystem);
+        addSubsystemToDebug(elevatorSubsystem);
 		showDebugInfo();		
 	}
 	
-	private void setSubsystemsDebug() {
+	private void setSubsystemsDebug() 
+	{
 		driveSubsystem.diagnosticsFlagSet();
 		intakeSubsystem.diagnosticsFlagSet();
 		
+		wheelShooterSubsystem.diagnosticsFlagSet();
+		springShooterSubsystem.diagnosticsFlagSet();
+		elevatorSubsystem.diagnosticsFlagSet();
+		
+	}
+	
+	private void chooseSubsystem()
+	{
+		switch (subsystemSelector.getSelected())
+		{
+		case WHEEL_SHOOTER:
+			wheelShooterSubsystem.setPresent(         	true);
+			springShooterSubsystem.setPresent(false);
+			elevatorSubsystem.setPresent(     false);
+			break;
+		case SPRING_SHOOTER:
+			wheelShooterSubsystem.setPresent( false);
+			springShooterSubsystem.setPresent(			true);
+			elevatorSubsystem.setPresent(     false);
+			break;
+		case ELEVATOR:
+			wheelShooterSubsystem.setPresent( false);
+			springShooterSubsystem.setPresent(false);
+			elevatorSubsystem.setPresent(     			true);
+			break;
+		case NONE:        
+		default:
+			wheelShooterSubsystem.setPresent( false);
+			springShooterSubsystem.setPresent(false);
+			elevatorSubsystem.setPresent(     false);
+			break;
+		}
 	}
 	
 	@Override
@@ -110,6 +159,8 @@ public class Robot extends IterativeRobot {
 		// Will result in only Default Commands (==Idle-s) running,
 		// effectively forcing all State Machines into Idle state.
 		Scheduler.getInstance().removeAll();
+		
+		chooseSubsystem();
 	}
 
 	@Override
@@ -124,6 +175,8 @@ public class Robot extends IterativeRobot {
 		runMode = RunMode.AUTO;
 
 		oi.setAutoMode();
+		
+		chooseSubsystem();
 	}
 
 	/**
@@ -142,6 +195,8 @@ public class Robot extends IterativeRobot {
 
 		// Set up OI for teleop mode
 		oi.setTeleopMode();
+		
+		chooseSubsystem();
 	}
 	
 	/**
@@ -157,8 +212,12 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void testInit() {
 		runMode = RunMode.TEST;
+
+		chooseSubsystem();
+		
 		setSubsystemsDebug();
 		LiveWindow.setEnabled(false);
+		
 	}
 
 	/**

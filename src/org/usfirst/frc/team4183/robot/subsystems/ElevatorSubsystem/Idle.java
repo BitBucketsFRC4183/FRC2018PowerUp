@@ -23,7 +23,11 @@ public class Idle extends Command{
 	}
 	
 	protected boolean isFinished()
-	{
+	{   
+		if (Robot.elevatorSubsystem.isPresent())
+		{
+			
+		}
 		return false;
 	}
 
