@@ -21,12 +21,13 @@ public class Diagnostics extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	Robot.driveSubsystem.diagnosticsInit();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	if(diagInitLoops < Robot.driveSubsystem.DIAG_LOOPS_RUN) {
-    		Robot.driveSubsystem.diagnosticsInit();
+    		Robot.driveSubsystem.diagnosticsExecute();
     		diagInitLoops++;
     	}
     }
