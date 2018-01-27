@@ -45,7 +45,7 @@ public class Robot extends IterativeRobot {
 	// with regard to overall robot function cannot be considered
 	// at the same time. Rather than create a complex selector
 	// and state exclusions we will just prevent creation.
-
+    /// WARNING WARNING WARNING: ONLY ONE
 	public static WheelShooterSubsystem wheelShooterSubsystem;
 	public static SpringShooterSubsystem springShooterSubsystem;
 	public static ElevatorSubsystem elevatorSubsystem;
@@ -67,9 +67,9 @@ public class Robot extends IterativeRobot {
 		driveSubsystem = new DriveSubsystem();
 		intakeSubsystem = new IntakeSubsystem();
 		
-		// Uncomment one, ONLY
+        /// WARNING WARNING WARNING: ONLY ONE
 		wheelShooterSubsystem = new WheelShooterSubsystem();
-		// elevatorSubsystem = new ElevatorSubsystem();
+		//elevatorSubsystem = new ElevatorSubsystem();
 		//springShooterSubsystem = new SpringShooterSubsystem();
 		
 		imu = new NavxIMU();
@@ -78,6 +78,8 @@ public class Robot extends IterativeRobot {
 		// Add all subsystems for debugging
 		addSubsystemToDebug(driveSubsystem);
         addSubsystemToDebug(intakeSubsystem);
+        
+        /// WARNING WARNING WARNING: ONLY ONE
         addSubsystemToDebug(wheelShooterSubsystem);
         //addSubsystemToDebug(springShooterSubsystem);
         //addSubsystemToDebug(elevatorSubsystem);
@@ -89,6 +91,7 @@ public class Robot extends IterativeRobot {
 		driveSubsystem.setDiagnosticsFlag(true);
 		intakeSubsystem.setDiagnosticsFlag(true);
 		
+        /// WARNING WARNING WARNING: ONLY ONE		
 		wheelShooterSubsystem.setDiagnosticsFlag(true);
 		//springShooterSubsystem.setDiagnosticsFlag(true);
 		//elevatorSubsystem.setDiagnosticsFlag(true);
