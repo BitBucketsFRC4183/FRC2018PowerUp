@@ -101,9 +101,15 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 	}
 
 	@Override
-	public void setDiagnosticsFlag(boolean enable) {
+	public void diagnosticsExecute() {
 		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setDiagnosticsFlag(boolean enable) {
 		runDiagnostics = enable;
+		
 	}
 
 	@Override

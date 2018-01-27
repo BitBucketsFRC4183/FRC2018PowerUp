@@ -7,8 +7,6 @@ import org.usfirst.frc.team4183.robot.subsystems.WheelShooterSubsystem.Idle;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
-import edu.wpi.first.wpilibj.command.Subsystem;
-
 /**
  *
  */
@@ -40,14 +38,20 @@ public class WheelShooterSubsystem extends BitBucketsSubsystem {
 	
 	private void setAllMotorsZero() 
 	{
-		leftWheelshooterMotorA.set(0.0);
+		leftWheelshooterMotorA.set(ControlMode.PercentOutput,0.0);
 		//leftWheelshooterMotorB .set(0.0);
-		rightWheelshooterMotorA.set(0.0);
+		rightWheelshooterMotorA.set(ControlMode.PercentOutput,0.0);
+		leftWheelshooterMotorB.set(ControlMode.Follower, RobotMap.WHEEL_SHOOTER_LEFT_1_MOTOR_ID);
+		rightWheelshooterMotorB.set(ControlMode.Follower, RobotMap.WHEEL_SHOOTER_RIGHT_1_MOTOR_ID);
 		//rightWheelshooterMotorB.set(0.0);			
+		leftWheelshooterMotorB.set(ControlMode.Follower, RobotMap.WHEEL_SHOOTER_LEFT_1_MOTOR_ID);
+		rightWheelshooterMotorB.set(ControlMode.Follower, RobotMap.WHEEL_SHOOTER_RIGHT_1_MOTOR_ID);
 	}
 	public void setMotorSpeed(double speed) {
-		leftWheelshooterMotorA.set(speed);
-		rightWheelshooterMotorA.set(speed);
+		leftWheelshooterMotorA.set(ControlMode.PercentOutput,speed);
+		rightWheelshooterMotorA.set(ControlMode.PercentOutput,speed);
+		leftWheelshooterMotorB.set(ControlMode.Follower, RobotMap.WHEEL_SHOOTER_LEFT_1_MOTOR_ID);
+		rightWheelshooterMotorB.set(ControlMode.Follower, RobotMap.WHEEL_SHOOTER_RIGHT_1_MOTOR_ID);
 	}
 	public void initDefaultCommand() {
         // Set the default command for a subsystem here.
