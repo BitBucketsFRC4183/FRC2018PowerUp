@@ -35,10 +35,13 @@ public class Idle extends Command
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() 
     {
-    	/// TODO: Resurrect this from last year
-    	if(Robot.oi.btnShooter.get()) {
-    		return CommandUtils.stateChange(this, new Shooting());
-}
+    	if (Robot.wheelShooterSubsystem.isPresent())
+    	{
+	    	/// TODO: Resurrect this from last year
+	    	if(Robot.oi.btnShooter.get()) {
+	    		return CommandUtils.stateChange(this, new Shooting());
+	        }
+    	}
     	
     	return false;
     }

@@ -12,6 +12,8 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 	private final WPI_TalonSRX elevatorMotorA;
 	
 	private final WPI_TalonSRX elevatorMotorB;
+
+	private boolean present = false;
 	
 	
 	
@@ -76,19 +78,27 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 		
 	}
 
+
 	@Override
 	public void periodic() {
 		// TODO Auto-generated method stub
 		
 	}
 
+	public void setPresent(boolean b) {
+		present = b;
+		
+	}
+	public boolean isPresent() {
+		return present;
+	}
+
+	
 	@Override
 	public void diagnosticsExecute() {
 		// TODO Auto-generated method stub
 		
 	}
-	
-	
 
 	@Override
 	public void setDiagnosticsFlag(boolean enable) {
