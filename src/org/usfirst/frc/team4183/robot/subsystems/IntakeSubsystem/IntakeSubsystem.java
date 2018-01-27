@@ -86,10 +86,19 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 		// TODO Auto-generated method stub
 		
 	}
-	@Override
-	public void diagnosticsFlagSet() {
+
+	public void diagnosticsExecute() {
 		// TODO Auto-generated method stub
 		
+	}
+	@Override
+	public void setDiagnosticsFlag(boolean enable) {
+		runDiagnostics = enable;
+		
+	}
+	@Override
+	public boolean getDiagnosticsFlag() {
+		return runDiagnostics;
 	}
 }
 
