@@ -8,9 +8,11 @@ package org.usfirst.frc.team4183.robot;
 import java.util.HashSet;
 import java.util.Set;
 import org.usfirst.frc.team4183.robot.Robot.RunMode;
+import org.usfirst.frc.team4183.robot.subsystems.AutonomousSubsystem.AutonomousSubsystem;
 import org.usfirst.frc.team4183.robot.subsystems.DriveSubsystem.DriveSubsystem;
 import org.usfirst.frc.team4183.robot.subsystems.ElevatorSubsystem.ElevatorSubsystem;
 import org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem.IntakeSubsystem;
+import org.usfirst.frc.team4183.robot.subsystems.VisionSubsystem.VisionSubsystem;
 import org.usfirst.frc.team4183.robot.subsystems.WheelShooterSubsystem.WheelShooterSubsystem;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -39,6 +41,8 @@ public class Robot extends IterativeRobot {
 	// Other may be optional or interchangable
 	public static DriveSubsystem driveSubsystem;
 	public static IntakeSubsystem intakeSubsystem;
+	public static AutonomousSubsystem autonomousSubsystem;
+	public static VisionSubsystem visionSubsystem;
 	
 	// The following subsystems are mutually exclusive
 	// with regard to overall robot function cannot be considered
@@ -63,6 +67,8 @@ public class Robot extends IterativeRobot {
 		// Always instantiate drive and intake
 		driveSubsystem = new DriveSubsystem();
 		intakeSubsystem = new IntakeSubsystem();
+		autonomousSubsystem = new AutonomousSubsystem();
+		visionSubsystem = new VisionSubsystem();
 		
         /// WARNING WARNING WARNING: ONLY ONE
 		wheelShooterSubsystem = new WheelShooterSubsystem();

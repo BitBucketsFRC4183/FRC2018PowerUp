@@ -349,6 +349,11 @@ public class DriveSubsystem extends BitBucketsSubsystem
 		return (leftFront + leftRear + rightFront + rightRear)/4.0;
 	}
 	
+	public double getPosition_inch() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
 
 	/* Any hardware devices used in this subsystem must
 	*  have a check here to see if it is still connected and 
@@ -464,5 +469,6 @@ public class DriveSubsystem extends BitBucketsSubsystem
 		}
 		
 	}
+
 }
 
