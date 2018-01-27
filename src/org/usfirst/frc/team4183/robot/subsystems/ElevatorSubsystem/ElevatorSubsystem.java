@@ -94,12 +94,7 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 		return present;
 	}
 
-	@Override
-	public void diagnosticsExecute() {
-		// TODO Auto-generated method stub
-		
-	}
-
+	
 	@Override
 	public void diagnosticsExecute() {
 		// TODO Auto-generated method stub

@@ -15,13 +15,7 @@ public class RampSubsystem extends BitBucketsSubsystem{
 		// TODO Auto-generated method stub
 		
 	}
-
-	@Override
-	public void diagnosticsFlagSet() {
-		// TODO Auto-generated method stub
-		
-	}
-
+	
 	@Override
 	protected void initDefaultCommand() {
 		// TODO Auto-generated method stub
@@ -32,6 +26,24 @@ public class RampSubsystem extends BitBucketsSubsystem{
 	public void periodic() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void diagnosticsExecute() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setDiagnosticsFlag(boolean enable) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean getDiagnosticsFlag() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }
