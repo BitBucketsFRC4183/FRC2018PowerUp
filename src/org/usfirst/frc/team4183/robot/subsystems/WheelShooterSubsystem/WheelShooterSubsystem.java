@@ -18,6 +18,7 @@ public class WheelShooterSubsystem extends BitBucketsSubsystem {
 	private final WPI_TalonSRX leftWheelshooterMotorB;
 	private final WPI_TalonSRX rightWheelshooterMotorA;
 	private final WPI_TalonSRX rightWheelshooterMotorB;
+	private boolean present = false;
 	
 	public WheelShooterSubsystem() {
 		leftWheelshooterMotorA = new WPI_TalonSRX(RobotMap.WHEEL_SHOOTER_LEFT_1_MOTOR_ID);
@@ -57,6 +58,18 @@ public class WheelShooterSubsystem extends BitBucketsSubsystem {
         //setDefaultCommand(new MySpecialCommand());
 		setDefaultCommand(new Idle());
     }
+	public void diagnosticsFlagSet() {
+		// TODO Auto-generated method stub
+		
+	}
+	public void setPresent(boolean b) {
+		present = b;
+		
+	}
+	public boolean isPresent() {
+		
+		return present;
+	}
 	@Override
 	public void diagnosticsInit() {
 		// TODO Auto-generated method stub
