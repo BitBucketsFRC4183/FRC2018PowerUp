@@ -8,13 +8,13 @@ public class Idle extends Command{
 
 	public Idle()
 	{
-		requires(Robot.elevatorSubsystem);
+		//requires(Robot.elevatorSubsystem);
 		setRunWhenDisabled(true);
 	}
 	
 	protected void initialize()
 	{
-		Robot.elevatorSubsystem.disable();
+		//Robot.elevatorSubsystem.disable();
 	}
 	
 	public void execute()
@@ -23,12 +23,12 @@ public class Idle extends Command{
 	}
 	
 	protected boolean isFinished()
-	{   
+	{  /* 
 		if (Robot.elevatorSubsystem.isPresent())
 		{
 			
-		}
-		return false;
+		}*/
+		return true;
 	}
 
 	protected void end()
