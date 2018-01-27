@@ -15,20 +15,34 @@ public class Shooting extends Command
     {
         // Use requires() here to declare subsystem dependencies
     	requires(Robot.wheelShooterSubsystem);
-    	setRunWhenDisabled(true);  // Idle state needs this!
     }
 
     // Called just before this Command runs the first time
     protected void initialize() 
     {
-    	
-    
-
+    	Robot.oi.btnDriveLock.push();
+    	Robot.wheelShooterSubsystem.setGateOpen();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.wheelShooterSubsystem.setMotorSpeed(SmartDashboard.getNumber("Shooter Speed", 0));
+    	if (Robot.wheelShooterSubsystem.getFireSpeedPos() == WheelShooterSubsystem.FirePos.MANUAL)
+    	{
+    		Robot.wheelShooterSubsystem.setMotorSpeed(SmartDashboard.getNumber("Shooter Speed", 0));
+    	}
+    	else
+    	{
+    	Robot.wheelShooterSubsystem.setMotorSpeed(Robot.wheelShooterSubsystem.getFireSpeedPos().getPow());
+    	}
+    	
+    	if (timeSinceInitialized()  > .5)
+    	{
+    		//fix this later for the correctSpeed
+    		Robot.oi.btnIntake.push();
+    	}
+    	
+    	
+    	//Robot.wheelShooterSubsystem.setMotorSpeed(SmartDashboard.getNumber("Shooter Speed", 0));
     //	Robot.wheelShooterSubsystem.setMotorSpeed(Robot.oi.wheelShooterAxis.get());
     //System.out.println("Im Shooting");
 
@@ -37,8 +51,9 @@ public class Shooting extends Command
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() 
     {
+    	//ADD FAILURE CONDITIONAL 
     	/// TODO: Resurrect this from last year
-    	if(Robot.oi.btnIdle.get()) {
+    	if(Robot.oi.btnIdle.get() || timeSinceInitialized()  > 2) {
     		return CommandUtils.stateChange(this, new Idle());
 }
     	

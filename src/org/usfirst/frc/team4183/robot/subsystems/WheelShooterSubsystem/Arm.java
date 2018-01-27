@@ -4,31 +4,29 @@ import org.usfirst.frc.team4183.robot.Robot;
 import org.usfirst.frc.team4183.utils.CommandUtils;
 import org.usfirst.frc.team4183.robot.OI;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
  */
-public class Idle extends Command 
+public class Arm extends Command 
 {
 
-    public Idle() 
+    public Arm() 
     {
         // Use requires() here to declare subsystem dependencies
     	requires(Robot.wheelShooterSubsystem);
-    	setRunWhenDisabled(true);  // Idle state needs this!
     }
 
     // Called just before this Command runs the first time
     protected void initialize() 
     {
-    	Robot.wheelShooterSubsystem.disable();
-    
-
+    	Robot.wheelShooterSubsystem.setPosToHigh();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-      //System.out.println("Im Waiting");
+    	
     	if (Robot.oi.btnHighShot.get())
     	{
     		Robot.wheelShooterSubsystem.setFireSpeedState(WheelShooterSubsystem.FirePos.HIGHSHOT);
@@ -41,22 +39,33 @@ public class Idle extends Command
     	{
     		Robot.wheelShooterSubsystem.setFireSpeedState(WheelShooterSubsystem.FirePos.MANUAL);
     	}
-
-    }
+    	
+    	if (Robot.wheelShooterSubsystem.getFireSpeedPos() == WheelShooterSubsystem.FirePos.MANUAL)
+    	{
+    		Robot.wheelShooterSubsystem.setMotorSpeed(SmartDashboard.getNumber("Shooter Speed", 0));
+    	}
+    	else
+    	{
+    	Robot.wheelShooterSubsystem.setMotorSpeed(Robot.wheelShooterSubsystem.getFireSpeedPos().getPow());
+    	}
+    	
+    	}
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() 
     {
     	if (Robot.wheelShooterSubsystem.isPresent())
     	{
-	    	/// TODO: Resurrect this from last year
-	    	if(Robot.oi.btnShooterLoad.get()) {
-	    		return CommandUtils.stateChange(this, new Arm());
+	    	/// WHEN ENCODERS ARE IMPLEMENTED ADDED THE CASE THAT WAITS FOR THE WHEELS TO BE AT DESIRED SPEED
+	    	if(Robot.oi.btnShooterFire.get()) {
+	    		return CommandUtils.stateChange(this, new Shooting());
 	        }
 	    	
-	    	
+	    	if (Robot.oi.btnIdle.get())
+	    	{
+	    		return CommandUtils.stateChange(this, new Idle());
+	    	}
     	}
-    	
     	return false;
     }
 

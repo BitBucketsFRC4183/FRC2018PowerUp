@@ -42,6 +42,8 @@ public class OI {
 	public final LogicalButton btnShooterFire = new ModalButton(operatorController.bL2);
 	public final LogicalButton btnShooterLoad = new ModalButton(operatorController.bR2);
 	
+	public final LogicalButton btnHighShot = new ModalButton(operatorController.bPovUp);
+	public final LogicalButton btnLowShot = new ModalButton(operatorController.bPovDown);
 	
 	
 	
