@@ -82,9 +82,9 @@ public class Robot extends IterativeRobot {
 	}
 	
 	private void setSubsystemsDebug() {
-		driveSubsystem.setDiagnosticsFlag(true);
-		intakeSubsystem.setDiagnosticsFlag(true);
-		springShooterSubsystem.setDiagnosticsFlag(true);
+		driveSubsystem.diagnosticsCheck();
+		intakeSubsystem.diagnosticsCheck();
+		springShooterSubsystem.diagnosticsFlagSet();
 		
 	}
 	

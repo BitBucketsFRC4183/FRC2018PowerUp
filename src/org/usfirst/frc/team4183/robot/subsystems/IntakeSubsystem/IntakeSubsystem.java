@@ -86,7 +86,7 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 		// TODO Auto-generated method stub
 		
 	}
-	@Override
+
 	public void diagnosticsExecute() {
 		// TODO Auto-generated method stub
 		
