@@ -51,8 +51,10 @@ public class RobotMap {
 	// Pneumatics
 	public final static int INTAKE_PNEUMA_CLOSED_CHANNEL    = 1;
 	public final static int INTAKE_PNEUMA_OPEN_CHANNEL      = 0;
-	public static final int SPRING_SHOOTER_SHIFTER_HIGH_PNEUMA_CHANNEL = 2;
-	public static final int SPRING_SHOOTER_SHIFTER_NEUTRAL_PNEUMA_CHANNEL = 3;
+	public final static int WHEEL_SHOOTER_HIGH_POS_CHANNEL = 2;
+	public final static int WHEEL_SHOOTER_LOW_POS_CHANNEL = 3;
+	public final static int GATE_OPEN_POS_CHANNEL = 4;
+	public final static int GATE_CLOSE_POS_CHANNEL = 5;
 	
 
 }

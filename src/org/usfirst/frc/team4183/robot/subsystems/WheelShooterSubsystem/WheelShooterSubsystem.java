@@ -7,6 +7,8 @@ import org.usfirst.frc.team4183.robot.subsystems.WheelShooterSubsystem.Idle;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+
 /**
  *
  */
@@ -18,6 +20,28 @@ public class WheelShooterSubsystem extends BitBucketsSubsystem {
 	private final WPI_TalonSRX leftWheelshooterMotorB;
 	private final WPI_TalonSRX rightWheelshooterMotorA;
 	private final WPI_TalonSRX rightWheelshooterMotorB;
+	
+	private final DoubleSolenoid positionChanger;
+	
+	private final DoubleSolenoid gate;
+	
+	private FirePos shooterPos = FirePos.LOWSHOT;
+	
+	static enum FirePos
+	{
+		HIGHSHOT(.8), LOWSHOT(.4), MANUAL(0);
+		
+		private final double power;
+		
+		FirePos(double pow)
+		{
+			this.power = pow;
+		}
+		
+		public double getPow() {return power;}
+	}
+
+	
 	private boolean present = false;
 	
 	public WheelShooterSubsystem() {
@@ -25,6 +49,8 @@ public class WheelShooterSubsystem extends BitBucketsSubsystem {
 		leftWheelshooterMotorB = new WPI_TalonSRX(RobotMap.WHEEL_SHOOTER_LEFT_2_MOTOR_ID);
 		rightWheelshooterMotorA = new WPI_TalonSRX(RobotMap.WHEEL_SHOOTER_RIGHT_1_MOTOR_ID);
 		rightWheelshooterMotorB = new WPI_TalonSRX(RobotMap.WHEEL_SHOOTER_RIGHT_2_MOTOR_ID);
+		positionChanger = new DoubleSolenoid(RobotMap.WHEEL_SHOOTER_HIGH_POS_CHANNEL, RobotMap.WHEEL_SHOOTER_LOW_POS_CHANNEL);
+		gate = new DoubleSolenoid(RobotMap.GATE_OPEN_POS_CHANNEL,RobotMap.GATE_CLOSE_POS_CHANNEL);
 		leftWheelshooterMotorA.setInverted(true);
 		leftWheelshooterMotorB.setInverted(true) ;
 		leftWheelshooterMotorB.set(ControlMode.Follower, RobotMap.WHEEL_SHOOTER_LEFT_1_MOTOR_ID);
@@ -33,7 +59,50 @@ public class WheelShooterSubsystem extends BitBucketsSubsystem {
 	//VVV SET THIS TO PRIVATE AND MAKE A PROPER DISABLE COMMAND THIS IS TEMPOARY 
 	public void disable() {
 		setAllMotorsZero();
+		setGateOpen();
+		setPosToLow();
 		
+	}
+	
+	public void setHighShotPower()
+	{
+		setMotorSpeed(.8);
+	}
+	
+	public void setLowShotPower()
+	{
+		setMotorSpeed(.5);
+	}
+	
+	public void setGateOpen()
+	{
+		gate.set(DoubleSolenoid.Value.kForward);
+	}
+	
+	public void setGateClose()
+	{
+		gate.set(DoubleSolenoid.Value.kReverse);
+	}
+	
+	public FirePos getFireSpeedPos()
+	{
+		return shooterPos;
+	}
+	
+	public void setPosToHigh()
+	{
+		positionChanger.set(DoubleSolenoid.Value.kForward);
+	}
+	
+	public void setFireSpeedState(FirePos state)
+	{
+		 shooterPos = state;
+	}
+	
+	public void setPosToLow()
+	{
+		
+		positionChanger.set(DoubleSolenoid.Value.kReverse);
 	}
 	
 	private void setAllMotorsZero() 
@@ -44,9 +113,7 @@ public class WheelShooterSubsystem extends BitBucketsSubsystem {
 		leftWheelshooterMotorB.set(ControlMode.Follower, RobotMap.WHEEL_SHOOTER_LEFT_1_MOTOR_ID);
 		rightWheelshooterMotorB.set(ControlMode.Follower, RobotMap.WHEEL_SHOOTER_RIGHT_1_MOTOR_ID);
 		//rightWheelshooterMotorB.set(0.0);			
-		leftWheelshooterMotorB.set(ControlMode.Follower, RobotMap.WHEEL_SHOOTER_LEFT_1_MOTOR_ID);
-		rightWheelshooterMotorB.set(ControlMode.Follower, RobotMap.WHEEL_SHOOTER_RIGHT_1_MOTOR_ID);
-	}
+		}
 	public void setMotorSpeed(double speed) {
 		leftWheelshooterMotorA.set(ControlMode.PercentOutput,speed);
 		rightWheelshooterMotorA.set(ControlMode.PercentOutput,speed);
