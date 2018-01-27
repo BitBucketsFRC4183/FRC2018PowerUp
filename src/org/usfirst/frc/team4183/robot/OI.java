@@ -32,12 +32,16 @@ public class OI {
 	// Manipulator Subsystem
 	//public final LogicalButton btnOpenGate = new ModalButton(operatorController.bCircle);
 	//public final LogicalButton btnCloseGate = new ModalButton(operatorController.bTriangle);
-	public final LogicalButton btnIntake = new ModalButton(operatorController.bL2);
-	public final LogicalButton btnOuttake = new ModalButton(operatorController.bR2);
+	public final LogicalButton btnIntake = new ModalButton(operatorController.bCross);
+	public final LogicalButton btnOuttake = new ModalButton(operatorController.bTriangle);
 	
 	public final LogicalButton btnShooter = new ModalButton(operatorController.bSquare);
 	public final LogicalButton btnIdle = new ModalButton(operatorController.bTrackpad);
 	public final LogicalButton btnStatus = new ModalButton(driverController.bTrackpad);
+	
+	public final LogicalButton btnShooterFire = new ModalButton(operatorController.bL2);
+	public final LogicalButton btnShooterLoad = new ModalButton(operatorController.bR2);
+	
 	
 	
 	
@@ -46,6 +50,7 @@ public class OI {
 	//****************************
 	public final LogicalAxis axisForward = new ModalAxis(driverController.aLeftY);
 	public final LogicalAxis axisTurn = new ModalAxis(driverController.aRightX);
+	public final LogicalAxis wheelShooterAxis = new ModalAxis(operatorController.aLeftY);
 
 	
 	//****************************

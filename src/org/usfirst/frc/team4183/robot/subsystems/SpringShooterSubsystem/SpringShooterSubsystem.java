@@ -77,13 +77,13 @@ public class SpringShooterSubsystem extends BitBucketsSubsystem
 
 	@Override
 	public void setDiagnosticsFlag(boolean enable) {
-		// TODO Auto-generated method stub
+		runDiagnostics = enable;
 		
 	}
 
 	@Override
 	public boolean getDiagnosticsFlag() {
 		// TODO Auto-generated method stub
-		return false;
+		return runDiagnostics;
 	}
 }
