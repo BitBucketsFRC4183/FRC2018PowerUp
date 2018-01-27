@@ -34,10 +34,12 @@ public class Idle extends Command
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
     		//Returns true when cube is detected
-    	if(Robot.runMode==Robot.RunMode.TEST && Robot.springShooterSubsystem.runDiagnostics==true)  
-            return CommandUtils.stateChange(this, new Diagnostics()); 
 
-    	return false;
+    		if(Robot.runMode==Robot.RunMode.TEST && Robot.springShooterSubsystem.getDiagnosticsFlag()==true) 
+    			return CommandUtils.stateChange(this, new Diagnostics());
+    		
+    		return false;
+
     }
 
     // Called once after isFinished returns true

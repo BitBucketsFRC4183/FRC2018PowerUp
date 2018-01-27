@@ -28,8 +28,8 @@ public class Shooting extends Command
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.wheelShooterSubsystem.setMotorSpeed(SmartDashboard.getNumber("Shooter Speed", 0));
-    	//Robot.wheelShooterSubsystem.setMotorSpeed(0.2);
+    	//Robot.wheelShooterSubsystem.setMotorSpeed(SmartDashboard.getNumber("Shooter Speed", 0));
+    	Robot.wheelShooterSubsystem.setMotorSpeed(Robot.oi.wheelShooterAxis.get());
     //System.out.println("Im Shooting");
 
     }

@@ -4,6 +4,7 @@ import org.usfirst.frc.team4183.robot.Robot;
 import org.usfirst.frc.team4183.utils.CommandUtils;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
@@ -22,13 +23,18 @@ public class Intaking extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.intakeSubsystem.setMotorSpeed(1);    
+    //	Robot.intakeSubsystem.setMotorSpeed(SmartDashboard.getNumber("Shooting Speed", 0));    
+    	Robot.intakeSubsystem.setMotorSpeed(-0.7);    
+
     	}
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
     	if( Robot.oi.btnIdle.get()) {
-    		return CommandUtils.stateChange(this, new Deployed());
+    		return CommandUtils.stateChange(this, new Idle());
+    	}
+    	if( Robot.oi.btnOuttake.get()) {
+    		return CommandUtils.stateChange(this, new Outtaking());
     	}
         return false;
     }

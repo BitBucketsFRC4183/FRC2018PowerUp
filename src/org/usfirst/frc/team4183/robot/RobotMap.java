@@ -4,6 +4,8 @@ public class RobotMap {
 
 	public final static int PRIMARY_PID_LOOP  = 0; // Constants to support new Talon interface types
 	public final static int CASCADED_PID_LOOP = 1; // That should have been enumerated rather than int
+	public final static int CONTROLLER_TIMEOUT_MS = 100; // Default timeout to wait for configuration response
+
 	
 	// Nominal value assuming 4" wheel:
 	// (4" * pi) in/rot = 12.57
@@ -29,14 +31,14 @@ public class RobotMap {
 	// Mutual exclusion on shooter or lifter types
 	
 	//IntakeSubsystem Motors ports
-	public final static int INTAKE_MOTOR_LEFT_ID      = 6;
-	public final static int INTAKE_MOTOR_RIGHT_ID      = 5;
+	public final static int INTAKE_MOTOR_LEFT_ID      = 9;
+	public final static int INTAKE_MOTOR_RIGHT_ID      = 8;
 	
 	// Wheel shooter, spring shooter, and elevator are mutually exlusive
-	public final static int WHEEL_SHOOTER_LEFT_1_MOTOR_ID     = 7;
-	public final static int WHEEL_SHOOTER_LEFT_2_MOTOR_ID     = 8;
-	public final static int WHEEL_SHOOTER_RIGHT_1_MOTOR_ID    = 9;
-	public final static int WHEEL_SHOOTER_RIGHT_2_MOTOR_ID    = 10;
+	public final static int WHEEL_SHOOTER_LEFT_1_MOTOR_ID     = 5;
+	public final static int WHEEL_SHOOTER_LEFT_2_MOTOR_ID     = 6;
+	public final static int WHEEL_SHOOTER_RIGHT_1_MOTOR_ID    = 11;
+	public final static int WHEEL_SHOOTER_RIGHT_2_MOTOR_ID    = 12;
 	
 	public static final int SPRING_SHOOTER_MOTOR_A_ID = 7;
 	public static final int SPRING_SHOOTER_MOTOR_B_ID = 8;

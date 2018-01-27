@@ -29,6 +29,10 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 		leftIntakeMotor = new WPI_TalonSRX(RobotMap.INTAKE_MOTOR_LEFT_ID);
 		rightIntakeMotor = new WPI_TalonSRX(RobotMap.INTAKE_MOTOR_RIGHT_ID);
 		leftIntakeMotor.setInverted(true);
+		rightIntakeMotor.setInverted(true);
+		leftIntakeMotor.configOpenloopRamp(0.5, RobotMap.CONTROLLER_TIMEOUT_MS);
+		rightIntakeMotor.configOpenloopRamp(0.5, RobotMap.CONTROLLER_TIMEOUT_MS);
+
 		//intakegate = new DoubleSolenoid(RobotMap.INTAKE_PNEUMA_OPEN_CHANNEL, RobotMap.INTAKE_PNEUMA_CLOSED_CHANNEL);
 		
 //		intakeGate = new DoubleSolenoid(RobotMap.INTAKE_PNEUMA_OPEN_CHANNEL, RobotMap.INTAKE_PNEUMA_CLOSED_CHANNEL);
@@ -82,10 +86,19 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 		// TODO Auto-generated method stub
 		
 	}
-	@Override
-	public void diagnosticsFlagSet() {
+
+	public void diagnosticsExecute() {
 		// TODO Auto-generated method stub
 		
+	}
+	@Override
+	public void setDiagnosticsFlag(boolean enable) {
+		runDiagnostics = enable;
+		
+	}
+	@Override
+	public boolean getDiagnosticsFlag() {
+		return runDiagnostics;
 	}
 }
 
