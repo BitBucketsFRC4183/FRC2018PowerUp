@@ -89,7 +89,6 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 		present = b;
 		
 	}
-
 	public boolean isPresent() {
 		return present;
 	}
