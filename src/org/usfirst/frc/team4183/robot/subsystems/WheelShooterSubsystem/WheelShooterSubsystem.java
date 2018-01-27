@@ -1,17 +1,16 @@
 package org.usfirst.frc.team4183.robot.subsystems.WheelShooterSubsystem;
 
 import org.usfirst.frc.team4183.robot.RobotMap;
+import org.usfirst.frc.team4183.robot.subsystems.BitBucketsSubsystem;
 import org.usfirst.frc.team4183.robot.subsystems.WheelShooterSubsystem.Idle;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
-import edu.wpi.first.wpilibj.command.Subsystem;
-
 /**
  *
  */
-public class WheelShooterSubsystem extends Subsystem {
+public class WheelShooterSubsystem extends BitBucketsSubsystem {
 
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
@@ -38,16 +37,18 @@ public class WheelShooterSubsystem extends Subsystem {
 	
 	private void setAllMotorsZero() 
 	{
-		leftWheelshooterMotorA.set(ControlMode.PercentOutput, 0.0);
+		leftWheelshooterMotorA.set(ControlMode.PercentOutput,0.0);
 		//leftWheelshooterMotorB .set(0.0);
-		rightWheelshooterMotorA.set(ControlMode.PercentOutput, 0.0);
+		rightWheelshooterMotorA.set(ControlMode.PercentOutput,0.0);
+		leftWheelshooterMotorB.set(ControlMode.Follower, RobotMap.WHEEL_SHOOTER_LEFT_1_MOTOR_ID);
+		rightWheelshooterMotorB.set(ControlMode.Follower, RobotMap.WHEEL_SHOOTER_RIGHT_1_MOTOR_ID);
 		//rightWheelshooterMotorB.set(0.0);			
 		leftWheelshooterMotorB.set(ControlMode.Follower, RobotMap.WHEEL_SHOOTER_LEFT_1_MOTOR_ID);
 		rightWheelshooterMotorB.set(ControlMode.Follower, RobotMap.WHEEL_SHOOTER_RIGHT_1_MOTOR_ID);
 	}
 	public void setMotorSpeed(double speed) {
-		leftWheelshooterMotorA.set(ControlMode.PercentOutput, speed);
-		rightWheelshooterMotorA.set(ControlMode.PercentOutput, speed);
+		leftWheelshooterMotorA.set(ControlMode.PercentOutput,speed);
+		rightWheelshooterMotorA.set(ControlMode.PercentOutput,speed);
 		leftWheelshooterMotorB.set(ControlMode.Follower, RobotMap.WHEEL_SHOOTER_LEFT_1_MOTOR_ID);
 		rightWheelshooterMotorB.set(ControlMode.Follower, RobotMap.WHEEL_SHOOTER_RIGHT_1_MOTOR_ID);
 	}
@@ -56,5 +57,35 @@ public class WheelShooterSubsystem extends Subsystem {
         //setDefaultCommand(new MySpecialCommand());
 		setDefaultCommand(new Idle());
     }
+	@Override
+	public void diagnosticsInit() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void diagnosticsExecute() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void diagnosticsCheck() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void setDiagnosticsFlag(boolean enable) {
+		// TODO Auto-generated method stub
+		runDiagnostics = enable;
+	}
+	@Override
+	public boolean getDiagnosticsFlag() {
+		// TODO Auto-generated method stub
+		return runDiagnostics;
+	}
+	@Override
+	public void periodic() {
+		// TODO Auto-generated method stub
+		
+	}
 }
 
