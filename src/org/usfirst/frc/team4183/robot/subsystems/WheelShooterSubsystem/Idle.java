@@ -29,6 +29,18 @@ public class Idle extends Command
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
       //System.out.println("Im Waiting");
+    	if (Robot.oi.btnHighShot.get())
+    	{
+    		Robot.wheelShooterSubsystem.setFireSpeedState(WheelShooterSubsystem.FirePos.HIGHSHOT);
+    	}
+    	else if (Robot.oi.btnLowShot.get())
+    	{
+    		Robot.wheelShooterSubsystem.setFireSpeedState(WheelShooterSubsystem.FirePos.LOWSHOT);
+    	}
+    	else if (Robot.oi.btnShooter.get())
+    	{
+    		Robot.wheelShooterSubsystem.setFireSpeedState(WheelShooterSubsystem.FirePos.MANUAL);
+    	}
 
     }
 
@@ -38,9 +50,10 @@ public class Idle extends Command
     	if (Robot.wheelShooterSubsystem.isPresent())
     	{
 	    	/// TODO: Resurrect this from last year
-	    	if(Robot.oi.btnShooter.get()) {
-	    		return CommandUtils.stateChange(this, new Shooting());
+	    	if(Robot.oi.btnShooterLoad.get()) {
+	    		return CommandUtils.stateChange(this, new Arm());
 	        }
+	    	
     	}
     	
     	return false;

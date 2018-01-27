@@ -11,7 +11,6 @@ import org.usfirst.frc.team4183.robot.Robot.RunMode;
 import org.usfirst.frc.team4183.robot.subsystems.DriveSubsystem.DriveSubsystem;
 import org.usfirst.frc.team4183.robot.subsystems.ElevatorSubsystem.ElevatorSubsystem;
 import org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem.IntakeSubsystem;
-import org.usfirst.frc.team4183.robot.subsystems.SpringShooterSubsystem.SpringShooterSubsystem;
 import org.usfirst.frc.team4183.robot.subsystems.WheelShooterSubsystem.WheelShooterSubsystem;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -47,8 +46,6 @@ public class Robot extends IterativeRobot {
 	// and state exclusions we will just prevent creation.
     /// WARNING WARNING WARNING: ONLY ONE
 	public static WheelShooterSubsystem wheelShooterSubsystem;
-	public static SpringShooterSubsystem springShooterSubsystem;
-	public static ElevatorSubsystem elevatorSubsystem;
 	
     public static OI oi;
 	

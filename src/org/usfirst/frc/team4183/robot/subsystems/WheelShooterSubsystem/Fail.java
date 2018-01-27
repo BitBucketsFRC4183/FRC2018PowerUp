@@ -13,16 +13,14 @@ public class Fail extends Command
 
     public Fail() 
     {
-        // Use requires() here to declare subsystem dependencies
     	requires(Robot.wheelShooterSubsystem);
+    	//add the Lights change to blinking red when the system has failed.
     }
 
     // Called just before this Command runs the first time
     protected void initialize() 
     {
     	Robot.wheelShooterSubsystem.disable();
-    
-
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -36,10 +34,10 @@ public class Fail extends Command
     {
     	if (Robot.wheelShooterSubsystem.isPresent())
     	{
-	    	/// TODO: Resurrect this from last year
-	    	if(Robot.oi.btnShooter.get()) {
-	    		return CommandUtils.stateChange(this, new Shooting());
-	        }
+    		if (timeSinceInitialized() >1)
+    		{
+    			return CommandUtils.stateChange(this, new Idle());
+    		}
     	}
     	
     	return false;

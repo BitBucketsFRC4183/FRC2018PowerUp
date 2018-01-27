@@ -7,6 +7,12 @@ public class RobotMap {
 	public final static int CONTROLLER_TIMEOUT_MS = 100; // Default timeout to wait for configuration response
 
 	
+	//Motor Current Limits for the Wheel Shooter adjust later
+	public static final double WHEEL_SHOOTER_MAX_CURRENT = 50;
+	
+	//Intake Max Current Limits for Faults
+	public static final double INTAKE_MAX_CURRENT = 50;
+	
 	// Nominal value assuming 4" wheel:
 	// (4" * pi) in/rot = 12.57
 	// The precise value must be determined by calibration.
@@ -51,8 +57,10 @@ public class RobotMap {
 	// Pneumatics
 	public final static int INTAKE_PNEUMA_CLOSED_CHANNEL    = 1;
 	public final static int INTAKE_PNEUMA_OPEN_CHANNEL      = 0;
-	public static final int SPRING_SHOOTER_SHIFTER_HIGH_PNEUMA_CHANNEL = 2;
-	public static final int SPRING_SHOOTER_SHIFTER_NEUTRAL_PNEUMA_CHANNEL = 3;
+	public final static int WHEEL_SHOOTER_HIGH_POS_CHANNEL = 2;
+	public final static int WHEEL_SHOOTER_LOW_POS_CHANNEL = 3;
+	public final static int GATE_OPEN_POS_CHANNEL = 4;
+	public final static int GATE_CLOSE_POS_CHANNEL = 5;
 	
 
 }
