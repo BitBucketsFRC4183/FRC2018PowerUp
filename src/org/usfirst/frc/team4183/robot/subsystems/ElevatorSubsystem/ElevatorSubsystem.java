@@ -89,18 +89,14 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 		present = b;
 		
 	}
+	
+	
 
 	public boolean isPresent() {
 		return present;
 	}
 
 	
-	@Override
-	public void diagnosticsExecute() {
-		// TODO Auto-generated method stub
-		
-	}
-
 	@Override
 	public void setDiagnosticsFlag(boolean enable) {
 		runDiagnostics = enable;
