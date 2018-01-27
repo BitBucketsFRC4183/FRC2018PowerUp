@@ -54,5 +54,9 @@ public class RobotMap {
 	public static final int SPRING_SHOOTER_SHIFTER_HIGH_PNEUMA_CHANNEL = 2;
 	public static final int SPRING_SHOOTER_SHIFTER_NEUTRAL_PNEUMA_CHANNEL = 3;
 	
+	// Autonomous Constants
+	public static final double DRIVESTRAIGHT_MIN_DRIVE = 0;
+	public static final double TURNBY_MIN_DRIVE = 0;
+	
 
 }
