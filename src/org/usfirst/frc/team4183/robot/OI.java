@@ -28,6 +28,7 @@ public class OI {
 	public final LogicalButton btnInvertAxis = new ModalButton(driverController.bR2);
 	public final LogicalButton btnAlignLock = new ModalButton(driverController.bL1);
 	public final LogicalButton btnDriveLock = new ModalButton(driverController.bL2);	
+	public final LogicalButton btnStatus = new ModalButton(driverController.bTrackpad);
 	
 	// Manipulator Subsystem
 	public final LogicalButton btnOpenGate = new ModalButton(operatorController.bR1);
@@ -37,10 +38,12 @@ public class OI {
 	
 	public final LogicalButton btnShooter = new ModalButton(operatorController.bSquare);
 	public final LogicalButton btnIdle = new ModalButton(operatorController.bTrackpad);
-	public final LogicalButton btnStatus = new ModalButton(driverController.bTrackpad);
+	
 	
 	public final LogicalButton btnShooterFire = new ModalButton(operatorController.bL2);
 	public final LogicalButton btnShooterLoad = new ModalButton(operatorController.bR2);
+	
+	public final LogicalButton btnRotateCube = new ModalButton(operatorController.bCircle);
 	
 	public final LogicalButton btnHighShot = new ModalButton(operatorController.bPovUp);
 	public final LogicalButton btnLowShot = new ModalButton(operatorController.bPovDown);

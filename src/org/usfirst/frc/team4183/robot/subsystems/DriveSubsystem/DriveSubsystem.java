@@ -89,7 +89,7 @@ public class DriveSubsystem extends BitBucketsSubsystem
 	    	drive = new DifferentialDrive(leftFrontMotor, rightFrontMotor);
     	
 	    	// Now get the other modes set up
-	    	setNeutral(NeutralMode.Coast);
+	    	setNeutral(NeutralMode.Brake);
 	    	telemetryState = new SendableChooser<SubsystemTelemetryState>();
 	    	
 	    	telemetryState.addDefault("Off", SubsystemTelemetryState.OFF);

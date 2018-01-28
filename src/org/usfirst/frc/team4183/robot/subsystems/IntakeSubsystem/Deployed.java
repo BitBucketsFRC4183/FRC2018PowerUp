@@ -39,6 +39,10 @@ public class Deployed extends Command {
     	if ( Robot.oi.btnOpenGate.get()) {
     		return CommandUtils.stateChange(this, new IntakingOpen());
     	}
+    	if (Robot.oi.btnRotateCube.get())
+    	{
+    		return CommandUtils.stateChange(this, new IntakeRotate());
+    	}
     //	if( Robot.oi.btnCloseGate.get()) {
     	//	return CommandUtils.stateChange(this, new Idle());
     	//}
