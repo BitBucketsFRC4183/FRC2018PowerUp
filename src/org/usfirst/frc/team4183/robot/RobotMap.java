@@ -62,5 +62,9 @@ public class RobotMap {
 	public final static int GATE_OPEN_POS_CHANNEL = 4;
 	public final static int GATE_CLOSE_POS_CHANNEL = 5;
 	
+	// Autonomous Constants
+	public static final double DRIVESTRAIGHT_MIN_DRIVE = 0;
+	public static final double TURNBY_MIN_DRIVE = 0;
+	
 
 }
