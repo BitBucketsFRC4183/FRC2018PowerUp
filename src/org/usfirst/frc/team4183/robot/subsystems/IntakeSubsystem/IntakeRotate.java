@@ -36,11 +36,6 @@ public class IntakeRotate extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	/*
-    	if(timeSinceInitialized()-Robot.intakeSubsystem.getTimeCurrentLimit() > .3) {
-    		return CommandUtils.stateChange(this, new CurrentLimit());
-    	}
-    	*/
     	if (Robot.oi.btnOpenGate.get())
     	{
     		return CommandUtils.stateChange(this, new Deployed());

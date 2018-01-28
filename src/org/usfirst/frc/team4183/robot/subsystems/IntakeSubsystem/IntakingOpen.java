@@ -32,15 +32,18 @@ public class IntakingOpen extends Command {
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
     	
-    	if(timeSinceInitialized()-Robot.intakeSubsystem.getTimeCurrentLimit() > .3) {
+    	if (Robot.intakeSubsystem.getCurrLimitStatus())
+    	{
+    	if(timeSinceInitialized()-Robot.intakeSubsystem.getTimeCurrentLimit() > .3 && timeSinceInitialized()-Robot.intakeSubsystem.getTimeCurrentLimit() < 2) {
     		return CommandUtils.stateChange(this, new CurrentLimit());
+    	}
     	}
     	if( Robot.oi.btnIdle.get()) {
     		return CommandUtils.stateChange(this, new Deployed());
     	}
     	if( ! Robot.oi.btnOpenGate.get()) {
     		return CommandUtils.stateChange(this , new Deployed());
-    		}
+    		}s
     	if (Robot.oi.btnRotateCube.get())
     	{
     		return CommandUtils.stateChange(this, new IntakeRotate());
