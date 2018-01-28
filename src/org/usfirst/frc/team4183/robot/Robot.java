@@ -8,6 +8,7 @@ package org.usfirst.frc.team4183.robot;
 import java.util.HashSet;
 import java.util.Set;
 import org.usfirst.frc.team4183.robot.Robot.RunMode;
+import org.usfirst.frc.team4183.robot.subsystems.AutonomousSubsystem.Scripter;
 import org.usfirst.frc.team4183.robot.subsystems.AutonomousSubsystem.AutonomousSubsystem;
 import org.usfirst.frc.team4183.robot.subsystems.DriveSubsystem.DriveSubsystem;
 import org.usfirst.frc.team4183.robot.subsystems.ElevatorSubsystem.ElevatorSubsystem;
@@ -59,6 +60,8 @@ public class Robot extends IterativeRobot {
 	public static LightingControl lightingControl;	
 	public static NavxIMU imu;
 	
+	public SendableChooser<Integer> positionChooser;
+	
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
@@ -78,19 +81,32 @@ public class Robot extends IterativeRobot {
 		//elevatorSubsystem = new ElevatorSubsystem();
 		//springShooterSubsystem = new SpringShooterSubsystem();
 		
+		positionChooser = new SendableChooser<Integer>();
+		positionChooser.addDefault( "None", 0);
+		positionChooser.addObject( "Left", 1);
+		positionChooser.addObject( "Center", 2);
+		positionChooser.addObject( "Right", 3);
+		SmartDashboard.putData( "AutoChooser", positionChooser);
+		
+		
 		imu = new NavxIMU();
 		lightingControl = new LightingControl();
 				
 		// Add all subsystems for debugging
 		addSubsystemToDebug(driveSubsystem);
         addSubsystemToDebug(intakeSubsystem);
+        addSubsystemToDebug(visionSubsystem);
+        addSubsystemToDebug(autonomousSubsystem);
+
         
         /// WARNING WARNING WARNING: ONLY ONE
         addSubsystemToDebug(wheelShooterSubsystem);
-        //addSubsystemToDebug(springShooterSubsystem);
         //addSubsystemToDebug(elevatorSubsystem);
 		showDebugInfo();		
+		
         CameraServer.getInstance().startAutomaticCapture();
+        
+        
 
 	}
 	
@@ -130,6 +146,9 @@ public class Robot extends IterativeRobot {
 		runMode = RunMode.AUTO;
 		oi.setAutoMode();
 
+		int position = positionChooser.getSelected();
+		if( position != 0)
+			(new Scripter( positionChooser.getSelected())).start();
 	}
 	/**
 	 * This function is called periodically during autonomous.
