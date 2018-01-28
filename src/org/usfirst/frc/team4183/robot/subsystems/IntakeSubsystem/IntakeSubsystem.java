@@ -17,7 +17,7 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 	
 	private final WPI_TalonSRX leftIntakeMotor; 
 	private final WPI_TalonSRX rightIntakeMotor; 
-	//private final DoubleSolenoid intakegate;
+	private final DoubleSolenoid intakegate;
 
 	private static ArrayList<WPI_TalonSRX> motors;
 	private static ArrayList<DoubleSolenoid> solenoids;
@@ -29,14 +29,14 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 		leftIntakeMotor = new WPI_TalonSRX(RobotMap.INTAKE_MOTOR_LEFT_ID);
 		rightIntakeMotor = new WPI_TalonSRX(RobotMap.INTAKE_MOTOR_RIGHT_ID);
 		leftIntakeMotor.setInverted(true);
-		rightIntakeMotor.setInverted(true);
+		rightIntakeMotor.setInverted(false);
 		leftIntakeMotor.configOpenloopRamp(0.5, RobotMap.CONTROLLER_TIMEOUT_MS);
 		rightIntakeMotor.configOpenloopRamp(0.5, RobotMap.CONTROLLER_TIMEOUT_MS);
 
-		//intakegate = new DoubleSolenoid(RobotMap.INTAKE_PNEUMA_OPEN_CHANNEL, RobotMap.INTAKE_PNEUMA_CLOSED_CHANNEL);
+		intakegate = new DoubleSolenoid(RobotMap.INTAKE_PNEUMA_OPEN_CHANNEL, RobotMap.INTAKE_PNEUMA_CLOSED_CHANNEL);
 		
-//		intakeGate = new DoubleSolenoid(RobotMap.INTAKE_PNEUMA_OPEN_CHANNEL, RobotMap.INTAKE_PNEUMA_CLOSED_CHANNEL);
-//		solenoids.add(intakeGate);
+		
+		solenoids.add(intakegate);
 		
 	}
 	public void disable() {
@@ -44,12 +44,12 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 		//closegate();
 	}
 	
-	//public void closegate() {
-		//intakegate.set(DoubleSolenoid.Value.kReverse);
-	//}
-	//public void opengate() {
-		//intakegate.set(DoubleSolenoid.Value.kForward);
-	//}
+	public void closegate() {
+		intakegate.set(DoubleSolenoid.Value.kReverse);
+	}
+	public void opengate() {
+		intakegate.set(DoubleSolenoid.Value.kForward);
+	}
 	
 	private void setAllMotorsZero() 
 	{
@@ -101,5 +101,16 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 		// TODO Auto-generated method stub
 		return runDiagnostics;
 	}
-}
+	public double getCurrentMax()
+	{
+		double leftintakecurrent = leftIntakeMotor.getOutputCurrent(); 
+		double rightintakecurrent = rightIntakeMotor.getOutputCurrent();
+		
+		double average = (leftintakecurrent+rightintakecurrent)/2;
+		
+		return average;
+		}
+	}
+
+
 
