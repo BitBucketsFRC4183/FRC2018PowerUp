@@ -5,10 +5,12 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import java.util.ArrayList;
 
+import org.usfirst.frc.team4183.robot.Robot;
 import org.usfirst.frc.team4183.robot.RobotMap;
 import org.usfirst.frc.team4183.robot.subsystems.BitBucketsSubsystem;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
@@ -84,7 +86,7 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 	@Override
 	public void periodic() {
 		// TODO Auto-generated method stub
-		
+		SmartDashboard.putNumber("Intake Current", Robot.intakeSubsystem.getCurrentMax());
 	}
 	@Override
 	public void diagnosticsExecute() {

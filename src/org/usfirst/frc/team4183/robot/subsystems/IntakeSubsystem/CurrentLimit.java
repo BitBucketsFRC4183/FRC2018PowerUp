@@ -2,7 +2,6 @@ package org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem;
 
 import org.usfirst.frc.team4183.robot.Robot;
 import org.usfirst.frc.team4183.utils.CommandUtils;
-import org.usfirst.frc.team4183.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -10,9 +9,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /**
  *
  */
-public class IntakingOpen extends Command {
+public class CurrentLimit extends Command {
 
-    public IntakingOpen() {
+    public CurrentLimit() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     		requires(Robot.intakeSubsystem);	
@@ -20,24 +19,21 @@ public class IntakingOpen extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    Robot.intakeSubsystem.opengate();
+    	Robot.intakeSubsystem.disable();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    //	Robot.intakeSubsystem.setMotorSpeed(SmartDashboard.getNumber("Shooting Speed", 0));
-    	Robot.intakeSubsystem.setMotorSpeed(-0.5);
-    	}
+    }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	if( Robot.oi.btnIdle.get() || Robot.intakeSubsystem.getCurrentMax() > RobotMap.INTAKE_MAX_CURRENT) {
-    		return CommandUtils.stateChange(this, new CurrentLimit());
-    	}
-    	if( ! Robot.oi.btnOpenGate.get()) {
-    		return CommandUtils.stateChange(this , new Deployed());
-    		}
-        return false;
+   // 	if( Robot.oi.btnIntake.get()) {
+    	//	return CommandUtils.stateChange(this, new Intaking());
+   // 	}
+    	if (!Robot.oi.btnOpenGate.get() && !Robot.oi.btnCloseGate.get())
+        return CommandUtils.stateChange(this, new Deployed());
+    	return false;
     }
 
     // Called once after isFinished returns true
