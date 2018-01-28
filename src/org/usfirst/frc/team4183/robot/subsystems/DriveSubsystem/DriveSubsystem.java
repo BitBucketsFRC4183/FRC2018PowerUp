@@ -19,6 +19,7 @@ import org.usfirst.frc.team4183.robot.subsystems.BitBucketsSubsystem;
 import org.usfirst.frc.team4183.robot.subsystems.SubsystemUtilities.DiagnosticsState;
 import org.usfirst.frc.team4183.robot.subsystems.SubsystemUtilities.SubsystemTelemetryState;
 
+
 public class DriveSubsystem extends BitBucketsSubsystem
 {
 	private final double INCH_PER_WHEEL_ROT = RobotMap.INCH_PER_WHEEL_ROT;
@@ -444,10 +445,14 @@ public class DriveSubsystem extends BitBucketsSubsystem
 //					getRightEncoderUnits());
 //			SmartDashboard.putNumber( "LeftEncoderUnits", 
 //					getLeftEncoderUnits());
+			
+			Robot.imu.diagnostics();
+		
 			SmartDashboard.putNumber( "IMU_Yaw", 
 					Robot.imu.getYawDeg());
 			SmartDashboard.putNumber( "IMU_Yawrate", 
 					Robot.imu.getYawRateDps());
+			
 			
 			SmartDashboard.putNumber("FRCurrent", 
 					rightFrontMotor.getOutputCurrent());
@@ -466,6 +471,10 @@ public class DriveSubsystem extends BitBucketsSubsystem
 					getRightRearMode().name());
 			SmartDashboard.putString("LeftBackMode", 
 					getLeftRearMode().name());
+			
+			
+			
+			
 		}
 		
 	}
