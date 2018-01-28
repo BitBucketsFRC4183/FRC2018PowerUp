@@ -54,7 +54,6 @@ public class Idle extends Command
 	    		return CommandUtils.stateChange(this, new Arm());
 	        }
 	    	
-	    	
     	}
     	
     	return false;

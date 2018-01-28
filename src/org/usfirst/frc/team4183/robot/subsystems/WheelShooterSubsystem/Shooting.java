@@ -1,6 +1,7 @@
 package org.usfirst.frc.team4183.robot.subsystems.WheelShooterSubsystem;
 
 import org.usfirst.frc.team4183.robot.Robot;
+import org.usfirst.frc.team4183.robot.RobotMap;
 import org.usfirst.frc.team4183.utils.CommandUtils;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -37,15 +38,8 @@ public class Shooting extends Command
     	
     	if (timeSinceInitialized()  > .5)
     	{
-    		//fix this later for the correctSpeed
     		Robot.oi.btnIntake.push();
     	}
-    	
-    	
-    	//Robot.wheelShooterSubsystem.setMotorSpeed(SmartDashboard.getNumber("Shooter Speed", 0));
-    //	Robot.wheelShooterSubsystem.setMotorSpeed(Robot.oi.wheelShooterAxis.get());
-    //System.out.println("Im Shooting");
-
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -53,7 +47,11 @@ public class Shooting extends Command
     {
     	//ADD FAILURE CONDITIONAL 
     	/// TODO: Resurrect this from last year
-    	if(Robot.oi.btnIdle.get() || timeSinceInitialized()  > 2) {
+    	if (Robot.wheelShooterSubsystem.getCurrentMax() > RobotMap.WHEEL_SHOOTER_MAX_CURRENT)
+    	{
+    		return CommandUtils.stateChange(this, new Fail());
+    	}
+    else if(Robot.oi.btnIdle.get() || (timeSinceInitialized()  > 2 && Robot.wheelShooterSubsystem.getFireSpeedPos() != WheelShooterSubsystem.FirePos.MANUAL)) {
     		return CommandUtils.stateChange(this, new Idle());
 }
     	
@@ -63,6 +61,7 @@ public class Shooting extends Command
     // Called once after isFinished returns true
     protected void end() 
     {    
+    	Robot.wheelShooterSubsystem.disable();
     }
 
     // Called when another command which requires one or more of the same

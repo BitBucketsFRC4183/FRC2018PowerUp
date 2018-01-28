@@ -64,16 +64,6 @@ public class WheelShooterSubsystem extends BitBucketsSubsystem {
 		
 	}
 	
-	public void setHighShotPower()
-	{
-		setMotorSpeed(.8);
-	}
-	
-	public void setLowShotPower()
-	{
-		setMotorSpeed(.5);
-	}
-	
 	public void setGateOpen()
 	{
 		gate.set(DoubleSolenoid.Value.kForward);
@@ -101,7 +91,6 @@ public class WheelShooterSubsystem extends BitBucketsSubsystem {
 	
 	public void setPosToLow()
 	{
-		
 		positionChanger.set(DoubleSolenoid.Value.kReverse);
 	}
 	
@@ -119,6 +108,30 @@ public class WheelShooterSubsystem extends BitBucketsSubsystem {
 		rightWheelshooterMotorA.set(ControlMode.PercentOutput,speed);
 		leftWheelshooterMotorB.set(ControlMode.Follower, RobotMap.WHEEL_SHOOTER_LEFT_1_MOTOR_ID);
 		rightWheelshooterMotorB.set(ControlMode.Follower, RobotMap.WHEEL_SHOOTER_RIGHT_1_MOTOR_ID);
+	}
+	
+	public double getCurrentMax()
+	{
+		double leftAMotCurrent = leftWheelshooterMotorA.getOutputCurrent();
+		double leftBMotCurrent = leftWheelshooterMotorB.getOutputCurrent();
+		double rightAMotCurrent = rightWheelshooterMotorA.getOutputCurrent();
+		double rightBMotCurrent = rightWheelshooterMotorB.getOutputCurrent();
+		
+		double leftMax = Math.max(leftAMotCurrent, leftBMotCurrent);
+		double rightMax = Math.max(rightAMotCurrent, rightBMotCurrent);
+		
+		if (leftMax > rightMax)
+		{
+			return leftMax;
+		}
+		else if (rightMax > leftMax)
+		{
+			return rightMax;
+		}
+		else
+		{
+			return rightMax;
+		}
 	}
 	public void initDefaultCommand() {
         // Set the default command for a subsystem here.

@@ -48,7 +48,6 @@ public class Arm extends Command
     	{
     	Robot.wheelShooterSubsystem.setMotorSpeed(Robot.wheelShooterSubsystem.getFireSpeedPos().getPow());
     	}
-    	
     	}
 
     // Make this return true when this Command no longer needs to run execute()
