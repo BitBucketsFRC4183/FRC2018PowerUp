@@ -20,6 +20,9 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 	private final WPI_TalonSRX leftIntakeMotor; 
 	private final WPI_TalonSRX rightIntakeMotor; 
 	private final DoubleSolenoid intakegate;
+	
+	private double timeCurrLimitInit = 0;
+	boolean currentLimitAct = false;
 
 	private static ArrayList<WPI_TalonSRX> motors;
 	private static ArrayList<DoubleSolenoid> solenoids;
@@ -41,9 +44,23 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 		solenoids.add(intakegate);
 		
 	}
+	public boolean getCurrLimitStatus()
+	{
+		return currentLimitAct;
+	}
+	public double getTimeCurrentLimit()
+	{
+		return timeCurrLimitInit;
+	}
 	public void disable() {
 		setAllMotorsZero();
 		//closegate();
+	}
+	
+	public void rotatePow(double pow)
+	{
+		leftIntakeMotor.set(pow);
+		rightIntakeMotor.set(-pow);
 	}
 	
 	public void closegate() {
@@ -67,6 +84,24 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
         // Set the default command for a subsystem here.
         setDefaultCommand(new Idle());
     }
+	
+	public void checkCurrentLimit(double currTimeInit)
+    {
+    	if(getCurrentMax() > RobotMap.INTAKE_MAX_CURRENT) {
+    		if (!currentLimitAct)
+       	 {
+       	 timeCurrLimitInit = currTimeInit;}
+    		
+    		currentLimitAct =true;
+    	 
+    	}
+    	else
+    	{
+    		currentLimitAct = false;
+    		timeCurrLimitInit = 0;
+    	}
+    }
+	
 	
 	@Override
 	public void diagnosticsInit() {
