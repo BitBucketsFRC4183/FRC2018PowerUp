@@ -22,6 +22,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team4183.utils.DoEveryN;
 import org.usfirst.frc.team4183.utils.Stopwatch;
+
+import edu.wpi.first.wpilibj.CameraServer;
+
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the IterativeRobot
@@ -87,6 +90,8 @@ public class Robot extends IterativeRobot {
         //addSubsystemToDebug(springShooterSubsystem);
         //addSubsystemToDebug(elevatorSubsystem);
 		showDebugInfo();		
+        CameraServer.getInstance().startAutomaticCapture();
+
 	}
 	
 	private void setSubsystemsDebug() 

@@ -11,7 +11,7 @@ public class RobotMap {
 	public static final double WHEEL_SHOOTER_MAX_CURRENT = 50;
 	
 	//Intake Max Current Limits for Faults
-	public static final double INTAKE_MAX_CURRENT = 50;
+	public static final double INTAKE_MAX_CURRENT = 40;
 	
 	// Nominal value assuming 4" wheel:
 	// (4" * pi) in/rot = 12.57
@@ -30,15 +30,15 @@ public class RobotMap {
 	//DriveSubystem Motors ports
 	public final static int LEFT_DRIVE_MOTOR_FRONT_ID  = 3;
 	public final static int LEFT_DRIVE_MOTOR_REAR_ID   = 4;
-	public final static int RIGHT_DRIVE_MOTOR_FRONT_ID = 1;
-	public final static int RIGHT_DRIVE_MOTOR_REAR_ID  = 2;
+	public final static int RIGHT_DRIVE_MOTOR_FRONT_ID = 7;
+	public final static int RIGHT_DRIVE_MOTOR_REAR_ID  = 8;
 
 	// Cube Manipulation
 	// Mutual exclusion on shooter or lifter types
 	
 	//IntakeSubsystem Motors ports
-	public final static int INTAKE_MOTOR_LEFT_ID      = 9;
-	public final static int INTAKE_MOTOR_RIGHT_ID      = 8;
+	public final static int INTAKE_MOTOR_LEFT_ID      = 5;
+	public final static int INTAKE_MOTOR_RIGHT_ID      = 9;
 	
 	// Wheel shooter, spring shooter, and elevator are mutually exlusive
 	public final static int WHEEL_SHOOTER_LEFT_1_MOTOR_ID     = 5;

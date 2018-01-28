@@ -32,7 +32,7 @@ public class Idle extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	
-    	if(btnToggleCamMode.onPressed()) 
+    /*if(btnToggleCamMode.onPressed()) 
     	{
     		if(Robot.visionSubsystem.isBoilerMode()) 
     		{
@@ -56,6 +56,7 @@ public class Idle extends Command {
     	Robot.visionSubsystem.updateTime();
     	Robot.visionSubsystem.setAllianceColor();
     	Robot.visionSubsystem.setAllianceNumber();
+    	*/
     }
 
     // Make this return true when this Command no longer needs to run execute()
