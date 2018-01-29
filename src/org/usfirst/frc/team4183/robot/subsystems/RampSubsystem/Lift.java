@@ -1,12 +1,48 @@
 package org.usfirst.frc.team4183.robot.subsystems.RampSubsystem;
+import org.usfirst.frc.team4183.robot.Robot;
+import org.usfirst.frc.team4183.utils.CommandUtils;
+
 import edu.wpi.first.wpilibj.command.Command;
 
 public class Lift extends Command{
 
+	public Lift()
+	{
+		requires(Robot.rampSubsystem);
+	}
+	
+	public void initialize()
+	{
+		
+	}
+	protected void execute()
+	{
+		Robot.rampSubsystem.setRampSpeed(Robot.oi.leftRampAxis.get(), Robot.oi.rightRampAxis.get());
+	}
+	
 	@Override
 	protected boolean isFinished() {
-		// TODO Auto-generated method stub
+		if (Robot.oi.leftRampAxis.get() == 0 || Robot.oi.rightRampAxis.get() == 0)
+		{
+			return CommandUtils.stateChange(this, new Deployed());
+		}
+		
+		if (Robot.oi.btnIdle.get())
+		{
+			return CommandUtils.stateChange(this, new Deployed());
+		}
+		
 		return false;
+	}
+	
+	protected void end()
+	{
+		
+	}
+	
+	protected void interrupted()
+	{
+		
 	}
 
 }

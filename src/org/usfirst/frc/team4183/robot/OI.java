@@ -48,6 +48,8 @@ public class OI {
 	public final LogicalButton btnHighShot = new ModalButton(operatorController.bPovUp);
 	public final LogicalButton btnLowShot = new ModalButton(operatorController.bPovDown);
 	
+	public final LogicalButton releaseRampDriv = new ModalButton(driverController.bPS4);
+	public final LogicalButton releaseRampOper = new ModalButton(operatorController.bPS4);
 	
 	
 	//****************************
@@ -56,7 +58,8 @@ public class OI {
 	public final LogicalAxis axisForward = new ModalAxis(driverController.aLeftY);
 	public final LogicalAxis axisTurn = new ModalAxis(driverController.aRightX);
 	public final LogicalAxis wheelShooterAxis = new ModalAxis(operatorController.aLeftY);
-
+	public final LogicalAxis leftRampAxis = new ModalAxis(operatorController.aLeftY);
+	public final LogicalAxis rightRampAxis = new ModalAxis(operatorController.aRightY);
 	
 	//****************************
 	// Permanent SoftButtons (used for inter-State-Machine communications)
