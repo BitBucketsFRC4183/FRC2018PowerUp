@@ -5,6 +5,8 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -90,7 +92,7 @@ public class DriveSubsystem extends BitBucketsSubsystem
 	    	drive = new DifferentialDrive(leftFrontMotor, rightFrontMotor);
     	
 	    	// Now get the other modes set up
-	    	setNeutral(NeutralMode.Coast);
+	    	setNeutral(NeutralMode.Brake);
 	    	telemetryState = new SendableChooser<SubsystemTelemetryState>();
 	    	
 	    	telemetryState.addDefault("Off", SubsystemTelemetryState.OFF);
@@ -355,6 +357,19 @@ public class DriveSubsystem extends BitBucketsSubsystem
 		return 0;
 	}
 	
+	public void magicDriveTime(SpeedController leftDrive, SpeedController rightDrive, double pwr, double timeRemain)
+	{
+		if (Timer.getMatchTime() > timeRemain)
+		{
+			leftDrive.set(pwr);
+			rightDrive.set(pwr);
+		}
+		else
+		{
+			leftDrive.set(0);
+			rightDrive.set(0);
+		}
+	}
 
 	/* Any hardware devices used in this subsystem must
 	*  have a check here to see if it is still connected and 

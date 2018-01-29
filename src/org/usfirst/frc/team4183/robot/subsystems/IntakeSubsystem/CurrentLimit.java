@@ -4,13 +4,14 @@ import org.usfirst.frc.team4183.robot.Robot;
 import org.usfirst.frc.team4183.utils.CommandUtils;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
  */
-public class Deployed extends Command {
+public class CurrentLimit extends Command {
 
-    public Deployed() {
+    public CurrentLimit() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     		requires(Robot.intakeSubsystem);	
@@ -30,23 +31,9 @@ public class Deployed extends Command {
    // 	if( Robot.oi.btnIntake.get()) {
     	//	return CommandUtils.stateChange(this, new Intaking());
    // 	}
-    	if( Robot.oi.btnOuttake.get()) {
-    		return CommandUtils.stateChange(this, new Outtaking());
-    	}
-    	if( Robot.oi.btnCloseGate.get()) {
-    		return CommandUtils.stateChange(this, new IntakingClose());
-    	}
-    	if ( Robot.oi.btnOpenGate.get()) {
-    		return CommandUtils.stateChange(this, new IntakingOpen());
-    	}
-    	if (Robot.oi.btnRotateCube.get())
-    	{
-    		return CommandUtils.stateChange(this, new IntakeRotate());
-    	}
-    //	if( Robot.oi.btnCloseGate.get()) {
-    	//	return CommandUtils.stateChange(this, new Idle());
-    	//}
-        return false;
+    	if (!Robot.oi.btnOpenGate.get() && !Robot.oi.btnCloseGate.get())
+        return CommandUtils.stateChange(this, new Deployed());
+    	return false;
     }
 
     // Called once after isFinished returns true

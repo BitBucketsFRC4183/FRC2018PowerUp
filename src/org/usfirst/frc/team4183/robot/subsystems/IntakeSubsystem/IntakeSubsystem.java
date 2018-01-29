@@ -5,10 +5,12 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import java.util.ArrayList;
 
+import org.usfirst.frc.team4183.robot.Robot;
 import org.usfirst.frc.team4183.robot.RobotMap;
 import org.usfirst.frc.team4183.robot.subsystems.BitBucketsSubsystem;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
@@ -18,6 +20,9 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 	private final WPI_TalonSRX leftIntakeMotor; 
 	private final WPI_TalonSRX rightIntakeMotor; 
 	private final DoubleSolenoid intakegate;
+	
+	private double timeCurrLimitInit = 0;
+	boolean currentLimitAct = false;
 
 	private static ArrayList<WPI_TalonSRX> motors;
 	private static ArrayList<DoubleSolenoid> solenoids;
@@ -39,9 +44,23 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 		solenoids.add(intakegate);
 		
 	}
+	public boolean getCurrLimitStatus()
+	{
+		return currentLimitAct;
+	}
+	public double getTimeCurrentLimit()
+	{
+		return timeCurrLimitInit;
+	}
 	public void disable() {
 		setAllMotorsZero();
 		//closegate();
+	}
+	
+	public void rotatePow(double pow)
+	{
+		leftIntakeMotor.set(pow);
+		rightIntakeMotor.set(-pow);
 	}
 	
 	public void closegate() {
@@ -66,6 +85,24 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
         setDefaultCommand(new Idle());
     }
 	
+	public void checkCurrentLimit(double currTimeInit)
+    {
+    	if(getCurrentMax() > RobotMap.INTAKE_MAX_CURRENT) {
+    		if (!currentLimitAct)
+       	 {
+       	 timeCurrLimitInit = currTimeInit;}
+    		
+    		currentLimitAct =true;
+    	 
+    	}
+    	else
+    	{
+    		currentLimitAct = false;
+    		timeCurrLimitInit = 0;
+    	}
+    }
+	
+	
 	@Override
 	public void diagnosticsInit() {
 		
@@ -84,7 +121,7 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 	@Override
 	public void periodic() {
 		// TODO Auto-generated method stub
-		
+		SmartDashboard.putNumber("Intake Current", Robot.intakeSubsystem.getCurrentMax());
 	}
 	@Override
 	public void diagnosticsExecute() {

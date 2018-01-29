@@ -1,16 +1,19 @@
 package org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem;
 
 import org.usfirst.frc.team4183.robot.Robot;
+import org.usfirst.frc.team4183.robot.RobotMap;
 import org.usfirst.frc.team4183.utils.CommandUtils;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
  */
-public class Deployed extends Command {
+public class IntakeRotate extends Command {
 
-    public Deployed() {
+	
+    public IntakeRotate() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     		requires(Robot.intakeSubsystem);	
@@ -18,34 +21,39 @@ public class Deployed extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	Robot.intakeSubsystem.disable();
+    Robot.intakeSubsystem.closegate();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    }
+    //	Robot.intakeSubsystem.setMotorSpeed(SmartDashboard.getNumber("Shooting Speed", 0));
+    	Robot.intakeSubsystem.rotatePow(.5);
+    	}
+    
+    
+    
+   
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-   // 	if( Robot.oi.btnIntake.get()) {
-    	//	return CommandUtils.stateChange(this, new Intaking());
-   // 	}
-    	if( Robot.oi.btnOuttake.get()) {
-    		return CommandUtils.stateChange(this, new Outtaking());
-    	}
-    	if( Robot.oi.btnCloseGate.get()) {
-    		return CommandUtils.stateChange(this, new IntakingClose());
-    	}
-    	if ( Robot.oi.btnOpenGate.get()) {
-    		return CommandUtils.stateChange(this, new IntakingOpen());
-    	}
-    	if (Robot.oi.btnRotateCube.get())
+    	if (Robot.oi.btnOpenGate.get())
     	{
-    		return CommandUtils.stateChange(this, new IntakeRotate());
+    		return CommandUtils.stateChange(this, new Deployed());
     	}
-    //	if( Robot.oi.btnCloseGate.get()) {
-    	//	return CommandUtils.stateChange(this, new Idle());
-    	//}
+    	if (Robot.oi.btnIdle.get() )
+    	{
+    		return CommandUtils.stateChange(this, new Deployed());
+    	}
+    	if( ! Robot.oi.btnRotateCube.get()) {
+    		return CommandUtils.stateChange(this , new Deployed());
+    		
+    	}
+ //   	if( Robot.oi.btnOuttake.get()) {
+//    		return CommandUtils.stateChange(this, new Outtaking());
+//    	}
+//    	if ( Robot.oi.btnOpenGate.get()) {
+  //  		return CommandUtils.stateChange(this, new IntakingOpen());
+   // 	}
         return false;
     }
 

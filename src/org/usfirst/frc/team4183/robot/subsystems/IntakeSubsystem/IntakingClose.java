@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class IntakingClose extends Command {
 
+	
     public IntakingClose() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
@@ -26,17 +27,34 @@ public class IntakingClose extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     //	Robot.intakeSubsystem.setMotorSpeed(SmartDashboard.getNumber("Shooting Speed", 0));    
-    	Robot.intakeSubsystem.setMotorSpeed(-0.5);    
+    	Robot.intakeSubsystem.setMotorSpeed(-0.5);   
+     	Robot.intakeSubsystem.checkCurrentLimit(timeSinceInitialized());
     	}
+    
+    
+    
+   
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	if( Robot.oi.btnIdle.get() || Robot.intakeSubsystem.getCurrentMax() > RobotMap.INTAKE_MAX_CURRENT) {
+    	if (Robot.intakeSubsystem.getCurrLimitStatus())
+    	{
+    	if(timeSinceInitialized()-Robot.intakeSubsystem.getTimeCurrentLimit() > .3 && timeSinceInitialized()-Robot.intakeSubsystem.getTimeCurrentLimit() < 2) {
+    		return CommandUtils.stateChange(this, new CurrentLimit());
+    	}
+    	}
+    	
+    	if (Robot.oi.btnIdle.get() )
+    	{
     		return CommandUtils.stateChange(this, new Deployed());
     	}
     	if( ! Robot.oi.btnCloseGate.get()) {
     		return CommandUtils.stateChange(this , new Deployed());
     		
+    	}
+    	if (Robot.oi.btnRotateCube.get())
+    	{
+    		return CommandUtils.stateChange(this, new IntakeRotate());
     	}
  //   	if( Robot.oi.btnOuttake.get()) {
 //    		return CommandUtils.stateChange(this, new Outtaking());

@@ -26,17 +26,28 @@ public class IntakingOpen extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     //	Robot.intakeSubsystem.setMotorSpeed(SmartDashboard.getNumber("Shooting Speed", 0));
-    	Robot.intakeSubsystem.setMotorSpeed(-0.5);    
+    	Robot.intakeSubsystem.setMotorSpeed(-0.5);
     	}
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	if( Robot.oi.btnIdle.get() || Robot.intakeSubsystem.getCurrentMax() > RobotMap.INTAKE_MAX_CURRENT) {
+    	
+    	if (Robot.intakeSubsystem.getCurrLimitStatus())
+    	{
+    	if(timeSinceInitialized()-Robot.intakeSubsystem.getTimeCurrentLimit() > .3 && timeSinceInitialized()-Robot.intakeSubsystem.getTimeCurrentLimit() < 2) {
+    		return CommandUtils.stateChange(this, new CurrentLimit());
+    	}
+    	}
+    	if( Robot.oi.btnIdle.get()) {
     		return CommandUtils.stateChange(this, new Deployed());
     	}
     	if( ! Robot.oi.btnOpenGate.get()) {
     		return CommandUtils.stateChange(this , new Deployed());
-    		}
+    		}s
+    	if (Robot.oi.btnRotateCube.get())
+    	{
+    		return CommandUtils.stateChange(this, new IntakeRotate());
+    	}
         return false;
     }
 
