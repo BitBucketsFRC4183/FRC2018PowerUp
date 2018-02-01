@@ -13,6 +13,7 @@ import org.usfirst.frc.team4183.robot.subsystems.AutonomousSubsystem.AutonomousS
 import org.usfirst.frc.team4183.robot.subsystems.DriveSubsystem.DriveSubsystem;
 import org.usfirst.frc.team4183.robot.subsystems.ElevatorSubsystem.ElevatorSubsystem;
 import org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem.IntakeSubsystem;
+import org.usfirst.frc.team4183.robot.subsystems.RampSubsystem.RampSubsystem;
 import org.usfirst.frc.team4183.robot.subsystems.VisionSubsystem.VisionSubsystem;
 import org.usfirst.frc.team4183.robot.subsystems.WheelShooterSubsystem.WheelShooterSubsystem;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -47,6 +48,8 @@ public class Robot extends IterativeRobot {
 	public static IntakeSubsystem intakeSubsystem;
 	public static AutonomousSubsystem autonomousSubsystem;
 	public static VisionSubsystem visionSubsystem;
+	public static RampSubsystem rampSubsystem;
+	
 	
 	// The following subsystems are mutually exclusive
 	// with regard to overall robot function cannot be considered
@@ -54,6 +57,7 @@ public class Robot extends IterativeRobot {
 	// and state exclusions we will just prevent creation.
     /// WARNING WARNING WARNING: ONLY ONE
 	public static WheelShooterSubsystem wheelShooterSubsystem;
+
 	
     public static OI oi;
 	
@@ -75,6 +79,7 @@ public class Robot extends IterativeRobot {
 		intakeSubsystem = new IntakeSubsystem();
 		autonomousSubsystem = new AutonomousSubsystem();
 		visionSubsystem = new VisionSubsystem();
+		rampSubsystem = new RampSubsystem();
 		
         /// WARNING WARNING WARNING: ONLY ONE
 		wheelShooterSubsystem = new WheelShooterSubsystem();

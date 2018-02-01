@@ -24,7 +24,12 @@ public class RobotMap {
   //inches per revolution for Elevator
   public static final int INCH_EXTENSION_ROT = 200;
 	
-	// Constant as UPPERCASE_WITH_UNDERSCORES
+    //Ramp Subsystem Motor Ports
+  	public final static int LEFT_RAMP_MOTOR_ID = 7;
+  	public final static int RIGHT_RAMP_MOTOR_ID = 8;
+  	
+  	//Ramp Subsystem Servo Port
+  	public final static int RAMP_RELEASE_SERVO_ID = 1;
 	
 	
 	//DriveSubystem Motors ports
@@ -46,8 +51,8 @@ public class RobotMap {
 	public final static int WHEEL_SHOOTER_RIGHT_1_MOTOR_ID    = 11;
 	public final static int WHEEL_SHOOTER_RIGHT_2_MOTOR_ID    = 12;
 	
-	public static final int SPRING_SHOOTER_MOTOR_A_ID = 7;
-	public static final int SPRING_SHOOTER_MOTOR_B_ID = 8;
+	//public static final int SPRING_SHOOTER_MOTOR_A_ID = 7;
+	//public static final int SPRING_SHOOTER_MOTOR_B_ID = 8;
 	
 	public final static int ELEVATOR_MOTOR_A_ID = 7;
 	public final static int ELEVATOR_MOTOR_B_ID = 8;

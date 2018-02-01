@@ -21,6 +21,7 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 	private final WPI_TalonSRX rightIntakeMotor; 
 	private final DoubleSolenoid intakegate;
 	
+	
 	private double timeCurrLimitInit = 0;
 	boolean currentLimitAct = false;
 
