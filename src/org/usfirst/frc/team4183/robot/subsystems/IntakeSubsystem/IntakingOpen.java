@@ -43,7 +43,7 @@ public class IntakingOpen extends Command {
     	}
     	if( ! Robot.oi.btnOpenGate.get()) {
     		return CommandUtils.stateChange(this , new Deployed());
-    		}s
+    	}
     	if (Robot.oi.btnRotateCube.get())
     	{
     		return CommandUtils.stateChange(this, new IntakeRotate());
