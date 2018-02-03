@@ -21,7 +21,6 @@ public class Arm extends Command
     // Called just before this Command runs the first time
     protected void initialize() 
     {
-    	Robot.wheelShooterSubsystem.setPosToHigh();
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -54,7 +53,7 @@ public class Arm extends Command
     protected boolean isFinished() 
     {
     	// TODO:  WHEN ENCODERS ARE IMPLEMENTED ADDED THE CASE THAT WAITS FOR THE WHEELS TO BE AT DESIRED SPEED
-    	if(Robot.oi.btnShooterFire.get()) {
+    	if(Robot.oi.shooterFireAxis.get() > .5) {
     		return CommandUtils.stateChange(this, new Shooting());
         }
     	

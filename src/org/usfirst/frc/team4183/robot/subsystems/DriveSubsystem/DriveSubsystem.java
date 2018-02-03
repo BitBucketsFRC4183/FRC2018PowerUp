@@ -357,39 +357,6 @@ public class DriveSubsystem extends BitBucketsSubsystem
 		return 0;
 	}
 	
-	/***
-	 * Magic Drive Method. Place this method into any team's code and if their motor controllers implement SpeedController this should allow them to drive by time
-	 * @param leftDrive leftDrive SpeedController
-	 * @param rightDrive rightDrive SpeedController
-	 * @param pwr the power parameter
-	 * @param time for the motors to run
-	 * @param forward a boolean that determines direction, True for forward or positive direction, False for reverse or negative direction.
-	 */
-	
-	public void magicDriveTime(SpeedController leftDrive, SpeedController rightDrive, double pwr, double time, boolean forward)
-	{
-		
-		double initialTime = Timer.getMatchTime();
-		double timeToDrive = initialTime - time;
-		double dir = 1;
-		if (!forward)
-		{
-			dir = -1;
-		}
-			
-		pwr = Math.abs(pwr);
-		if (Timer.getMatchTime() > timeToDrive)
-		{
-			leftDrive.set(pwr*dir);
-			rightDrive.set(pwr*dir);
-		}
-		else
-		{
-			leftDrive.set(0);
-			rightDrive.set(0);
-		}
-	}
-
 	/* Any hardware devices used in this subsystem must
 	*  have a check here to see if it is still connected and 
 	*  working properly. For motors check for current draw.
