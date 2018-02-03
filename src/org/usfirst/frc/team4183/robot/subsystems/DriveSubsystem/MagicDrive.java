@@ -13,26 +13,37 @@ public class MagicDrive {
 		rightDrive = rightDriveParr;
 	}
 	
+	enum Direction
+	{
+		FORWARD(1),REVERSE(-1);
+		
+		private final double powerDir;
+		
+		Direction(double pow)
+		{
+			this.powerDir = pow;
+		}
+		
+		double getPowDir()
+		{
+			return powerDir;
+		}
+	}
+	
 	
 	/***
 	 * Magic Drive Method. Place this method into any team's code and if their motor controllers implement SpeedController this should allow them to drive by time
 	 * @param pwr the power parameter
 	 * @param time for the motors to run
-	 * @param forward a boolean that determines direction, True for forward or positive direction, False for reverse or negative direction.
+	 * @param A enumeration which has the two values Forward and Backwards and returns -1 or 1 in order to flip the direction of movement
 	 */
-	public void magicDriveTime(double pwr, double timeRemain, boolean forward)
-	{
-		double dir = 1;
-		if (!forward)
-		{
-			dir = -1;
-		}
-			
-		pwr = Math.abs(pwr);
+	public void magicDriveTime(double pwr, double timeRemain, Direction direction)
+	{		
+		pwr = Math.abs(pwr) * direction.getPowDir();
 		if (Timer.getMatchTime() > timeRemain)
 		{
-			leftDrive.set(pwr*dir);
-			rightDrive.set(pwr*dir);
+			leftDrive.set(pwr);
+			rightDrive.set(pwr);
 		}
 		else
 		{
