@@ -45,8 +45,6 @@ public class Shooting extends Command
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() 
     {
-    	//ADD FAILURE CONDITIONAL 
-    	/// TODO: Resurrect this from last year
     	if (Robot.wheelShooterSubsystem.getCurrentMax() > RobotMap.WHEEL_SHOOTER_MAX_CURRENT)
     	{
     		return CommandUtils.stateChange(this, new Fail());
