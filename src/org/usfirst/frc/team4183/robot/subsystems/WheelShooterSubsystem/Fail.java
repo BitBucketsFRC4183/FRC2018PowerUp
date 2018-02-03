@@ -32,14 +32,11 @@ public class Fail extends Command
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() 
     {
-    	if (Robot.wheelShooterSubsystem.isPresent())
-    	{
-    		if (timeSinceInitialized() >1)
-    		{
-    			return CommandUtils.stateChange(this, new Idle());
-    		}
-    	}
-    	
+		if (timeSinceInitialized() >1)
+		{
+			return CommandUtils.stateChange(this, new Idle());
+		}
+		
     	return false;
     }
 

@@ -13,11 +13,6 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 	
 	private final WPI_TalonSRX elevatorMotorB;
 
-	private boolean present = false;
-	
-	
-	
-	
 	public ElevatorSubsystem()
 	{
 		elevatorMotorA = new WPI_TalonSRX(RobotMap.ELEVATOR_MOTOR_A_ID);
@@ -84,15 +79,6 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 		// TODO Auto-generated method stub
 		
 	}
-
-	public void setPresent(boolean b) {
-		present = b;
-		
-	}
-	public boolean isPresent() {
-		return present;
-	}
-
 	
 	@Override
 	public void diagnosticsExecute() {
