@@ -47,9 +47,7 @@ public class RobotMap {
 	
 	// Wheel shooter, spring shooter, and elevator are mutually exlusive
 	public final static int WHEEL_SHOOTER_LEFT_1_MOTOR_ID     = 5;
-	public final static int WHEEL_SHOOTER_LEFT_2_MOTOR_ID     = 6;
 	public final static int WHEEL_SHOOTER_RIGHT_1_MOTOR_ID    = 11;
-	public final static int WHEEL_SHOOTER_RIGHT_2_MOTOR_ID    = 12;
 	
 	//public static final int SPRING_SHOOTER_MOTOR_A_ID = 7;
 	//public static final int SPRING_SHOOTER_MOTOR_B_ID = 8;

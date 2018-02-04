@@ -47,7 +47,7 @@ public class Idle extends Command
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() 
     {
-    	if(Robot.oi.btnShooterLoad.get()) {
+    	if(Robot.oi.shooterLoadAxis.get() > .5) {
     		return CommandUtils.stateChange(this, new Arm());	    	
     	}
     	

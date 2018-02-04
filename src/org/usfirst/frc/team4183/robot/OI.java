@@ -39,10 +39,6 @@ public class OI {
 	public final LogicalButton btnShooter = new ModalButton(operatorController.bSquare);
 	public final LogicalButton btnIdle = new ModalButton(operatorController.bTrackpad);
 	
-	
-	public final LogicalButton btnShooterFire = new ModalButton(operatorController.bL2);
-	public final LogicalButton btnShooterLoad = new ModalButton(operatorController.bR2);
-	
 	public final LogicalButton btnRotateCube = new ModalButton(operatorController.bCircle);
 	
 	public final LogicalButton btnHighShot = new ModalButton(operatorController.bPovUp);
@@ -50,6 +46,8 @@ public class OI {
 	
 	public final LogicalButton releaseRampDriv = new ModalButton(driverController.bPS4);
 	public final LogicalButton releaseRampOper = new ModalButton(operatorController.bPS4);
+
+	
 	
 	
 	//****************************
@@ -60,6 +58,10 @@ public class OI {
 	public final LogicalAxis wheelShooterAxis = new ModalAxis(operatorController.aLeftY);
 	public final LogicalAxis leftRampAxis = new ModalAxis(operatorController.aLeftY);
 	public final LogicalAxis rightRampAxis = new ModalAxis(operatorController.aRightY);
+	public final LogicalAxis shooterFireAxis = new ModalAxis(operatorController.aL2);
+	public final LogicalAxis shooterLoadAxis = new ModalAxis(operatorController.aR2);
+	
+	
 	
 	//****************************
 	// Permanent SoftButtons (used for inter-State-Machine communications)
