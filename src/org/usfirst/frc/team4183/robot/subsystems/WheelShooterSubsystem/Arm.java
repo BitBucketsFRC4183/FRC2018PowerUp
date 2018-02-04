@@ -26,6 +26,7 @@ public class Arm extends Command
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	
+    
     	if (Robot.oi.btnHighShot.get())
     	{
     		Robot.wheelShooterSubsystem.setFireSpeedState(WheelShooterSubsystem.FirePos.HIGHSHOT);
@@ -41,13 +42,14 @@ public class Arm extends Command
     	
     	if (Robot.wheelShooterSubsystem.getFireSpeedPos() == WheelShooterSubsystem.FirePos.MANUAL)
     	{
-    		Robot.wheelShooterSubsystem.setMotorSpeed(SmartDashboard.getNumber("Shooter Speed", 0));
+    		Robot.wheelShooterSubsystem.setMotorPwr(SmartDashboard.getNumber("Shooter Speed", 0));
     	}
     	else
     	{
-    	Robot.wheelShooterSubsystem.setMotorSpeed(Robot.wheelShooterSubsystem.getFireSpeedPos().getPow());
+    	Robot.wheelShooterSubsystem.setMotorPwr(Robot.wheelShooterSubsystem.getFireSpeedPos().getPow());
     	}
     	}
+    
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() 
