@@ -438,40 +438,40 @@ public class DriveSubsystem extends BitBucketsSubsystem
 //			SmartDashboard.putNumber("ReadMotorCurrent", 
 //					rightRearMotor.getOutputCurrent());
 //			
-//			SmartDashboard.putNumber( "RightNativeUnits", 
-//					getRightNativeUnits());
-//			SmartDashboard.putNumber( "LeftNativeUnits", 
-//					getLeftNativeUnits());
-//			SmartDashboard.putNumber( "RightEncoderUnits", 
-//					getRightEncoderUnits());
-//			SmartDashboard.putNumber( "LeftEncoderUnits", 
-//					getLeftEncoderUnits());
+			SmartDashboard.putNumber( "RightNativeUnits", 
+					getRightNativeUnits());
+			SmartDashboard.putNumber( "LeftNativeUnits", 
+					getLeftNativeUnits());
+			SmartDashboard.putNumber( "RightEncoderUnits", 
+					getRightEncoderUnits());
+			SmartDashboard.putNumber( "LeftEncoderUnits", 
+					getLeftEncoderUnits());
 			
-			Robot.imu.diagnostics();
+			//Robot.imu.diagnostics();
 		
-			SmartDashboard.putNumber( "IMU_Yaw", 
-					Robot.imu.getYawDeg());
-			SmartDashboard.putNumber( "IMU_Yawrate", 
-					Robot.imu.getYawRateDps());
-			
-			
-			SmartDashboard.putNumber("FRCurrent", 
-					rightFrontMotor.getOutputCurrent());
-			SmartDashboard.putNumber("FLCurrent", 
-					leftFrontMotor.getOutputCurrent());
-			SmartDashboard.putNumber("BRCurrent", 
-					rightRearMotor.getOutputCurrent());
-			SmartDashboard.putNumber("BLCurrent", 
-					leftRearMotor.getOutputCurrent());
-			
-			SmartDashboard.putString("RightFrontMode", 
-					getRightFrontMode().name());
-			SmartDashboard.putString("LeftFrontMode", 
-					getLeftFrontMode().name());
-			SmartDashboard.putString("RightBackMode", 
-					getRightRearMode().name());
-			SmartDashboard.putString("LeftBackMode", 
-					getLeftRearMode().name());
+//			SmartDashboard.putNumber( "IMU_Yaw", 
+//					Robot.imu.getYawDeg());
+//			SmartDashboard.putNumber( "IMU_Yawrate", 
+//					Robot.imu.getYawRateDps());
+//			
+//			
+//			SmartDashboard.putNumber("FRCurrent", 
+//					rightFrontMotor.getOutputCurrent());
+//			SmartDashboard.putNumber("FLCurrent", 
+//					leftFrontMotor.getOutputCurrent());
+//			SmartDashboard.putNumber("BRCurrent", 
+//					rightRearMotor.getOutputCurrent());
+//			SmartDashboard.putNumber("BLCurrent", 
+//					leftRearMotor.getOutputCurrent());
+//			
+//			SmartDashboard.putString("RightFrontMode", 
+//					getRightFrontMode().name());
+//			SmartDashboard.putString("LeftFrontMode", 
+//					getLeftFrontMode().name());
+//			SmartDashboard.putString("RightBackMode", 
+//					getRightRearMode().name());
+//			SmartDashboard.putString("LeftBackMode", 
+//					getLeftRearMode().name());
 			
 			
 			
