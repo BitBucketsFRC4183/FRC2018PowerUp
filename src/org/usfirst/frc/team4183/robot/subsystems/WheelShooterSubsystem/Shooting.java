@@ -33,7 +33,7 @@ public class Shooting extends Command
     	}
     	else
     	{
-    	Robot.wheelShooterSubsystem.setMotorPwr(Robot.wheelShooterSubsystem.getFireSpeedPos().getPow());
+    	Robot.wheelShooterSubsystem.setMotorSpeedfts(Robot.wheelShooterSubsystem.getFireSpeedPos().getPow());
     	}
     	
     	if (timeSinceInitialized()  > .5)

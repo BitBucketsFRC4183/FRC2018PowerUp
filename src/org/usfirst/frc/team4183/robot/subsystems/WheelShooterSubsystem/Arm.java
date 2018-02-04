@@ -46,7 +46,7 @@ public class Arm extends Command
     	}
     	else
     	{
-    	Robot.wheelShooterSubsystem.setMotorPwr(Robot.wheelShooterSubsystem.getFireSpeedPos().getPow());
+    	Robot.wheelShooterSubsystem.setMotorSpeedfts(Robot.wheelShooterSubsystem.getFireSpeedPos().getPow());
     	}
     	}
     

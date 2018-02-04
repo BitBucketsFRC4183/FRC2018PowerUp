@@ -37,10 +37,11 @@ public class WheelShooterSubsystem extends BitBucketsSubsystem {
 	
 	//Approximately using 4inch wheels
 		private final int NATIVE_UNITS_PER_INCH = 652;
+		private final int NATIVE_UNITS_PER_FOOT = 7802;
 	
 	static enum FirePos
 	{
-		HIGHSHOT(.8), LOWSHOT(.4), MANUAL(0);
+		HIGHSHOT(8), LOWSHOT(4), MANUAL(0);
 		
 		private final double power;
 		
@@ -78,12 +79,12 @@ public class WheelShooterSubsystem extends BitBucketsSubsystem {
 	
 	private int getLeftWheelNativeUnits()
 	{
-		return leftWheelshooterMotorA.getSelectedSensorPosition(RobotMap.PRIMARY_PID_LOOP);
+		return leftWheelshooterMotorA.getSelectedSensorVelocity(RobotMap.PRIMARY_PID_LOOP);
 	}
 	
 	private int getRightWheelNativeUnits()
 	{
-		return rightWheelshooterMotorA.getSelectedSensorPosition(RobotMap.PRIMARY_PID_LOOP);
+		return rightWheelshooterMotorA.getSelectedSensorVelocity(RobotMap.PRIMARY_PID_LOOP);
 	}
 	
 	
@@ -134,7 +135,7 @@ public class WheelShooterSubsystem extends BitBucketsSubsystem {
 	
 	public void setMotorSpeedfts(double fts)
 	{
-		int speed = (int) (fts/10*7824);
+		int speed = (int) ((fts/10)*NATIVE_UNITS_PER_FOOT);
 		leftWheelshooterMotorA.set(ControlMode.Velocity,speed);
 		rightWheelshooterMotorA.set(ControlMode.Velocity,speed);
 		leftWheelshooterMotorB.set(ControlMode.Follower, RobotMap.WHEEL_SHOOTER_LEFT_1_MOTOR_ID);
