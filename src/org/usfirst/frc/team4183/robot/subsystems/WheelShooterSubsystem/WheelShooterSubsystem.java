@@ -55,9 +55,7 @@ public class WheelShooterSubsystem extends BitBucketsSubsystem {
 		positionChanger = new DoubleSolenoid(RobotMap.WHEEL_SHOOTER_HIGH_POS_CHANNEL, RobotMap.WHEEL_SHOOTER_LOW_POS_CHANNEL);
 		gate = new DoubleSolenoid(RobotMap.GATE_OPEN_POS_CHANNEL,RobotMap.GATE_CLOSE_POS_CHANNEL);
 		leftWheelshooterMotorA.setInverted(true);
-		leftWheelshooterMotorB.setInverted(true) ;
-		leftWheelshooterMotorB.set(ControlMode.Follower, RobotMap.WHEEL_SHOOTER_LEFT_1_MOTOR_ID);
-		rightWheelshooterMotorB.set(ControlMode.Follower, RobotMap.WHEEL_SHOOTER_RIGHT_1_MOTOR_ID);
+		
 		
 		telemetryState = new SendableChooser<SubsystemTelemetryState>();
     	
@@ -112,8 +110,8 @@ public class WheelShooterSubsystem extends BitBucketsSubsystem {
 		//rightWheelshooterMotorB.set(0.0);			
 		}
 	public void setMotorSpeed(double speed) {
-		leftWheelshooterMotorA.set(ControlMode.Velocity,speed);
-		rightWheelshooterMotorA.set(ControlMode.Velocity,speed);
+		leftWheelshooterMotorA.set(ControlMode.PercentOutput,speed);
+		rightWheelshooterMotorA.set(ControlMode.PercentOutput,speed);
 	}
 	
 	
@@ -231,11 +229,7 @@ public class WheelShooterSubsystem extends BitBucketsSubsystem {
 		SmartDashboard.putString("Shooter Mode", shooterPos.toString());
 		// TODO Auto-generated method stub
 		if(telemetryState.getSelected() == SubsystemTelemetryState.ON) {
-			SmartDashboard.putNumber("RightEncoderUnits", getRightEncoderUnits());
-			SmartDashboard.putNumber("LeftEncoderUnits", getLeftEncoderUnits());
-			
-			SmartDashboard.putNumber("RightNativeUnits", getRightNativeUnits());
-			SmartDashboard.putNumber("LeftNativeUnits", getLeftNativeUnits());
+
 		}
 		
 		SmartDashboard.putNumber("leftShooter Pow", leftWheelshooterMotorA.get());

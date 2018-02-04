@@ -17,6 +17,7 @@ public class RobotMap {
 	// (4" * pi) in/rot = 12.57
 	// The precise value must be determined by calibration.
 	public static final double INCH_PER_WHEEL_ROT = 12.5 * 1.0353360615;
+	public static final double WHEEL_CIRCUMFERENCE = (4.3 * Math.PI);
 	
 	public static final double MINUMUM_MOTOR_CURR = 1.25;
 	public static final double MOTOR_TEST_PERCENT = 0.5;
@@ -35,8 +36,8 @@ public class RobotMap {
 	//DriveSubystem Motors ports
 	public final static int LEFT_DRIVE_MOTOR_FRONT_ID  = 3;
 	public final static int LEFT_DRIVE_MOTOR_REAR_ID   = 4;
-	public final static int RIGHT_DRIVE_MOTOR_FRONT_ID = 7;
-	public final static int RIGHT_DRIVE_MOTOR_REAR_ID  = 8;
+	public final static int RIGHT_DRIVE_MOTOR_FRONT_ID = 1;
+	public final static int RIGHT_DRIVE_MOTOR_REAR_ID  = 2;
 
 	// Cube Manipulation
 	// Mutual exclusion on shooter or lifter types
