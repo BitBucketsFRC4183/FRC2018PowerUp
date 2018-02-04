@@ -111,8 +111,9 @@ public class Robot extends IterativeRobot {
 		
         CameraServer.getInstance().startAutomaticCapture();
         
-        
-
+        SmartDashboard.putNumber("Kp", 0.016);
+        SmartDashboard.putNumber("Ki", 0.0);
+        SmartDashboard.putNumber("Kd", 0.0);
 	}
 	
 	private void setSubsystemsDebug() 

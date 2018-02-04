@@ -48,6 +48,10 @@ public class DriverControl extends Command
     	{
     		return CommandUtils.stateChange(this, new AlignLock());
     	}
+    	else if(Robot.oi.btnPosControl.get()) 
+    	{
+    		return CommandUtils.stateChange(this, new PositionControl());
+    	}
     	
         return false;
     }

@@ -204,7 +204,8 @@ public class DriveSubsystem extends BitBucketsSubsystem
 	{
 		// TODO: New functions provide ErrorCode feedback if there is a problem setting up the controller
 		
-		m.set(ControlMode.Position,0.0);
+		m.set(ControlMode.Position, 0.0);
+		
 		m.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, RobotMap.CONTROLLER_TIMEOUT_MS);
 		
 		// NOTE: The encoder codes per revolution interface no longer exists
@@ -336,6 +337,10 @@ public class DriveSubsystem extends BitBucketsSubsystem
 	public ControlMode getRightRearMode() {
 		return getMotorMode(rightRearMotor);
 	}
+	
+	public double inchesToEncoderTicks(double inches) {
+		return ENCODER_PULSES_PER_REV * EDGES_PER_ENCODER_COUNT * inches / RobotMap.WHEEL_CIRCUMFERENCE;
+	}
 
 	public double getFwdVelocity_ips() {
 		// Right side motor reads -velocity when going forward!
@@ -355,6 +360,34 @@ public class DriveSubsystem extends BitBucketsSubsystem
 	public double getPosition_inch() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+	
+	private void setupPositionControl(WPI_TalonSRX m) {
+		m.setSelectedSensorPosition(0, 0, RobotMap.CONTROLLER_TIMEOUT_MS);
+		m.config_kP(0, SmartDashboard.getNumber("Kp", 0.016), RobotMap.CONTROLLER_TIMEOUT_MS); // May be able to increase gain a bit	
+		m.config_kI(0, SmartDashboard.getNumber("Ki", 0.016), RobotMap.CONTROLLER_TIMEOUT_MS);
+		m.config_kD(0, SmartDashboard.getNumber("Kd", 0.016), RobotMap.CONTROLLER_TIMEOUT_MS);
+		
+		m.set(ControlMode.PercentOutput, 0.0);
+	}
+	
+	public void setupPositionControl() {
+		setupPositionControl(leftFrontMotor);
+		setupPositionControl(leftRearMotor);
+		setupPositionControl(rightFrontMotor);
+		setupPositionControl(rightRearMotor);
+	}
+	
+	private void setPos(WPI_TalonSRX m, double value) {
+		
+		m.set(ControlMode.Position, value);
+	}
+	
+	public void setPos(double value) {
+		setPos(leftFrontMotor, inchesToEncoderTicks(value));
+		setPos(rightFrontMotor, -inchesToEncoderTicks(value));
+		setPos(leftRearMotor, inchesToEncoderTicks(value));
+		setPos(rightRearMotor, -inchesToEncoderTicks(value));
 	}
 	
 	/* Any hardware devices used in this subsystem must
@@ -438,43 +471,14 @@ public class DriveSubsystem extends BitBucketsSubsystem
 //			SmartDashboard.putNumber("ReadMotorCurrent", 
 //					rightRearMotor.getOutputCurrent());
 //			
-//			SmartDashboard.putNumber( "RightNativeUnits", 
-//					getRightNativeUnits());
-//			SmartDashboard.putNumber( "LeftNativeUnits", 
-//					getLeftNativeUnits());
-//			SmartDashboard.putNumber( "RightEncoderUnits", 
-//					getRightEncoderUnits());
-//			SmartDashboard.putNumber( "LeftEncoderUnits", 
-//					getLeftEncoderUnits());
-			
-			Robot.imu.diagnostics();
-		
-			SmartDashboard.putNumber( "IMU_Yaw", 
-					Robot.imu.getYawDeg());
-			SmartDashboard.putNumber( "IMU_Yawrate", 
-					Robot.imu.getYawRateDps());
-			
-			
-			SmartDashboard.putNumber("FRCurrent", 
-					rightFrontMotor.getOutputCurrent());
-			SmartDashboard.putNumber("FLCurrent", 
-					leftFrontMotor.getOutputCurrent());
-			SmartDashboard.putNumber("BRCurrent", 
-					rightRearMotor.getOutputCurrent());
-			SmartDashboard.putNumber("BLCurrent", 
-					leftRearMotor.getOutputCurrent());
-			
-			SmartDashboard.putString("RightFrontMode", 
-					getRightFrontMode().name());
-			SmartDashboard.putString("LeftFrontMode", 
-					getLeftFrontMode().name());
-			SmartDashboard.putString("RightBackMode", 
-					getRightRearMode().name());
-			SmartDashboard.putString("LeftBackMode", 
-					getLeftRearMode().name());
-			
-			
-			
+			SmartDashboard.putNumber( "RightNativeUnits", 
+					getRightNativeUnits());
+			SmartDashboard.putNumber( "LeftNativeUnits", 
+					getLeftNativeUnits());
+			SmartDashboard.putNumber( "RightEncoderUnits", 
+					getRightEncoderUnits());
+			SmartDashboard.putNumber( "LeftEncoderUnits", 
+					getLeftEncoderUnits());	
 			
 		}
 		

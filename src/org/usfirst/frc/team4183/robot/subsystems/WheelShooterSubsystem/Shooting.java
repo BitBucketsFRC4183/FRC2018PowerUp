@@ -45,11 +45,13 @@ public class Shooting extends Command
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() 
     {
-    	if (Robot.wheelShooterSubsystem.getCurrentMax() > RobotMap.WHEEL_SHOOTER_MAX_CURRENT)
-    	{
-    		return CommandUtils.stateChange(this, new Fail());
-    	}
-    else if(Robot.oi.btnIdle.get() || (timeSinceInitialized()  > 2 && Robot.wheelShooterSubsystem.getFireSpeedPos() != WheelShooterSubsystem.FirePos.MANUAL)) {
+    	//ADD FAILURE CONDITIONAL 
+    	/// TODO: Resurrect this from last year
+//    	if (Robot.wheelShooterSubsystem.getCurrentMax() > RobotMap.WHEEL_SHOOTER_MAX_CURRENT)
+//    	{
+//    		return CommandUtils.stateChange(this, new Fail());
+//    	}
+    	if(Robot.oi.btnIdle.get() || (timeSinceInitialized()  > 2 && Robot.wheelShooterSubsystem.getFireSpeedPos() != WheelShooterSubsystem.FirePos.MANUAL)) {
     		return CommandUtils.stateChange(this, new Idle());
 }
     	
