@@ -10,6 +10,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -17,7 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class WheelShooterSubsystem extends BitBucketsSubsystem {
 
-    // Put methods for controlling this subsystem
+	// Put methods for controlling this subsystem
     // here. Call these from Commands.
 	private final WPI_TalonSRX leftWheelshooterMotorA;
 	private final WPI_TalonSRX leftWheelshooterMotorB;
@@ -55,6 +56,8 @@ public class WheelShooterSubsystem extends BitBucketsSubsystem {
 
 	
 	public WheelShooterSubsystem() {
+		setName("WheelShooterSubsystem");
+		
 		leftWheelshooterMotorA = new WPI_TalonSRX(RobotMap.WHEEL_SHOOTER_LEFT_1_MOTOR_ID);
 		leftWheelshooterMotorB = new WPI_TalonSRX(RobotMap.WHEEL_SHOOTER_LEFT_2_MOTOR_ID);
 		rightWheelshooterMotorA = new WPI_TalonSRX(RobotMap.WHEEL_SHOOTER_RIGHT_1_MOTOR_ID);
@@ -207,6 +210,31 @@ public class WheelShooterSubsystem extends BitBucketsSubsystem {
 			return rightMax;
 		}
 	}
+	
+	private int getMotorNativeUnits(WPI_TalonSRX m) {
+		return m.getSelectedSensorPosition(RobotMap.PRIMARY_PID_LOOP);
+	}
+	
+	public int getLeftNativeUnits() {
+		return getMotorNativeUnits(leftWheelshooterMotorA);
+	}
+	
+	public int getRightNativeUnits() {
+		return getMotorNativeUnits(rightWheelshooterMotorA);
+	}
+	
+	private double getMotorEncoderUnits(WPI_TalonSRX m) {
+		return getMotorNativeUnits(m)/EDGES_PER_ENCODER_COUNT;
+	}
+	
+	public double getLeftEncoderUnits() {
+		return getMotorNativeUnits(leftWheelshooterMotorA);
+	}
+	
+	public double getRightEncoderUnits() {
+		return getMotorEncoderUnits(rightWheelshooterMotorA);
+	}
+	
 	public void initDefaultCommand() {
         // Set the default command for a subsystem here.
         //setDefaultCommand(new MySpecialCommand());
@@ -249,8 +277,10 @@ public class WheelShooterSubsystem extends BitBucketsSubsystem {
 		
 		SmartDashboard.putNumber("leftWheel Native Val", getLeftWheelNativeUnits());
 		SmartDashboard.putNumber("rightWheel Native Val", getRightWheelNativeUnits());
-	
-		// TODO Auto-generated method stub
+		
+		SmartDashboard.putNumber("leftShooter Pow", leftWheelshooterMotorA.get());
+		SmartDashboard.putNumber("rightShooter Pow", rightWheelshooterMotorA.get());
+		
 		
 	}
 }
