@@ -1,6 +1,7 @@
 package org.usfirst.frc.team4183.robot.subsystems.ElevatorSubsystem;
 
 import org.usfirst.frc.team4183.robot.Robot;
+import org.usfirst.frc.team4183.utils.CommandUtils;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -8,13 +9,13 @@ public class Idle extends Command{
 
 	public Idle()
 	{
-		//requires(Robot.elevatorSubsystem);
+		requires(Robot.elevatorSubsystem);
 		setRunWhenDisabled(true);
 	}
 	
 	protected void initialize()
 	{
-		//Robot.elevatorSubsystem.disable();
+		Robot.elevatorSubsystem.disable();
 	}
 	
 	public void execute()
@@ -23,12 +24,11 @@ public class Idle extends Command{
 	}
 	
 	protected boolean isFinished()
-	{  /* 
-		if (Robot.elevatorSubsystem.isPresent())
+	{ if (Math.abs(Robot.oi.leftRampAxis.get()) > .05)
 		{
-			
-		}*/
-		return true;
+			return CommandUtils.stateChange(this, new Raise());
+		}
+		return false;
 	}
 
 	protected void end()

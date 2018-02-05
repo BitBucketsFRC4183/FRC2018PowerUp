@@ -38,13 +38,9 @@ public class OI {
 	public final LogicalButton btnIntake = new ModalButton(operatorController.bCross);
 	public final LogicalButton btnOuttake = new ModalButton(operatorController.bTriangle);
 	
-	public final LogicalButton btnShooter = new ModalButton(operatorController.bSquare);
 	public final LogicalButton btnIdle = new ModalButton(operatorController.bTrackpad);
 	
 	public final LogicalButton btnRotateCube = new ModalButton(operatorController.bCircle);
-	
-	public final LogicalButton btnHighShot = new ModalButton(operatorController.bPovUp);
-	public final LogicalButton btnLowShot = new ModalButton(operatorController.bPovDown);
 	
 	public final LogicalButton releaseRampDriv = new ModalButton(driverController.bPS4);
 	public final LogicalButton releaseRampOper = new ModalButton(operatorController.bPS4);
@@ -58,10 +54,10 @@ public class OI {
 	public final LogicalAxis axisForward = new ModalAxis(driverController.aLeftY);
 	public final LogicalAxis axisTurn = new ModalAxis(driverController.aRightX);
 	public final LogicalAxis wheelShooterAxis = new ModalAxis(operatorController.aLeftY);
+	
+	//Ramp and Elevator will share the left Joystick Y axis
 	public final LogicalAxis leftRampAxis = new ModalAxis(operatorController.aLeftY);
 	public final LogicalAxis rightRampAxis = new ModalAxis(operatorController.aRightY);
-	public final LogicalAxis shooterFireAxis = new ModalAxis(operatorController.aL2);
-	public final LogicalAxis shooterLoadAxis = new ModalAxis(operatorController.aR2);
 	
 	
 	
