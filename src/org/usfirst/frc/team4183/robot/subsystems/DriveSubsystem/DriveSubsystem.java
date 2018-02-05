@@ -1,10 +1,12 @@
 package org.usfirst.frc.team4183.robot.subsystems.DriveSubsystem;
 
+import com.ctre.phoenix.motion.TrajectoryPoint;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -21,6 +23,10 @@ import org.usfirst.frc.team4183.robot.subsystems.BitBucketsSubsystem;
 import org.usfirst.frc.team4183.robot.subsystems.SubsystemUtilities.DiagnosticsState;
 import org.usfirst.frc.team4183.robot.subsystems.SubsystemUtilities.SubsystemTelemetryState;
 
+import jaci.pathfinder.Pathfinder;
+import jaci.pathfinder.Trajectory;
+import jaci.pathfinder.Waypoint;
+import jaci.pathfinder.modifiers.TankModifier;
 
 public class DriveSubsystem extends BitBucketsSubsystem
 {
@@ -42,15 +48,23 @@ public class DriveSubsystem extends BitBucketsSubsystem
 	private final int EDGES_PER_ENCODER_COUNT = 4;
 	private double yawSetPoint;
 		
-	private final WPI_TalonSRX leftFrontMotor;		// User follower mode
-	private final WPI_TalonSRX leftRearMotor;
+	private final WPI_TalonSRX leftFrontMotor;		
+	private final WPI_TalonSRX leftRearMotor;		// Use follower mode
 
-	private final WPI_TalonSRX rightFrontMotor;		// Use follower mode
-	private final WPI_TalonSRX rightRearMotor;
+	private final WPI_TalonSRX rightFrontMotor;
+	private final WPI_TalonSRX rightRearMotor;		// Use follower mode
 
 	private final DifferentialDrive drive;
 	
 	private static SendableChooser<SubsystemTelemetryState> telemetryState;
+	
+	Waypoint[] points = new Waypoint[]
+			{
+				new Waypoint(0, 0, 0),
+				new Waypoint(1, 2, Pathfinder.d2r(45)),
+                new Waypoint(3, 4, 0),
+                new Waypoint(5,6, Pathfinder.d2r(45))
+			};
 	
     public DriveSubsystem()
     {
@@ -100,10 +114,91 @@ public class DriveSubsystem extends BitBucketsSubsystem
 	    	
 	    	SmartDashboard.putData("DriveTelemetry", telemetryState);
     }
+    class forestgump implements java.lang.Runnable
+    {
+    	public void run() {leftFrontMotor.processMotionProfileBuffer();}
+    }
+    
+    Notifier _notifier=new Notifier(new forestgump());
+    public void MotionControlTest(Waypoint[] waypoints)
+    {
+    	 Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, 
+    			 Trajectory.Config.SAMPLES_HIGH, 
+    			 0.05, 
+    			 1.7, 
+    			 2.0, 
+    			 60.0);
+    	 
+    	 Trajectory trajectory = Pathfinder.generate(waypoints, config);
+
+         // Wheelbase Width = 0.5m
+         TankModifier modifier = new TankModifier(trajectory).modify(RobotMap.ROBOT_WHEEL_TRACK_INCHES*0.0254);
+
+         // Do something with the new Trajectories...
+         Trajectory left = modifier.getLeftTrajectory();
+         Trajectory right = modifier.getRightTrajectory();
+         
+         TrajectoryPoint[] modifiedLeft = new TrajectoryPoint[left.length()];
+         System.out.println(modifiedLeft.length);
+         TrajectoryPoint[] modifiedRight = new TrajectoryPoint[right.length()];
+         System.out.println(modifiedRight.length);
+         
+         try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+         
+         for (int i = 0; i < left.length(); i++) 
+         {
+             Trajectory.Segment seg = left.get(i);
+             System.out.println(i);
+             modifiedLeft[i].position=seg.position*2.916;
+             modifiedLeft[i].velocity=seg.velocity*174.97;
+         }
+         
+         for (int i = 0; i < right.length(); i++) 
+         {
+             Trajectory.Segment seg = right.get(i);
+             modifiedRight[i].position=seg.position*2.916;
+             modifiedRight[i].velocity=seg.velocity*174.97;
+         }
+ 
+         leftFrontMotor.clearMotionProfileHasUnderrun(RobotMap.CONTROLLER_TIMEOUT_MS);//um what 
+         
+         leftFrontMotor.clearMotionProfileTrajectories();
+         
+         TrajectoryPoint point = new TrajectoryPoint();
+    	 point.timeDur = TrajectoryPoint.TrajectoryDuration.Trajectory_Duration_50ms;
+    	 point.profileSlotSelect0=1;
+    	 point.profileSlotSelect1=1;
+         for(int i=0; i<modifiedLeft.length; i++)
+         {
+        	 point.position = modifiedLeft[i].position;
+        	 point.velocity = modifiedLeft[i].velocity;
+
+        	 
+        	 point.zeroPos=false;
+        	 if(i==0) point.zeroPos = true;
+        	 
+        	 point.isLastPoint=false;
+        	 if((i+1)==modifiedLeft.length) point.isLastPoint=true;
+        	 leftFrontMotor.pushMotionProfileTrajectory(point);
+         }
+
+         
+         leftFrontMotor.changeMotionControlFramePeriod(25);
+         _notifier.startPeriodic(0.025);
+    }
+    
+  
+    
     private double shapeAxis( double x) {
 		x = Deadzone.f( x, .05);
 		return Math.signum(x) * (x*x);
 	}
+    
 	
 	// +turnStick produces right turn (CW from above, -yaw angle)
 	public void arcadeDrive(double fwdStick, double turnStick) {

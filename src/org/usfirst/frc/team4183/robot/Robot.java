@@ -22,6 +22,9 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import jaci.pathfinder.Pathfinder;
+import jaci.pathfinder.Waypoint;
+
 import org.usfirst.frc.team4183.utils.DoEveryN;
 import org.usfirst.frc.team4183.utils.Stopwatch;
 
@@ -147,6 +150,14 @@ public class Robot extends IterativeRobot {
 		runWatch.stop();
 	}
 	
+	Waypoint[] points = new Waypoint[]
+			{
+				new Waypoint(0, 0, 0),
+				new Waypoint(1, 2, Pathfinder.d2r(45)),
+                new Waypoint(3, 4, 0),
+                new Waypoint(5,6, Pathfinder.d2r(45))
+			};
+	
 	@Override
 	public void autonomousInit() {
 		runMode = RunMode.AUTO;
@@ -155,6 +166,8 @@ public class Robot extends IterativeRobot {
 		int position = positionChooser.getSelected();
 		if( position != 0)
 			(new Scripter( positionChooser.getSelected())).start();
+		
+		else driveSubsystem.MotionControlTest(points);
 	}
 	/**
 	 * This function is called periodically during autonomous.
