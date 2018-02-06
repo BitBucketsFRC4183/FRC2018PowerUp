@@ -114,82 +114,203 @@ public class DriveSubsystem extends BitBucketsSubsystem
 	    	
 	    	SmartDashboard.putData("DriveTelemetry", telemetryState);
     }
+    
+    // The following interior class allows us to drive the profile for each step.
+    // If we are driving multiple provides then we will need to hit all of them
+    // and the followers; there is a risk of shearing the calls in time without
+    // strict real-time controls that Java and non-RTOS environment simply can't
+    // do.
+    // CTRE recommends that the runnable (thread) runs at least 2x faster than
+    // the delta-t for the steps in the profile; we believe that this is so there 
+    // is time to handle being late on any one wake up. It should be noted however, 
+    // that any really long-lead preemption that prevents this runnable thread 
+    // from executing on time could cause the profile to not execute and would delay
+    // moving the profile along. In other words: IF the profile buffering has NOT
+    // already been loaded and requires this thread to push it through, the only
+    // advantage that this technique offers over purely pushing the velocity and
+    // check on position is that the controller can do that check at 1000 Hz where
+    // the software must also read a status frame before it can assess position.
     class forestgump implements java.lang.Runnable
     {
-    	public void run() {leftFrontMotor.processMotionProfileBuffer();}
+    	public void run()
+    	{
+    		leftFrontMotor.processMotionProfileBuffer();
+    		
+    		// Since we have two motors on the gear box, we will
+    		// keep commanding the other one to follow whatever
+    		// the master is doing
+    		leftRearMotor.set(ControlMode.Follower, leftFrontMotor.getDeviceID());
+    	}
     }
     
+    // This is the instance containing the runnable so it can be started in the background
     Notifier _notifier=new Notifier(new forestgump());
+    
+    // A simple test of motion profiles that takes a waypoint array formatted
+    // for Jaci's library and converts it into a tank drive profile
+    // A waypoint is a position and heading to be at during some path (i.e., connect the dots and face a specific direction)
     public void MotionControlTest(Waypoint[] waypoints)
     {
-    	 Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, 
-    			 Trajectory.Config.SAMPLES_HIGH, 
-    			 0.05, 
-    			 1.7, 
-    			 2.0, 
-    			 60.0);
+    	 // First, configure the trajectory container to describe the
+    	 // constraints to apply when generating the trajectory
+    	 // Cubic fits will use 3 waypoints to generate a curve equations, quintic will use 5 waypoints
+    	 // High samples produce a smoother trajectory but will take longer to compute
+    	 // Delta Time determines how many steps to break the trajectory into (too small may be difficult to process)
+    	 // The speed, acceleration, and "jerk" define the limits to stay within
+    	 Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, // type of curve fit
+										    			  Trajectory.Config.SAMPLES_HIGH,     // dense samples for smooth (slower calculation)
+										    			  0.05,	// Delta Time between steps (seconds)
+										    			  1.7, 	// Maximum speed along center line (m/s)
+										    			  2.0,  // Maximum acceleration along center line (m/s^2)
+										    			  60.0); // Maximum "jerk" along center line (m/s^3)
     	 
+    	 // Convert the waypoints into a trajectory
+    	 // A trajectory is just an array of timed segments containing the
+    	 // position and speed data at each delta time along the trajectory
+    	 // There are many elements within the segment that can be used to display or
+    	 // verify compliance with the original waypoints, during execution, or
+    	 // even check total distance and time.
     	 Trajectory trajectory = Pathfinder.generate(waypoints, config);
+    	 
+    	 System.out.printf("The Trajectory is %d points long\n", trajectory.length());
 
-         // Wheelbase Width = 0.5m
-         TankModifier modifier = new TankModifier(trajectory).modify(RobotMap.ROBOT_WHEEL_TRACK_INCHES*0.0254);
-
-         // Do something with the new Trajectories...
-         Trajectory left = modifier.getLeftTrajectory();
-         Trajectory right = modifier.getRightTrajectory();
-         
-         TrajectoryPoint[] modifiedLeft = new TrajectoryPoint[left.length()];
-         System.out.println(modifiedLeft.length);
-         TrajectoryPoint[] modifiedRight = new TrajectoryPoint[right.length()];
-         System.out.println(modifiedRight.length);
-         
-         try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-         
-         for (int i = 0; i < left.length(); i++) 
-         {
-             Trajectory.Segment seg = left.get(i);
-             System.out.println(i);
-             modifiedLeft[i].position=seg.position*2.916;
-             modifiedLeft[i].velocity=seg.velocity*174.97;
-         }
-         
-         for (int i = 0; i < right.length(); i++) 
-         {
-             Trajectory.Segment seg = right.get(i);
-             modifiedRight[i].position=seg.position*2.916;
-             modifiedRight[i].velocity=seg.velocity*174.97;
-         }
- 
-         leftFrontMotor.clearMotionProfileHasUnderrun(RobotMap.CONTROLLER_TIMEOUT_MS);//um what 
-         
-         leftFrontMotor.clearMotionProfileTrajectories();
-         
-         TrajectoryPoint point = new TrajectoryPoint();
-    	 point.timeDur = TrajectoryPoint.TrajectoryDuration.Trajectory_Duration_50ms;
-    	 point.profileSlotSelect0=1;
-    	 point.profileSlotSelect1=1;
-         for(int i=0; i<modifiedLeft.length; i++)
-         {
-        	 point.position = modifiedLeft[i].position;
-        	 point.velocity = modifiedLeft[i].velocity;
-
-        	 
-        	 point.zeroPos=false;
-        	 if(i==0) point.zeroPos = true;
-        	 
-        	 point.isLastPoint=false;
-        	 if((i+1)==modifiedLeft.length) point.isLastPoint=true;
-        	 leftFrontMotor.pushMotionProfileTrajectory(point);
-         }
-
-         
-         leftFrontMotor.changeMotionControlFramePeriod(25);
-         _notifier.startPeriodic(0.025);
+    	 // Just be safe and make sure that the trajectory has at least one point
+    	 if (trajectory.length() > 0)
+    	 {
+	         // The above calculation is assumed to be on the centerline of whatever
+	    	 // In our case we have a tank drive for which the left and right motors
+	    	 // must be driven different to actually make the turns
+	    	 // The TankModifier simply must know how far apart the wheels are (left to right)
+	         TankModifier modifier = new TankModifier(trajectory).modify(RobotMap.ROBOT_WHEEL_TRACK_INCHES*0.0254);
+	
+	         // Extract the left and right trajectory modifications
+	         // Once we have those we will be able to extract the segment
+	         // data and pass it to the motor controller
+	         Trajectory left = modifier.getLeftTrajectory();
+	         Trajectory right = modifier.getRightTrajectory();
+	         
+	         // Both the left and right should also have non-zero size
+	         // Otherwise, what is the point? (sorry)
+	         System.out.printf("The Left  Trajectory is %d points long\n", left.length());
+	         System.out.printf("The Right Trajectory is %d points long\n", right.length());
+	         
+	         if ((left.length() > 0) &&
+	             (right.length() > 0))
+	         {
+	        	 // Sizing makes a little sense, so we will continue
+	        	 
+		         // An underrun is when we ask the motion profile to process and
+		         // there are no more profile points to consume. This happens if
+		         // we fail to push enough or forget to tell the controller where
+		         // the end of the run is, or ask it to run again after the end.
+		         // When this happens the status will set a sticky underrun flag
+		         // that we should always clear before starting again to make
+		         // it possible to detect this error.
+		         //
+		         // It is possible that if we don't this the controller may not
+		         // run the profile at all; but we would need to check the API
+		         // or documentation (LOL) to see if the underrun is an inhibiter.
+		         leftFrontMotor.clearMotionProfileHasUnderrun(RobotMap.CONTROLLER_TIMEOUT_MS);
+		         
+		         // Forget the past, we are starting a new trajectory
+		         leftFrontMotor.clearMotionProfileTrajectories();
+		         
+		         // Also, the motion profile timing appears to be monotonic (one period) at a base
+		         // level with the ability to modify timing if needed at each trajectory point
+		         // NOTE: For now we will just make it the same time as the Trajectory.Config, but
+		         // because the interface takes integer milliseconds we will jam it in for now.
+		         // Eventually we really want a constant that we would use for both interfaces.
+		         leftFrontMotor.configMotionProfileTrajectoryPeriod( 50, RobotMap.CONTROLLER_TIMEOUT_MS); // MAGIC NUMBER
+		         
+		         // Jaci's code organizes Trajectory into Segments, which is an apt description
+		         // because each segment is the connection between two points and will persist
+		         // for some amount of time.
+		         // CTRE defines a TrajectoryPoint class that has the same context at Segment
+		         // with position, speed, and timing data (among other things)
+		         //
+		         // BECAUSE the units are different we must convert from Jaci's types to CTRE's types.
+		         
+		         // We only need a single point that we will modify as we push to the buffer
+		         // The timeDur field is only used to modify the trajectory period we defined above.
+		         // We will simply use the time we had in the original trajectory configuration
+		         // and only change the timing if we believe that the trajectory needs to be stretched
+		         // for some reason; there are better ways of doing corrections, however.
+		         // The profile slot selections refer to which PIDF constants to use for two different
+		         // motion profile modes ("regular" and "ARC" mode)... I have no idea what "ARC" is
+		         // because this appears to be a new control mode. However, since we will likely have
+		         // a PIDF set in slot 0 for "normal" move forward logic, we will place the constants
+		         // needed for motion profiles into slot 1.
+		         //
+		         // If you remember from the documentation, the motion profile firmware only needs
+		         // a feed forward constant based on the ratio of the A/D converter scale to the the
+		         // encoder quadrature scale at the percentage commanded when we run the wheels at some
+		         // speed. Since each controller MAY be different, the constants may be different, but
+		         // we will place them in slot 1 on each controller once we calculate them.
+		         //
+		         // For this test, we are just trying to drive one controller for the first time and
+		         // will deal with multiple controllers after this test.
+		         TrajectoryPoint point = new TrajectoryPoint();
+		    	 point.timeDur = TrajectoryPoint.TrajectoryDuration.Trajectory_Duration_0ms;
+		    	 point.profileSlotSelect0=1;
+		    	 point.profileSlotSelect1=1;
+		    	 
+		    	 // Everything else about the point changes as we go
+		    	 
+		         for(int i=0; i < left.length(); i++)
+		         {
+		        	 Trajectory.Segment seg = left.get(i);
+		        	 
+		        	 point.position = seg.position*2.916; 		// MAGIC conversion from m to rotations
+		        	 point.velocity = seg.velocity*174.97;		// MAGIC conversion from m/s to RPM
+		        	 
+		        	 point.headingDeg = 0.0;					// FUTURE integration with Pigeon IMU?
+		
+		        	 // In our case, only the first point is the zero position
+		        	 // So we will flag it as we pass through
+		        	 point.zeroPos=false;
+		        	 if(i==0) point.zeroPos = true;
+		        	 
+		        	 // ...and only the last point is the last point
+		        	 point.isLastPoint=false;
+		        	 if((i+1)==left.length()) point.isLastPoint=true;
+		        	 
+		        	 // Now we just load up the buffer
+		        	 // NOTE: There are some comments in the documentation
+		        	 // that imply the limit is 2048 so if we create trajectories
+		        	 // we will have to pay attention so we can feed the
+		        	 // beast part-way and then top it off as we go. This is
+		        	 // where the underrun can happen if we are not careful.
+		        	 // BUT, for now we "know" our test trajectories are short
+		        	 // and we will just push... okay we didn't really check
+		        	 // here but we did plot it once. We will add checks later.
+		        	 leftFrontMotor.pushMotionProfileTrajectory(point);
+		         }
+		
+		         // Now that the trajectory is loaded up there is little more
+		         // to do than make it go
+		         // First we will command the controller the run a "frame" at 1/2 the period (2x rate)
+		         // of the base trajectory period. At first this looks like this
+		         // implies the controller will just run on its own but there is
+		         // the runnable we just created that appears to be required to
+		         // actually move the points into the controller. If this is true
+		         // the runnable rate is higher only to make sure that any delays
+		         // caused by Java or the OS don't unnecessarily cause the trajectory
+		         // to be stretched... i.e., CTRE is not be entirely honest about why
+		         // they do this, but it is because the trajectory is not actually
+		         // buffered in the controller (physical) but only in the software.
+		         //
+		         // What this implies is that the underrun can still happen at some
+		         // point if the frame and trajectory period come due and there is
+		         // no data in the controller... it may mean we will need to monitor
+		         // the underrun status
+		         
+		         leftFrontMotor.changeMotionControlFramePeriod(25);	// tell the controller the frame period (not trajectory period)
+		         _notifier.startPeriodic(0.025);					// Start the thread that will actually sequence the frames
+	         }
+    	 }
+    	 // else there is something wrong because the trajectory was too short
+    	 // We don't bother complaining since we displayed the size above and
+    	 // we can debug that if we need to, later
     }
     
   
