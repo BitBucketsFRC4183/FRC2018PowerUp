@@ -18,6 +18,8 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 	
 	private final int ENCODER_TICKS_REV = 2048;
 	
+	//add enum for POS
+	
 	//adjust this later for the driver control
 	private final int deltaPos = UNITS_PER_FEET;
 

@@ -21,7 +21,7 @@ public class Raise extends Command{
 
 	@Override
 	protected boolean isFinished() {
-		if(Robot.oi.btnIdle.get()) {
+		if(Robot.oi.btnIdle.get() || Math.abs(Robot.oi.leftRampAxis.get()) < .06) {
     		return CommandUtils.stateChange(this, new Idle());
 
 		}

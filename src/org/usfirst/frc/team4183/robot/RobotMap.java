@@ -59,15 +59,17 @@ public class RobotMap {
 	public final static int ELEVATOR_MOTOR_A_ID = 7;
 	public final static int ELEVATOR_MOTOR_B_ID = 8;
 	
+	//Elevator Pneumatics for Gear Box
+	public final static int ELEVATOR_PNEUMA_BRAKE_OPEN_CHANNEL = 2;
+	public final static int ELEVATOR_PNEUMA_BRAKE_CLOSE_CHANNEL = 3;
+	public final static int ELEVATOR_PNEUMA_NEUTRAL_OPEN_CHANNEL = 4;
+	public final static int ELEVATOR_PNEUMA_NEUTRAL_CLOSE_CHANNEL = 5;
+	
 	//ClimbSubystem TBD... may be pneumatics
 	
 	// Pneumatics
 	public final static int INTAKE_PNEUMA_CLOSED_CHANNEL    = 1;
 	public final static int INTAKE_PNEUMA_OPEN_CHANNEL      = 0;
-	public final static int WHEEL_SHOOTER_HIGH_POS_CHANNEL = 2;
-	public final static int WHEEL_SHOOTER_LOW_POS_CHANNEL = 3;
-	public final static int GATE_OPEN_POS_CHANNEL = 4;
-	public final static int GATE_CLOSE_POS_CHANNEL = 5;
 	
 	// Autonomous Constants
 	public static final double DRIVESTRAIGHT_MIN_DRIVE = 0;
