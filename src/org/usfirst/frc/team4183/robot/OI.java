@@ -70,8 +70,10 @@ public class OI {
 	// Permanent SoftButtons (used for inter-State-Machine communications)
 	//****************************
 	public final LogicalButton sbtnShake = new SoftButton();
+	public final LogicalButton sbtnCurrentCheckIntake = new SoftButton();
+	public final LogicalButton sbtnCloseMandible = new SoftButton();
+	public final LogicalButton sbtnOpenMandible = new SoftButton();
 
-	
 	/*
 	 * I removed the driver/operator specific remappings because we didn't use them 
 	 * and they clutter up this already too-big class.

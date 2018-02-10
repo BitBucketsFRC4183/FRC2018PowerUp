@@ -6,9 +6,9 @@ import org.usfirst.frc.team4183.utils.CommandUtils;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class Raise extends Command{
+public class Reposition extends Command{
 
-	public Raise()
+	public Reposition()
 	{
 		requires(Robot.elevatorSubsystem);
 		
@@ -16,13 +16,24 @@ public class Raise extends Command{
 	
 	public void execute()
 	{
-		Robot.elevatorSubsystem.addToPosition(Robot.oi.leftRampAxis.get());
+		Robot.elevatorSubsystem.setSystemPower(Robot.oi.leftRampAxis.get());
+		
+		//Robot.elevatorSubsystem.addToPosition(Robot.oi.leftRampAxis.get());
+		if  (!Robot.elevatorSubsystem.posGreaterThanMin())
+		{
+			Robot.oi.sbtnOpenMandible.push();
+		}
+		else if (Robot.elevatorSubsystem.posCloseToInit())
+		{
+			Robot.oi.sbtnCloseMandible.push();
+		}
 	}
 
 	@Override
 	protected boolean isFinished() {
 		if(Robot.oi.btnIdle.get() || Math.abs(Robot.oi.leftRampAxis.get()) < .06) {
-    		return CommandUtils.stateChange(this, new Idle());
+    		Robot.elevatorSubsystem.holdPos();
+			return CommandUtils.stateChange(this, new Idle());
 
 		}
 		

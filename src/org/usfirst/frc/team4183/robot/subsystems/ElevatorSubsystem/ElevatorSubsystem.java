@@ -1,11 +1,14 @@
 package org.usfirst.frc.team4183.robot.subsystems.ElevatorSubsystem;
 
+import org.usfirst.frc.team4183.robot.Robot;
 import org.usfirst.frc.team4183.robot.RobotMap;
 import org.usfirst.frc.team4183.robot.subsystems.BitBucketsSubsystem;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 
 public class ElevatorSubsystem extends BitBucketsSubsystem {
@@ -14,19 +17,40 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 	
 	private final WPI_TalonSRX elevatorMotorB;
 	
+	private final DoubleSolenoid shiftGearBoxPneu;
+	
+	private final DoubleSolenoid brakePneu;
+	
 	private final int UNITS_PER_FEET = 1000;
 	
 	private final int ENCODER_TICKS_REV = 2048;
 	
-	//add enum for POS
+	public int ELEVATOR_FULLY_LOWERED_UNITS = 0;
+	
+	enum ElevatorBrake
+	{
+		BRAKED, UNBRAKED;
+	}
+	
+	public static int holdTicks = 0;
+	
+	public boolean cubePresent = false;
+	
+	//This is used to open the intake mandibles if the position is too close.
+	public final int elevatorMinTriggerUnits = 500;
 	
 	//adjust this later for the driver control
 	private final int deltaPos = UNITS_PER_FEET;
+	
+	ElevatorBrake brakeStatus = ElevatorBrake.UNBRAKED;
 
 	public ElevatorSubsystem()
 	{
 		elevatorMotorA = new WPI_TalonSRX(RobotMap.ELEVATOR_MOTOR_A_ID);
-		elevatorMotorB = new WPI_TalonSRX(RobotMap.ELEVATOR_MOTOR_B_ID);	
+		elevatorMotorB = new WPI_TalonSRX(RobotMap.ELEVATOR_MOTOR_B_ID);
+		
+		shiftGearBoxPneu = new DoubleSolenoid(RobotMap.ELEVATOR_PNEUMA_NEUTRAL_CLOSE_CHANNEL,RobotMap.ELEVATOR_PNEUMA_NEUTRAL_OPEN_CHANNEL);
+		brakePneu = new DoubleSolenoid(RobotMap.ELEVATOR_PNEUMA_BRAKE_CLOSE_CHANNEL,RobotMap.ELEVATOR_PNEUMA_BRAKE_OPEN_CHANNEL);
 		
 		setupClosedLoopMaster(elevatorMotorA);
 		elevatorMotorB.set(ControlMode.Follower, RobotMap.ELEVATOR_MOTOR_A_ID);
@@ -74,6 +98,85 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 		m.configNominalOutputForward(1.0/3.0, RobotMap.CONTROLLER_TIMEOUT_MS);
 		m.configNominalOutputReverse(-1.0/3.0, RobotMap.CONTROLLER_TIMEOUT_MS);
 					
+	}
+	//method that checks if the intake mandibles should be open
+	public boolean posGreaterThanMin()
+	{
+		if (elevatorMotorA.getSelectedSensorPosition(RobotMap.PRIMARY_PID_LOOP) > elevatorMinTriggerUnits)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	public boolean posCloseToInit()
+	{
+		if (Math.abs(elevatorMotorA.getSelectedSensorPosition(RobotMap.PRIMARY_PID_LOOP)-ELEVATOR_FULLY_LOWERED_UNITS) < 50)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	public void holdEncodPos(boolean holdTicksBol)
+	{
+		if (holdTicksBol)
+		{
+			if (holdTicks == 0)
+			{
+				holdTicks = elevatorMotorA.getSelectedSensorPosition(RobotMap.PRIMARY_PID_LOOP);
+			}
+			goToPosition(holdTicks);
+		}
+		holdTicks = 0;
+	}
+	public void engageBrake()
+	{
+		brakePneu.set(DoubleSolenoid.Value.kForward);
+		brakeStatus = ElevatorBrake.BRAKED;
+	}
+	
+	public void disengageBrake()
+	{
+		brakePneu.set(DoubleSolenoid.Value.kReverse);
+		brakeStatus = ElevatorBrake.UNBRAKED;
+	}
+	
+	public void switchNeutral()
+	{
+		
+		shiftGearBoxPneu.set(DoubleSolenoid.Value.kReverse);
+	}
+	
+	public void switchActive()
+	{
+		shiftGearBoxPneu.set(DoubleSolenoid.Value.kForward);
+	}
+	
+	//return true if a cube is present
+	public boolean getCubeStatus()
+	{
+		return cubePresent;
+	}
+	
+	public void releasePos()
+	{
+		disengageBrake();
+		switchActive();
+	}
+	
+	//this one engages the brake
+	public void holdPos()
+	{
+		holdEncodPos(true);
+		engageBrake();
+		setAllMotorsZero();
 	}
 	
 	public void disable()

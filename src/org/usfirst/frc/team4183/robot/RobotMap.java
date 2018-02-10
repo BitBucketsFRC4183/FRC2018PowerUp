@@ -13,6 +13,7 @@ public class RobotMap {
 	//Intake Max Current Limits for Faults
 	public static final double INTAKE_MAX_CURRENT = 10;
 	
+	
 	// Nominal value assuming 4" wheel:
 	// (4" * pi) in/rot = 12.57
 	// The precise value must be determined by calibration.

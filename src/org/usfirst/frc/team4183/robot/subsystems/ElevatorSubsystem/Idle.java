@@ -16,6 +16,7 @@ public class Idle extends Command{
 	protected void initialize()
 	{
 		Robot.elevatorSubsystem.disable();
+		Robot.elevatorSubsystem.engageBrake();
 	}
 	
 	public void execute()
@@ -24,9 +25,15 @@ public class Idle extends Command{
 	}
 	
 	protected boolean isFinished()
-	{ if (Math.abs(Robot.oi.leftRampAxis.get()) > .05)
+	{ 
+		if (Robot.elevatorSubsystem.getCubeStatus())
 		{
-			return CommandUtils.stateChange(this, new Raise());
+			return CommandUtils.stateChange(this, new Loaded());
+		}
+		
+		if (!Robot.elevatorSubsystem.getCubeStatus())
+		{
+			return CommandUtils.stateChange(this, new Empty());
 		}
 		return false;
 	}
@@ -40,4 +47,45 @@ public class Idle extends Command{
 	{
 		end();
 	}
+	
+	public class Empty extends Command
+	{
+
+		public Empty()
+		{
+			//add the light change
+			requires(Robot.elevatorSubsystem);
+		}
+		
+		@Override
+		protected boolean isFinished() {
+			 if (Math.abs(Robot.oi.leftRampAxis.get()) > .05)
+				{
+					return CommandUtils.stateChange(this, new Reposition());
+				}
+			return false;
+		}
+		
+	}
+	public class Loaded extends Command
+	{
+
+		public Loaded()
+		{
+			//add light change
+			requires(Robot.elevatorSubsystem);
+		}
+		
+		@Override
+		protected boolean isFinished() {
+			 if (Math.abs(Robot.oi.leftRampAxis.get()) > .05)
+				{
+					return CommandUtils.stateChange(this, new Reposition());
+				}
+			return false;
+		}
+		
+	}
+
 }
+
