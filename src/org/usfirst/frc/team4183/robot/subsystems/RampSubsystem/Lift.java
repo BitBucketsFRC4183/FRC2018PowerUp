@@ -17,6 +17,7 @@ public class Lift extends Command{
 	}
 	protected void execute()
 	{
+		Robot.oi.btnDriveLock.push();
 		Robot.rampSubsystem.setRampSpeed(Robot.oi.leftRampAxis.get(), Robot.oi.rightRampAxis.get());
 	}
 	

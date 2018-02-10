@@ -15,12 +15,11 @@ public class Deployed extends Command {
 	protected void initalize()
 	{
 		Robot.rampSubsystem.disabled();
-		Robot.driveSubsystem.disable();
 	}
 	
 	protected void execute()
 	{
-	
+		Robot.oi.btnDriveLock.push();
 	}
 	
 	@Override
