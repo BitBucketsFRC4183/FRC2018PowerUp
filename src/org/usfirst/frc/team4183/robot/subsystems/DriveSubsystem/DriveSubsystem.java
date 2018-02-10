@@ -37,7 +37,7 @@ public class DriveSubsystem extends BitBucketsSubsystem
 
 	// The counts-per-rev is printed on the encoder -
 	// it's the 1st number after the "E4P" or "E4T"
-	private final int ENCODER_PULSES_PER_REV = 250; 
+	private final int ENCODER_PULSES_PER_REV = 248; 
 	private final boolean REVERSE_SENSOR = false;  
 	private final int EDGES_PER_ENCODER_COUNT = 4;
 	private double yawSetPoint;

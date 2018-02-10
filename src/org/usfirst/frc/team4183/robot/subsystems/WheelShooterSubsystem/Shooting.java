@@ -29,11 +29,11 @@ public class Shooting extends Command
     protected void execute() {
     	if (Robot.wheelShooterSubsystem.getFireSpeedPos() == WheelShooterSubsystem.FirePos.MANUAL)
     	{
-    		Robot.wheelShooterSubsystem.setMotorSpeed(SmartDashboard.getNumber("Shooter Speed", 0));
+    		Robot.wheelShooterSubsystem.setMotorPwr(SmartDashboard.getNumber("Shooter Speed", 0));
     	}
     	else
     	{
-    	Robot.wheelShooterSubsystem.setMotorSpeed(Robot.wheelShooterSubsystem.getFireSpeedPos().getPow());
+    	Robot.wheelShooterSubsystem.setMotorPwr(Robot.wheelShooterSubsystem.getFireSpeedPos().getPow());
     	}
     	
     	if (timeSinceInitialized()  > .5)

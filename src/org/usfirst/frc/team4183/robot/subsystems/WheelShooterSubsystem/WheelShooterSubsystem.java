@@ -22,15 +22,23 @@ public class WheelShooterSubsystem extends BitBucketsSubsystem {
 	// Put methods for controlling this subsystem
     // here. Call these from Commands.
 	private final WPI_TalonSRX leftWheelshooterMotorA;
+	private final WPI_TalonSRX leftWheelshooterMotorB;
 	private final WPI_TalonSRX rightWheelshooterMotorA;
-	
+	private final WPI_TalonSRX rightWheelshooterMotorB;
 	private final DoubleSolenoid positionChanger;
 	
 	private final DoubleSolenoid gate;
 	
 	private FirePos shooterPos = FirePos.LOWSHOT;
 	
-	private static SendableChooser<SubsystemTelemetryState> telemetryState;
+	//Edit these values once we find the out the actual ticks per revolution
+	
+	private final int ENCODER_PULSES_PER_REV = 2048; 
+	private final boolean REVERSE_SENSOR = false;  
+	private final int EDGES_PER_ENCODER_COUNT = 4;
+	
+	//Approximately using 4inch wheels
+		private final int NATIVE_UNITS_PER_INCH = 652;
 	
 	static enum FirePos
 	{
@@ -51,18 +59,18 @@ public class WheelShooterSubsystem extends BitBucketsSubsystem {
 		setName("WheelShooterSubsystem");
 		
 		leftWheelshooterMotorA = new WPI_TalonSRX(RobotMap.WHEEL_SHOOTER_LEFT_1_MOTOR_ID);
+		leftWheelshooterMotorB = new WPI_TalonSRX(RobotMap.WHEEL_SHOOTER_LEFT_2_MOTOR_ID);
 		rightWheelshooterMotorA = new WPI_TalonSRX(RobotMap.WHEEL_SHOOTER_RIGHT_1_MOTOR_ID);
+		rightWheelshooterMotorB = new WPI_TalonSRX(RobotMap.WHEEL_SHOOTER_RIGHT_2_MOTOR_ID);
 		positionChanger = new DoubleSolenoid(RobotMap.WHEEL_SHOOTER_HIGH_POS_CHANNEL, RobotMap.WHEEL_SHOOTER_LOW_POS_CHANNEL);
 		gate = new DoubleSolenoid(RobotMap.GATE_OPEN_POS_CHANNEL,RobotMap.GATE_CLOSE_POS_CHANNEL);
 		leftWheelshooterMotorA.setInverted(true);
+		leftWheelshooterMotorB.setInverted(true) ;
+		setupClosedLoopMaster(leftWheelshooterMotorA);
+		setupClosedLoopMaster(rightWheelshooterMotorA);
 		
-		
-		telemetryState = new SendableChooser<SubsystemTelemetryState>();
-    	
-    	telemetryState.addDefault("Off", SubsystemTelemetryState.OFF);
-    	telemetryState.addObject( "On",  SubsystemTelemetryState.ON);
-    	
-    	SmartDashboard.putData("DriveTelemetry", telemetryState);
+		leftWheelshooterMotorB.set(ControlMode.Follower, RobotMap.WHEEL_SHOOTER_LEFT_1_MOTOR_ID);
+		rightWheelshooterMotorB.set(ControlMode.Follower, RobotMap.WHEEL_SHOOTER_RIGHT_1_MOTOR_ID);
 	}
 	//VVV SET THIS TO PRIVATE AND MAKE A PROPER DISABLE COMMAND THIS IS TEMPOARY 
 	public void disable() {
@@ -71,6 +79,17 @@ public class WheelShooterSubsystem extends BitBucketsSubsystem {
 		setPosToLow();
 		
 	}
+	
+	private int getLeftWheelNativeUnits()
+	{
+		return leftWheelshooterMotorA.getSelectedSensorPosition(RobotMap.PRIMARY_PID_LOOP);
+	}
+	
+	private int getRightWheelNativeUnits()
+	{
+		return rightWheelshooterMotorA.getSelectedSensorPosition(RobotMap.PRIMARY_PID_LOOP);
+	}
+	
 	
 	public void setGateOpen()
 	{
@@ -107,11 +126,23 @@ public class WheelShooterSubsystem extends BitBucketsSubsystem {
 		leftWheelshooterMotorA.set(ControlMode.PercentOutput,0.0);
 		//leftWheelshooterMotorB .set(0.0);
 		rightWheelshooterMotorA.set(ControlMode.PercentOutput,0.0);
-		//rightWheelshooterMotorB.set(0.0);			
+		leftWheelshooterMotorB.set(ControlMode.Follower, RobotMap.WHEEL_SHOOTER_LEFT_1_MOTOR_ID);
+		rightWheelshooterMotorB.set(ControlMode.Follower, RobotMap.WHEEL_SHOOTER_RIGHT_1_MOTOR_ID);
 		}
-	public void setMotorSpeed(double speed) {
+	public void setMotorPwr(double speed) {
 		leftWheelshooterMotorA.set(ControlMode.PercentOutput,speed);
 		rightWheelshooterMotorA.set(ControlMode.PercentOutput,speed);
+		leftWheelshooterMotorB.set(ControlMode.Follower, RobotMap.WHEEL_SHOOTER_LEFT_1_MOTOR_ID);
+		rightWheelshooterMotorB.set(ControlMode.Follower, RobotMap.WHEEL_SHOOTER_RIGHT_1_MOTOR_ID);
+	}
+	
+	public void setMotorSpeedfts(double fts)
+	{
+		int speed = (int) (fts/10*7824);
+		leftWheelshooterMotorA.set(ControlMode.Velocity,speed);
+		rightWheelshooterMotorA.set(ControlMode.Velocity,speed);
+		leftWheelshooterMotorB.set(ControlMode.Follower, RobotMap.WHEEL_SHOOTER_LEFT_1_MOTOR_ID);
+		rightWheelshooterMotorB.set(ControlMode.Follower, RobotMap.WHEEL_SHOOTER_RIGHT_1_MOTOR_ID);
 	}
 	
 	
@@ -120,7 +151,7 @@ public class WheelShooterSubsystem extends BitBucketsSubsystem {
 	{
 		// TODO: New functions provide ErrorCode feedback if there is a problem setting up the controller
 		
-		m.set(ControlMode.Position,0.0);
+		m.set(ControlMode.Velocity,0.0);
 		m.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, RobotMap.CONTROLLER_TIMEOUT_MS);
 		
 		// NOTE: The encoder codes per revolution interface no longer exists
@@ -159,9 +190,25 @@ public class WheelShooterSubsystem extends BitBucketsSubsystem {
 	public double getCurrentMax()
 	{
 		double leftAMotCurrent = leftWheelshooterMotorA.getOutputCurrent();
+		double leftBMotCurrent = leftWheelshooterMotorB.getOutputCurrent();
 		double rightAMotCurrent = rightWheelshooterMotorA.getOutputCurrent();
+		double rightBMotCurrent = rightWheelshooterMotorB.getOutputCurrent();
 		
-		return Math.max(leftAMotCurrent, rightAMotCurrent);
+		double leftMax = Math.max(leftAMotCurrent, leftBMotCurrent);
+		double rightMax = Math.max(rightAMotCurrent, rightBMotCurrent);
+		
+		if (leftMax > rightMax)
+		{
+			return leftMax;
+		}
+		else if (rightMax > leftMax)
+		{
+			return rightMax;
+		}
+		else
+		{
+			return rightMax;
+		}
 	}
 	
 	private int getMotorNativeUnits(WPI_TalonSRX m) {
@@ -227,6 +274,10 @@ public class WheelShooterSubsystem extends BitBucketsSubsystem {
 	@Override
 	public void periodic() {
 		SmartDashboard.putString("Shooter Mode", shooterPos.toString());
+		
+		SmartDashboard.putNumber("leftWheel Native Val", getLeftWheelNativeUnits());
+		SmartDashboard.putNumber("rightWheel Native Val", getRightWheelNativeUnits());
+	
 		// TODO Auto-generated method stub
 		if(telemetryState.getSelected() == SubsystemTelemetryState.ON) {
 
