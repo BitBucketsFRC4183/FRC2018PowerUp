@@ -60,7 +60,9 @@ public class DriveSubsystem extends BitBucketsSubsystem
     		DIAG_LOOPS_RUN = 10;
     		
 	    	leftFrontMotor = new WPI_TalonSRX(RobotMap.LEFT_DRIVE_MOTOR_FRONT_ID);
+	    	leftFrontMotor.setInverted(false);
 	    	leftRearMotor = new WPI_TalonSRX(RobotMap.LEFT_DRIVE_MOTOR_REAR_ID);
+	    	leftRearMotor.setInverted(false);
 	    		    	
 	    	// Use follower mode to minimize shearing commands that could occur if
 	    	// separate commands are sent to each motor in a group
@@ -70,7 +72,9 @@ public class DriveSubsystem extends BitBucketsSubsystem
 	    	leftRearMotor.setSafetyEnabled(false);
 	    	
 	    	rightFrontMotor  = new WPI_TalonSRX(RobotMap.RIGHT_DRIVE_MOTOR_FRONT_ID);
+	    	rightFrontMotor.setInverted(false);
 	    	rightRearMotor   = new WPI_TalonSRX(RobotMap.RIGHT_DRIVE_MOTOR_REAR_ID);
+	    	rightRearMotor.setInverted(false);
 	
 	    	// Use follower mode to minimize shearing commands that could occur if
 	    	// separate commands are sent to each motor in a group
@@ -118,7 +122,7 @@ public class DriveSubsystem extends BitBucketsSubsystem
 		
 		// Shape axis for human control
 		fwdStick = shapeAxis(fwdStick);
-		turnStick = shapeAxis(turnStick);
+		turnStick = -shapeAxis(turnStick);
 					
 		if( fwdStick == 0.0 && turnStick == 0.0) {
 			setAllMotorsZero();
@@ -167,7 +171,9 @@ public class DriveSubsystem extends BitBucketsSubsystem
 			// so + stick should lower the setpoint. 
 			yawSetPoint += -0.3 * turnStick;
 			
-			double error = ALIGN_LOOP_GAIN * (yawSetPoint - Robot.imu.getYawDeg());				
+			double error = -ALIGN_LOOP_GAIN * (yawSetPoint - Robot.imu.getYawDeg());
+			error = -ALIGN_LOOP_GAIN * -Robot.imu.getYawRateDps();
+			SmartDashboard.putNumber("IMU_ERROR", error);
 			drive.arcadeDrive( fwdStick, error + yawCorrect(), false);
 		}
 	}
@@ -470,7 +476,11 @@ public class DriveSubsystem extends BitBucketsSubsystem
 		if(telemetryState.getSelected() == SubsystemTelemetryState.ON) {
 //			SmartDashboard.putNumber("ReadMotorCurrent", 
 //					rightRearMotor.getOutputCurrent());
-//			
+			SmartDashboard.putNumber("Yaw_Deg",
+					Robot.imu.getYawDeg());
+			SmartDashboard.putNumber("Yaw_Rate", 
+					Robot.imu.getYawRateDps());
+			
 			SmartDashboard.putNumber( "RightNativeUnits", 
 					getRightNativeUnits());
 			SmartDashboard.putNumber( "LeftNativeUnits", 
