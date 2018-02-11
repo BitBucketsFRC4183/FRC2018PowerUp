@@ -26,16 +26,9 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 	
 	private final int ENCODER_TICKS_REV = 2048;
 	
-	public int ELEVATOR_FULLY_LOWERED_UNITS = 0;
-	
-	enum ElevatorBrake
-	{
-		BRAKED, UNBRAKED;
-	}
-	
 	static enum ElevatorPositions
 	{
-		SCALE(10000), SWITCH(1000), TRANS(500), INIT(0), MANUAL(-2);
+		SCALE(10000), SWITCH(1000), TRANS(500), INIT(0), MANUAL(-2), TRIGGER(600);
 		
 		private int units;
 		ElevatorPositions(int units)
@@ -53,17 +46,12 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 	
 	public static int holdTicks = 0;
 	
-	public boolean cubePresent = false;
-	
 	//adjust this later for the driver control
 	private final int deltaPos = UNITS_PER_FEET;
-	
-	ElevatorBrake brakeStatus = ElevatorBrake.UNBRAKED;
 	
 	ElevatorPositions currentElevatorPosition = ElevatorPositions.INIT;
 	
 	//This is used to open the intake mandibles if the position is too close.
-	public final int elevatorMinTriggerUnits = 500;
 
 	public ElevatorSubsystem()
 	{
@@ -150,10 +138,11 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 	{
 		return this.currentElevatorPosition;
 	}
+	
 	//method that checks if the intake mandibles should be open
 	public boolean posGreaterThanMin()
 	{
-		if (elevatorMotorA.getSelectedSensorPosition(RobotMap.PRIMARY_PID_LOOP) > elevatorMinTriggerUnits)
+		if (elevatorMotorA.getSelectedSensorPosition(RobotMap.PRIMARY_PID_LOOP) > ElevatorPositions.TRIGGER.getUnits())
 		{
 			return true;
 		}
@@ -198,32 +187,20 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 		}
 	public void engageBrake()
 	{
-		if (brakeStatus == ElevatorBrake.UNBRAKED)
-		{
 		brakePneu.set(DoubleSolenoid.Value.kForward);
-		brakeStatus = ElevatorBrake.BRAKED;
-		}
 	}
 	
 	public void disengageBrake()
 	{
-		if (brakeStatus == ElevatorBrake.BRAKED)
-		{
 		brakePneu.set(DoubleSolenoid.Value.kReverse);
-		brakeStatus = ElevatorBrake.UNBRAKED;
-		}
-		}
+	}
 	
 	//return true if a cube is present
-	public boolean getCubeStatus()
-	{
-		return cubePresent;
-	}
 	
 	public void releasePos()
 	{
 		disengageBrake();
-		holdEncodPos(true);
+		holdEncodPos(false);
 	}
 	
 	//this one engages the brake

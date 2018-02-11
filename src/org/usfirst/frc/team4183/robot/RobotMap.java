@@ -54,8 +54,8 @@ public class RobotMap {
 	public final static int ELEVATOR_MOTOR_A_ID = 7;
 	public final static int ELEVATOR_MOTOR_B_ID = 8;
 	
-	public final static int THROAT_MOTOR_A_ID = 10;
-	public final static int THROAT_MOTOR_B_ID = 11;
+	public final static int THROAT_MOTOR_A_ID = 3;
+	public final static int THROAT_MOTOR_B_ID = 6;
 	
 	//Elevator Pneumatics for Gear Box
 	public final static int ELEVATOR_PNEUMA_BRAKE_OPEN_CHANNEL = 2;

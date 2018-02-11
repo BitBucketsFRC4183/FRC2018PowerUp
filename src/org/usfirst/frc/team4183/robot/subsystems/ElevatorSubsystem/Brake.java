@@ -15,6 +15,7 @@ public class Brake extends Command{
 	public void init()
 	{
 		Robot.elevatorSubsystem.engageBrake();
+		Robot.elevatorSubsystem.disable();
 	}
 	
 	public void execute()
@@ -35,7 +36,8 @@ public class Brake extends Command{
 	
 	@Override
 	protected boolean isFinished() {
-		if (Math.abs(Robot.oi.leftRampAxis.get()) > .06 || Robot.oi.btnMedPosElev.get() || Robot.oi.btnHighPosElev.get() || Robot.oi.btnLowPosElev.get() || Robot.oi.btnTransPosElev.get())
+		if (Math.abs(Robot.oi.leftRampAxis.get()) > .06 || Robot.oi.btnMedPosElev.get() 
+				|| Robot.oi.btnHighPosElev.get() || Robot.oi.btnLowPosElev.get() || Robot.oi.btnTransPosElev.get())
 		{
 			return CommandUtils.stateChange(this, new Idle());
 		}
@@ -44,8 +46,10 @@ public class Brake extends Command{
 	
 	public void end()
 	{
-		Robot.elevatorSubsystem.disengageBrake();
+		Robot.elevatorSubsystem.holdEncodPos(false);
 		Robot.elevatorSubsystem.holdEncodPos(true);
+		Robot.elevatorSubsystem.disengageBrake();
+		
 		
 	}
 

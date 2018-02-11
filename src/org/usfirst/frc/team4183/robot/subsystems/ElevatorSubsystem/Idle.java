@@ -16,6 +16,7 @@ public class Idle extends Command{
 	protected void initialize()
 	{
 		Robot.elevatorSubsystem.disable();
+		Robot.elevatorSubsystem.holdEncodPos(false);
 		Robot.elevatorSubsystem.holdEncodPos(true);
 	}
 	
@@ -26,12 +27,12 @@ public class Idle extends Command{
 	
 	protected boolean isFinished()
 	{ 
-		if (Robot.elevatorSubsystem.getCubeStatus())
+		if (Robot.intakeSubsystem.getLastCurrent())
 		{
 			return CommandUtils.stateChange(this, new Loaded());
 		}
 		
-		if (!Robot.elevatorSubsystem.getCubeStatus())
+		if (!Robot.intakeSubsystem.getLastCurrent())
 		{
 			return CommandUtils.stateChange(this, new Empty());
 		}
@@ -65,6 +66,7 @@ public class Idle extends Command{
 		
 		public void execute()
 		{
+			//Checks while in idle to see if the intake has called for the throat to spin.
 			if (Robot.oi.sbtnIntakeThroat.get())
 			{
 				Robot.elevatorSubsystem.intakeThroat();
@@ -88,7 +90,6 @@ public class Idle extends Command{
 			 
 			 if (timeSinceInitialized() > Robot.elevatorSubsystem.timeUntilBrakeSec)
 				{
-					Robot.elevatorSubsystem.engageBrake();
 					return CommandUtils.stateChange(this, new Brake());
 				}
 			return false;
@@ -130,7 +131,6 @@ public class Idle extends Command{
 			 
 			 if (timeSinceInitialized() > Robot.elevatorSubsystem.timeUntilBrakeSec)
 				{
-					Robot.elevatorSubsystem.engageBrake();
 					return CommandUtils.stateChange(this, new Brake());
 				}
 			return false;

@@ -24,6 +24,8 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 	
 	private double timeCurrLimitInit = 0;
 	boolean currentLimitAct = false;
+	
+	boolean lastCurrentState = false;
 
 	private static ArrayList<WPI_TalonSRX> motors;
 	private static ArrayList<DoubleSolenoid> solenoids;
@@ -44,6 +46,11 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 		
 		solenoids.add(intakegate);
 		
+	}
+	
+	public boolean getLastCurrent()
+	{
+		return lastCurrentState;
 	}
 	public boolean getCurrLimitStatus()
 	{
@@ -91,12 +98,14 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
     		currentLimitAct =true;
     		if (currTimeInit - timeCurrLimitInit > .25)
     		{
+    			lastCurrentState = true;
     			return true;
     		}
     		return false;
     	}
     	else
     	{
+    		lastCurrentState = false;
     		currentLimitAct = false;
     		timeCurrLimitInit = 0;
     		return false;
