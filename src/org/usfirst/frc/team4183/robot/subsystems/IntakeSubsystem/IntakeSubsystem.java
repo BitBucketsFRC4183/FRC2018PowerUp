@@ -49,13 +49,8 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 	{
 		return currentLimitAct;
 	}
-	public double getTimeCurrentLimit()
-	{
-		return timeCurrLimitInit;
-	}
 	public void disable() {
 		setAllMotorsZero();
-		//closegate();
 	}
 	
 	public void rotatePow(double pow)
@@ -77,8 +72,8 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 		rightIntakeMotor.set(ControlMode.PercentOutput, 0.0);
 	}
 	public void setMotorSpeed(double speed) {
-		leftIntakeMotor.set(speed);
-		rightIntakeMotor.set(speed);
+		leftIntakeMotor.set(ControlMode.PercentOutput,speed);
+		rightIntakeMotor.set(ControlMode.PercentOutput,speed);
 	}
 	
 	public void initDefaultCommand() {
@@ -86,20 +81,25 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
         setDefaultCommand(new Idle());
     }
 	
-	public void checkCurrentLimit(double currTimeInit)
+	public boolean checkCurrentLimit(double currTimeInit)
     {
     	if(getCurrentMax() > RobotMap.INTAKE_MAX_CURRENT) {
     		if (!currentLimitAct)
        	 {
-       	 timeCurrLimitInit = currTimeInit;}
-    		
+       	 timeCurrLimitInit = currTimeInit;
+       	 }
     		currentLimitAct =true;
-    	 
+    		if (currTimeInit - timeCurrLimitInit > .25)
+    		{
+    			return true;
+    		}
+    		return false;
     	}
     	else
     	{
     		currentLimitAct = false;
     		timeCurrLimitInit = 0;
+    		return false;
     	}
     }
 	

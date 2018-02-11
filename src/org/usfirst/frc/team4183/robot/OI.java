@@ -48,7 +48,8 @@ public class OI {
 	//Elevator Buttons
 	public final LogicalButton btnHighPosElev = new ModalButton(operatorController.bPovUp);
 	public final LogicalButton btnLowPosElev = new ModalButton(operatorController.bPovDown);
-	public final LogicalButton btnMedPosElev = new ModalButton(operatorController.bPovLeft);
+	public final LogicalButton btnMedPosElev = new ModalButton(operatorController.bPovRight);
+	public final LogicalButton btnTransPosElev = new ModalButton(driverController.bPovLeft);
 
 	
 	
@@ -58,7 +59,6 @@ public class OI {
 	//****************************
 	public final LogicalAxis axisForward = new ModalAxis(driverController.aLeftY);
 	public final LogicalAxis axisTurn = new ModalAxis(driverController.aRightX);
-	public final LogicalAxis wheelShooterAxis = new ModalAxis(operatorController.aLeftY);
 	
 	//Ramp and Elevator will share the left Joystick Y axis
 	public final LogicalAxis leftRampAxis = new ModalAxis(operatorController.aLeftY);
@@ -73,6 +73,8 @@ public class OI {
 	public final LogicalButton sbtnCurrentCheckIntake = new SoftButton();
 	public final LogicalButton sbtnCloseMandible = new SoftButton();
 	public final LogicalButton sbtnOpenMandible = new SoftButton();
+	public final LogicalButton sbtnIntakeThroat = new SoftButton();
+	public final LogicalButton sbtnOuttakeThroat = new SoftButton();
 
 	/*
 	 * I removed the driver/operator specific remappings because we didn't use them 

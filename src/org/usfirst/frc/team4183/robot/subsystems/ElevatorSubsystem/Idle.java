@@ -16,7 +16,7 @@ public class Idle extends Command{
 	protected void initialize()
 	{
 		Robot.elevatorSubsystem.disable();
-		Robot.elevatorSubsystem.engageBrake();
+		Robot.elevatorSubsystem.holdEncodPos(true);
 	}
 	
 	public void execute()
@@ -35,6 +35,11 @@ public class Idle extends Command{
 		{
 			return CommandUtils.stateChange(this, new Empty());
 		}
+		if (timeSinceInitialized() > Robot.elevatorSubsystem.timeUntilBrakeSec)
+		{
+			Robot.elevatorSubsystem.engageBrake();
+			return CommandUtils.stateChange(this, new Brake());
+		}
 		return false;
 	}
 
@@ -48,20 +53,43 @@ public class Idle extends Command{
 		end();
 	}
 	
-	public class Empty extends Command
+	public class Empty extends Idle
 	{
 
 		public Empty()
 		{
 			//add the light change
 			requires(Robot.elevatorSubsystem);
+			Robot.elevatorSubsystem.holdEncodPos(true);
+		}
+		
+		public void execute()
+		{
+			if (Robot.oi.sbtnIntakeThroat.get())
+			{
+				Robot.elevatorSubsystem.intakeThroat();
+			}
+			else if (Robot.oi.sbtnOuttakeThroat.get())
+			{
+				Robot.elevatorSubsystem.outtakeThroat();
+			}
+			else
+			{
+				Robot.elevatorSubsystem.disableThroat();
+			}
 		}
 		
 		@Override
 		protected boolean isFinished() {
-			 if (Math.abs(Robot.oi.leftRampAxis.get()) > .05)
+			 if (Math.abs(Robot.oi.leftRampAxis.get()) > .06 || Robot.oi.btnMedPosElev.get() || Robot.oi.btnHighPosElev.get() || Robot.oi.btnLowPosElev.get() || Robot.oi.btnTransPosElev.get())
 				{
 					return CommandUtils.stateChange(this, new Reposition());
+				}
+			 
+			 if (timeSinceInitialized() > Robot.elevatorSubsystem.timeUntilBrakeSec)
+				{
+					Robot.elevatorSubsystem.engageBrake();
+					return CommandUtils.stateChange(this, new Brake());
 				}
 			return false;
 		}
@@ -74,18 +102,48 @@ public class Idle extends Command{
 		{
 			//add light change
 			requires(Robot.elevatorSubsystem);
+			Robot.elevatorSubsystem.holdEncodPos(true);
+		}
+		
+		public void execute()
+		{
+			if (Robot.oi.sbtnIntakeThroat.get())
+			{
+				Robot.elevatorSubsystem.intakeThroat();
+			}
+			else if (Robot.oi.sbtnOuttakeThroat.get())
+			{
+				Robot.elevatorSubsystem.outtakeThroat();
+			}
+			else
+			{
+				Robot.elevatorSubsystem.disableThroat();
+			}
 		}
 		
 		@Override
 		protected boolean isFinished() {
-			 if (Math.abs(Robot.oi.leftRampAxis.get()) > .05)
+			 if (Math.abs(Robot.oi.leftRampAxis.get()) > .06 || Robot.oi.btnMedPosElev.get() || Robot.oi.btnHighPosElev.get() || Robot.oi.btnLowPosElev.get() || Robot.oi.btnTransPosElev.get())
 				{
 					return CommandUtils.stateChange(this, new Reposition());
+				}
+			 
+			 if (timeSinceInitialized() > Robot.elevatorSubsystem.timeUntilBrakeSec)
+				{
+					Robot.elevatorSubsystem.engageBrake();
+					return CommandUtils.stateChange(this, new Brake());
 				}
 			return false;
 		}
 		
+		protected void end()
+		{
+	
+		}	
+	
 	}
+	
+	
 
 }
 
