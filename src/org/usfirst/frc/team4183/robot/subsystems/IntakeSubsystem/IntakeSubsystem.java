@@ -24,6 +24,8 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 	
 	private double timeCurrLimitInit = 0;
 	boolean currentLimitAct = false;
+	
+	boolean lastCurrentState = false;
 
 	private static ArrayList<WPI_TalonSRX> motors;
 	private static ArrayList<DoubleSolenoid> solenoids;
@@ -45,17 +47,17 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 		solenoids.add(intakegate);
 		
 	}
+	
+	public boolean getLastCurrent()
+	{
+		return lastCurrentState;
+	}
 	public boolean getCurrLimitStatus()
 	{
 		return currentLimitAct;
 	}
-	public double getTimeCurrentLimit()
-	{
-		return timeCurrLimitInit;
-	}
 	public void disable() {
 		setAllMotorsZero();
-		//closegate();
 	}
 	
 	public void rotatePow(double pow)
@@ -77,8 +79,8 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 		rightIntakeMotor.set(ControlMode.PercentOutput, 0.0);
 	}
 	public void setMotorSpeed(double speed) {
-		leftIntakeMotor.set(speed);
-		rightIntakeMotor.set(speed);
+		leftIntakeMotor.set(ControlMode.PercentOutput,speed);
+		rightIntakeMotor.set(ControlMode.PercentOutput,speed);
 	}
 	
 	public void initDefaultCommand() {
@@ -86,20 +88,27 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
         setDefaultCommand(new Idle());
     }
 	
-	public void checkCurrentLimit(double currTimeInit)
+	public boolean checkCurrentLimit(double currTimeInit)
     {
     	if(getCurrentMax() > RobotMap.INTAKE_MAX_CURRENT) {
     		if (!currentLimitAct)
        	 {
-       	 timeCurrLimitInit = currTimeInit;}
-    		
+       	 timeCurrLimitInit = currTimeInit;
+       	 }
     		currentLimitAct =true;
-    	 
+    		if (currTimeInit - timeCurrLimitInit > .25)
+    		{
+    			lastCurrentState = true;
+    			return true;
+    		}
+    		return false;
     	}
     	else
     	{
+    		lastCurrentState = false;
     		currentLimitAct = false;
     		timeCurrLimitInit = 0;
+    		return false;
     	}
     }
 	

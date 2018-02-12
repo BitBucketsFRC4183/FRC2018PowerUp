@@ -37,13 +37,9 @@ public class IntakingClose extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	if (Robot.intakeSubsystem.getCurrLimitStatus())
-    	{
-    	if(timeSinceInitialized()-Robot.intakeSubsystem.getTimeCurrentLimit() > .3 && timeSinceInitialized()-Robot.intakeSubsystem.getTimeCurrentLimit() < 2) {
+    	if(Robot.intakeSubsystem.getCurrLimitStatus()) {
     		return CommandUtils.stateChange(this, new CurrentLimit());
-    	}
-    	}
-    	
+    	}    	
     	if (Robot.oi.btnIdle.get() )
     	{
     		return CommandUtils.stateChange(this, new Deployed());

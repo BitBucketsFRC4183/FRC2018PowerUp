@@ -24,6 +24,10 @@ public class Outtaking extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	Robot.intakeSubsystem.setMotorSpeed(0.5);    
+    	if (Robot.elevatorSubsystem.posCloseToInit())
+    	{
+    		Robot.oi.sbtnOuttakeThroat.push();
+    	}
     }
 
     // Make this return true when this Command no longer needs to run execute()

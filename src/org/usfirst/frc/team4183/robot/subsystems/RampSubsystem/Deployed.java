@@ -19,7 +19,7 @@ public class Deployed extends Command {
 	
 	protected void execute()
 	{
-	
+		Robot.oi.btnDriveLock.push();
 	}
 	
 	@Override

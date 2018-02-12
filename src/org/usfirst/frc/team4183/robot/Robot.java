@@ -15,7 +15,6 @@ import org.usfirst.frc.team4183.robot.subsystems.ElevatorSubsystem.ElevatorSubsy
 import org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem.IntakeSubsystem;
 import org.usfirst.frc.team4183.robot.subsystems.RampSubsystem.RampSubsystem;
 import org.usfirst.frc.team4183.robot.subsystems.VisionSubsystem.VisionSubsystem;
-import org.usfirst.frc.team4183.robot.subsystems.WheelShooterSubsystem.WheelShooterSubsystem;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -49,6 +48,7 @@ public class Robot extends IterativeRobot {
 	public static AutonomousSubsystem autonomousSubsystem;
 	public static VisionSubsystem visionSubsystem;
 	public static RampSubsystem rampSubsystem;
+	public static ElevatorSubsystem elevatorSubsystem;
 	
 	
 	// The following subsystems are mutually exclusive
@@ -56,7 +56,6 @@ public class Robot extends IterativeRobot {
 	// at the same time. Rather than create a complex selector
 	// and state exclusions we will just prevent creation.
     /// WARNING WARNING WARNING: ONLY ONE
-	public static WheelShooterSubsystem wheelShooterSubsystem;
 
 	
     public static OI oi;
@@ -81,8 +80,9 @@ public class Robot extends IterativeRobot {
 		visionSubsystem = new VisionSubsystem();
 		rampSubsystem = new RampSubsystem();
 		
+		
         /// WARNING WARNING WARNING: ONLY ONE
-		wheelShooterSubsystem = new WheelShooterSubsystem();
+		elevatorSubsystem = new ElevatorSubsystem();
 		//elevatorSubsystem = new ElevatorSubsystem();
 		//springShooterSubsystem = new SpringShooterSubsystem();
 		
@@ -105,8 +105,8 @@ public class Robot extends IterativeRobot {
 
         
         /// WARNING WARNING WARNING: ONLY ONE
-        addSubsystemToDebug(wheelShooterSubsystem);
-        //addSubsystemToDebug(elevatorSubsystem);
+        //addSubsystemToDebug(wheelShooterSubsystem);
+        addSubsystemToDebug(elevatorSubsystem);
 		showDebugInfo();		
 		
         CameraServer.getInstance().startAutomaticCapture();
@@ -122,9 +122,8 @@ public class Robot extends IterativeRobot {
 		intakeSubsystem.setDiagnosticsFlag(true);
 		
         /// WARNING WARNING WARNING: ONLY ONE		
-		wheelShooterSubsystem.setDiagnosticsFlag(true);
 		//springShooterSubsystem.setDiagnosticsFlag(true);
-		//elevatorSubsystem.setDiagnosticsFlag(true);
+		elevatorSubsystem.setDiagnosticsFlag(true);
 		
 	}
 	

@@ -23,6 +23,14 @@ public class Deployed extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	if (Robot.oi.sbtnOpenMandible.get())
+    	{
+    		Robot.intakeSubsystem.opengate();
+    	}
+    	else if (Robot.oi.sbtnCloseMandible.get())
+    	{
+    		Robot.intakeSubsystem.closegate();
+    	}
     }
 
     // Make this return true when this Command no longer needs to run execute()
