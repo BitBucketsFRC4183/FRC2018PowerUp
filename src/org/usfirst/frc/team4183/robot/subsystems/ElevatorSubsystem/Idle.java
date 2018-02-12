@@ -16,8 +16,8 @@ public class Idle extends Command{
 	protected void initialize()
 	{
 		Robot.elevatorSubsystem.disable();
-		Robot.elevatorSubsystem.holdEncodPos(false);
-		Robot.elevatorSubsystem.holdEncodPos(true);
+		//Robot.elevatorSubsystem.holdEncodPos(false);
+		//Robot.elevatorSubsystem.holdEncodPos(true);
 	}
 	
 	public void execute()
@@ -26,7 +26,7 @@ public class Idle extends Command{
 	}
 	
 	protected boolean isFinished()
-	{ 
+	{ /*
 		if (Robot.intakeSubsystem.getLastCurrent())
 		{
 			return CommandUtils.stateChange(this, new Loaded());
@@ -41,6 +41,7 @@ public class Idle extends Command{
 			Robot.elevatorSubsystem.engageBrake();
 			return CommandUtils.stateChange(this, new Brake());
 		}
+		*/
 		return false;
 	}
 
