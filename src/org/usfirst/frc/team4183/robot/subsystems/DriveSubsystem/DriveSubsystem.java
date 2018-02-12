@@ -60,9 +60,22 @@ public class DriveSubsystem extends BitBucketsSubsystem
     		DIAG_LOOPS_RUN = 10;
     		
 	    	leftFrontMotor = new WPI_TalonSRX(RobotMap.LEFT_DRIVE_MOTOR_FRONT_ID);
-	    	leftFrontMotor.setInverted(false);
+	    	leftFrontMotor.setInverted(true);
 	    	leftRearMotor = new WPI_TalonSRX(RobotMap.LEFT_DRIVE_MOTOR_REAR_ID);
-	    	leftRearMotor.setInverted(false);
+	    	leftRearMotor.setInverted(true);
+	    	
+	    	leftFrontMotor.configNeutralDeadband(.003, RobotMap.CONTROLLER_TIMEOUT_MS);
+	    	leftRearMotor.configNeutralDeadband(.003, RobotMap.CONTROLLER_TIMEOUT_MS);
+	    	
+	    	leftFrontMotor.configPeakOutputForward(1.0, RobotMap.CONTROLLER_TIMEOUT_MS);
+		    leftFrontMotor.configPeakOutputReverse(-1.0, RobotMap.CONTROLLER_TIMEOUT_MS);
+			leftFrontMotor.configNominalOutputForward(0, RobotMap.CONTROLLER_TIMEOUT_MS);
+			leftFrontMotor.configNominalOutputReverse(0, RobotMap.CONTROLLER_TIMEOUT_MS);
+			
+			leftRearMotor.configPeakOutputForward(1.0, RobotMap.CONTROLLER_TIMEOUT_MS);
+			leftRearMotor.configPeakOutputReverse(-1.0, RobotMap.CONTROLLER_TIMEOUT_MS);
+			leftRearMotor.configNominalOutputForward(0, RobotMap.CONTROLLER_TIMEOUT_MS);
+			leftRearMotor.configNominalOutputReverse(0, RobotMap.CONTROLLER_TIMEOUT_MS);
 	    		    	
 	    	// Use follower mode to minimize shearing commands that could occur if
 	    	// separate commands are sent to each motor in a group
@@ -72,9 +85,22 @@ public class DriveSubsystem extends BitBucketsSubsystem
 	    	leftRearMotor.setSafetyEnabled(false);
 	    	
 	    	rightFrontMotor  = new WPI_TalonSRX(RobotMap.RIGHT_DRIVE_MOTOR_FRONT_ID);
-	    	rightFrontMotor.setInverted(false);
+	    	rightFrontMotor.setInverted(true);
 	    	rightRearMotor   = new WPI_TalonSRX(RobotMap.RIGHT_DRIVE_MOTOR_REAR_ID);
-	    	rightRearMotor.setInverted(false);
+	    	rightRearMotor.setInverted(true);
+	    	
+	    	rightFrontMotor.configNeutralDeadband(.007, RobotMap.CONTROLLER_TIMEOUT_MS);
+	    	rightRearMotor.configNeutralDeadband(.007, RobotMap.CONTROLLER_TIMEOUT_MS);
+	    	
+	    	rightFrontMotor.configPeakOutputForward(1.0, RobotMap.CONTROLLER_TIMEOUT_MS);
+			rightFrontMotor.configPeakOutputReverse(-1.0, RobotMap.CONTROLLER_TIMEOUT_MS);
+			rightFrontMotor.configNominalOutputForward(0, RobotMap.CONTROLLER_TIMEOUT_MS);
+			rightFrontMotor.configNominalOutputReverse(0, RobotMap.CONTROLLER_TIMEOUT_MS);
+			
+			rightRearMotor.configPeakOutputForward(1.0, RobotMap.CONTROLLER_TIMEOUT_MS);
+			rightRearMotor.configPeakOutputReverse(-1.0, RobotMap.CONTROLLER_TIMEOUT_MS);
+			rightRearMotor.configNominalOutputForward(0, RobotMap.CONTROLLER_TIMEOUT_MS);
+			rightRearMotor.configNominalOutputReverse(0, RobotMap.CONTROLLER_TIMEOUT_MS);
 	
 	    	// Use follower mode to minimize shearing commands that could occur if
 	    	// separate commands are sent to each motor in a group

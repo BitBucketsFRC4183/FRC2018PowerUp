@@ -35,10 +35,10 @@ public class RobotMap {
 	
 	
 	//DriveSubystem Motors ports
-	public final static int LEFT_DRIVE_MOTOR_FRONT_ID  = 11;
-	public final static int LEFT_DRIVE_MOTOR_REAR_ID   = 12;
-	public final static int RIGHT_DRIVE_MOTOR_FRONT_ID = 13;
-	public final static int RIGHT_DRIVE_MOTOR_REAR_ID  = 14;
+	public final static int LEFT_DRIVE_MOTOR_FRONT_ID  = 13;
+	public final static int LEFT_DRIVE_MOTOR_REAR_ID   = 14;
+	public final static int RIGHT_DRIVE_MOTOR_FRONT_ID = 11;
+	public final static int RIGHT_DRIVE_MOTOR_REAR_ID  = 12;
 
 	// Cube Manipulation
 	// Mutual exclusion on shooter or lifter types
