@@ -67,6 +67,46 @@ public class RobotMap {
 	public final static boolean RIGHT_DRIVE_MOTOR_SENSOR_PHASE = false;
 	
 	public final static FeedbackDevice DRIVE_MOTOR_FEEDBACK_DEVICE = FeedbackDevice.QuadEncoder;
+	public final static int DRIVE_MOTOR_NATIVE_TICKS_PER_REV = 8192;	// AMT-201 at 2048 pulses per rev
+	
+	// PIDF Constants for the DriveSubsystem are empirically derived using
+	// the techniques in the TalonSRX Software Reference Manual (2018 Section 12.6)
+	//
+	// To keep names as short as possible, the fact that all speeds are computed
+	// over a 100 ms interval (i.e., encoder changes at 10 Hz) is NOT contained
+	// within the names of the constants.
+	public final static double DRIVE_MOTOR_FULL_THROTTLE_AVERAGE_SPEED_NATIVE_TICKS = 9926.8;	// per 100 ms, average of 10 samples
+	
+	// An estimate of the maximum no-load speed is as follows
+	public final static double DRIVE_MAXIMUM_NO_LOAD_SPEED_IN_PER_SEC = WHEEL_CIRCUMFERENCE_INCHES * 
+																		(DRIVE_MOTOR_FULL_THROTTLE_AVERAGE_SPEED_NATIVE_TICKS /
+																		 DRIVE_MOTOR_NATIVE_TICKS_PER_REV) * 10;
+	public final static double DRIVE_MAXIMUM_NO_LOAD_SPEED_FT_PER_SEC = DRIVE_MAXIMUM_NO_LOAD_SPEED_IN_PER_SEC / 12.0;
+	
+	// These Motion Magic values defined the shape of the trapezoidal profile for speed
+	// The cruise speed is the maximum speed during the profile and is chosen to keep
+	// below the maximum (which varies with battery voltage). The acceleration is the
+	// slope allowed to reach the cruise speed or zero (hence, a trapezoid).
+	//
+	// Setting this to 80% of maximum is a reasonable place to start;
+	// However, the acceleration is currently default to reach cruising speed within 1 second 
+	// and may need to be increased or decreased depending on static friction limits of tires
+	//
+	/// TODO: Consider a dashboard selector for floor type to set motion acceleration to match
+	/// conditions (e.g., carpet vs wood vs smooth or rough concrete)
+	public final static int DRIVE_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS = (int)(0.80 * 
+			                                                               DRIVE_MOTOR_FULL_THROTTLE_AVERAGE_SPEED_NATIVE_TICKS);
+	public final static int DRIVE_MOTOR_MOTION_ACCELERATION_NATIVE_TICKS = DRIVE_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS;
+	
+	// The magic number 1023 is in the SRM based on the characteristics of the TalonSRX
+	// It is likely based on the internal workings of the A-to-D conversions, but the details
+	// are not important at this point; just consider it a scaling factor to make the numbers
+	// work for the specific controllers we have.
+	public static double driveMotorKf = 1023.0 / DRIVE_MOTOR_FULL_THROTTLE_AVERAGE_SPEED_NATIVE_TICKS; 
+	public static double driveMotorKp = 0.6704;				// Is currently 32 x (10% of 1023/error_at_10_rotations)
+	public static double driveMotorKi = 0.0;            	// Very small values will help remove any final friction errors
+	public static double driveMotorKd = 10 * driveMotorKf;	// Start with 10 x Kp for increased damping of overshoot
+	public static int    driveMotorIZone = 0;               // Read up on what this does
 	
 	// The left and right sides may not be precisely balanced in terms of
 	// friction at really low speeds. We would like fine control to be balanced

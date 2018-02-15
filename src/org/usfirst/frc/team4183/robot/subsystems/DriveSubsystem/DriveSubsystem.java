@@ -1,18 +1,16 @@
 package org.usfirst.frc.team4183.robot.subsystems.DriveSubsystem;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
-import edu.wpi.first.wpilibj.SpeedController;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+
+
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import java.util.ArrayList;
+
 
 import org.usfirst.frc.team4183.robot.Robot;
 import org.usfirst.frc.team4183.robot.RobotMap;
@@ -38,18 +36,14 @@ public class DriveSubsystem extends BitBucketsSubsystem
 
 	// The counts-per-rev is printed on the encoder -
 	// it's the 1st number after the "E4P" or "E4T"
-	private final int ENCODER_PULSES_PER_REV = 248; 
-	private final boolean REVERSE_SENSOR = false;  
 	private final int EDGES_PER_ENCODER_COUNT = 4;
 	private double yawSetPoint;
 		
-	private final WPI_TalonSRX leftFrontMotor;		// User follower mode
-	private final WPI_TalonSRX leftRearMotor;
+	private final TalonSRX leftFrontMotor;		// User follower mode
+	private final TalonSRX leftRearMotor;
 
-	private final WPI_TalonSRX rightFrontMotor;		// Use follower mode
-	private final WPI_TalonSRX rightRearMotor;
-
-	private final DifferentialDrive drive;
+	private final TalonSRX rightFrontMotor;		// Use follower mode
+	private final TalonSRX rightRearMotor;
 	
 	private static SendableChooser<SubsystemTelemetryState> telemetryState;
 	
@@ -60,8 +54,8 @@ public class DriveSubsystem extends BitBucketsSubsystem
     		
     		DIAG_LOOPS_RUN = 10;
     		
-	    	leftFrontMotor = new WPI_TalonSRX(RobotMap.LEFT_DRIVE_MOTOR_FRONT_ID);
-	    	leftRearMotor = new WPI_TalonSRX(RobotMap.LEFT_DRIVE_MOTOR_REAR_ID);
+	    	leftFrontMotor = new TalonSRX(RobotMap.LEFT_DRIVE_MOTOR_FRONT_ID);
+	    	leftRearMotor = new TalonSRX(RobotMap.LEFT_DRIVE_MOTOR_REAR_ID);
 	    	
 	    	/// TODO: Create setupMasterMotor function
 	    	/// TODO: Create setupSlaveMotor function
@@ -126,14 +120,17 @@ public class DriveSubsystem extends BitBucketsSubsystem
 			//  Put drive train on ground with weight and re-test to see if position is as commanded.
 			//  If not, then add SMALL amounts of I-zone and Ki until final error is removed.
 			leftFrontMotor.selectProfileSlot(0, RobotMap.PRIMARY_PID_LOOP);
-			leftFrontMotor.config_kF(0, 0.1030543579, RobotMap.CONTROLLER_TIMEOUT_MS);		/// TODO: Move constants to map/profile
-			leftFrontMotor.config_kP(0, 0.02095*2*2*2*2*2, RobotMap.CONTROLLER_TIMEOUT_MS);
-			leftFrontMotor.config_kI(0, 0.0, RobotMap.CONTROLLER_TIMEOUT_MS);
-			leftFrontMotor.config_kD(0, 0.0, RobotMap.CONTROLLER_TIMEOUT_MS);
+			leftFrontMotor.config_kF(0, RobotMap.driveMotorKf, RobotMap.CONTROLLER_TIMEOUT_MS);		/// TODO: Move constants to map/profile
+			leftFrontMotor.config_kP(0, RobotMap.driveMotorKp, RobotMap.CONTROLLER_TIMEOUT_MS);
+			leftFrontMotor.config_kI(0, RobotMap.driveMotorKi, RobotMap.CONTROLLER_TIMEOUT_MS);
+			leftFrontMotor.config_kD(0, RobotMap.driveMotorKd, RobotMap.CONTROLLER_TIMEOUT_MS);
+			leftFrontMotor.config_IntegralZone(0, RobotMap.driveMotorIZone, RobotMap.CONTROLLER_TIMEOUT_MS);
 			
 			/* set acceleration and vcruise velocity - see documentation */
-			leftFrontMotor.configMotionCruiseVelocity(7445, RobotMap.CONTROLLER_TIMEOUT_MS);
-			leftFrontMotor.configMotionAcceleration(7445, RobotMap.CONTROLLER_TIMEOUT_MS);
+			leftFrontMotor.configMotionCruiseVelocity(RobotMap.DRIVE_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS, 
+					                                  RobotMap.CONTROLLER_TIMEOUT_MS);
+			leftFrontMotor.configMotionAcceleration(RobotMap.DRIVE_MOTOR_MOTION_ACCELERATION_NATIVE_TICKS, 
+					                                RobotMap.CONTROLLER_TIMEOUT_MS);
 			
 			/* zero the sensor */
 			leftFrontMotor.setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_LOOP, RobotMap.CONTROLLER_TIMEOUT_MS);
@@ -142,17 +139,9 @@ public class DriveSubsystem extends BitBucketsSubsystem
 	    	// Use follower mode to minimize shearing commands that could occur if
 	    	// separate commands are sent to each motor in a group
 	    	leftRearMotor.set(ControlMode.Follower, leftFrontMotor.getDeviceID());
-
-	    	/// TODO: We can bypass this feature (and the effect it can have when the DS
-	    	/// or other commands take longer than 100 ms) by using the TalonSRX class
-	    	/// rather than the WPI_* variants. Besides, it does not appear that disabling
-	    	/// the safety here has any real effect as the "not updating fast enough" message
-	    	/// still appears from time to time.
-	    	leftFrontMotor.setSafetyEnabled(false);
-	    	leftRearMotor.setSafetyEnabled(false);
 	    	
-	    	rightFrontMotor  = new WPI_TalonSRX(RobotMap.RIGHT_DRIVE_MOTOR_FRONT_ID);
-	    	rightRearMotor   = new WPI_TalonSRX(RobotMap.RIGHT_DRIVE_MOTOR_REAR_ID);
+	    	rightFrontMotor  = new TalonSRX(RobotMap.RIGHT_DRIVE_MOTOR_FRONT_ID);
+	    	rightRearMotor   = new TalonSRX(RobotMap.RIGHT_DRIVE_MOTOR_REAR_ID);
 	    	rightFrontMotor.setInverted(RobotMap.RIGHT_DRIVE_MOTOR_INVERSION_FLAG);
 	    	rightRearMotor.setInverted(RobotMap.RIGHT_DRIVE_MOTOR_INVERSION_FLAG);
 
@@ -209,25 +198,28 @@ public class DriveSubsystem extends BitBucketsSubsystem
 			//  Put drive train on ground with weight and re-test to see if position is as commanded.
 			//  If not, then add SMALL amounts of I-zone and Ki until final error is removed.
 			rightFrontMotor.selectProfileSlot(0, RobotMap.PRIMARY_PID_LOOP);
-			rightFrontMotor.config_kF(0, 0.1030543579, RobotMap.CONTROLLER_TIMEOUT_MS);		/// TODO: Move constants to map/profile
-			rightFrontMotor.config_kP(0, 0.02095*2*2*2*2*2, RobotMap.CONTROLLER_TIMEOUT_MS);
-			rightFrontMotor.config_kI(0, 0.0, RobotMap.CONTROLLER_TIMEOUT_MS);
-			rightFrontMotor.config_kD(0, 0.0, RobotMap.CONTROLLER_TIMEOUT_MS);
+			rightFrontMotor.config_kF(0, RobotMap.driveMotorKf, RobotMap.CONTROLLER_TIMEOUT_MS);		/// TODO: Move constants to map/profile
+			rightFrontMotor.config_kP(0, RobotMap.driveMotorKp, RobotMap.CONTROLLER_TIMEOUT_MS);
+			rightFrontMotor.config_kI(0, RobotMap.driveMotorKi, RobotMap.CONTROLLER_TIMEOUT_MS);
+			rightFrontMotor.config_kD(0, RobotMap.driveMotorKd, RobotMap.CONTROLLER_TIMEOUT_MS);
+			rightFrontMotor.config_IntegralZone(0, RobotMap.driveMotorIZone, RobotMap.CONTROLLER_TIMEOUT_MS);
 			
 			/* set acceleration and vcruise velocity - see documentation */
-			rightFrontMotor.configMotionCruiseVelocity(7445, RobotMap.CONTROLLER_TIMEOUT_MS);
-			rightFrontMotor.configMotionAcceleration(7445, RobotMap.CONTROLLER_TIMEOUT_MS);
-			
+			rightFrontMotor.configMotionCruiseVelocity(RobotMap.DRIVE_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS, 
+					                                   RobotMap.CONTROLLER_TIMEOUT_MS);
+			rightFrontMotor.configMotionAcceleration(RobotMap.DRIVE_MOTOR_MOTION_ACCELERATION_NATIVE_TICKS, 
+					                                 RobotMap.CONTROLLER_TIMEOUT_MS);
+		
 			/* zero the sensor */
 			rightFrontMotor.setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_LOOP, RobotMap.CONTROLLER_TIMEOUT_MS);
 			
 	    	// Use follower mode to minimize shearing commands that could occur if
 	    	// separate commands are sent to each motor in a group
 	    	rightRearMotor.set(ControlMode.Follower, rightFrontMotor.getDeviceID());
-	    	
-	    	rightFrontMotor.setSafetyEnabled(false);
-	    	rightRearMotor.setSafetyEnabled(false);
 	
+	    	// Now get the other modes set up
+	    	setNeutral(NeutralMode.Brake);
+	    	
 	    	// The differential drive simply requires a left and right speed controller
 	    	// In this case we can use a single motor controller type on each side
 	    	// rather than a SpeedControllerGroup because we set up the follower mode
@@ -239,17 +231,18 @@ public class DriveSubsystem extends BitBucketsSubsystem
 	    	// The left vs right can still be sheared by preemption but that is generally 
 	    	// less harmful on the entire robot as forces and slippage will be absorbed
 	    	// through the tires and frame (not JUST the gearbox)
-	    	drive = new DifferentialDrive(leftFrontMotor, rightFrontMotor);
-    	
-	    	// Now get the other modes set up
-	    	setNeutral(NeutralMode.Brake);
+	    	///drive = new DifferentialDrive(leftFrontMotor, rightFrontMotor);
+    		    	
 	    	telemetryState = new SendableChooser<SubsystemTelemetryState>();
-	    	
 	    	telemetryState.addDefault("Off", SubsystemTelemetryState.OFF);
 	    	telemetryState.addObject( "On",  SubsystemTelemetryState.ON);
 	    	
 	    	SmartDashboard.putData("DriveTelemetry", telemetryState);
     }
+    
+    
+    /// TODO: Should provide more control, see junk bot example for an enumerated
+    /// selector that can be different per axis
     private double shapeAxis( double x) {
 		x = Deadzone.f( x, .05);
 		return Math.signum(x) * (x*x);
@@ -257,41 +250,48 @@ public class DriveSubsystem extends BitBucketsSubsystem
 	
 	// +turnStick produces right turn (CW from above, -yaw angle)
     /// TODO: Consider re-designing this to reduce turn by up to 50% at full forward speed
-	public void arcadeDrive(double fwdStick, double turnStick) {
+	public void arcadeDrive(double fwdStick, double turnStick) 
+	{
 		
-		if(Robot.oi.btnLowSensitiveDrive.get()) {
+		// Shape axis for human control
+		/// TODO: axis shaping should be controllable via dashboard
+		/// see examples of selector for linear, square, cube, and sine
+		/// TODO: May want different shapes on fwd and turn
+		fwdStick  *= Math.abs(fwdStick * fwdStick);
+		turnStick *= Math.abs(turnStick * turnStick);
+		
+		if(Robot.oi.btnLowSensitiveDrive.get()) 
+		{
 			fwdStick *= LOW_SENS_GAIN;
 			turnStick *= LOW_SENS_GAIN;
 		}
 		if(Robot.oi.btnInvertAxis.get()) {
 			fwdStick *= -1.0;
 		}
+		double maxSteer = 1.0 - Math.abs(fwdStick) / 2.0;	// Reduce steering by up to 50%
+		double steer = maxSteer * turnStick;
 		
-		// Shape axis for human control
-		/// TODO: axis shaping should be controllable via dashboard
-		/// see examples of selector for linear, square, cube, and sine
-		/// TODO: May want different shapes on fwd and turn
-		fwdStick = shapeAxis(fwdStick);
-		turnStick = -shapeAxis(turnStick); /// TODO: The extra minus sign here could cause problems
-		
-		/// TODO: Probably harmless. It is not clear that this 0,0 check will actually
-		/// do anything unless shapeAxis actually forces zero for some
-		/// shapes. In general, if the value is below the neutral deadband, nothing will move
-		/// so the minimum of both left and right deadbands is the determining factor
-		if( fwdStick == 0.0 && turnStick == 0.0) {
-			setAllMotorsZero();
-		}
-		else {
-			// Turn stick is + to the right;
-			// but arcadeDrive 2nd arg + produces left turn
-			// (this is +yaw when yaw is defined according to right-hand-rule
-			// with z-axis up, so arguably correct).
-			// Anyhow need the - sign on turnStick to make it turn correctly.
-			drive.arcadeDrive( fwdStick, turnStick + yawCorrect(), false);
-		}
+		leftFrontMotor.set(ControlMode.PercentOutput, fwdStick + steer);
+		rightFrontMotor.set(ControlMode.PercentOutput, fwdStick - steer);
+//		
+//		/// TODO: Probably harmless. It is not clear that this 0,0 check will actually
+//		/// do anything unless shapeAxis actually forces zero for some
+//		/// shapes. In general, if the value is below the neutral deadband, nothing will move
+//		/// so the minimum of both left and right deadbands is the determining factor
+//		if( fwdStick == 0.0 && turnStick == 0.0) {
+//			setAllMotorsZero();
+//		}
+//		else {
+//			// Turn stick is + to the right;
+//			// but arcadeDrive 2nd arg + produces left turn
+//			// (this is +yaw when yaw is defined according to right-hand-rule
+//			// with z-axis up, so arguably correct).
+//			// Anyhow need the - sign on turnStick to make it turn correctly.
+//			drive.arcadeDrive( fwdStick, turnStick + yawCorrect(), false);
+//		}
 	}
 	public void doAutoTurn( double turn) {
-		drive.arcadeDrive( 0.0, turn, false);				
+		arcadeDrive( 0.0, turn);				
 	}
 	
 	public void setAlignDrive(boolean start) {
@@ -325,7 +325,7 @@ public class DriveSubsystem extends BitBucketsSubsystem
 			double error = -ALIGN_LOOP_GAIN * (yawSetPoint - Robot.imu.getYawDeg());
 			error = -ALIGN_LOOP_GAIN * -Robot.imu.getYawRateDps();
 			SmartDashboard.putNumber("IMU_ERROR", error);
-			drive.arcadeDrive( fwdStick, error + yawCorrect(), false);
+			arcadeDrive( fwdStick, error + yawCorrect());
 		}
 	}
 	
@@ -335,7 +335,7 @@ public class DriveSubsystem extends BitBucketsSubsystem
 			setAllMotorsZero();
 		else {
 			double error = ALIGN_LOOP_GAIN * (yawSetPoint - Robot.imu.getYawDeg());				
-			drive.arcadeDrive( fwd, error + yawCorrect(), false);				
+			arcadeDrive( fwd, error + yawCorrect());				
 		}			
 	}
 	@Override
@@ -357,31 +357,14 @@ public class DriveSubsystem extends BitBucketsSubsystem
 		rightFrontMotor.set(ControlMode.PercentOutput, 0.0);
 		rightRearMotor.set(ControlMode.PercentOutput, 0.0);			
 	}
-	private void setupClosedLoopMaster( WPI_TalonSRX m) 
+	private void setupClosedLoopMaster( TalonSRX m) 
 	{
 		// TODO: New functions provide ErrorCode feedback if there is a problem setting up the controller
 		
-		m.set(ControlMode.Position, 0.0);
-		
-		m.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, RobotMap.CONTROLLER_TIMEOUT_MS);
-		
-		// NOTE: The encoder codes per revolution interface no longer exists
-		// All of the interfaces operate in native units which are 4x the counts per revolution
-		// An encoder that returns 250 counts per rev will be 1000 native units per rev
-		// But the resolution is still 360/250 degrees
-		// An encoder that return 1024 counts per rev will be 4096 native units per rev
-		// But the resolution is still 360/1024 degrees.
-		// Basically, we just need to do the math ourselves
-		
-		//m.setInverted(true);  // TODO: When do we turn this off?
+		m.set(ControlMode.Position, 0.0);		
+
 		m.setSelectedSensorPosition(0, 0, RobotMap.CONTROLLER_TIMEOUT_MS);	// Zero the sensor where we are right now
 		
-		// NOTE: PIDF constants should be determined based on native units
-		m.config_kP(0, 0.016, RobotMap.CONTROLLER_TIMEOUT_MS); // May be able to increase gain a bit	
-		m.config_kI(0, 0, RobotMap.CONTROLLER_TIMEOUT_MS);
-		m.config_kD(0, 0, RobotMap.CONTROLLER_TIMEOUT_MS); 
-		m.config_kF(0, 0, RobotMap.CONTROLLER_TIMEOUT_MS);
-		m.config_IntegralZone(0, 0, RobotMap.CONTROLLER_TIMEOUT_MS);
 		
 		m.configClosedloopRamp(0.250, RobotMap.CONTROLLER_TIMEOUT_MS); // Smoothes things a bit: Don't switch from neutral to full too quickly
 		
@@ -390,12 +373,7 @@ public class DriveSubsystem extends BitBucketsSubsystem
 		// E.g., if encoder is 256 steps per revolution then 8/256 is 11.25 degress, which is actually
 		// quite large. So we need to figure this out if we want to have real control.
 		m.configAllowableClosedloopError(0, 0, RobotMap.CONTROLLER_TIMEOUT_MS);  // Specified in native "ticks"?
-		
-		m.configPeakOutputForward(1.0, RobotMap.CONTROLLER_TIMEOUT_MS);
-		m.configPeakOutputReverse(-1.0, RobotMap.CONTROLLER_TIMEOUT_MS);
-		m.configNominalOutputForward(1.0/3.0, RobotMap.CONTROLLER_TIMEOUT_MS);
-		m.configNominalOutputReverse(-1.0/3.0, RobotMap.CONTROLLER_TIMEOUT_MS);
-					
+
 	}
 	
 	public void doLockDrive(double value) 
@@ -413,10 +391,10 @@ public class DriveSubsystem extends BitBucketsSubsystem
 			setupClosedLoopMaster(leftFrontMotor);
 			setupClosedLoopMaster(rightFrontMotor);
 
-			leftRearMotor.set(ControlMode.Follower, leftFrontMotor.getDeviceID());	// Reinforce
-			leftRearMotor.setInverted(false); // Follow the front
-			rightRearMotor.set(ControlMode.Follower, rightFrontMotor.getDeviceID());			
-			rightRearMotor.setInverted(false); // Follow the front
+//			leftRearMotor.set(ControlMode.Follower, leftFrontMotor.getDeviceID());	// Reinforce
+//			leftRearMotor.setInverted(false); // Follow the front
+//			rightRearMotor.set(ControlMode.Follower, rightFrontMotor.getDeviceID());			
+//			rightRearMotor.setInverted(false); // Follow the front
 		}
 		else 
 		{
@@ -451,7 +429,7 @@ public class DriveSubsystem extends BitBucketsSubsystem
 		return -INCH_PER_WHEEL_ROT * rightFrontMotor.getSelectedSensorPosition(RobotMap.PRIMARY_PID_LOOP);						
 	}
 	
-	private int getMotorNativeUnits(WPI_TalonSRX m) {
+	private int getMotorNativeUnits(TalonSRX m) {
 		return m.getSelectedSensorPosition(RobotMap.PRIMARY_PID_LOOP);
 	}
 	
@@ -463,7 +441,7 @@ public class DriveSubsystem extends BitBucketsSubsystem
 		return getMotorNativeUnits(leftFrontMotor);
 	}
 	
-	private double getMotorEncoderUnits(WPI_TalonSRX m) {
+	private double getMotorEncoderUnits(TalonSRX m) {
 		return getMotorNativeUnits(m)/EDGES_PER_ENCODER_COUNT;
 	}
 	
@@ -475,7 +453,7 @@ public class DriveSubsystem extends BitBucketsSubsystem
 		return getMotorEncoderUnits(leftFrontMotor);
 	}
 	
-	private ControlMode getMotorMode(WPI_TalonSRX m) {
+	private ControlMode getMotorMode(TalonSRX m) {
 		return m.getControlMode();
 	}
 	
@@ -495,8 +473,8 @@ public class DriveSubsystem extends BitBucketsSubsystem
 		return getMotorMode(rightRearMotor);
 	}
 	
-	public double inchesToEncoderTicks(double inches) {
-		return ENCODER_PULSES_PER_REV * EDGES_PER_ENCODER_COUNT * inches / RobotMap.WHEEL_CIRCUMFERENCE_INCHES;
+	public double inchesToNativeTicks(double inches) {
+		return (double)RobotMap.DRIVE_MOTOR_NATIVE_TICKS_PER_REV * (inches / RobotMap.WHEEL_CIRCUMFERENCE_INCHES);
 	}
 
 	public double getFwdVelocity_ips() {
@@ -519,32 +497,30 @@ public class DriveSubsystem extends BitBucketsSubsystem
 		return 0;
 	}
 	
-	private void setupPositionControl(WPI_TalonSRX m) {
+	private void setupPositionControl(TalonSRX m) {
 		m.setSelectedSensorPosition(0, 0, RobotMap.CONTROLLER_TIMEOUT_MS);
-		m.config_kP(0, SmartDashboard.getNumber("Kp", 0.016), RobotMap.CONTROLLER_TIMEOUT_MS); // May be able to increase gain a bit	
-		m.config_kI(0, SmartDashboard.getNumber("Ki", 0.016), RobotMap.CONTROLLER_TIMEOUT_MS);
-		m.config_kD(0, SmartDashboard.getNumber("Kd", 0.016), RobotMap.CONTROLLER_TIMEOUT_MS);
+// TODO: If we want to experiment we should move this to the initialization so we don't undo the defaults
+// OR at least restore the defaults when done
+//		m.config_kP(0, SmartDashboard.getNumber("Kp", 0.016), RobotMap.CONTROLLER_TIMEOUT_MS); // May be able to increase gain a bit	
+//		m.config_kI(0, SmartDashboard.getNumber("Ki", 0.016), RobotMap.CONTROLLER_TIMEOUT_MS);
+//		m.config_kD(0, SmartDashboard.getNumber("Kd", 0.016), RobotMap.CONTROLLER_TIMEOUT_MS);
 		
 		m.set(ControlMode.PercentOutput, 0.0);
 	}
 	
 	public void setupPositionControl() {
 		setupPositionControl(leftFrontMotor);
-		setupPositionControl(leftRearMotor);
 		setupPositionControl(rightFrontMotor);
-		setupPositionControl(rightRearMotor);
 	}
 	
-	private void setPos(WPI_TalonSRX m, double value) {
+	private void setPos(TalonSRX m, double nativeTicks) {
 		
-		m.set(ControlMode.Position, value);
+		m.set(ControlMode.MotionMagic, nativeTicks);
 	}
 	
 	public void setPos(double value) {
-		setPos(leftFrontMotor, inchesToEncoderTicks(value));
-		setPos(rightFrontMotor, -inchesToEncoderTicks(value));
-		setPos(leftRearMotor, inchesToEncoderTicks(value));
-		setPos(rightRearMotor, -inchesToEncoderTicks(value));
+		setPos(leftFrontMotor,  inchesToNativeTicks(value));
+		setPos(rightFrontMotor, inchesToNativeTicks(value));
 	}
 	
 	/* Any hardware devices used in this subsystem must
