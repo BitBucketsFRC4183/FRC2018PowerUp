@@ -20,6 +20,8 @@ import org.usfirst.frc.team4183.robot.subsystems.BitBucketsSubsystem;
 import org.usfirst.frc.team4183.robot.subsystems.SubsystemUtilities.DiagnosticsState;
 import org.usfirst.frc.team4183.robot.subsystems.SubsystemUtilities.SubsystemTelemetryState;
 
+import org.usfirst.frc.team4183.utils.JoystickScale;
+
 
 public class DriveSubsystem extends BitBucketsSubsystem
 {
@@ -47,11 +49,30 @@ public class DriveSubsystem extends BitBucketsSubsystem
 	
 	private static SendableChooser<SubsystemTelemetryState> telemetryState;
 	
+	private static SendableChooser<JoystickScale> forwardJoystickScaleChooser;
+	private static SendableChooser<JoystickScale> turnJoystickScaleChooser;
+	  
     public DriveSubsystem()
     {
     		setName("DriveSubsystem");
-    	
     		
+			// Make joystick scale chooser and put it on the dashboard
+    		forwardJoystickScaleChooser = new SendableChooser<JoystickScale>();
+    		forwardJoystickScaleChooser.addDefault( "Linear",    JoystickScale.LINEAR);
+    		forwardJoystickScaleChooser.addObject(  "Square",    JoystickScale.SQUARE);
+    		forwardJoystickScaleChooser.addObject(  "Cube",      JoystickScale.CUBE);
+    		forwardJoystickScaleChooser.addObject(  "Sine",      JoystickScale.SINE);
+			   
+			SmartDashboard.putData( "Forward Joystick Scale", forwardJoystickScaleChooser);    	
+
+			turnJoystickScaleChooser = new SendableChooser<JoystickScale>();
+			turnJoystickScaleChooser.addDefault( "Linear",    JoystickScale.LINEAR);
+			turnJoystickScaleChooser.addObject(  "Square",    JoystickScale.SQUARE);
+			turnJoystickScaleChooser.addObject(  "Cube",      JoystickScale.CUBE);
+			turnJoystickScaleChooser.addObject(  "Sine",      JoystickScale.SINE);
+			   
+			SmartDashboard.putData( "Turn Joystick Scale", turnJoystickScaleChooser);    	
+			
     		DIAG_LOOPS_RUN = 10;
     		
 	    	leftFrontMotor = new TalonSRX(RobotMap.LEFT_DRIVE_MOTOR_FRONT_ID);
@@ -257,8 +278,9 @@ public class DriveSubsystem extends BitBucketsSubsystem
 		/// TODO: axis shaping should be controllable via dashboard
 		/// see examples of selector for linear, square, cube, and sine
 		/// TODO: May want different shapes on fwd and turn
-		fwdStick  *= Math.abs(fwdStick * fwdStick);
-		turnStick *= Math.abs(turnStick * turnStick);
+		
+		fwdStick = forwardJoystickScaleChooser.getSelected().rescale(fwdStick);
+		turnStick = turnJoystickScaleChooser.getSelected().rescale(turnStick);
 		
 		if(Robot.oi.btnLowSensitiveDrive.get()) 
 		{

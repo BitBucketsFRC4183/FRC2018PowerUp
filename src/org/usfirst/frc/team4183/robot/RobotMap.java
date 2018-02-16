@@ -96,7 +96,7 @@ public class RobotMap {
 	/// conditions (e.g., carpet vs wood vs smooth or rough concrete)
 	public final static int DRIVE_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS = (int)(0.80 * 
 			                                                               DRIVE_MOTOR_FULL_THROTTLE_AVERAGE_SPEED_NATIVE_TICKS);
-	public final static int DRIVE_MOTOR_MOTION_ACCELERATION_NATIVE_TICKS = DRIVE_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS;
+	public final static int DRIVE_MOTOR_MOTION_ACCELERATION_NATIVE_TICKS = 4346; // 0.26 g on wood//DRIVE_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS;
 	
 	// The magic number 1023 is in the SRM based on the characteristics of the TalonSRX
 	// It is likely based on the internal workings of the A-to-D conversions, but the details
