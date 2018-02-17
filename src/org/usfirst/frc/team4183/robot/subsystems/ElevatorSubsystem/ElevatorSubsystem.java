@@ -7,6 +7,7 @@ import org.usfirst.frc.team4183.robot.subsystems.BitBucketsSubsystem;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -14,10 +15,10 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 public class ElevatorSubsystem extends BitBucketsSubsystem {
 
-	private final WPI_TalonSRX elevatorMotorA;
+	private final TalonSRX elevatorMotorA;
 	
-	private final WPI_TalonSRX throatMotorA;
-	private final WPI_TalonSRX throatMotorB;
+	private final TalonSRX throatMotorA;
+	private final TalonSRX throatMotorB;
 	
 	private final DoubleSolenoid brakePneu;
 	
@@ -54,10 +55,10 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 
 	public ElevatorSubsystem()
 	{
-		elevatorMotorA = new WPI_TalonSRX(RobotMap.ELEVATOR_MOTOR_A_ID);
+		elevatorMotorA = new TalonSRX(RobotMap.ELEVATOR_MOTOR_A_ID);
 		
-		throatMotorA = new WPI_TalonSRX(RobotMap.THROAT_MOTOR_A_ID);
-		throatMotorB = new WPI_TalonSRX(RobotMap.THROAT_MOTOR_B_ID);
+		throatMotorA = new TalonSRX(RobotMap.THROAT_MOTOR_A_ID);
+		throatMotorB = new TalonSRX(RobotMap.THROAT_MOTOR_B_ID);
 		
 		brakePneu = new DoubleSolenoid(RobotMap.ELEVATOR_PNEUMA_BRAKE_CLOSE_CHANNEL,RobotMap.ELEVATOR_PNEUMA_BRAKE_OPEN_CHANNEL);
 		
