@@ -3,6 +3,7 @@ package org.usfirst.frc.team4183.utils;
 
 public class Positions
 {
+	
 public static enum StartingPosition {
 	LEFT,
 	CENTER,
@@ -12,6 +13,8 @@ public static enum StartingPosition {
 public static enum GenericPositions
 {
 	LEFT, RIGHT;
+	
+	
 }
 
 }

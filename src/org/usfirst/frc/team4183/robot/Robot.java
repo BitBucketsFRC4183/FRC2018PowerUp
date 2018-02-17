@@ -28,6 +28,7 @@ import org.usfirst.frc.team4183.utils.DoEveryN;
 import org.usfirst.frc.team4183.utils.Stopwatch;
 
 import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.DriverStation;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -159,9 +160,10 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void autonomousInit() {
+		autonomousSubsystem.convertGameData();
+		
 		runMode = RunMode.AUTO;
 		oi.setAutoMode();
-
 		int position = positionChooser.getSelected();
 		if( position != 0)
 			(new Scripter( positionChooser.getSelected())).start();

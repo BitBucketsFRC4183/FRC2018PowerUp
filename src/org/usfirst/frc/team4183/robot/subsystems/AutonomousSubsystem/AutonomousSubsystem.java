@@ -2,6 +2,7 @@ package org.usfirst.frc.team4183.robot.subsystems.AutonomousSubsystem;
 
 import org.usfirst.frc.team4183.robot.subsystems.BitBucketsSubsystem;
 import org.usfirst.frc.team4183.utils.Positions;
+import org.usfirst.frc.team4183.utils.Positions.GenericPositions;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -18,7 +19,7 @@ public class AutonomousSubsystem extends BitBucketsSubsystem {
 	
 	private static SendableChooser<Positions.StartingPosition> startingPosition;
 
-	private static Positions.GenericPositions scalePositon;
+	private static Positions.GenericPositions scalePosition;
 	private static Positions.GenericPositions switchPosition;
 	
 	
@@ -26,7 +27,7 @@ public class AutonomousSubsystem extends BitBucketsSubsystem {
 	{
 		startingPosition = new SendableChooser<Positions.StartingPosition>();
 		startingPosition.addDefault("Center", Positions.StartingPosition.CENTER);
-		startingPosition.addObject("LEFT", Positions.StartingPosition.LEFT);
+		startingPosition.addObject("Left", Positions.StartingPosition.LEFT);
 		startingPosition.addObject("Right", Positions.StartingPosition.RIGHT);
 		
 		SmartDashboard.putData(startingPosition);
@@ -38,16 +39,13 @@ public class AutonomousSubsystem extends BitBucketsSubsystem {
 		String gameData;
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
 		
+		
 		if (gameData.length() > 0)
 		{
-			if (gameData.charAt(0) == 'L')
-			{
-				
-			}
-			else if (gameData.charAt(0) == 'R') 
-			{
-				
-			}
+			if (gameData.charAt(0) == 'L') switchPosition = GenericPositions.LEFT;
+			else switchPosition = GenericPositions.RIGHT;
+			if(gameData.charAt(1)== 'L') scalePosition = GenericPositions.LEFT;
+			else scalePosition = GenericPositions.RIGHT;
 		}
 	}
 	
