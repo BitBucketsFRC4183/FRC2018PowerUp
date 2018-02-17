@@ -34,7 +34,11 @@ public class RobotMap {
 	public static final double MOTOR_TEST_PERCENT = 0.5;
 
 	//inches per revolution for Elevator
-	public static final int INCH_EXTENSION_ROT = 200;
+	//Nominal diameter to the pin
+	public static final double ELEVATOR_SPROCKET_DIAMETER_INCHES  = 3;
+	public static final double ELEVATOR_SPROCKET_CIRCUMFERENCE_INCHES = (ELEVATOR_SPROCKET_DIAMETER_INCHES*Math.PI);
+	
+	public static final int INCH_EXTENSION_ROT = (int) ELEVATOR_SPROCKET_CIRCUMFERENCE_INCHES/8192;
 	
     //Ramp Subsystem Motor Ports
   	public final static int LEFT_RAMP_MOTOR_ID = 1;
@@ -50,6 +54,43 @@ public class RobotMap {
 	public final static int RIGHT_DRIVE_MOTOR_FRONT_ID = 11;
 	public final static int RIGHT_DRIVE_MOTOR_REAR_ID  = 12;
 
+	
+	//Magic Motion Constants for the Elevator Subsystem
+	public final static boolean ELEVATOR_MOTOR_SENSOR_PHASE = false;
+		
+	public final static FeedbackDevice ELEVATOR_MOTOR_FEEDBACK_DEVICE = FeedbackDevice.QuadEncoder;
+	public final static int ELEVATOR_MOTOR_NATIVE_TICKS_PER_REV = 8192;
+	public final static double ELEVATOR_MOTOR_FULL_THROTTLE_AVERAGE_SPEED_NATIVE_TICKS = 25588.4;	// per 100 ms, average of 10 samples
+	
+	public final static int ELEVATOR_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS = (int)(0.80 * 
+            ELEVATOR_MOTOR_FULL_THROTTLE_AVERAGE_SPEED_NATIVE_TICKS);
+
+	public final static int ELEVATOR_MOTOR_MOTION_ACCELERATION_NATIVE_TICKS = ELEVATOR_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS; 
+	// The magic number 1023 is in the SRM based on the characteristics of the TalonSRX
+	// It is likely based on the internal workings of the A-to-D conversions, but the details
+	// are not important at this point; just consider it a scaling factor to make the numbers
+	// work for the specific controllers we have.
+	public static double elevatorMotorKf = 0.03997911175;
+	public static double elevatorMotorKp = 0.0821686747;		
+	public static double elevatorMotorKi = 0.0;
+	public static double elevatorMotorKd = 10 * elevatorMotorKp;
+	public static int    elevatorMotorIZone = 0;
+
+// The left and right sides may not be precisely balanced in terms of
+// friction at really low speeds. We would like fine control to be balanced
+// so the neutral deadband is adjusted to determine when the motors start
+// moving on each side. This also prevents the motor from moving when
+// really small commands are passed through.
+//
+// The values are determined empirically by simply driving the motors slowly
+// until they first start to move on one side and not the other. Increase the
+// values until the desired response is achieved.
+	public final static double ELEVATOR_MOTOR_NEUTRAL_DEADBAND  = 0.000; //ADJUST
+	
+	
+	
+	
+	
 	// DriveSubsystem Motor Directions
 	// Assuming a single stage gearbox and motors mounted on
 	// interior with axle pointing outward. Using right hand
@@ -58,6 +99,10 @@ public class RobotMap {
 	//		INVERTED		not-inverted
 	public final static boolean LEFT_DRIVE_MOTOR_INVERSION_FLAG = true;
 	public final static boolean RIGHT_DRIVE_MOTOR_INVERSION_FLAG = false;
+	
+	
+	
+	
 	
 	// If positive controller command yields positive rotation and positive encoder speed
 	// then the motor sensor phase should be left false. If the encoder reads a negative
@@ -133,7 +178,6 @@ public class RobotMap {
 	//public static final int SPRING_SHOOTER_MOTOR_B_ID = 8;
 	
 	public final static int ELEVATOR_MOTOR_A_ID = 7;
-	public final static int ELEVATOR_MOTOR_B_ID = 8;
 	
 	public final static int THROAT_MOTOR_A_ID = 3;
 	public final static int THROAT_MOTOR_B_ID = 6;
