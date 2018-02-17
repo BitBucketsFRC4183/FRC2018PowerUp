@@ -152,5 +152,8 @@ public class RobotMap {
 	public static final double DRIVESTRAIGHT_MIN_DRIVE = 0;
 	public static final double TURNBY_MIN_DRIVE = 0;
 	
+	//Robot Measurements
+	public final static double ROBOT_WHEEL_TRACK_INCHES=24.5;
+	
 
 }
