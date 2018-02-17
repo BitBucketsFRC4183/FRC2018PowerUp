@@ -16,8 +16,6 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 
 	private final WPI_TalonSRX elevatorMotorA;
 	
-	private final WPI_TalonSRX elevatorMotorB;
-	
 	private final WPI_TalonSRX throatMotorA;
 	private final WPI_TalonSRX throatMotorB;
 	
@@ -45,7 +43,7 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 	
 	public static final double timeUntilBrakeSec = .75;
 	
-	public static int holdTicks = 0;
+	public static int holdUnits = 0;
 	
 	//adjust this later for the driver control
 	private final int deltaPos = UNITS_PER_FEET;
@@ -57,7 +55,6 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 	public ElevatorSubsystem()
 	{
 		elevatorMotorA = new WPI_TalonSRX(RobotMap.ELEVATOR_MOTOR_A_ID);
-		elevatorMotorB = new WPI_TalonSRX(RobotMap.ELEVATOR_MOTOR_B_ID);
 		
 		throatMotorA = new WPI_TalonSRX(RobotMap.THROAT_MOTOR_A_ID);
 		throatMotorB = new WPI_TalonSRX(RobotMap.THROAT_MOTOR_B_ID);
@@ -97,9 +94,6 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 				                                RobotMap.CONTROLLER_TIMEOUT_MS);
 		
 		elevatorMotorA.setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_LOOP, RobotMap.CONTROLLER_TIMEOUT_MS);
-		
-		//setupClosedLoopMaster(elevatorMotorA);
-		elevatorMotorB.set(ControlMode.Follower, RobotMap.ELEVATOR_MOTOR_A_ID);
 		
 		setAllMotorsZero();
 	}
@@ -162,20 +156,20 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 		}
 	}
 
-	//holds the current Encoder position MAKE SURE TO SET THIS METHOD TO FALSE AFTER HOLDING POSITION TO RESET HOLDTICKS
-	public void holdEncodPos(boolean holdTicksBol)
+	//holds the current Encoder position MAKE SURE TO SET THIS METHOD TO FALSE AFTER HOLDING POSITION TO RESET HOLDUNITS
+	public void holdEncodPos(boolean holdUnitsBol)
 	{
-		if (holdTicksBol)
+		if (holdUnitsBol)
 		{
-			if (holdTicks == 0)
+			if (holdUnits == 0)
 			{
-				holdTicks = elevatorMotorA.getSelectedSensorPosition(RobotMap.PRIMARY_PID_LOOP);
+				holdUnits = elevatorMotorA.getSelectedSensorPosition(RobotMap.PRIMARY_PID_LOOP);
 			}
-			goToPosition(holdTicks);
+			goToPosition(holdUnits);
 		}
 		else
 		{
-		holdTicks = 0;
+		holdUnits = 0;
 		}
 		}
 	public void engageBrake()
@@ -209,7 +203,7 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 		setAllMotorsZero();
 	}
 	
-	public int inchesToTicks(double inches)
+	public int inchesToUnits(double inches)
 	{
 		return (int) (inches/RobotMap.INCH_EXTENSION_ROT);
 	}
@@ -223,13 +217,11 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 	public void goToPosition(int ticks)
 	{
 		elevatorMotorA.set(ControlMode.MotionMagic, ticks);
-		elevatorMotorB.set(ControlMode.Follower,RobotMap.ELEVATOR_MOTOR_A_ID);
 	}
 	
 	public void setAllMotorsZero()
 	{
 		elevatorMotorA.set(ControlMode.PercentOutput,0);
-		elevatorMotorB.set(ControlMode.Follower,RobotMap.ELEVATOR_MOTOR_A_ID);
 
 		throatMotorA.set(ControlMode.PercentOutput,0);
 		throatMotorB.set(ControlMode.PercentOutput,0);
@@ -238,10 +230,6 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 	public void setSystemPower(double power)
 	{
 		elevatorMotorA.set(ControlMode.PercentOutput,power);
-		if (elevatorMotorB.getControlMode() != ControlMode.Follower)
-		{
-			elevatorMotorB.set(ControlMode.Follower,RobotMap.ELEVATOR_MOTOR_A_ID);
-		}
 	}
 
 

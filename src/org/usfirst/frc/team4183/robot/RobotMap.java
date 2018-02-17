@@ -34,7 +34,11 @@ public class RobotMap {
 	public static final double MOTOR_TEST_PERCENT = 0.5;
 
 	//inches per revolution for Elevator
-	public static final int INCH_EXTENSION_ROT = 200;
+	//Nominal diameter to the pin
+	public static final double ELEVATOR_SPROCKET_DIAMETER_INCHES  = 3;
+	public static final double ELEVATOR_SPROCKET_CIRCUMFERENCE_INCHES = (ELEVATOR_SPROCKET_DIAMETER_INCHES*Math.PI);
+	
+	public static final int INCH_EXTENSION_ROT = (int) ELEVATOR_SPROCKET_CIRCUMFERENCE_INCHES/8192;
 	
     //Ramp Subsystem Motor Ports
   	public final static int LEFT_RAMP_MOTOR_ID = 1;
@@ -67,10 +71,10 @@ public class RobotMap {
 	// are not important at this point; just consider it a scaling factor to make the numbers
 	// work for the specific controllers we have.
 	public static double elevatorMotorKf = 0.03997911175;
-	public static double elevatorMotorKp = 0.0821686747;				// Is currently 32 x (10% of 1023/error_at_10_rotations)
-	public static double elevatorMotorKi = 0.0;            	// Very small values will help remove any final friction errors
-	public static double elevatorMotorKd = 10 * elevatorMotorKp;	// Start with 10 x Kp for increased damping of overshoot
-	public static int    elevatorMotorIZone = 0;               // Read up on what this does
+	public static double elevatorMotorKp = 0.0821686747;		
+	public static double elevatorMotorKi = 0.0;
+	public static double elevatorMotorKd = 10 * elevatorMotorKp;
+	public static int    elevatorMotorIZone = 0;
 
 // The left and right sides may not be precisely balanced in terms of
 // friction at really low speeds. We would like fine control to be balanced
