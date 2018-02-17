@@ -178,7 +178,6 @@ public class RobotMap {
 	//public static final int SPRING_SHOOTER_MOTOR_B_ID = 8;
 	
 	public final static int ELEVATOR_MOTOR_A_ID = 7;
-	public final static int ELEVATOR_MOTOR_B_ID = 8;
 	
 	public final static int THROAT_MOTOR_A_ID = 3;
 	public final static int THROAT_MOTOR_B_ID = 6;
