@@ -1,6 +1,7 @@
 package org.usfirst.frc.team4183.robot.subsystems.DriveSubsystem;
 
 import org.usfirst.frc.team4183.robot.Robot;
+import org.usfirst.frc.team4183.robot.RobotMap;
 import org.usfirst.frc.team4183.utils.CommandUtils;
 
 import edu.wpi.first.wpilibj.command.Command;
@@ -23,7 +24,7 @@ public class PositionControl extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.driveSubsystem.setPos(24.0);
+    	Robot.driveSubsystem.setPos(3*RobotMap.WHEEL_CIRCUMFERENCE_INCHES);
     }
 
     // Make this return true when this Command no longer needs to run execute()
