@@ -3,7 +3,13 @@ package org.usfirst.frc.team4183.robot.subsystems.AutonomousSubsystem;
 import java.util.List;
 
 import org.usfirst.frc.team4183.robot.subsystems.BitBucketsSubsystem;
+import org.usfirst.frc.team4183.utils.Positions;
+import org.usfirst.frc.team4183.utils.Positions.GenericPositions;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -76,6 +82,10 @@ public class AutonomousSubsystem extends BitBucketsSubsystem
 	};
 	
 	private static List<AutoTaskDescriptor> plan;	// A place to inject the plan tokens
+	// Nothing in here now...it's pretty much a dummy,
+	// just to make the state machine work.
+	
+	private static SendableChooser<Positions.StartingPosition> startingPosition;
 
 	
 	private static AutoTaskDescriptor currentDriveTask;
@@ -99,6 +109,37 @@ public class AutonomousSubsystem extends BitBucketsSubsystem
 	
     public void initDefaultCommand() 
     {
+	private static Positions.GenericPositions scalePosition;
+	private static Positions.GenericPositions switchPosition;
+	
+	
+	public AutonomousSubsystem()
+	{
+		startingPosition = new SendableChooser<Positions.StartingPosition>();
+		startingPosition.addDefault("Center", Positions.StartingPosition.CENTER);
+		startingPosition.addObject("Left", Positions.StartingPosition.LEFT);
+		startingPosition.addObject("Right", Positions.StartingPosition.RIGHT);
+		
+		SmartDashboard.putData(startingPosition);
+		
+	}
+	
+	public void convertGameData()
+	{
+		String gameData;
+		gameData = DriverStation.getInstance().getGameSpecificMessage();
+		
+		
+		if (gameData.length() > 0)
+		{
+			if (gameData.charAt(0) == 'L') switchPosition = GenericPositions.LEFT;
+			else switchPosition = GenericPositions.RIGHT;
+			if(gameData.charAt(1)== 'L') scalePosition = GenericPositions.LEFT;
+			else scalePosition = GenericPositions.RIGHT;
+		}
+	}
+	
+    public void initDefaultCommand() {
         setDefaultCommand(new Idle());
     }
 

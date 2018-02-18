@@ -1,12 +1,15 @@
 package org.usfirst.frc.team4183.robot.subsystems.DriveSubsystem;
 
+import com.ctre.phoenix.motion.TrajectoryPoint;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
-
-
+import edu.wpi.first.wpilibj.Notifier;
+import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -18,6 +21,10 @@ import org.usfirst.frc.team4183.robot.subsystems.BitBucketsSubsystem;
 import org.usfirst.frc.team4183.robot.subsystems.SubsystemUtilities.DiagnosticsState;
 import org.usfirst.frc.team4183.robot.subsystems.SubsystemUtilities.SubsystemTelemetryState;
 
+import jaci.pathfinder.Pathfinder;
+import jaci.pathfinder.Trajectory;
+import jaci.pathfinder.Waypoint;
+import jaci.pathfinder.modifiers.TankModifier;
 import org.usfirst.frc.team4183.utils.JoystickScale;
 import org.usfirst.frc.team4183.utils.RobotTrajectory;
 
@@ -314,6 +321,7 @@ public class DriveSubsystem extends BitBucketsSubsystem
 		x = Deadzone.f( x, .05);
 		return Math.signum(x) * (x*x);
 	}
+    
 	
 	// +turnStick produces right turn (CW from above, -yaw angle)
     /// TODO: Consider re-designing this to reduce turn by up to 50% at full forward speed

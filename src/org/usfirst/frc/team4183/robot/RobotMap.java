@@ -27,6 +27,16 @@ public class RobotMap
 	public final static int MEDIUM_STATUS_FRAME_PERIOD_MS      =  50;
 	public final static int LOW_STATUS_FRAME_PERIOD_MS        = 100;
 
+	/**
+	 * Intake Subsystem Limit Switch Mappings
+	 */
+	public final static int INTAKE_LIMIT_LEFT_MAX_ID = 0;
+	public final static int INTAKE_LIMIT_LEFT_MIN_ID = 1;
+	public final static int INTAKE_LIMIT_RIGHT_MAX_ID = 2;
+	public final static int INTAKE_LIMIT_RIGHT_MIN_ID = 3;
+	
+	
+	
 	
 	//Motor Current Limits for the Wheel Shooter adjust later
 	public static final double WHEEL_SHOOTER_MAX_CURRENT = 50;
