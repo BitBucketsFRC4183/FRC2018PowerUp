@@ -199,7 +199,7 @@ public class RobotMap
 	// Mutual exclusion on shooter or lifter types
 	
 	//IntakeSubsystem Motors ports
-	public final static int INTAKE_MOTOR_LEFT_ID      = 5;
+	public final static int INTAKE_MOTOR_LEFT_ID      = 10;
 	public final static int INTAKE_MOTOR_RIGHT_ID      = 9;
 	
 	

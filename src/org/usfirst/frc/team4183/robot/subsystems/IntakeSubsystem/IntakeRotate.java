@@ -21,13 +21,13 @@ public class IntakeRotate extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    Robot.intakeSubsystem.closegate();
+    Robot.intakeSubsystem.opengate();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     //	Robot.intakeSubsystem.setMotorSpeed(SmartDashboard.getNumber("Shooting Speed", 0));
-    	Robot.intakeSubsystem.rotatePow(.5);
+    	Robot.intakeSubsystem.rotatePow(-.8);
     	}
     
     

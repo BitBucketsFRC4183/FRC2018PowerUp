@@ -26,10 +26,10 @@ public class IntakingOpen extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     //	Robot.intakeSubsystem.setMotorSpeed(SmartDashboard.getNumber("Shooting Speed", 0));
-    	Robot.intakeSubsystem.setMotorSpeed(-0.5);
-    	if (Robot.elevatorSubsystem.posCloseToInit())
+    	Robot.intakeSubsystem.setMotorSpeed(-0.8);
+    	//if (Robot.elevatorSubsystem.posCloseToInit())
     	{
-    		Robot.oi.sbtnIntakeThroat.push();
+    		//Robot.oi.sbtnIntakeThroat.push();
     	}
     	}
 
