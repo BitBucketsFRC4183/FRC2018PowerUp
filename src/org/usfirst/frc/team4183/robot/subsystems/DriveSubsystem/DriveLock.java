@@ -30,17 +30,21 @@ public class DriveLock extends Command
                                   0);	// period_msec - don't care   
     	
     	
-        Robot.driveSubsystem.setLockDrive(true);
+        Robot.driveSubsystem.resetMotion();
     	
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() 
     {
-    	if(Robot.oi.sbtnShake.get()){
-    		Robot.driveSubsystem.doLockDrive(.1*sineWave(10.0));
+    	if(Robot.oi.sbtnShake.get())
+    	{
+    		Robot.driveSubsystem.doLockDrive(.1*sineWave(10.0));	/// TODO: MAYBE need it, but interface should be in inches not ticks
     	}
-    	else Robot.driveSubsystem.doLockDrive(0.0);
+    	else
+    	{
+    		Robot.driveSubsystem.doLockDrive(0.0);
+    	}
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -66,7 +70,6 @@ public class DriveLock extends Command
     // Called once after isFinished returns true
     protected void end() 
     {
-    	Robot.driveSubsystem.setLockDrive(false);
     }
 
     // Called when another command which requires one or more of the same

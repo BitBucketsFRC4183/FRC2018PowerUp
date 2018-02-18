@@ -442,26 +442,13 @@ public class DriveSubsystem extends BitBucketsSubsystem
 		m.set(ControlMode.MotionMagic, 0.0);		
 	}
 	
+	/// TODO: This is redundant with other similar functions
 	public void doLockDrive(double value) 
 	{
 		leftFrontMotor.set(ControlMode.MotionMagic, value);
 		rightFrontMotor.set(ControlMode.MotionMagic, value);			
 	}
-	public void setLockDrive( boolean start) 
-	{
 
-		if( start) 
-		{
-			setupClosedLoopMaster(leftFrontMotor);
-			setupClosedLoopMaster(rightFrontMotor);
-		}
-		else 
-		{
-			leftFrontMotor.set(ControlMode.PercentOutput,0.0);
-			rightFrontMotor.set(ControlMode.PercentOutput,0.0);
-		}
-	}
-	
 
 	/** 
 	 * setNeutral is a pass through interface to each motor in the subsystem
