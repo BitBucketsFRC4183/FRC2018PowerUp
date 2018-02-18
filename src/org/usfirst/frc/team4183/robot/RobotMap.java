@@ -68,23 +68,6 @@ public class RobotMap
 	public static final double ELEVATOR_SPROCKET_DIAMETER_INCHES  = 3;
 	public static final double ELEVATOR_SPROCKET_CIRCUMFERENCE_INCHES = (ELEVATOR_SPROCKET_DIAMETER_INCHES*Math.PI);
 	
-	public static final int INCH_EXTENSION_ROT = (int) ELEVATOR_SPROCKET_CIRCUMFERENCE_INCHES/8192;
-	
-    //Ramp Subsystem Motor Ports
-  	public final static int LEFT_RAMP_MOTOR_ID = 1;
-  	public final static int RIGHT_RAMP_MOTOR_ID = 2;
-  	
-  	//Ramp Subsystem Servo Port
-  	public final static int RAMP_RELEASE_SERVO_ID = 1;
-	
-	
-	//DriveSubystem Motors ports
-	public final static int LEFT_DRIVE_MOTOR_FRONT_ID  = 3;//13;
-	public final static int LEFT_DRIVE_MOTOR_REAR_ID   = 4;//14;
-	public final static int RIGHT_DRIVE_MOTOR_FRONT_ID = 1;//11;
-	public final static int RIGHT_DRIVE_MOTOR_REAR_ID  = 2;//12;
-
-	
 	//Magic Motion Constants for the Elevator Subsystem
 	public final static boolean ELEVATOR_MOTOR_SENSOR_PHASE = false;
 		
@@ -93,9 +76,15 @@ public class RobotMap
 	public final static double ELEVATOR_MOTOR_FULL_THROTTLE_AVERAGE_SPEED_NATIVE_TICKS = 25588.4;	// per 100 ms, average of 10 samples
 	
 	public final static int ELEVATOR_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS = (int)(0.80 * 
-            ELEVATOR_MOTOR_FULL_THROTTLE_AVERAGE_SPEED_NATIVE_TICKS);
+                                                                              ELEVATOR_MOTOR_FULL_THROTTLE_AVERAGE_SPEED_NATIVE_TICKS);
 
-	public final static int ELEVATOR_MOTOR_MOTION_ACCELERATION_NATIVE_TICKS = ELEVATOR_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS; 
+	public final static int ELEVATOR_MOTOR_MOTION_ACCELERATION_NATIVE_TICKS = ELEVATOR_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS;
+	
+	//Deadband defines when motion can start (i.e., minimum input required)
+	public final static double ELEVATOR_MOTOR_NEUTRAL_DEADBAND  = 0.000; //ADJUST
+	
+	public static final int ELEVATOR_INCHES_PER_NATIVE_TICKS = (int) ELEVATOR_SPROCKET_CIRCUMFERENCE_INCHES/ELEVATOR_MOTOR_NATIVE_TICKS_PER_REV;
+
 	// The magic number 1023 is in the SRM based on the characteristics of the TalonSRX
 	// It is likely based on the internal workings of the A-to-D conversions, but the details
 	// are not important at this point; just consider it a scaling factor to make the numbers
@@ -106,16 +95,23 @@ public class RobotMap
 	public static double elevatorMotorKd = 10 * elevatorMotorKp;
 	public static int    elevatorMotorIZone = 0;
 
-// The left and right sides may not be precisely balanced in terms of
-// friction at really low speeds. We would like fine control to be balanced
-// so the neutral deadband is adjusted to determine when the motors start
-// moving on each side. This also prevents the motor from moving when
-// really small commands are passed through.
-//
-// The values are determined empirically by simply driving the motors slowly
-// until they first start to move on one side and not the other. Increase the
-// values until the desired response is achieved.
-	public final static double ELEVATOR_MOTOR_NEUTRAL_DEADBAND  = 0.000; //ADJUST
+	
+    //Ramp Subsystem Motor Ports
+  	public final static int LEFT_RAMP_MOTOR_ID = 1;
+  	public final static int RIGHT_RAMP_MOTOR_ID = 2;
+  	
+  	//Ramp Subsystem Servo Port
+  	public final static int RAMP_RELEASE_SERVO_ID = 1;
+	
+	
+	//DriveSubystem Motors ports
+	public final static int LEFT_DRIVE_MOTOR_FRONT_ID  = 13;
+	public final static int LEFT_DRIVE_MOTOR_REAR_ID   = 14;
+	public final static int RIGHT_DRIVE_MOTOR_FRONT_ID = 11;
+	public final static int RIGHT_DRIVE_MOTOR_REAR_ID  = 12;
+
+	
+
 	
 	// DriveSubsystem Motor Directions
 	// Assuming a single stage gearbox and motors mounted on

@@ -205,7 +205,11 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 	
 	public int inchesToUnits(double inches)
 	{
-		return (int) (inches/RobotMap.INCH_EXTENSION_ROT);
+		return (int) (inches/RobotMap.ELEVATOR_INCHES_PER_NATIVE_TICKS);
+	}
+	public double unitsToInches(int units)
+	{
+		return (double)(units) * RobotMap.ELEVATOR_INCHES_PER_NATIVE_TICKS;
 	}
 	
 	public void addToPosition(double joyStickVal)
