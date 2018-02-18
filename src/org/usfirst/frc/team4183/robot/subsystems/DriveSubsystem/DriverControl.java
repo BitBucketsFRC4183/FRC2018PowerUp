@@ -49,6 +49,10 @@ public class DriverControl extends Command
     	{
     		return CommandUtils.stateChange(this, new AlignLock());
     	}
+    	else if (Robot.oi.btnMoveByTest.get())
+    	{
+    		return CommandUtils.stateChange(this, new MoveBy(36.0,5.0));
+    	}
     	
         return false;
     }
