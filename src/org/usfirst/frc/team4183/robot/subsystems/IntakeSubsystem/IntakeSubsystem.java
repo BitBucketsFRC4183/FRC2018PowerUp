@@ -9,6 +9,7 @@ import org.usfirst.frc.team4183.robot.Robot;
 import org.usfirst.frc.team4183.robot.RobotMap;
 import org.usfirst.frc.team4183.robot.subsystems.BitBucketsSubsystem;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -21,6 +22,10 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 	private final WPI_TalonSRX rightIntakeMotor; 
 	private final DoubleSolenoid intakegate;
 	
+	private final DigitalInput leftMaxLimit;
+	private final DigitalInput leftMinLimit;
+	private final DigitalInput rightMaxLimit;
+	private final DigitalInput rightMinLimit;
 	
 	private double timeCurrLimitInit = 0;
 	boolean currentLimitAct = false;
@@ -43,9 +48,34 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 
 		intakegate = new DoubleSolenoid(RobotMap.INTAKE_PNEUMA_OPEN_CHANNEL, RobotMap.INTAKE_PNEUMA_CLOSED_CHANNEL);
 		
+		leftMaxLimit = new DigitalInput(RobotMap.INTAKE_LIMIT_LEFT_MAX_ID);
+		leftMinLimit = new DigitalInput(RobotMap.INTAKE_LIMIT_LEFT_MIN_ID);
+		rightMaxLimit = new DigitalInput(RobotMap.INTAKE_LIMIT_RIGHT_MAX_ID);
+		rightMinLimit = new DigitalInput(RobotMap.INTAKE_LIMIT_RIGHT_MIN_ID);
+		
 		
 		solenoids.add(intakegate);
 		
+	}
+	
+	//checks to see if the either of the Min Limit Switches are hit for the pneumatics
+	public boolean getMinLimit()
+	{
+		if (leftMinLimit.get() || rightMinLimit.get())
+		{
+			return true;
+		}
+		return false;
+	}
+	
+	//checks to see if either of the Max Limit Switches are hit for the pneumatics
+	public boolean getMaxLimit()
+	{
+		if (leftMaxLimit.get() || rightMaxLimit.get())
+		{
+			return true;
+		}
+		return false;
 	}
 	
 	public boolean getLastCurrent()
@@ -132,6 +162,8 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 	public void periodic() {
 		// TODO Auto-generated method stub
 		SmartDashboard.putNumber("Intake Current", Robot.intakeSubsystem.getCurrentMax());
+		SmartDashboard.putBoolean("Min Limit Intake", Robot.intakeSubsystem.getMinLimit());
+		SmartDashboard.putBoolean("Max Limit Intake", Robot.intakeSubsystem.getMaxLimit());
 	}
 	@Override
 	public void diagnosticsExecute() {
