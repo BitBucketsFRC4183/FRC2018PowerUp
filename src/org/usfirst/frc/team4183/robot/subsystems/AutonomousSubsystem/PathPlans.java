@@ -98,11 +98,11 @@ public class PathPlans
 		case NONE:
 			break;
 		case TEST0:
-			System.out.println("TEST0 PATH SELECTED");			
+			//System.out.println("TEST0 PATH SELECTED");			
 			trajectory = PathPlans.testTrajectory0;			
 			break;
 		default:
-			System.out.println("BAD PATH CHOICE");
+			//System.out.println("BAD PATH CHOICE");
 			break;
 		
 		}
