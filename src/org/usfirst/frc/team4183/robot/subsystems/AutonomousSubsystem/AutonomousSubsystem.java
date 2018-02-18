@@ -11,9 +11,6 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 /**
  *
  */
@@ -33,7 +30,7 @@ public class AutonomousSubsystem extends BitBucketsSubsystem
 	// and then a way of kicking it off when commanded from the Robot
 	// passing through autonomousInit
 	
-	public static  SendableChooser<Integer> positionChooser;		/// TODO: use position type
+	private static SendableChooser<Positions.StartingPosition> startingPosition;
 
 	// Is this a re-hash of the CommandGroup concept or is it more
 	// ordered and state like? The fact that a re-plan can interject
@@ -85,21 +82,20 @@ public class AutonomousSubsystem extends BitBucketsSubsystem
 	// Nothing in here now...it's pretty much a dummy,
 	// just to make the state machine work.
 	
-	private static SendableChooser<Positions.StartingPosition> startingPosition;
-
-	
 	private static AutoTaskDescriptor currentDriveTask;
 	
 	public AutonomousSubsystem()
-	{				
-		positionChooser = new SendableChooser<Integer>();
-		positionChooser.addDefault( "None", 0);
-		positionChooser.addObject( "Left", 1);
-		positionChooser.addObject( "Center", 2);
-		positionChooser.addObject( "Right", 3);
-		SmartDashboard.putData( "Starting Position", positionChooser);
-		
+	{						
 		currentDriveTask = new AutoTaskDescriptor();
+		
+		startingPosition = new SendableChooser<Positions.StartingPosition>();
+		startingPosition.addDefault("Center", Positions.StartingPosition.CENTER);
+		startingPosition.addObject("Left", Positions.StartingPosition.LEFT);
+		startingPosition.addObject("Right", Positions.StartingPosition.RIGHT);
+		
+		SmartDashboard.putData("StartingPosition", startingPosition);
+		
+		
 	}
 
 	public void initialize()
@@ -107,22 +103,8 @@ public class AutonomousSubsystem extends BitBucketsSubsystem
 		PathPlans.initialize();		
 	}
 	
-    public void initDefaultCommand() 
-    {
 	private static Positions.GenericPositions scalePosition;
 	private static Positions.GenericPositions switchPosition;
-	
-	
-	public AutonomousSubsystem()
-	{
-		startingPosition = new SendableChooser<Positions.StartingPosition>();
-		startingPosition.addDefault("Center", Positions.StartingPosition.CENTER);
-		startingPosition.addObject("Left", Positions.StartingPosition.LEFT);
-		startingPosition.addObject("Right", Positions.StartingPosition.RIGHT);
-		
-		SmartDashboard.putData(startingPosition);
-		
-	}
 	
 	public void convertGameData()
 	{
@@ -132,14 +114,28 @@ public class AutonomousSubsystem extends BitBucketsSubsystem
 		
 		if (gameData.length() > 0)
 		{
-			if (gameData.charAt(0) == 'L') switchPosition = GenericPositions.LEFT;
-			else switchPosition = GenericPositions.RIGHT;
-			if(gameData.charAt(1)== 'L') scalePosition = GenericPositions.LEFT;
-			else scalePosition = GenericPositions.RIGHT;
+			if (gameData.charAt(0) == 'L')
+			{
+				switchPosition = GenericPositions.LEFT;
+			}
+			else
+			{
+				switchPosition = GenericPositions.RIGHT;
+			}
+			
+			if(gameData.charAt(1)== 'L')
+			{
+				scalePosition = GenericPositions.LEFT;
+			}
+			else
+			{
+				scalePosition = GenericPositions.RIGHT;
+			}
 		}
 	}
 	
-    public void initDefaultCommand() {
+    public void initDefaultCommand() 
+    {
         setDefaultCommand(new Idle());
     }
 
