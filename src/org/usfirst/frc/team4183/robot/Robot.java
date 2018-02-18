@@ -8,7 +8,7 @@ package org.usfirst.frc.team4183.robot;
 import java.util.HashSet;
 import java.util.Set;
 import org.usfirst.frc.team4183.robot.Robot.RunMode;
-import org.usfirst.frc.team4183.robot.subsystems.AutonomousSubsystem.Scripter;
+import org.usfirst.frc.team4183.robot.subsystems.AutonomousSubsystem.RunScript;
 import org.usfirst.frc.team4183.robot.subsystems.AutonomousSubsystem.AutonomousSubsystem;
 import org.usfirst.frc.team4183.robot.subsystems.DriveSubsystem.DriveSubsystem;
 import org.usfirst.frc.team4183.robot.subsystems.ElevatorSubsystem.ElevatorSubsystem;
@@ -62,9 +62,7 @@ public class Robot extends IterativeRobot {
 	
 	public static LightingControl lightingControl;	
 	public static NavxIMU imu;
-	
-	public SendableChooser<Integer> positionChooser;
-	
+		
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
@@ -73,47 +71,30 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		oi = OI.instance();
 		
-		// Always instantiate drive and intake
+		// Always instantiate the subsystems for this robot
+		// Auto subsystem is constructed last as it may want to reference the others
+		// (Not a best practice)
 		driveSubsystem = new DriveSubsystem();
-		intakeSubsystem = new IntakeSubsystem();
-		autonomousSubsystem = new AutonomousSubsystem();
+		//intakeSubsystem = new IntakeSubsystem();
 		visionSubsystem = new VisionSubsystem();
-		rampSubsystem = new RampSubsystem();
-		
-		
-        /// WARNING WARNING WARNING: ONLY ONE
-		elevatorSubsystem = new ElevatorSubsystem();
+		//rampSubsystem = new RampSubsystem();		
 		//elevatorSubsystem = new ElevatorSubsystem();
-		//springShooterSubsystem = new SpringShooterSubsystem();
-		
-		positionChooser = new SendableChooser<Integer>();
-		positionChooser.addDefault( "None", 0);
-		positionChooser.addObject( "Left", 1);
-		positionChooser.addObject( "Center", 2);
-		positionChooser.addObject( "Right", 3);
-		SmartDashboard.putData( "AutoChooser", positionChooser);
-		
-		
+				
 		imu = new NavxIMU();
 		lightingControl = new LightingControl();
+		
+		autonomousSubsystem = new AutonomousSubsystem();
+		autonomousSubsystem.initialize();
 				
 		// Add all subsystems for debugging
 		addSubsystemToDebug(driveSubsystem);
-        addSubsystemToDebug(intakeSubsystem);
+        //addSubsystemToDebug(intakeSubsystem);
         addSubsystemToDebug(visionSubsystem);
         addSubsystemToDebug(autonomousSubsystem);
-
-        
-        /// WARNING WARNING WARNING: ONLY ONE
-        //addSubsystemToDebug(wheelShooterSubsystem);
-        addSubsystemToDebug(elevatorSubsystem);
+        //addSubsystemToDebug(elevatorSubsystem);
 		showDebugInfo();		
 		
         CameraServer.getInstance().startAutomaticCapture();
-        
-        SmartDashboard.putNumber("Kp", 0.016);
-        SmartDashboard.putNumber("Ki", 0.0);
-        SmartDashboard.putNumber("Kd", 0.0);
 	}
 	
 	private void setSubsystemsDebug() 
@@ -150,10 +131,6 @@ public class Robot extends IterativeRobot {
 	public void autonomousInit() {
 		runMode = RunMode.AUTO;
 		oi.setAutoMode();
-
-		int position = positionChooser.getSelected();
-		if( position != 0)
-			(new Scripter( positionChooser.getSelected())).start();
 	}
 	/**
 	 * This function is called periodically during autonomous.
@@ -167,7 +144,6 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopInit() {
 		runMode = RunMode.TELEOP;
-		// Set up OI for teleop mode
 		oi.setTeleopMode();
 		
 	}
@@ -198,8 +174,7 @@ public class Robot extends IterativeRobot {
 		runWatch.start();
 		Scheduler.getInstance().run();	
 		runWatch.stop();
-				
-		//hardwareStatusSubsystem.subsystemStatusCheck();
+
 	}
 	
 	// Called periodically all the time (regardless of mode)

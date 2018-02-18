@@ -2,8 +2,17 @@ package org.usfirst.frc.team4183.robot;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 
-public class RobotMap {
-
+public class RobotMap 
+{
+	public static double inch2Meter(double inch)
+	{
+		return 0.3048 * inch / 12.0; 
+	}
+	public static double meter2inch(double meter)
+	{
+		return 12.0 * meter / 0.3048; 
+	}
+	
 	public final static int PRIMARY_PID_LOOP  = 0; // Constants to support new Talon interface types
 	public final static int CASCADED_PID_LOOP = 1; // That should have been enumerated rather than int
 	public final static int CONTROLLER_TIMEOUT_MS = 100; // Default timeout to wait for configuration response
@@ -26,13 +35,24 @@ public class RobotMap {
 	public static final double INTAKE_MAX_CURRENT = 10;
 	
 	
-	// Nominal value of wheels on this robot (should be measured at the wheels with greatest contact to ground, not just assumed)
-	public static final double WHEEL_DIAMETER_INCHES = 6.0;
+	// Nominal value of wheels on this robot (measured from edge to edge of the blue nitrile tire)
+	public static final double WHEEL_DIAMETER_INCHES = 6.25;
 	public static final double WHEEL_CIRCUMFERENCE_INCHES = (WHEEL_DIAMETER_INCHES * Math.PI);
-	
-	public static final double MINUMUM_MOTOR_CURR = 1.25;
-	public static final double MOTOR_TEST_PERCENT = 0.5;
 
+	public static final double MAXIMUM_MOTION_ERROR_INCHES = 0.125;	// Convert into native ticks later
+
+	
+	public static final double MINUMUM_MOTOR_CURR = 1.25; 
+	public static final double MOTOR_TEST_PERCENT = 0.5; 	
+	
+	// Wheel track measured from inside edge to edge of blue nitrile tires in center position of robot
+	public static final double WHEEL_TRACK_INCHES = 24.25;
+	
+	// Ratio of circumference to track determined the turn angle
+	public static final double TRACK_TO_CIRCUMFERENCE_RATIO = WHEEL_TRACK_INCHES / WHEEL_DIAMETER_INCHES;
+	
+	public static final double WHEEL_ROTATION_PER_FRAME_DEGREES = TRACK_TO_CIRCUMFERENCE_RATIO / 360.0;
+	
 	//inches per revolution for Elevator
 	//Nominal diameter to the pin
 	public static final double ELEVATOR_SPROCKET_DIAMETER_INCHES  = 3;
@@ -49,10 +69,10 @@ public class RobotMap {
 	
 	
 	//DriveSubystem Motors ports
-	public final static int LEFT_DRIVE_MOTOR_FRONT_ID  = 13;
-	public final static int LEFT_DRIVE_MOTOR_REAR_ID   = 14;
-	public final static int RIGHT_DRIVE_MOTOR_FRONT_ID = 11;
-	public final static int RIGHT_DRIVE_MOTOR_REAR_ID  = 12;
+	public final static int LEFT_DRIVE_MOTOR_FRONT_ID  = 3;//13;
+	public final static int LEFT_DRIVE_MOTOR_REAR_ID   = 4;//14;
+	public final static int RIGHT_DRIVE_MOTOR_FRONT_ID = 1;//11;
+	public final static int RIGHT_DRIVE_MOTOR_REAR_ID  = 2;//12;
 
 	
 	//Magic Motion Constants for the Elevator Subsystem
@@ -87,10 +107,6 @@ public class RobotMap {
 // values until the desired response is achieved.
 	public final static double ELEVATOR_MOTOR_NEUTRAL_DEADBAND  = 0.000; //ADJUST
 	
-	
-	
-	
-	
 	// DriveSubsystem Motor Directions
 	// Assuming a single stage gearbox and motors mounted on
 	// interior with axle pointing outward. Using right hand
@@ -99,10 +115,6 @@ public class RobotMap {
 	//		INVERTED		not-inverted
 	public final static boolean LEFT_DRIVE_MOTOR_INVERSION_FLAG = true;
 	public final static boolean RIGHT_DRIVE_MOTOR_INVERSION_FLAG = false;
-	
-	
-	
-	
 	
 	// If positive controller command yields positive rotation and positive encoder speed
 	// then the motor sensor phase should be left false. If the encoder reads a negative
@@ -113,6 +125,13 @@ public class RobotMap {
 	
 	public final static FeedbackDevice DRIVE_MOTOR_FEEDBACK_DEVICE = FeedbackDevice.QuadEncoder;
 	public final static int DRIVE_MOTOR_NATIVE_TICKS_PER_REV = 8192;	// AMT-201 at 2048 pulses per rev
+	
+	public static final int DRIVE_MOTOR_MAX_CLOSED_LOOP_ERROR_TICKS = (int) (MAXIMUM_MOTION_ERROR_INCHES * DRIVE_MOTOR_NATIVE_TICKS_PER_REV / WHEEL_CIRCUMFERENCE_INCHES);
+	
+	public static final double DRIVE_MOTOR_NATIVE_TICKS_PER_FRAME_DEGREES = DRIVE_MOTOR_NATIVE_TICKS_PER_REV * WHEEL_ROTATION_PER_FRAME_DEGREES;
+	
+	public static final double DRIVE_MOTOR_OPEN_LOOP_RAMP_SEC   = 0.250;	// Second from neutral to full (easy on the gears)
+	public static final double DRIVE_MOTOR_CLOSED_LOOP_RAMP_SEC = 0.0;	    // No ramp rate on closed loop (use Motion Magic)
 	
 	// PIDF Constants for the DriveSubsystem are empirically derived using
 	// the techniques in the TalonSRX Software Reference Manual (2018 Section 12.6)
@@ -196,5 +215,8 @@ public class RobotMap {
 	public static final double DRIVESTRAIGHT_MIN_DRIVE = 0;
 	public static final double TURNBY_MIN_DRIVE = 0;
 	
+	public static final double MOTION_PROFILE_PERIOD_MS = 50;
+	public static final double MINIMUM_MOVE_FORWARD_INCH = 85;	/// TODO: Check This, front of bumper well across line
+
 
 }

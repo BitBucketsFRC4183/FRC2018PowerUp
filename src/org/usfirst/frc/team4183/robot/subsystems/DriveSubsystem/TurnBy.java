@@ -9,28 +9,41 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class PositionControl extends Command {
+public class TurnBy extends Command {
 
-    public PositionControl() {
-        // Use requires() here to declare subsystem dependencies
-        // eg. requires(chassis);
+	private double timeout_sec;
+	private double angle_deg;
+	
+    public TurnBy(double degrees, double aTimeout_sec) 
+    {
     	requires(Robot.driveSubsystem);
+    	
+    	angle_deg = degrees;
+    	
+    	timeout_sec = aTimeout_sec;
     }
 
     // Called just before this Command runs the first time
-    protected void initialize() {
-    	Robot.driveSubsystem.setupPositionControl();
+    protected void initialize() 
+    {
+    	Robot.driveSubsystem.resetMotion();
     }
 
     // Called repeatedly when this Command is scheduled to run
-    protected void execute() {
-    	Robot.driveSubsystem.setPos(3*RobotMap.WHEEL_CIRCUMFERENCE_INCHES);
+    protected void execute() 
+    {
+    	// Keep enforcing the current position request until we get there
+    	Robot.driveSubsystem.turn_degrees(angle_deg);
     }
 
     // Make this return true when this Command no longer needs to run execute()
-    protected boolean isFinished() {
-    	if(Robot.oi.btnExitPosControl.get()) {
-    		return CommandUtils.stateChange(this, new DriverControl());
+    protected boolean isFinished() 
+    {
+    	boolean timeout = (timeSinceInitialized() > timeout_sec);
+    	
+    	if (timeout || Robot.driveSubsystem.isTurnComplete()) 
+    	{
+    		return CommandUtils.stateChange(this, new Idle());
     		
     	}
     	return false;

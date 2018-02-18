@@ -165,12 +165,13 @@ public class VisionSubsystem extends Subsystem
 	}
 	
 	public boolean isRedAlliance() 
-	{
+	{   currentAllianceColor = driverStation.getAlliance();
 		return currentAllianceColor.equals(DriverStation.Alliance.Red);
 	}
 	
 	public boolean isBlueAlliance() 
 	{
+		currentAllianceColor = driverStation.getAlliance();
 		return currentAllianceColor.equals(DriverStation.Alliance.Blue);
 	}
 	

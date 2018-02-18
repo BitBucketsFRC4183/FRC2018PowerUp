@@ -2,6 +2,7 @@
 package org.usfirst.frc.team4183.robot.subsystems.DriveSubsystem;
 
 import org.usfirst.frc.team4183.robot.Robot;
+import org.usfirst.frc.team4183.robot.RobotMap;
 import org.usfirst.frc.team4183.robot.LightingControl;
 import org.usfirst.frc.team4183.robot.LightingControl.LightingObjects;
 import org.usfirst.frc.team4183.utils.CommandUtils;
@@ -47,10 +48,6 @@ public class DriverControl extends Command
     	else if(Robot.oi.btnAlignLock.get()) 
     	{
     		return CommandUtils.stateChange(this, new AlignLock());
-    	}
-    	else if(Robot.oi.btnPosControl.get()) 
-    	{
-    		return CommandUtils.stateChange(this, new PositionControl());
     	}
     	
         return false;

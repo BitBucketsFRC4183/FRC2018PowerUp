@@ -2,6 +2,12 @@
 package org.usfirst.frc.team4183.robot.subsystems.DriveSubsystem;
 
 import org.usfirst.frc.team4183.robot.Robot;
+import org.usfirst.frc.team4183.robot.subsystems.AutonomousSubsystem.AutonomousSubsystem;
+import org.usfirst.frc.team4183.robot.subsystems.AutonomousSubsystem.AutonomousSubsystem.AutoTaskDescriptor;
+import org.usfirst.frc.team4183.utils.CommandUtils;
+
+import com.ctre.phoenix.motion.SetValueMotionProfile;
+
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
@@ -11,26 +17,61 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class AutoControl extends Command 
 {	
+	AutoTaskDescriptor currentDriveTask;
+	
     public AutoControl() 
     {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     	requires( Robot.driveSubsystem);
+    	
     }
 
     // Called just before this Command runs the first time
     protected void initialize() 
     {
+    	// Each time we re-enter AutoControl, reset the drive subsystem encoder
+    	// states to allow for relative motion (the AutonomousSubsystem is
+    	// responsible for knowing the absolute state)
+    	Robot.driveSubsystem.resetMotion();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() 
     {
+    	// For all cases, determine what we are being asked to do
+    	// NOTE: Each of the following Drive commands should return to
+    	// AutoControl when the run-mode is auto, otherwise they should
+    	// return to Idle when complete.
+    	//
+    	// Ask the AutonomousSubsystem what we should be doing right now
+    	// But hold on to it until cycle is complete
+    	currentDriveTask = AutonomousSubsystem.getDriveTask();
+    	switch (currentDriveTask.task)
+    	{
+    	case MOVE_BY:
+    		Robot.driveSubsystem.move_inches(currentDriveTask.value);
+    		AutonomousSubsystem.setDriveTaskComplete(Robot.driveSubsystem.isMoveComplete());
+    		break;
+    	case TURN_BY:
+    		Robot.driveSubsystem.turn_degrees(currentDriveTask.value);
+    		AutonomousSubsystem.setDriveTaskComplete(Robot.driveSubsystem.isTurnComplete());
+    		break;
+    	default:
+    		break;
+    	}
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() 
     {
+    	// If the auto mode is turned off, go back to Idle to determine
+    	// the correct state
+    	if (Robot.runMode != Robot.RunMode.AUTO)
+       	{
+       		return CommandUtils.stateChange(this, new Idle());
+       	} 	
+   	
         return false;
     }
 

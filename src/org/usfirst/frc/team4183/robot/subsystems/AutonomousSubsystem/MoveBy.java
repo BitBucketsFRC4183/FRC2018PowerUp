@@ -11,15 +11,15 @@ import edu.wpi.first.wpilibj.command.Command;
 
 
 
-public class TurnBy extends Command 
+public class MoveBy extends Command 
 {
 	private double timeout_sec;
 	
-	public TurnBy( double angle_deg, double aTimeout_sec) 
+	public MoveBy( double distanceInch, double aTimeout_sec) 
 	{		
 		requires( Robot.autonomousSubsystem);
 		
-		AutonomousSubsystem.setDriveTask(AutoTasks.TURN_BY, angle_deg);
+		AutonomousSubsystem.setDriveTask(AutoTasks.MOVE_BY, distanceInch);
 		timeout_sec = aTimeout_sec;
 	}
 
@@ -39,19 +39,18 @@ public class TurnBy extends Command
 	@Override
 	protected boolean isFinished() 
 	{
-		// TODO: Determine if something more interesting to do
-		// has popped up (e.g., re-planned goes back to idle
-		// for the decision of what to do next.
-		boolean replan = false;
+		boolean replan = AutonomousSubsystem.isPlanning();
 		
-		// Wait for standby or timeout
+		// Wait for standby (i.e., done), timeout, or new plan
 		AutoTaskDescriptor currentDriveTask = AutonomousSubsystem.getDriveTask();
 		boolean timeout = (timeSinceInitialized() > timeout_sec);
 		
-		// If timeout, then force subsystem to stop task; if standby it already stopped
-		AutonomousSubsystem.setDriveTaskComplete(true);
+		// If timeout, then force subsystem to stop task, if standby the it already stopped
+		AutonomousSubsystem.setDriveTaskComplete(timeout || replan);
 		
-		if (replan || timeout || (currentDriveTask.task == AutoTasks.STANDBY))
+		if (AutonomousSubsystem.isPlanning() || 
+		    timeout || 
+		    (currentDriveTask.task == AutoTasks.STANDBY))
 		{
 			// Go back to idle to decide what is next, if anything
 			return CommandUtils.stateChange(this, new Idle());

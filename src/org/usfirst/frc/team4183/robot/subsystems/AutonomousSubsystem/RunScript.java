@@ -6,14 +6,14 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class Scripter extends Command {
+public class RunScript extends Command {
 			
 	// These values written by "MeasureGear"
 	static double measuredDistance_inch;    // inch
 	static double measuredYaw_deg;          // gives Robot pose in target C.S.; +val means Robot sitting CCW (viewed from top)
 	
 	private int pc = 0;
-	private final boolean debug = false;
+	private final boolean debug = true;
 	private final int position;
 	
 	// To see the Scripter instruction set documentation, 
@@ -161,14 +161,14 @@ public class Scripter extends Command {
 	// e.g. TurnBy 5, DriveStraight 3.
 	// Test big moves to make sure it behaves & settles.
 	// e.g. TurnBy 60, DriveStraight 48.
-	private String[][] tuneScript = {
+	static public String[][] tuneScript = {
 			{"",        "BranchOnColorAndPosition BlueLeft BlueCntr Noop RedLeft RedCntr Noop"},
 			{"BlueLeft",	"TurnBy 5.0" },
 			{"",			"TurnBy -5.0"},
 			{"",			"End"},
 			{"BlueCntr",	"TurnBy 60.0"},
 			{"",			"TurnBy -60.0"},
-			{"", 			"End"},
+			{"", 			"End"},		
 			{"RedLeft",		"DriveStraight 5.0"},
 			{"",			"DriveStraight -5.0"},
 			{"",			"End"},
@@ -186,14 +186,17 @@ public class Scripter extends Command {
 	 * Set this variable to the script you actually want to execute!!!
 	 * 
 	 *****************************************************************/
-	private String[][] script = tuneScript;
+	private String[][] script = tuneScript; // Initial script (updated at construction)
 	
 	
 	// position 1,2,3 are Left, Center, Right respectively
-    public Scripter( int position) {
-    	// No "requires" - this one stands apart - it's a Meta-State.
-    	// This is start()-ed from Robot.autonomousInit().
+    public RunScript( int position, String[][] aScript) {
+    	// NO requires in this case
+    	// This is a meta state that puts the auto system into other states
+    	
     	this.position = position;
+    	
+    	this.script = aScript;
     }
 
     protected void initialize() {
@@ -272,7 +275,7 @@ public class Scripter extends Command {
     	}    	
     }
     
-    private void doGoto( String label) {
+	private void doGoto( String label) {
     	if(debug)
     		System.out.format( "Scripter.doGoto %s\n", label);
     	
@@ -317,7 +320,11 @@ public class Scripter extends Command {
     	if(debug)
     		System.out.format("Scripter.branchOnColorAndPosition %s %s %s %s %s %s\n", 
     				lblB1, lblB2, lblB3, lblR1, lblR2, lblR3);
-    	
+
+    	if(debug)
+    		System.out.format("Scripter.branchOnColorAndPosition Position = %d Color %s\n", 
+    				position, Robot.visionSubsystem.isBlueAlliance()?"Blue":"Red");
+   	
     	if(Robot.visionSubsystem.isBlueAlliance() && position == 1) {
     		doGoto(lblB1);
     	}
@@ -342,7 +349,7 @@ public class Scripter extends Command {
     private void turnBy( double yaw) {
     	if(debug)
     		System.out.format("Scripter.turnBy %f\n", yaw);
-    	(new TurnBy( yaw)).start();
+    	(new TurnByOld( yaw)).start();
     }
     
     private void driveStraight( double dist) {
@@ -350,7 +357,7 @@ public class Scripter extends Command {
     		System.out.format( "Scripter.driveStraight %f\n", dist);
     	(new DriveStraight( dist)).start();
     }
-
+    
     private void enableVisionGear() {
     	if(debug)
     		System.out.println("Scripter.enableVisionGear");
@@ -360,7 +367,7 @@ public class Scripter extends Command {
     private void yawCorrect() {
     	if(debug)
     		System.out.format("Scripter.yawCorrect %f\n", measuredYaw_deg);
-    	(new TurnBy( -measuredYaw_deg)).start();
+    	(new TurnByOld( -measuredYaw_deg)).start();
     }
     
     private void distanceCorrect( double dRemain) {

@@ -1,6 +1,5 @@
 package org.usfirst.frc.team4183.robot.subsystems.AutonomousSubsystem;
 
-import org.usfirst.frc.team4183.robot.OI;
 import org.usfirst.frc.team4183.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
