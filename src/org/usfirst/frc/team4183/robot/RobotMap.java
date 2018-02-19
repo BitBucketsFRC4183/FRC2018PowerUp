@@ -93,11 +93,17 @@ public class RobotMap
 	// It is likely based on the internal workings of the A-to-D conversions, but the details
 	// are not important at this point; just consider it a scaling factor to make the numbers
 	// work for the specific controllers we have.
-	public static double elevatorMotorKf = 0.03997911175;
-	public static double elevatorMotorKp = 0.0821686747;		
-	public static double elevatorMotorKi = 0.0;
-	public static double elevatorMotorKd = 10 * elevatorMotorKp;
-	public static int    elevatorMotorIZone = 0;
+	//
+	// NOTE: These values were found empirically running the Mini-CIM on a 9:1 Versa-Planetary gear box (NO LOAD)
+	// Followup testing will adjust these values based on the weight of the elevator
+	// It is possible that the constants will be different for up and down, and even across the first stage transition.
+	// We only get two sets per Talon and probably cannot switch the value fast enough to handling the
+	// transition, so will need to be satisfied with just and up/down set if it comes down (or up) to that.
+	public static double elevatorMotorKf = 0.111544836;
+	public static double elevatorMotorKp = 0.1778688524;		
+	public static double elevatorMotorKi = 0.001;
+	public static double elevatorMotorKd = 5.336065573;
+	public static int    elevatorMotorIZone = 300;
 
 	
     //Ramp Subsystem Motor Ports
