@@ -18,7 +18,7 @@ public class OpenOff extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	Robot.intakeSubsystem.opengate();
+    	Robot.intakeSubsystem.openMandible();
     	Robot.intakeSubsystem.setIntakeMotorSpeed(0.0);
     }
 
