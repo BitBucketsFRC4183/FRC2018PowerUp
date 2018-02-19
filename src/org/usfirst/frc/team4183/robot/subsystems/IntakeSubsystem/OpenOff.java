@@ -13,6 +13,7 @@ public class OpenOff extends Command {
     public OpenOff() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
+    	requires(Robot.intakeSubsystem);
     }
 
     // Called just before this Command runs the first time
@@ -27,7 +28,7 @@ public class OpenOff extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	if(Robot.oi.btnIdle.get())
+    	if(Robot.oi.btnIdle.get() || Robot.oi.btnCloseGate.get())
     		return CommandUtils.stateChange(this, new Idle());
     	else if(Robot.oi.btnInIntake.get())
     		return CommandUtils.stateChange(this, new OpenIn());
@@ -47,5 +48,6 @@ public class OpenOff extends Command {
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
+    	end();
     }
 }
