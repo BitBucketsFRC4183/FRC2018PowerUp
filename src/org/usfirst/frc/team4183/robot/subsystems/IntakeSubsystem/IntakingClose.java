@@ -27,8 +27,10 @@ public class IntakingClose extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     //	Robot.intakeSubsystem.setMotorSpeed(SmartDashboard.getNumber("Shooting Speed", 0));    
-    	Robot.intakeSubsystem.setMotorSpeed(-0.8);   
+    	Robot.intakeSubsystem.setMotorSpeed(-0.8);
+    	Robot.oi.sbtnIntakeThroat.push();
      	Robot.intakeSubsystem.checkCurrentLimit(timeSinceInitialized());
+     	
     	}
     
     
@@ -63,6 +65,8 @@ public class IntakingClose extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
+    	Robot.oi.sbtnOuttakeThroat.release();
+    	Robot.oi.sbtnCloseMandible.release();
     }
 
     // Called when another command which requires one or more of the same

@@ -22,7 +22,18 @@ public class Idle extends Command{
 	
 	public void execute()
 	{
-		
+		if (Robot.oi.sbtnIntakeThroat.get())
+		{
+			Robot.elevatorSubsystem.intakeThroat();
+		}
+		else if (Robot.oi.sbtnOuttakeThroat.get())
+		{
+			Robot.elevatorSubsystem.outtakeThroat();
+		}
+		else
+		{
+			Robot.elevatorSubsystem.disableThroat();
+		}
 	}
 	
 	protected boolean isFinished()
@@ -42,6 +53,11 @@ public class Idle extends Command{
 			return CommandUtils.stateChange(this, new Brake());
 		}
 		*/
+		
+		if (Math.abs(Robot.oi.leftRampAxis.get()) > .06)
+		{
+			return CommandUtils.stateChange(this, new Reposition());
+		}
 		return false;
 	}
 

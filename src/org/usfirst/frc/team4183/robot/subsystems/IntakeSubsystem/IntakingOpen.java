@@ -27,6 +27,7 @@ public class IntakingOpen extends Command {
     protected void execute() {
     //	Robot.intakeSubsystem.setMotorSpeed(SmartDashboard.getNumber("Shooting Speed", 0));
     	Robot.intakeSubsystem.setMotorSpeed(-0.8);
+    	Robot.oi.sbtnIntakeThroat.push();
     	//if (Robot.elevatorSubsystem.posCloseToInit())
     	{
     		//Robot.oi.sbtnIntakeThroat.push();
@@ -53,7 +54,8 @@ public class IntakingOpen extends Command {
     }
 
     // Called once after isFinished returns true
-    protected void end() {
+    protected void end() {Robot.oi.sbtnOuttakeThroat.release();
+	Robot.oi.sbtnCloseMandible.release();
     }
 
     // Called when another command which requires one or more of the same

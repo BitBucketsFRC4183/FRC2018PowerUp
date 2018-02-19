@@ -82,7 +82,7 @@ public class Robot extends IterativeRobot {
 		intakeSubsystem = new IntakeSubsystem();
 		visionSubsystem = new VisionSubsystem();
 		//rampSubsystem = new RampSubsystem();		
-		//elevatorSubsystem = new ElevatorSubsystem();
+		elevatorSubsystem = new ElevatorSubsystem();
 				
 		imu = new NavxIMU();
 		lightingControl = new LightingControl();
