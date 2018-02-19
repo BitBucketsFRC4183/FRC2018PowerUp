@@ -677,10 +677,14 @@ public class DriveSubsystem extends BitBucketsSubsystem
 	}
 
 	// Move is complete when we are within tolerance and can consider starting the next move
-	public boolean isMoveComplete()	// At timeout should be used with this
+	public boolean isMoveComplete(double distance_inches)	// At timeout should be used with this
 	{
-		return (Math.abs(leftFrontMotor.getClosedLoopError(RobotMap.PRIMARY_PID_LOOP))  < RobotMap.DRIVE_MOTOR_MAX_CLOSED_LOOP_ERROR_TICKS) &&
-			   (Math.abs(rightFrontMotor.getClosedLoopError(RobotMap.PRIMARY_PID_LOOP)) < RobotMap.DRIVE_MOTOR_MAX_CLOSED_LOOP_ERROR_TICKS);
+		int ticks = (int)inchesToNativeTicks(distance_inches);
+		int errorL = (int) Math.abs(ticks - leftFrontMotor.getSelectedSensorPosition(RobotMap.PRIMARY_PID_LOOP));
+		int errorR = (int) Math.abs(ticks - rightFrontMotor.getSelectedSensorPosition(RobotMap.PRIMARY_PID_LOOP));
+		System.out.printf("%d %d\n", errorL, errorR);
+		return (errorL  < RobotMap.DRIVE_MOTOR_MAX_CLOSED_LOOP_ERROR_TICKS) &&
+			   (errorR < RobotMap.DRIVE_MOTOR_MAX_CLOSED_LOOP_ERROR_TICKS);
 	}
 
 	public void turn_degrees(double angle_degrees)

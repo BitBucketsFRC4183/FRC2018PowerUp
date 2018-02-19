@@ -1,6 +1,7 @@
 package org.usfirst.frc.team4183.robot.subsystems.AutonomousSubsystem;
 
 import org.usfirst.frc.team4183.robot.Robot;
+import org.usfirst.frc.team4183.robot.subsystems.DriveSubsystem.AlignLock;
 import org.usfirst.frc.team4183.robot.subsystems.DriveSubsystem.DriveProfile;
 import org.usfirst.frc.team4183.utils.CommandUtils;
 import org.usfirst.frc.team4183.utils.RobotTrajectory;
@@ -18,6 +19,7 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class Idle extends Command {
 
+	static int counter = 0;
     public Idle() 
     {
     	requires( Robot.autonomousSubsystem);
@@ -37,6 +39,17 @@ public class Idle extends Command {
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() 
     {
+    	if (Robot.runMode == Robot.RunMode.AUTO)
+    	{
+    		++counter;
+    		if (counter == 1) 
+    		{
+    			AutoTasks blah = new AutoTasks();
+    			blah.start();
+    		}
+    	}
+    	
+    	
     	// Auto Idle just keeps running, doing nothing until
     	// something tells us what is next; we dispatch the
     	// state change and expect that it will complete, timeout
@@ -47,39 +60,13 @@ public class Idle extends Command {
     	// planning cycle without any additional "fancy" synchronization
     	// techniques that could block the WPI scheduler which sequences
     	// the subsystem periodic and these commands, making the 
-    	if ( (AutonomousSubsystem.isPlanning() == false) && (Robot.runMode == Robot.RunMode.AUTO))
-    	{
-    		/// TODO: Get next auto step from subsystem
-    		/// TODO: Switch on step type to transition to new state
-    		
-    		AutonomousSubsystem.AutoTaskDescriptor nextTaskDescriptor = AutonomousSubsystem.getNextTask();
-    		
-    		switch (nextTaskDescriptor.task)
-    		{
-    		case MOVE_BY:
-    			return CommandUtils.stateChange(this, new MoveBy(nextTaskDescriptor.value, 5.0));	/// TODO: magic 5 second timeout
-    		case TURN_BY:
-    			return CommandUtils.stateChange(this, new TurnBy(nextTaskDescriptor.value, 5.0));	/// TODO: magic 5 second timeout
-    		case DRIVE_PROFILE:
-    			RobotTrajectory trajectory = PathPlans.getSelectedTrajectory();
-    			if (trajectory != null)
-    			{
-	    			return CommandUtils.stateChange(this, new DriveProfile(trajectory));
-    			}
-    			break;
-
-    		case STANDBY:
-    		default:
-    			break;
-    		}
-    		//    		int position = AutonomousSubsystem.positionChooser.getSelected();
-//    		return CommandUtils.stateChange(this, new RunScript( position, RunScript.tuneScript));
-    	}
-        return false;
+    	return false;
+    	
     }
 
     // Called once after isFinished returns true
     protected void end() {
+    	counter = 0;
     }
 
     // Called when another command which requires one or more of the same

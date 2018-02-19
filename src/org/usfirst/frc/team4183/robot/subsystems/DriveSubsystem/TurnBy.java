@@ -43,7 +43,7 @@ public class TurnBy extends Command {
     	
     	if (timeout || Robot.driveSubsystem.isTurnComplete()) 
     	{
-    		return CommandUtils.stateChange(this, new Idle());
+    		return CommandUtils.autoStateChange(this, new Idle());
     		
     	}
     	return false;

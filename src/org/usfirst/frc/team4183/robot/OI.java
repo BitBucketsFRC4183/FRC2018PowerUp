@@ -29,7 +29,8 @@ public class OI {
 	public final LogicalButton btnAlignLock = new ModalButton(driverController.bL1);
 	public final LogicalButton btnDriveLock = new ModalButton(driverController.bL2);	
 	public final LogicalButton btnStatus = new ModalButton(driverController.bTrackpad);
-	//public final LogicalButton btnSOMETHING = new ModalButton(driverController.bTriangle);
+	public final LogicalButton btnMoveByTest = new ModalButton(driverController.bTriangle); 
+
 	public final LogicalButton btn180 = new ModalButton(driverController.bCircle);
 	
 	// Manipulator Subsystem

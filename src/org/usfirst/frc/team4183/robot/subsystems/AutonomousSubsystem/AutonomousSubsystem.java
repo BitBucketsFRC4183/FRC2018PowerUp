@@ -7,6 +7,7 @@ import org.usfirst.frc.team4183.utils.Positions;
 import org.usfirst.frc.team4183.utils.Positions.GenericPositions;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -25,8 +26,8 @@ public class AutonomousSubsystem extends BitBucketsSubsystem
 
 	public void initialize()
 	{
+		//for(int a=0; a<100; a++) System.out.println("?!?!?!??!?!??!?!?!");
 		PathPlans.initialize();	
-		new AutoTasks();
 
 	}
 	

@@ -33,5 +33,11 @@ public class CommandUtils {
 		else
 			return false;
 	}
+	
+	public static boolean autoStateChange(Command fromState, Command toState) 
+	{
+		return (Robot.runMode == Robot.RunMode.AUTO)?true:stateChange(fromState, toState);
+		
+	}
 
 }
