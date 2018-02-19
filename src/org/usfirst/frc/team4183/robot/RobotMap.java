@@ -83,8 +83,11 @@ public class RobotMap
 	//Deadband defines when motion can start (i.e., minimum input required)
 	public final static double ELEVATOR_MOTOR_NEUTRAL_DEADBAND  = 0.000; //ADJUST
 	
-	public static final int ELEVATOR_INCHES_PER_NATIVE_TICKS = (int) ELEVATOR_SPROCKET_CIRCUMFERENCE_INCHES/ELEVATOR_MOTOR_NATIVE_TICKS_PER_REV;
+	public static final double ELEVATOR_INCHES_PER_NATIVE_TICKS = ELEVATOR_SPROCKET_CIRCUMFERENCE_INCHES / ELEVATOR_MOTOR_NATIVE_TICKS_PER_REV;
 
+	public static final double ELEVATOR_POSITION_TOLERANCE_INCH = 0.25;	/// TODO: What is possible and what do we want?
+	public static final int ELEVATOR_POSITION_TOLERANCE_NATIVE_TICKS = (int) (ELEVATOR_POSITION_TOLERANCE_INCH / ELEVATOR_INCHES_PER_NATIVE_TICKS); //50;	/// TODO: Convert from inches or meter tolerance
+	
 	// The magic number 1023 is in the SRM based on the characteristics of the TalonSRX
 	// It is likely based on the internal workings of the A-to-D conversions, but the details
 	// are not important at this point; just consider it a scaling factor to make the numbers
@@ -199,14 +202,15 @@ public class RobotMap
 	public final static int INTAKE_MOTOR_RIGHT_ID      = 9;
 	
 	
-	//public static final int SPRING_SHOOTER_MOTOR_A_ID = 7;
-	//public static final int SPRING_SHOOTER_MOTOR_B_ID = 8;
-	
 	public final static int ELEVATOR_MOTOR_A_ID = 7;
 	
 	//A is left, B Right
 	public final static int THROAT_MOTOR_A_ID = 3;
 	public final static int THROAT_MOTOR_B_ID = 6;
+
+	public static final double INTAKE_THROAT_SPEED_PERCENT  =  0.5;
+	public static final double OUTTAKE_THROAT_SPEED_PERCENT = -0.5;	/// TODO: May need to be higher to throw longer
+	
 	
 	//Elevator Pneumatics for Gear Box
 	public final static int ELEVATOR_PNEUMA_BRAKE_OPEN_CHANNEL = 2;
@@ -224,6 +228,6 @@ public class RobotMap
 	
 	public static final double MOTION_PROFILE_PERIOD_MS = 50;
 	public static final double MINIMUM_MOVE_FORWARD_INCH = 85;	/// TODO: Check This, front of bumper well across line
-
+	
 
 }

@@ -88,6 +88,7 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 	}
 	public void disable() {
 		setAllMotorsZero();
+    	closeMandible();
 	}
 	
 	public void rotatePow(double pow)
@@ -96,10 +97,10 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 		rightIntakeMotor.set(-pow);
 	}
 	
-	public void closegate() {
+	public void closeMandible() {
 		intakegate.set(DoubleSolenoid.Value.kReverse);
 	}
-	public void opengate() {
+	public void openMandible() {
 		intakegate.set(DoubleSolenoid.Value.kForward);
 	}
 	

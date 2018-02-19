@@ -14,13 +14,13 @@ public class Idle extends Command {
     public Idle() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
-    		requires(Robot.intakeSubsystem);	
+    	requires(Robot.intakeSubsystem);	
     }
 
     // Called just before this Command runs the first time
-    protected void initialize() {
-    	Robot.intakeSubsystem.disable();
-    	Robot.intakeSubsystem.closegate();
+    protected void initialize() 
+    {
+    	Robot.intakeSubsystem.disable();	// Turn everything off and close it
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -31,9 +31,10 @@ public class Idle extends Command {
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
    
-    	if ( Robot.runMode == Robot.RunMode.TELEOP) {
-    	return CommandUtils.stateChange(this, new Deployed());
-   	}
+    	if ( Robot.runMode != Robot.RunMode.DISABLED)	// Can deploy in any mode except disabled
+    	{
+    		return CommandUtils.stateChange(this, new Deployed());
+    	}
         return false;
     }
 

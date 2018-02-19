@@ -1,11 +1,9 @@
 package org.usfirst.frc.team4183.robot.subsystems.ElevatorSubsystem;
 
-import org.usfirst.frc.team4183.robot.Robot;
 import org.usfirst.frc.team4183.robot.RobotMap;
 import org.usfirst.frc.team4183.robot.subsystems.BitBucketsSubsystem;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
@@ -21,27 +19,26 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 	
 	private final DoubleSolenoid brakePneu;
 	
-	private final int UNITS_PER_FEET = 1000;
-	
-	private final int ENCODER_TICKS_REV = 2048;
-	
+	private final int UNITS_PER_FEET = 1000;		/// TODO: Remove this and use conversions from RobotMap
+		
 	static enum ElevatorPositions
 	{
+		/// TODO: Change to inches, millimeters or meters
 		SCALE(10000), SWITCH(1000), TRANS(500), INIT(0), MANUAL(-2), TRIGGER(600);
 		
-		private int units;
-		ElevatorPositions(int units)
+		private int nativeTicks;
+		ElevatorPositions(int nativeTicks)
 		{
-			this.units = units;
+			this.nativeTicks = nativeTicks;
 		}
 		
-		public int getUnits()
+		public int getNativeTicks()
 		{
-			return this.units;
+			return this.nativeTicks;
 		}
 	}
 	
-	public static final double timeUntilBrakeSec = .75;
+	public static final double timeUntilBrakeSec = .75;	/// TODO: Remove all brake concepts?
 	
 	public static int holdUnits = 0;
 	
@@ -50,7 +47,7 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 	
 	ElevatorPositions currentElevatorPosition = ElevatorPositions.INIT;
 	
-	//This is used to open the intake mandibles if the position is too close.
+	//This is used to open the intake mandible if the position is too close.
 
 	public ElevatorSubsystem()
 	{
@@ -107,22 +104,22 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 	
 	public void intakeThroat()
 	{
-		throatMotorA.set(ControlMode.PercentOutput,.5);
-		throatMotorB.set(ControlMode.PercentOutput,.5);
+		throatMotorA.set(ControlMode.PercentOutput, RobotMap.INTAKE_THROAT_SPEED_PERCENT);
+		throatMotorB.set(ControlMode.PercentOutput, RobotMap.INTAKE_THROAT_SPEED_PERCENT);
 	}
 	
 	public void outtakeThroat()
 	{
-		throatMotorA.set(ControlMode.PercentOutput,-.5);
-		throatMotorB.set(ControlMode.PercentOutput,-.5);
+		throatMotorA.set(ControlMode.PercentOutput, RobotMap.OUTTAKE_THROAT_SPEED_PERCENT);
+		throatMotorB.set(ControlMode.PercentOutput, RobotMap.OUTTAKE_THROAT_SPEED_PERCENT);
 	}
 	
-	public void setElevPos(ElevatorPositions elevPos)
+	public void setElevPos(ElevatorPositions elevPos)		/// TODO: inches, meters, what?
 	{
 		this.currentElevatorPosition = elevPos;
 	}
 	
-	public ElevatorPositions getElevPos()
+	public ElevatorPositions getElevPos()		/// TODO: inches, meeter, what?
 	{
 		return this.currentElevatorPosition;
 	}
@@ -130,24 +127,17 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 	//method that checks if the intake mandibles should be open
 	public boolean posGreaterThanMin()
 	{
-		if (elevatorMotorA.getSelectedSensorPosition(RobotMap.PRIMARY_PID_LOOP) > ElevatorPositions.TRIGGER.getUnits())
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		return (elevatorMotorA.getSelectedSensorPosition(RobotMap.PRIMARY_PID_LOOP) > ElevatorPositions.TRIGGER.getNativeTicks());
 	}
 	
 	public boolean closeToDesiredPos()
 	{
-	return (Math.abs(elevatorMotorA.getSelectedSensorPosition(RobotMap.PRIMARY_PID_LOOP)-currentElevatorPosition.getUnits()) < 50);
+		return (Math.abs(elevatorMotorA.getSelectedSensorPosition(RobotMap.PRIMARY_PID_LOOP)-currentElevatorPosition.getNativeTicks()) < RobotMap.ELEVATOR_POSITION_TOLERANCE_NATIVE_TICKS);
 	}
 	//returns true if the elevator is close to the floor Position
 	public boolean posCloseToInit()
 	{
-		if (Math.abs(elevatorMotorA.getSelectedSensorPosition(RobotMap.PRIMARY_PID_LOOP)-ElevatorPositions.INIT.getUnits()) < 50)
+		if (Math.abs(elevatorMotorA.getSelectedSensorPosition(RobotMap.PRIMARY_PID_LOOP)-ElevatorPositions.INIT.getNativeTicks()) < RobotMap.ELEVATOR_POSITION_TOLERANCE_NATIVE_TICKS)
 		{
 			return true;
 		}
@@ -213,8 +203,8 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 		return (double)(units) * RobotMap.ELEVATOR_INCHES_PER_NATIVE_TICKS;
 	}
 	
-	public void addToPosition(double joyStickVal)
-	{
+	public void addToPosition(double joyStickVal) /// TODO: Change concept to small rate control then capture position and hold
+	{											  /// otherwise the operator will have to continue to hold joystick and elevator will move
 		goToPosition((int)(elevatorMotorA.getSelectedSensorPosition(RobotMap.PRIMARY_PID_LOOP)+Math.floor(joyStickVal*deltaPos)));
 		
 	}

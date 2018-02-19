@@ -6,32 +6,40 @@ import org.usfirst.frc.team4183.utils.CommandUtils;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
- *
+ * Deployed is similar to IDLE but represents a non-disabled state relative to robot mode
  */
 public class Deployed extends Command {
 
     public Deployed() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
-    		requires(Robot.intakeSubsystem);	
+    	requires(Robot.intakeSubsystem);	
     }
 
-    // Called just before this Command runs the first time
-    protected void initialize() {
-    	Robot.intakeSubsystem.disable();
+    protected void releaseSoftButtons()
+    {
+    	Robot.oi.sbtnIntakeThroat.release();
     	Robot.oi.sbtnOuttakeThroat.release();
-    	Robot.oi.sbtnCloseMandible.release();
+    	Robot.oi.sbtnCloseMandible.release();    	
+    }
+    // Called just before this Command runs the first time
+    protected void initialize() 
+    {
+    	// At initial deployment disable the intake and stop pressing any soft buttons
+    	Robot.intakeSubsystem.disable();
+    	releaseSoftButtons();
     }
 
     // Called repeatedly when this Command is scheduled to run
-    protected void execute() {
+    protected void execute() 
+    {
     	if (Robot.oi.sbtnOpenMandible.get())
     	{
-    		Robot.intakeSubsystem.opengate();
+    		Robot.intakeSubsystem.openMandible();
     	}
     	else if (Robot.oi.sbtnCloseMandible.get())
     	{
-    		Robot.intakeSubsystem.closegate();
+    		Robot.intakeSubsystem.closeMandible();
     	}
     	Robot.elevatorSubsystem.disableThroat();
     	

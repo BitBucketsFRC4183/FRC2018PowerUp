@@ -22,17 +22,27 @@ public class Idle extends Command{
 	
 	public void execute()
 	{
-		if (Robot.oi.sbtnIntakeThroat.get())
+		boolean in  = Robot.oi.sbtnIntakeThroat.get();
+		boolean out = Robot.oi.sbtnOuttakeThroat.get();
+		if (in ^ out) // Require mutual exclusion (i.e., cannot be both buttons at same time
 		{
-			Robot.elevatorSubsystem.intakeThroat();
+			if (in)
+			{
+				Robot.elevatorSubsystem.intakeThroat();
+			}
+			else if (out)
+			{
+				Robot.elevatorSubsystem.outtakeThroat();
+			}
 		}
-		else if (Robot.oi.sbtnOuttakeThroat.get())
-		{
-			Robot.elevatorSubsystem.outtakeThroat();
-		}
-		else
+		else // Could be both on or both off (either way, disable)
 		{
 			Robot.elevatorSubsystem.disableThroat();
+			
+			if (in && out)
+			{
+				System.out.println("ERROR: Both Throat In and Out Commanded!");
+			}
 		}
 	}
 	
@@ -53,9 +63,10 @@ public class Idle extends Command{
 			return CommandUtils.stateChange(this, new Brake());
 		}
 		*/
-		
-		if (Math.abs(Robot.oi.leftRampAxis.get()) > .06)
-		{
+		/// Temporary code for testing linkage
+		/// TODO: magic 0.06
+		if (Math.abs(Robot.oi.leftRampAxis.get()) > .06)		/// TODO: Need comment here explaining that sharing joytick!
+		{														/// TODO: May want two instances with different names and put comment at definition
 			return CommandUtils.stateChange(this, new Reposition());
 		}
 		return false;
@@ -71,6 +82,7 @@ public class Idle extends Command{
 		end();
 	}
 	
+	/// TODO: Hidden state should be move to different file
 	public class Empty extends Idle
 	{
 
