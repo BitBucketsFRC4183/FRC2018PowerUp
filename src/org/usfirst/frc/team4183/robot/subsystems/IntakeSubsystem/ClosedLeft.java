@@ -36,6 +36,8 @@ public class ClosedLeft extends Command {
     		return CommandUtils.stateChange(this, new ClosedIn());
     	else if(Robot.oi.btnRightIntake.get()) 
     		return CommandUtils.stateChange(this, new ClosedRight());
+    	else if (Robot.oi.btnOpenGate.get())
+    		return CommandUtils.stateChange(this, new OpenLeft());
         return false;
     }
 

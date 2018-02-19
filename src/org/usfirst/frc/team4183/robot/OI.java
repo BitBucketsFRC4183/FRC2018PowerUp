@@ -38,12 +38,10 @@ public class OI {
 	public final LogicalButton btnCloseGate = new ModalButton(operatorController.bCross);
 	
 	public final LogicalButton btnOutIntake = new ModalButton(operatorController.bPovUp);
-	public final LogicalButton btnInIntake = new ModalButton(operatorController.bPovUp);
-	public final LogicalButton btnRightIntake = new ModalButton(operatorController.bPovUp);
-	public final LogicalButton btnLeftIntake = new ModalButton(operatorController.bPovUp);
+	public final LogicalButton btnInIntake = new ModalButton(operatorController.bPovDown);
+	public final LogicalButton btnRightIntake = new ModalButton(operatorController.bPovRight);
+	public final LogicalButton btnLeftIntake = new ModalButton(operatorController.bPovLeft);
 
-//	public final LogicalButton btnIntake = new ModalButton(operatorController.bCross);
-//	public final LogicalButton btnOuttake = new ModalButton(operatorController.bTriangle);
 	
 	public final LogicalButton btnIdle = new ModalButton(operatorController.bTrackpad);
 	

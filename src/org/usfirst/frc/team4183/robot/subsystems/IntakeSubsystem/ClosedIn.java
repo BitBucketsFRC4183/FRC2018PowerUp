@@ -35,6 +35,8 @@ public class ClosedIn extends Command {
     		return CommandUtils.stateChange(this, new ClosedLeft());
     	else if(Robot.oi.btnRightIntake.get())
     		return CommandUtils.stateChange(this, new ClosedRight());
+    	else if(Robot.oi.btnOpenGate.get())
+    		return CommandUtils.stateChange(this, new OpenIn());
         return false;
     }
 

@@ -35,6 +35,8 @@ public class ClosedOut extends Command {
     		return CommandUtils.stateChange(this, new ClosedRight());
     	else if(Robot.oi.btnLeftIntake.get())
     		return CommandUtils.stateChange(this, new ClosedLeft());
+    	else if(Robot.oi.btnOpenGate.get())
+    		return CommandUtils.stateChange(this, new OpenOut());
         return false;
     }
 
