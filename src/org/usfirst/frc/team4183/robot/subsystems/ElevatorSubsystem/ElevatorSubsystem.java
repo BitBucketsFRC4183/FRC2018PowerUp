@@ -57,6 +57,7 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 		elevatorMotorA = new TalonSRX(RobotMap.ELEVATOR_MOTOR_A_ID);
 		
 		throatMotorA = new TalonSRX(RobotMap.THROAT_MOTOR_A_ID);
+		throatMotorA.setInverted(true);
 		throatMotorB = new TalonSRX(RobotMap.THROAT_MOTOR_B_ID);
 		
 		brakePneu = new DoubleSolenoid(RobotMap.ELEVATOR_PNEUMA_BRAKE_CLOSE_CHANNEL,RobotMap.ELEVATOR_PNEUMA_BRAKE_OPEN_CHANNEL);
@@ -106,14 +107,14 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 	
 	public void intakeThroat()
 	{
-		throatMotorA.set(ControlMode.PercentOutput,-.1);
-		throatMotorB.set(ControlMode.PercentOutput,-.1);
+		throatMotorA.set(ControlMode.PercentOutput,.5);
+		throatMotorB.set(ControlMode.PercentOutput,.5);
 	}
 	
 	public void outtakeThroat()
 	{
-		throatMotorA.set(ControlMode.PercentOutput,.1);
-		throatMotorB.set(ControlMode.PercentOutput,.1);
+		throatMotorA.set(ControlMode.PercentOutput,-.5);
+		throatMotorB.set(ControlMode.PercentOutput,-.5);
 	}
 	
 	public void setElevPos(ElevatorPositions elevPos)

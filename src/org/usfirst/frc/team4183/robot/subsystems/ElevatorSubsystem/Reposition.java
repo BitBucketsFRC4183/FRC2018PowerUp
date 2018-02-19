@@ -22,7 +22,7 @@ public class Reposition extends Command{
 	{
 		//Robot.elevatorSubsystem.setSystemPower(Robot.oi.leftRampAxis.get());
 		
-		
+		/*
 		if (Robot.oi.btnHighPosElev.get())
 		{
 			Robot.elevatorSubsystem.setElevPos(ElevatorSubsystem.ElevatorPositions.SCALE);
@@ -79,6 +79,8 @@ public class Reposition extends Command{
 				Robot.elevatorSubsystem.disableThroat();
 			}
 		}
+		*/
+		Robot.elevatorSubsystem.setSystemPower(Robot.oi.leftRampAxis.get());
 		
 	}
 
@@ -86,13 +88,19 @@ public class Reposition extends Command{
 	protected boolean isFinished() {
 		
 		//Basically checks to see if the there is not any joystick movement or any buttons pressed for the elevPositions
-		 if (Robot.oi.btnIdle.get() || Math.abs(Robot.oi.leftRampAxis.get()) < .06 || !Robot.oi.btnMedPosElev.get() 
+		 
+		/*if (Robot.oi.btnIdle.get() || Math.abs(Robot.oi.leftRampAxis.get()) < .06 || !Robot.oi.btnMedPosElev.get() 
 				 || !Robot.oi.btnHighPosElev.get() || !Robot.oi.btnLowPosElev.get() || !Robot.oi.btnTransPosElev.get() 
 				 || Robot.elevatorSubsystem.closeToDesiredPos())
 			{
 				Robot.elevatorSubsystem.holdPos();
 				return CommandUtils.stateChange(this, new Idle());
 			}
+			*/
+		if (Math.abs(Robot.oi.leftRampAxis.get()) < .06 || Robot.oi.btnIdle.get())
+		{
+			return CommandUtils.stateChange(this, new Idle());
+		}
 	return false;
 }
 }

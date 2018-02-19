@@ -23,7 +23,9 @@ public class Outtaking extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.intakeSubsystem.setMotorSpeed(0.8);    
+    	Robot.intakeSubsystem.setMotorSpeed(0.8);   
+    	Robot.oi.sbtnOuttakeThroat.push();
+    	//Robot.oi.sbtnIntakeThroat.push();
     	//if (Robot.elevatorSubsystem.posCloseToInit())
     	{
     		//Robot.oi.sbtnOuttakeThroat.push();
@@ -43,6 +45,8 @@ public class Outtaking extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
+    	Robot.oi.sbtnOuttakeThroat.release();
+    	Robot.oi.sbtnCloseMandible.release();
     }
 
     // Called when another command which requires one or more of the same

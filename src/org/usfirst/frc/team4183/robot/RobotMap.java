@@ -204,6 +204,7 @@ public class RobotMap
 	
 	public final static int ELEVATOR_MOTOR_A_ID = 7;
 	
+	//A is left, B Right
 	public final static int THROAT_MOTOR_A_ID = 3;
 	public final static int THROAT_MOTOR_B_ID = 6;
 	
@@ -214,8 +215,8 @@ public class RobotMap
 	//ClimbSubystem TBD... may be pneumatics
 	
 	// Pneumatics
-	public final static int INTAKE_PNEUMA_CLOSED_CHANNEL    = 1;
-	public final static int INTAKE_PNEUMA_OPEN_CHANNEL      = 0;
+	public final static int INTAKE_PNEUMA_CLOSED_CHANNEL    = 0;
+	public final static int INTAKE_PNEUMA_OPEN_CHANNEL      = 1;
 	
 	// Autonomous Constants
 	public static final double DRIVESTRAIGHT_MIN_DRIVE = 0;
