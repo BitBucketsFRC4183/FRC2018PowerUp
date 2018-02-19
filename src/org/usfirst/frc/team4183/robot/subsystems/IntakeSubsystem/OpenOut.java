@@ -1,7 +1,7 @@
 package org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem;
 
 import org.usfirst.frc.team4183.robot.Robot;
-import org.usfirst.frc.team4183.robot.Robot.RunMode;
+import org.usfirst.frc.team4183.robot.RobotMap;
 import org.usfirst.frc.team4183.utils.CommandUtils;
 
 import edu.wpi.first.wpilibj.command.Command;
@@ -9,42 +9,37 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class Idle extends Command {
+public class OpenOut extends Command {
 
-    public Idle() {
+    public OpenOut() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
-    	requires(Robot.intakeSubsystem);	
+    	requires(Robot.intakeSubsystem);
     }
 
     // Called just before this Command runs the first time
-    protected void initialize() 
-    {
-    	Robot.intakeSubsystem.disable();	// Turn everything off and close it
+    protected void initialize() {
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	
+    	Robot.intakeSubsystem.setIntakeMotorSpeed(RobotMap.INTAKE_MOTOR_PERCENT);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	if(Robot.oi.btnOpenGate.get())
-    		return CommandUtils.stateChange(this, new OpenOff());
-    	else if(Robot.oi.btnOutIntake.get()) {
+    	
+    	if(Robot.oi.btnIdle.get())
+    		return CommandUtils.stateChange(this, new Idle());
+    	else if(Robot.oi.btnInIntake.get())
+    		return CommandUtils.stateChange(this, new OpenIn());
+    	else if(Robot.oi.btnLeftIntake.get())
+    		return CommandUtils.stateChange(this, new OpenLeft());
+    	else if(Robot.oi.btnRightIntake.get())
+    		return CommandUtils.stateChange(this, new OpenRight());
+    	else if(Robot.oi.btnCloseGate.get())
     		return CommandUtils.stateChange(this, new ClosedOut());
-    	}
-    	else if(Robot.oi.btnInIntake.get()) {
-    		return CommandUtils.stateChange(this, new ClosedIn());
-    	}
-    	else if(Robot.oi.btnLeftIntake.get()) {
-    		return CommandUtils.stateChange(this, new ClosedLeft());
-    	}
-    	else if(Robot.oi.btnRightIntake.get()) {
-    		return CommandUtils.stateChange(this, new ClosedRight());
-    	}
-    	return false;
+        return false;
     }
 
     // Called once after isFinished returns true

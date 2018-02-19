@@ -1,6 +1,7 @@
 package org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import java.util.ArrayList;
@@ -20,6 +21,9 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 	
 	private final WPI_TalonSRX leftIntakeMotor; 
 	private final WPI_TalonSRX rightIntakeMotor; 
+	private final TalonSRX throatMotorA;
+	private final TalonSRX throatMotorB;
+	
 	private final DoubleSolenoid intakegate;
 	
 	private final DigitalInput leftMaxLimit;
@@ -41,6 +45,11 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 		
 		leftIntakeMotor = new WPI_TalonSRX(RobotMap.INTAKE_MOTOR_LEFT_ID);
 		rightIntakeMotor = new WPI_TalonSRX(RobotMap.INTAKE_MOTOR_RIGHT_ID);
+		
+		throatMotorA = new TalonSRX(RobotMap.THROAT_MOTOR_A_ID);
+		throatMotorA.setInverted(true);
+		throatMotorB = new TalonSRX(RobotMap.THROAT_MOTOR_B_ID);
+		
 		leftIntakeMotor.setInverted(true);
 		rightIntakeMotor.setInverted(false);
 		leftIntakeMotor.configOpenloopRamp(0.5, RobotMap.CONTROLLER_TIMEOUT_MS);
@@ -108,10 +117,22 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 	{
 		leftIntakeMotor.set(ControlMode.PercentOutput, 0.0);
 		rightIntakeMotor.set(ControlMode.PercentOutput, 0.0);
+		throatMotorA.set(ControlMode.PercentOutput, 0.0);
+		throatMotorB.set(ControlMode.PercentOutput, 0.0);
 	}
-	public void setMotorSpeed(double speed) {
-		leftIntakeMotor.set(ControlMode.PercentOutput,speed);
-		rightIntakeMotor.set(ControlMode.PercentOutput,speed);
+	public void setLeftMotorSpeed(double speed) {
+		leftIntakeMotor.set(ControlMode.PercentOutput, speed);
+		throatMotorA.set(ControlMode.PercentOutput, speed);
+	}
+	
+	public void setRightMotorSpeed(double speed) {
+		rightIntakeMotor.set(ControlMode.PercentOutput, speed);
+		throatMotorB.set(ControlMode.PercentOutput, speed);
+	}
+	
+	public void setIntakeMotorSpeed(double speed) {
+		setLeftMotorSpeed(speed);
+		setRightMotorSpeed(speed);
 	}
 	
 	public void initDefaultCommand() {

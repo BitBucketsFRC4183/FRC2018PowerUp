@@ -1,39 +1,45 @@
 package org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem;
 
 import org.usfirst.frc.team4183.robot.Robot;
+import org.usfirst.frc.team4183.robot.RobotMap;
 import org.usfirst.frc.team4183.utils.CommandUtils;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
  */
-public class CurrentLimit extends Command {
+public class OpenLeft extends Command {
 
-    public CurrentLimit() {
+    public OpenLeft() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
-    		requires(Robot.intakeSubsystem);	
+    	requires(Robot.intakeSubsystem);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	Robot.intakeSubsystem.disable();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	Robot.intakeSubsystem.setLeftMotorSpeed(-RobotMap.INTAKE_MOTOR_PERCENT);
+    	Robot.intakeSubsystem.setRightMotorSpeed(RobotMap.INTAKE_MOTOR_PERCENT);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-   // 	if( Robot.oi.btnIntake.get()) {
-    	//	return CommandUtils.stateChange(this, new Intaking());
-   // 	}
-    	if (!Robot.oi.btnOpenGate.get() && !Robot.oi.btnCloseGate.get())
-        return CommandUtils.stateChange(this, new Deployed());
-    	return false;
+    	if(Robot.oi.btnIdle.get())
+    		return CommandUtils.stateChange(this, new Idle());
+    	else if(Robot.oi.btnInIntake.get())
+    		return CommandUtils.stateChange(this, new OpenIn());
+    	else if(Robot.oi.btnOutIntake.get())
+    		return CommandUtils.stateChange(this, new OpenOut());
+    	else if(Robot.oi.btnRightIntake.get())
+    		return CommandUtils.stateChange(this, new OpenRight());
+    	else if(Robot.oi.btnCloseGate.get())
+    		return CommandUtils.stateChange(this, new ClosedLeft());
+        return false;
     }
 
     // Called once after isFinished returns true
@@ -43,5 +49,6 @@ public class CurrentLimit extends Command {
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
+    	end();
     }
 }

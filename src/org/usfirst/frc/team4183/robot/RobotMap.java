@@ -36,7 +36,8 @@ public class RobotMap
 	public final static int INTAKE_LIMIT_RIGHT_MIN_ID = 3;
 	
 	
-	
+	// Intake motor speed
+	public static final double INTAKE_MOTOR_PERCENT = 0.8;
 	
 	//Motor Current Limits for the Wheel Shooter adjust later
 	public static final double WHEEL_SHOOTER_MAX_CURRENT = 50;
