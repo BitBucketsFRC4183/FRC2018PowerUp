@@ -11,11 +11,11 @@ public class MotionProfileInstrumentation {
 	private static final String[] _table = {" Dis ", " En  ", "Hold "};
 
 	public static void OnUnderrun() {
-		System.out.format("%s\n", "UNDERRUN");
+		//.out.format("%s\n", "UNDERRUN");
 	}
 
 	public static void OnNoProgress() {
-		System.out.format("%s\n", "NOPROGRESS");
+		//System.out.format("%s\n", "NOPROGRESS");
 	}
 
 	static private String StrOutputEnable(SetValueMotionProfile sv) {
@@ -39,36 +39,36 @@ public class MotionProfileInstrumentation {
 				count = 8;
 				/* every 8 loops, print our columns */
 
-				System.out.format("%-9s\t", "outEn");
-				System.out.format("%-9s\t", "topCnt");
-				System.out.format("%-9s\t", "topRem");
-				System.out.format("%-9s\t", "btmCnt");
-				System.out.format("%-9s\t", "IsValid");
-				System.out.format("%-9s\t", "HasUnder");
-				System.out.format("%-9s\t", "IsUnder");
-				System.out.format("%-9s\t", "IsLast");
-				System.out.format("%-9s\t", "targPos");
-				System.out.format("%-9s\t", "targVel");
-				System.out.format("%-9s\t", "SlotSel0");
-				System.out.format("%-9s\t", "timeDurMs");
-
-				System.out.format("\n");
+//				System.out.format("%-9s\t", "outEn");
+//				System.out.format("%-9s\t", "topCnt");
+//				System.out.format("%-9s\t", "topRem");
+//				System.out.format("%-9s\t", "btmCnt");
+//				System.out.format("%-9s\t", "IsValid");
+//				System.out.format("%-9s\t", "HasUnder");
+//				System.out.format("%-9s\t", "IsUnder");
+//				System.out.format("%-9s\t", "IsLast");
+//				System.out.format("%-9s\t", "targPos");
+//				System.out.format("%-9s\t", "targVel");
+//				System.out.format("%-9s\t", "SlotSel0");
+//				System.out.format("%-9s\t", "timeDurMs");
+//
+//				System.out.format("\n");
 			}
 			/* every loop, print our values */
-			System.out.format("%-9s\t", StrOutputEnable(status.outputEnable));
-			System.out.format("%-9s\t", status.topBufferCnt);
-			System.out.format("%-9s\t", status.topBufferRem);
-			System.out.format("%-9s\t", status.btmBufferCnt);
-			System.out.format("%-9s\t", (status.activePointValid ? "1" : ""));
-			System.out.format("%-9s\t", (status.hasUnderrun ? "1" : ""));
-			System.out.format("%-9s\t", (status.isUnderrun ? "1" : ""));
-			System.out.format("%-9s\t", (status.isLast ? "1" : ""));
-			System.out.format("%-9s\t", pos);
-			System.out.format("%-9s\t", vel);
-			System.out.format("%-9s\t", status.profileSlotSelect);
-			System.out.format("%-9s\t", status.timeDurMs);
-
-			System.out.format("\n");
+//			System.out.format("%-9s\t", StrOutputEnable(status.outputEnable));
+//			System.out.format("%-9s\t", status.topBufferCnt);
+//			System.out.format("%-9s\t", status.topBufferRem);
+//			System.out.format("%-9s\t", status.btmBufferCnt);
+//			System.out.format("%-9s\t", (status.activePointValid ? "1" : ""));
+//			System.out.format("%-9s\t", (status.hasUnderrun ? "1" : ""));
+//			System.out.format("%-9s\t", (status.isUnderrun ? "1" : ""));
+//			System.out.format("%-9s\t", (status.isLast ? "1" : ""));
+//			System.out.format("%-9s\t", pos);
+//			System.out.format("%-9s\t", vel);
+//			System.out.format("%-9s\t", status.profileSlotSelect);
+//			System.out.format("%-9s\t", status.timeDurMs);
+//
+//			System.out.format("\n");
 		}
 	}
 }

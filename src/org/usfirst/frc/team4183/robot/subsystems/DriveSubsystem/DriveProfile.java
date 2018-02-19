@@ -52,7 +52,7 @@ public class DriveProfile extends Command {
     	{
     		if (timeout)
     		{
-    			System.out.println("WARNING: DriveProfile Timedout!");
+    			//System.out.println("WARNING: DriveProfile Timedout!");
     		}
     		return CommandUtils.stateChange(this, new Idle());
     	}

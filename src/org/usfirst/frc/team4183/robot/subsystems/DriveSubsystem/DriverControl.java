@@ -54,6 +54,11 @@ public class DriverControl extends Command
     		return CommandUtils.stateChange(this, new MoveBy(36.0,5.0));
     	}
     	
+    	else if (Robot.oi.btnMoveByTest.get()) 
+        { 
+          return CommandUtils.stateChange(this, new MoveBy(3600.0,5.0)); 
+        } 
+    	
         return false;
     }
 

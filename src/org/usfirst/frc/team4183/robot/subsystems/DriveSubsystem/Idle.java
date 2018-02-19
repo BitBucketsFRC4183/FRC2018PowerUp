@@ -48,10 +48,6 @@ public class Idle extends Command
     	{
     		return CommandUtils.stateChange(this, new DriverControl());
     	}
-    	if( Robot.runMode == Robot.RunMode.AUTO)
-    	{
-    		return CommandUtils.stateChange(this, new AutoControl());
-    	}
     	
     	// Getting into test mode requires 2 conditions to avoid inadvertent activation
     	// of future other test modes

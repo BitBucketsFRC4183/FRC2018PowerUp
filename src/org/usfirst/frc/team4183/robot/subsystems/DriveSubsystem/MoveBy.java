@@ -33,18 +33,21 @@ public class MoveBy extends Command {
     {
     	// Keep enforcing the current position request until we get there
     	Robot.driveSubsystem.move_inches(distance_inches);
+    	System.out.println("DISTANCE REMAINING"+ distance_inches);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() 
     {
     	boolean timeout = (timeSinceInitialized() > timeout_sec);
+    	System.out.printf("Timeout is %s\n", timeout?"TRUE":"false");
     	
-    	if (timeout || Robot.driveSubsystem.isMoveComplete()) 
+    	if (timeout || Robot.driveSubsystem.isMoveComplete(distance_inches)) 
     	{
-    		return CommandUtils.stateChange(this, new Idle());
     		
+    		return CommandUtils.autoStateChange(this, new Idle());
     	}
+    	
     	return false;
     }
 
@@ -55,5 +58,7 @@ public class MoveBy extends Command {
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
+    	
+    	end();
     }
 }
