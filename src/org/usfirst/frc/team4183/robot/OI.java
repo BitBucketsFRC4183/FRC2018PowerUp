@@ -45,7 +45,7 @@ public class OI {
 	
 	public final LogicalButton btnIdle = new ModalButton(operatorController.bTrackpad);
 	
-	public final LogicalButton btnRotateCube = new ModalButton(operatorController.bCircle);
+	public final LogicalButton btnOffIntake = new ModalButton(operatorController.bCircle);
 	
 	public final LogicalButton releaseRampDriv = new ModalButton(driverController.bPS4);
 	public final LogicalButton releaseRampOper = new ModalButton(operatorController.bPS4);
