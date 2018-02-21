@@ -79,7 +79,7 @@ public class Robot extends IterativeRobot {
 		// Auto subsystem is constructed last as it may want to reference the others
 		// (Not a best practice)
 		driveSubsystem = new DriveSubsystem();
-//		intakeSubsystem = new IntakeSubsystem();
+		intakeSubsystem = new IntakeSubsystem();
 		visionSubsystem = new VisionSubsystem();
 		//rampSubsystem = new RampSubsystem();		
 		elevatorSubsystem = new ElevatorSubsystem();

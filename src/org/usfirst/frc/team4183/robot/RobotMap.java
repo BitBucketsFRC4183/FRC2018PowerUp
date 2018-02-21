@@ -115,12 +115,22 @@ public class RobotMap
 	
 	
 	//DriveSubystem Motors ports
-	public final static int LEFT_DRIVE_MOTOR_FRONT_ID  = 13;
-	public final static int LEFT_DRIVE_MOTOR_REAR_ID   = 14;
-	public final static int RIGHT_DRIVE_MOTOR_FRONT_ID = 11;
-	public final static int RIGHT_DRIVE_MOTOR_REAR_ID  = 12;
+	public final static int LEFT_DRIVE_MOTOR_FRONT_ID  = 11; //13;
+	public final static int LEFT_DRIVE_MOTOR_REAR_ID   = 12; //14;
+	public final static int RIGHT_DRIVE_MOTOR_FRONT_ID = 13; //11;
+	public final static int RIGHT_DRIVE_MOTOR_REAR_ID  = 14; //12;
 
 	
+	//IntakeSubsystem Motors ports
+	public final static int INTAKE_MOTOR_LEFT_ID      = 10;
+	public final static int INTAKE_MOTOR_RIGHT_ID      = 9;
+	
+	
+	public final static int ELEVATOR_MOTOR_A_ID = 4;
+	
+	//A is left, B Right
+	public final static int THROAT_MOTOR_LEFT_ID = 5;
+	public final static int THROAT_MOTOR_RIGHT_ID = 3;
 
 	
 	// DriveSubsystem Motor Directions
@@ -204,16 +214,6 @@ public class RobotMap
 	// Cube Manipulation
 	// Mutual exclusion on shooter or lifter types
 	
-	//IntakeSubsystem Motors ports
-	public final static int INTAKE_MOTOR_LEFT_ID      = 10;
-	public final static int INTAKE_MOTOR_RIGHT_ID      = 9;
-	
-	
-	public final static int ELEVATOR_MOTOR_A_ID = 7;
-	
-	//A is left, B Right
-	public final static int THROAT_MOTOR_A_ID = 3;
-	public final static int THROAT_MOTOR_B_ID = 6;
 
 	public static final double INTAKE_THROAT_SPEED_PERCENT  =  0.5;
 	public static final double OUTTAKE_THROAT_SPEED_PERCENT = -0.5;	/// TODO: May need to be higher to throw longer
@@ -226,8 +226,8 @@ public class RobotMap
 	//ClimbSubystem TBD... may be pneumatics
 	
 	// Pneumatics
-	public final static int INTAKE_PNEUMA_CLOSED_CHANNEL    = 0;
-	public final static int INTAKE_PNEUMA_OPEN_CHANNEL      = 1;
+	public final static int INTAKE_PNEUMA_CLOSED_CHANNEL    = 1;
+	public final static int INTAKE_PNEUMA_OPEN_CHANNEL      = 0;
 	
 	// Autonomous Constants
 	public static final double DRIVESTRAIGHT_MIN_DRIVE = 0;

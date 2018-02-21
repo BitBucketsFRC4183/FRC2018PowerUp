@@ -46,9 +46,9 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 		leftIntakeMotor = new WPI_TalonSRX(RobotMap.INTAKE_MOTOR_LEFT_ID);
 		rightIntakeMotor = new WPI_TalonSRX(RobotMap.INTAKE_MOTOR_RIGHT_ID);
 		
-		throatMotorA = new TalonSRX(RobotMap.THROAT_MOTOR_A_ID);
+		throatMotorA = new TalonSRX(RobotMap.THROAT_MOTOR_LEFT_ID);
 		throatMotorA.setInverted(true);
-		throatMotorB = new TalonSRX(RobotMap.THROAT_MOTOR_B_ID);
+		throatMotorB = new TalonSRX(RobotMap.THROAT_MOTOR_RIGHT_ID);
 		
 		leftIntakeMotor.setInverted(true);
 		rightIntakeMotor.setInverted(false);
