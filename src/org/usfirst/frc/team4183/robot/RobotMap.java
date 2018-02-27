@@ -108,6 +108,8 @@ public class RobotMap
 	public static int    elevatorMotorIZone = 300;
 
 
+	/// TODO: Do we want to reorg this in ID order?
+	
     //Ramp Subsystem Motor Ports
   	public final static int LEFT_RAMP_MOTOR_ID = 1;
   	public final static int RIGHT_RAMP_MOTOR_ID = 2;
