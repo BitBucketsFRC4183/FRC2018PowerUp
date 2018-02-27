@@ -52,14 +52,14 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 	public ElevatorSubsystem()
 	{
 		elevatorMotorA = new TalonSRX(RobotMap.ELEVATOR_MOTOR_A_ID);
+		elevatorMotorA.setSensorPhase(RobotMap.ELEVATOR_MOTOR_SENSOR_PHASE);
+		elevatorMotorA.setInverted(RobotMap.ELEVATOR_MOTOR_INVERSION);
 		
 		throatMotorA = new TalonSRX(RobotMap.THROAT_MOTOR_LEFT_ID);
 		throatMotorA.setInverted(true);
 		throatMotorB = new TalonSRX(RobotMap.THROAT_MOTOR_RIGHT_ID);
 		
 		brakePneu = new DoubleSolenoid(RobotMap.ELEVATOR_PNEUMA_BRAKE_CLOSE_CHANNEL,RobotMap.ELEVATOR_PNEUMA_BRAKE_OPEN_CHANNEL);
-		
-		elevatorMotorA.setSensorPhase(RobotMap.ELEVATOR_MOTOR_SENSOR_PHASE);
 		
 		elevatorMotorA.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 
                 RobotMap.HIGH_STATUS_FRAME_PERIOD_MS, 

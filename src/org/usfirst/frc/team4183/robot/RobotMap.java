@@ -66,15 +66,17 @@ public class RobotMap
 	
 	//inches per revolution for Elevator
 	//Nominal diameter to the pin
-	public static final double ELEVATOR_SPROCKET_DIAMETER_INCHES  = 3;
+	public static final double ELEVATOR_SPROCKET_DIAMETER_INCHES  = 1.4323944878270580219199538703526;
 	public static final double ELEVATOR_SPROCKET_CIRCUMFERENCE_INCHES = (ELEVATOR_SPROCKET_DIAMETER_INCHES*Math.PI);
-	
+		
 	//Magic Motion Constants for the Elevator Subsystem
 	public final static boolean ELEVATOR_MOTOR_SENSOR_PHASE = false;
+	public static final boolean ELEVATOR_MOTOR_INVERSION = true;
+
 		
 	public final static FeedbackDevice ELEVATOR_MOTOR_FEEDBACK_DEVICE = FeedbackDevice.QuadEncoder;
 	public final static int ELEVATOR_MOTOR_NATIVE_TICKS_PER_REV = 8192;
-	public final static double ELEVATOR_MOTOR_FULL_THROTTLE_AVERAGE_SPEED_NATIVE_TICKS = 25588.4;	// per 100 ms, average of 10 samples
+	public final static double ELEVATOR_MOTOR_FULL_THROTTLE_AVERAGE_SPEED_NATIVE_TICKS = 9171.2;	// per 100 ms, average of 10 samples
 	
 	public final static int ELEVATOR_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS = (int)(0.80 * 
                                                                               ELEVATOR_MOTOR_FULL_THROTTLE_AVERAGE_SPEED_NATIVE_TICKS);
@@ -101,11 +103,11 @@ public class RobotMap
 	// transition, so will need to be satisfied with just and up/down set if it comes down (or up) to that.
 	public static double elevatorMotorKf = 0.111544836;
 	public static double elevatorMotorKp = 0.1778688524;		
-	public static double elevatorMotorKi = 0.001;
+	public static double elevatorMotorKi = 0.0015;
 	public static double elevatorMotorKd = 5.336065573;
 	public static int    elevatorMotorIZone = 300;
 
-	
+
     //Ramp Subsystem Motor Ports
   	public final static int LEFT_RAMP_MOTOR_ID = 1;
   	public final static int RIGHT_RAMP_MOTOR_ID = 2;
@@ -114,23 +116,24 @@ public class RobotMap
   	public final static int RAMP_RELEASE_SERVO_ID = 1;
 	
 	
-	//DriveSubystem Motors ports
-	public final static int LEFT_DRIVE_MOTOR_FRONT_ID  = 11; //13;
-	public final static int LEFT_DRIVE_MOTOR_REAR_ID   = 12; //14;
-	public final static int RIGHT_DRIVE_MOTOR_FRONT_ID = 13; //11;
-	public final static int RIGHT_DRIVE_MOTOR_REAR_ID  = 14; //12;
+	//DriveSubystem Motors ports (Encoders required for left and right)
+	public final static int LEFT_DRIVE_MOTOR_FRONT_ID  = 11;
+	public final static int LEFT_DRIVE_MOTOR_REAR_ID   = 12;
+	public final static int RIGHT_DRIVE_MOTOR_FRONT_ID = 13;
+	public final static int RIGHT_DRIVE_MOTOR_REAR_ID  = 14;
 
 	
 	//IntakeSubsystem Motors ports
 	public final static int INTAKE_MOTOR_LEFT_ID      = 10;
 	public final static int INTAKE_MOTOR_RIGHT_ID      = 9;
 	
-	
-	public final static int ELEVATOR_MOTOR_A_ID = 4;
-	
-	//A is left, B Right
+	//Intake Throat (on carriage)
 	public final static int THROAT_MOTOR_LEFT_ID = 5;
 	public final static int THROAT_MOTOR_RIGHT_ID = 3;
+	
+	// Elevator motor ports, encoder required on gearbox
+	public final static int ELEVATOR_MOTOR_A_ID = 4;
+	
 
 	
 	// DriveSubsystem Motor Directions
