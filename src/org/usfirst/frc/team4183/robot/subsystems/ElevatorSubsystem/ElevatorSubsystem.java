@@ -2,12 +2,15 @@ package org.usfirst.frc.team4183.robot.subsystems.ElevatorSubsystem;
 
 import org.usfirst.frc.team4183.robot.RobotMap;
 import org.usfirst.frc.team4183.robot.subsystems.BitBucketsSubsystem;
+import org.usfirst.frc.team4183.robot.subsystems.SubsystemUtilities.SubsystemTelemetryState;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class ElevatorSubsystem extends BitBucketsSubsystem {
@@ -21,6 +24,8 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 	
 	private final int UNITS_PER_FEET = 1000;		/// TODO: Remove this and use conversions from RobotMap
 		
+	private static SendableChooser<SubsystemTelemetryState> telemetryState;
+	
 	static enum ElevatorPositions
 	{
 		/// TODO: Change to inches, millimeters or meters
@@ -93,6 +98,12 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 		
 		elevatorMotorA.setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_LOOP, RobotMap.CONTROLLER_TIMEOUT_MS);
 		
+		telemetryState = new SendableChooser<SubsystemTelemetryState>();
+    	telemetryState.addDefault("Off", SubsystemTelemetryState.OFF);
+    	telemetryState.addObject( "On",  SubsystemTelemetryState.ON);
+    	
+    	SmartDashboard.putData("ElevatorTelemetry", telemetryState);
+		
 		setAllMotorsZero();
 	}
 	
@@ -102,17 +113,6 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 		throatMotorB.set(ControlMode.PercentOutput,0);
 	}
 	
-	public void intakeThroat()
-	{
-		throatMotorA.set(ControlMode.PercentOutput, RobotMap.INTAKE_THROAT_SPEED_PERCENT);
-		throatMotorB.set(ControlMode.PercentOutput, RobotMap.INTAKE_THROAT_SPEED_PERCENT);
-	}
-	
-	public void outtakeThroat()
-	{
-		throatMotorA.set(ControlMode.PercentOutput, RobotMap.OUTTAKE_THROAT_SPEED_PERCENT);
-		throatMotorB.set(ControlMode.PercentOutput, RobotMap.OUTTAKE_THROAT_SPEED_PERCENT);
-	}
 	
 	public void setElevPos(ElevatorPositions elevPos)		/// TODO: inches, meters, what?
 	{
@@ -226,8 +226,14 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 	{
 		elevatorMotorA.set(ControlMode.PercentOutput,power);
 	}
+	
+	private double getMotorNativeUnits(TalonSRX m) {
+		return elevatorMotorA.getSelectedSensorPosition(RobotMap.PRIMARY_PID_LOOP);
+	}
 
-
+	public double getElevatorNativeUnits() {
+		return getMotorNativeUnits(elevatorMotorA);
+	}
 
 	@Override
 	public void diagnosticsCheck() {
@@ -248,7 +254,9 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 
 	@Override
 	public void periodic() {
-		// TODO Auto-generated method stub
+		if(telemetryState.getSelected() == SubsystemTelemetryState.ON) {
+			SmartDashboard.putNumber("ElevatorPosition", getElevatorNativeUnits());
+		}
 		
 	}
 	
