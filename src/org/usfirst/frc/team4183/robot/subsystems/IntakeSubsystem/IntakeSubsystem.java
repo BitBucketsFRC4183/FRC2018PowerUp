@@ -1,6 +1,7 @@
 package org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
@@ -9,9 +10,11 @@ import java.util.ArrayList;
 import org.usfirst.frc.team4183.robot.Robot;
 import org.usfirst.frc.team4183.robot.RobotMap;
 import org.usfirst.frc.team4183.robot.subsystems.BitBucketsSubsystem;
+import org.usfirst.frc.team4183.robot.subsystems.SubsystemUtilities.SubsystemTelemetryState;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -38,6 +41,8 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 
 	private static ArrayList<WPI_TalonSRX> motors;
 	private static ArrayList<DoubleSolenoid> solenoids;
+	
+	private static SendableChooser<SubsystemTelemetryState> telemetryState;
 
 	public IntakeSubsystem() {
 		motors = new ArrayList<WPI_TalonSRX>();
@@ -49,6 +54,8 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 		throatMotorA = new TalonSRX(RobotMap.THROAT_MOTOR_LEFT_ID);
 		throatMotorA.setInverted(true);
 		throatMotorB = new TalonSRX(RobotMap.THROAT_MOTOR_RIGHT_ID);
+		
+		setNeutral(NeutralMode.Coast);
 		
 		leftIntakeMotor.setInverted(true);
 		rightIntakeMotor.setInverted(false);
@@ -64,6 +71,21 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 		
 		
 		solenoids.add(intakegate);
+		
+		telemetryState = new SendableChooser<SubsystemTelemetryState>();
+    	telemetryState.addDefault("Off", SubsystemTelemetryState.OFF);
+    	telemetryState.addObject( "On",  SubsystemTelemetryState.ON);
+    	
+    	SmartDashboard.putData("IntakeTelemetry", telemetryState);
+		
+	}
+	
+	private void setNeutral(NeutralMode neutralMode) 
+	{	
+		leftIntakeMotor.setNeutralMode(neutralMode);
+		rightIntakeMotor.setNeutralMode(neutralMode);
+		throatMotorA.setNeutralMode(neutralMode);
+		throatMotorB.setNeutralMode(neutralMode);
 		
 	}
 	
@@ -120,19 +142,27 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 		throatMotorA.set(ControlMode.PercentOutput, 0.0);
 		throatMotorB.set(ControlMode.PercentOutput, 0.0);
 	}
-	public void setLeftMotorSpeed(double speed) {
-		leftIntakeMotor.set(ControlMode.PercentOutput, speed);
+	public void setLeftThroatSpeed(double speed) {
 		throatMotorA.set(ControlMode.PercentOutput, speed);
 	}
 	
-	public void setRightMotorSpeed(double speed) {
-		rightIntakeMotor.set(ControlMode.PercentOutput, speed);
+	public void setRightThroatSpeed(double speed) {
 		throatMotorB.set(ControlMode.PercentOutput, speed);
 	}
 	
-	public void setIntakeMotorSpeed(double speed) {
-		setLeftMotorSpeed(speed);
-		setRightMotorSpeed(speed);
+	public void setLeftMotorSpeed(double intakeSpeed, double throatSpeed) {
+		leftIntakeMotor.set(ControlMode.PercentOutput, intakeSpeed);
+		setLeftThroatSpeed(throatSpeed);
+	}
+	
+	public void setRightMotorSpeed(double intakeSpeed, double throatSpeed) {
+		rightIntakeMotor.set(ControlMode.PercentOutput, intakeSpeed);
+		setRightThroatSpeed(throatSpeed);
+	}
+	
+	public void setIntakeMotorToSpeed(double intakeSpeed, double throatSpeed) {
+		setLeftMotorSpeed(intakeSpeed, throatSpeed);
+		setRightMotorSpeed(intakeSpeed, throatSpeed);
 	}
 	
 	public void initDefaultCommand() {
@@ -183,9 +213,17 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 	@Override
 	public void periodic() {
 		// TODO Auto-generated method stub
-		SmartDashboard.putNumber("Intake Current", Robot.intakeSubsystem.getCurrentMax());
-		SmartDashboard.putBoolean("Min Limit Intake", Robot.intakeSubsystem.getMinLimit());
-		SmartDashboard.putBoolean("Max Limit Intake", Robot.intakeSubsystem.getMaxLimit());
+		
+		if(telemetryState.getSelected() == SubsystemTelemetryState.ON) {
+			SmartDashboard.putNumber("Intake Current", Robot.intakeSubsystem.getCurrentMax());
+			SmartDashboard.putBoolean("Min Limit Intake", Robot.intakeSubsystem.getMinLimit());
+			SmartDashboard.putBoolean("Max Limit Intake", Robot.intakeSubsystem.getMaxLimit());
+			
+			SmartDashboard.putNumber("ThroatMotorA", throatMotorA.getOutputCurrent());
+			SmartDashboard.putNumber("ThroatMotorB", throatMotorB.getOutputCurrent());
+			SmartDashboard.putNumber("LeftIntakeMotor", leftIntakeMotor.getOutputCurrent());
+			SmartDashboard.putNumber("RightIntakeMotor", rightIntakeMotor.getOutputCurrent());
+		}
 	}
 	@Override
 	public void diagnosticsExecute() {

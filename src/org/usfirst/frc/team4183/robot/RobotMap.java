@@ -37,7 +37,8 @@ public class RobotMap
 	
 	
 	// Intake motor speed
-	public static final double INTAKE_MOTOR_PERCENT = 0.8;
+	public static final double INTAKE_MOTOR_PERCENT = 0.9;
+	public static final double THROAT_MOTOR_PERCENT = 0.9;
 	
 	//Motor Current Limits for the Wheel Shooter adjust later
 	public static final double WHEEL_SHOOTER_MAX_CURRENT = 50;
@@ -214,14 +215,7 @@ public class RobotMap
 	// values until the desired response is achieved.
 	public final static double LEFT_DRIVE_MOTOR_NEUTRAL_DEADBAND  = 0.003;
 	public final static double RIGHT_DRIVE_MOTOR_NEUTRAL_DEADBAND = 0.007;
-	
-	
-	// Cube Manipulation
-	// Mutual exclusion on shooter or lifter types
-	
 
-	public static final double INTAKE_THROAT_SPEED_PERCENT  =  0.5;
-	public static final double OUTTAKE_THROAT_SPEED_PERCENT = -0.5;	/// TODO: May need to be higher to throw longer
 	
 	
 	//Elevator Pneumatics for Gear Box
