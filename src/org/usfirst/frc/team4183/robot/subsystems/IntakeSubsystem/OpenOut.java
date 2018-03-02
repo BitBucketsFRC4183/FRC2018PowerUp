@@ -24,7 +24,7 @@ public class OpenOut extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.intakeSubsystem.setIntakeMotorSpeed(RobotMap.INTAKE_MOTOR_PERCENT);
+    	Robot.intakeSubsystem.setIntakeMotorToSpeed(RobotMap.INTAKE_MOTOR_PERCENT, RobotMap.THROAT_MOTOR_PERCENT);
     }
 
     // Make this return true when this Command no longer needs to run execute()
