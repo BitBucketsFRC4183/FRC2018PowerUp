@@ -30,14 +30,8 @@ public class ClosedRight extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	if(Robot.oi.btnIdle.get()) 
+    	if(Robot.oi.btnIdle.get() || ! Robot.oi.btnRightIntake.get()) 
     		return CommandUtils.stateChange(this, new Idle());
-    	else if(Robot.oi.btnInIntake.get())
-    		return CommandUtils.stateChange(this, new ClosedIn());
-    	else if(Robot.oi.btnOutIntake.get())
-    		return CommandUtils.stateChange(this, new ClosedOut());
-    	else if(Robot.oi.btnLeftIntake.get())
-    		return CommandUtils.stateChange(this, new ClosedLeft());
     	else if(Robot.oi.btnOpenGate.get())
     		return CommandUtils.stateChange(this, new OpenRight());
         return false;

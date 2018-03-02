@@ -32,12 +32,8 @@ public class OpenRight extends Command {
     protected boolean isFinished() {
     	if(Robot.oi.btnIdle.get())
     		return CommandUtils.stateChange(this, new Idle());
-    	else if(Robot.oi.btnInIntake.get())
-    		return CommandUtils.stateChange(this, new OpenIn());
-    	else if(Robot.oi.btnOutIntake.get())
-    		return CommandUtils.stateChange(this, new OpenOut());
-    	else if(Robot.oi.btnLeftIntake.get())
-    		return CommandUtils.stateChange(this, new OpenLeft());
+    	else if (! Robot.oi.btnRightIntake.get())
+    		return CommandUtils.stateChange(this, new OpenOff());
     	else if(Robot.oi.btnCloseGate.get())
     		return CommandUtils.stateChange(this, new ClosedIn());
         return false;
