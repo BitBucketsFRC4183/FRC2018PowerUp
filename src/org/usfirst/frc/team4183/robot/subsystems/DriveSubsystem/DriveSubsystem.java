@@ -107,6 +107,7 @@ public class DriveSubsystem extends BitBucketsSubsystem
 	    	leftRearMotor = new TalonSRX(RobotMap.LEFT_DRIVE_MOTOR_REAR_ID);
 	    	leftRearMotor.follow(leftFrontMotor);
 	    	
+	    	
 	    	/// TODO: Create setupMasterMotor function
 	    	/// TODO: Create setupSlaveMotor function
 	    	/// Each function should take a list of argument constants for inversion, sense, sensor type, deadbands, etc
@@ -221,7 +222,8 @@ public class DriveSubsystem extends BitBucketsSubsystem
 	    			                              RobotMap.CONTROLLER_TIMEOUT_MS);
 	    	rightRearMotor.configNeutralDeadband(RobotMap.RIGHT_DRIVE_MOTOR_NEUTRAL_DEADBAND, 
 	    			                             RobotMap.CONTROLLER_TIMEOUT_MS);
-			rightFrontMotor.configOpenloopRamp(RobotMap.DRIVE_MOTOR_OPEN_LOOP_RAMP_SEC, 
+			
+	    	rightFrontMotor.configOpenloopRamp(RobotMap.DRIVE_MOTOR_OPEN_LOOP_RAMP_SEC, 
 				      					 	   RobotMap.CONTROLLER_TIMEOUT_MS);
 			rightRearMotor.configOpenloopRamp(RobotMap.DRIVE_MOTOR_OPEN_LOOP_RAMP_SEC, 
 											  RobotMap.CONTROLLER_TIMEOUT_MS);

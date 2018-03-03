@@ -28,7 +28,7 @@ public class OpenOff extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	if(Robot.oi.btnIdle.get() || Robot.oi.btnCloseGate.get())
+    	if(Robot.oi.btnIdle.get() || Robot.oi.btnCloseGate.get() || Robot.oi.sbtnCloseMandible.get())
     		return CommandUtils.stateChange(this, new Idle());
     	else if(Robot.oi.btnInIntake.get())
     		return CommandUtils.stateChange(this, new OpenIn());

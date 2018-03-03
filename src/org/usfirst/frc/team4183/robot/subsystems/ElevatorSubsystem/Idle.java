@@ -16,6 +16,7 @@ public class Idle extends Command{
 	protected void initialize()
 	{
 		Robot.elevatorSubsystem.disable();
+		Robot.oi.sbtnOpenMandible.release();
 		//Robot.elevatorSubsystem.holdEncodPos(false);
 		//Robot.elevatorSubsystem.holdEncodPos(true);
 	}
@@ -26,26 +27,12 @@ public class Idle extends Command{
 	}
 	
 	protected boolean isFinished()
-	{ /*
-		if (Robot.intakeSubsystem.getLastCurrent())
-		{
-			return CommandUtils.stateChange(this, new Loaded());
-		}
-		
-		if (!Robot.intakeSubsystem.getLastCurrent())
-		{
-			return CommandUtils.stateChange(this, new Empty());
-		}
-		if (timeSinceInitialized() > Robot.elevatorSubsystem.timeUntilBrakeSec)
-		{
-			Robot.elevatorSubsystem.engageBrake();
-			return CommandUtils.stateChange(this, new Brake());
-		}
-		*/
+	{
 		/// Temporary code for testing linkage
 		/// TODO: magic 0.06
-		if (Math.abs(Robot.oi.leftRampAxis.get()) > .06)		/// TODO: Need comment here explaining that sharing joytick!
+		if (Math.abs(Robot.oi.rightRampAxis.get()) > .06)		/// TODO: Need comment here explaining that sharing joytick!
 		{														/// TODO: May want two instances with different names and put comment at definition
+			Robot.oi.sbtnOpenMandible.push();
 			return CommandUtils.stateChange(this, new Reposition());
 		}
 		return false;

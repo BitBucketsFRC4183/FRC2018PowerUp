@@ -12,6 +12,15 @@ public class RobotMap
 	{
 		return 12.0 * meter / 0.3048; 
 	}
+	public static double signedSqrt(double value) 
+	{
+		if(value > 0)
+			return Math.sqrt(value);
+		else if(value < 0)
+			return -Math.sqrt(Math.abs(value));
+		else 
+			return 0;
+	}
 	
 	public final static int PRIMARY_PID_LOOP  = 0; // Constants to support new Talon interface types
 	public final static int CASCADED_PID_LOOP = 1; // That should have been enumerated rather than int
@@ -73,6 +82,9 @@ public class RobotMap
 	//Magic Motion Constants for the Elevator Subsystem
 	public final static boolean ELEVATOR_MOTOR_SENSOR_PHASE = false;
 	public static final boolean ELEVATOR_MOTOR_INVERSION = true;
+	
+	public final static double ELEVATOR_TICKS_PER_INCH = 8192/4.5;
+	public final static double ELEVATOR_SAFE_ZONE = 12 * ELEVATOR_TICKS_PER_INCH;
 
 		
 	public final static FeedbackDevice ELEVATOR_MOTOR_FEEDBACK_DEVICE = FeedbackDevice.QuadEncoder;
