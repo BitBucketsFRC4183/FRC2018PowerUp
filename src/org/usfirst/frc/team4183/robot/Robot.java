@@ -27,6 +27,7 @@ import jaci.pathfinder.Waypoint;
 import org.usfirst.frc.team4183.utils.DoEveryN;
 import org.usfirst.frc.team4183.utils.Stopwatch;
 
+import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 
@@ -81,7 +82,7 @@ public class Robot extends IterativeRobot {
 		driveSubsystem = new DriveSubsystem();
 		intakeSubsystem = new IntakeSubsystem();
 		visionSubsystem = new VisionSubsystem();
-		//rampSubsystem = new RampSubsystem();		
+		rampSubsystem = new RampSubsystem();		
 		elevatorSubsystem = new ElevatorSubsystem();
 				
 		imu = new NavxIMU();
@@ -91,14 +92,16 @@ public class Robot extends IterativeRobot {
 		autonomousSubsystem.initialize();
 				
 		// Add all subsystems for debugging
-		addSubsystemToDebug(driveSubsystem);
+		//addSubsystemToDebug(driveSubsystem);
         addSubsystemToDebug(intakeSubsystem);
-        addSubsystemToDebug(visionSubsystem);
-        addSubsystemToDebug(autonomousSubsystem);
+        //addSubsystemToDebug(visionSubsystem);
+        //addSubsystemToDebug(autonomousSubsystem);
         addSubsystemToDebug(elevatorSubsystem);
 		showDebugInfo();		
 		
-        CameraServer.getInstance().startAutomaticCapture();
+        UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+        camera.setResolution(640, 480);
+        camera.setFPS(120);
 	}
 	
 	private void setSubsystemsDebug() 
@@ -201,10 +204,7 @@ public class Robot extends IterativeRobot {
 		
 		periodicSDdebugLoop.update();
 		
-		SmartDashboard.putBoolean("sbtnOpen", oi.sbtnOpenMandible.get());
-		SmartDashboard.putBoolean("btnOpen", oi.btnOpenGate.get());
-		SmartDashboard.putBoolean("sbtnClose", oi.sbtnCloseMandible.get());
-		SmartDashboard.putBoolean("btnClose", oi.btnCloseGate.get());
+		
 		
 		
 	}
