@@ -30,7 +30,7 @@ public class Idle extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	if(Robot.oi.btnOpenGate.get())
+    	if(Robot.oi.btnOpenGate.get() || Robot.oi.sbtnOpenMandible.get())
     		return CommandUtils.stateChange(this, new OpenOff());
     	else if(Robot.oi.btnOutIntake.get()) {
     		return CommandUtils.stateChange(this, new ClosedOut());

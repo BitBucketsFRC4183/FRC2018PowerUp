@@ -59,8 +59,11 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 		
 		leftIntakeMotor.setInverted(true);
 		rightIntakeMotor.setInverted(false);
+		
 		leftIntakeMotor.configOpenloopRamp(0.5, RobotMap.CONTROLLER_TIMEOUT_MS);
 		rightIntakeMotor.configOpenloopRamp(0.5, RobotMap.CONTROLLER_TIMEOUT_MS);
+		throatMotorA.configOpenloopRamp(0.0, RobotMap.CONTROLLER_TIMEOUT_MS);
+		throatMotorB.configOpenloopRamp(0.0, RobotMap.CONTROLLER_TIMEOUT_MS);
 
 		intakegate = new DoubleSolenoid(RobotMap.INTAKE_PNEUMA_OPEN_CHANNEL, RobotMap.INTAKE_PNEUMA_CLOSED_CHANNEL);
 		

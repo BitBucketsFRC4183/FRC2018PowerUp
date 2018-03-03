@@ -92,10 +92,10 @@ public class Robot extends IterativeRobot {
 				
 		// Add all subsystems for debugging
 		addSubsystemToDebug(driveSubsystem);
-        //addSubsystemToDebug(intakeSubsystem);
+        addSubsystemToDebug(intakeSubsystem);
         addSubsystemToDebug(visionSubsystem);
         addSubsystemToDebug(autonomousSubsystem);
-        //addSubsystemToDebug(elevatorSubsystem);
+        addSubsystemToDebug(elevatorSubsystem);
 		showDebugInfo();		
 		
         CameraServer.getInstance().startAutomaticCapture();
@@ -200,6 +200,13 @@ public class Robot extends IterativeRobot {
 		loopWatch.start();
 		
 		periodicSDdebugLoop.update();
+		
+		SmartDashboard.putBoolean("sbtnOpen", oi.sbtnOpenMandible.get());
+		SmartDashboard.putBoolean("btnOpen", oi.btnOpenGate.get());
+		SmartDashboard.putBoolean("sbtnClose", oi.sbtnCloseMandible.get());
+		SmartDashboard.putBoolean("btnClose", oi.btnCloseGate.get());
+		
+		
 	}
 	
 	// Some ancillary debugging stuff below here

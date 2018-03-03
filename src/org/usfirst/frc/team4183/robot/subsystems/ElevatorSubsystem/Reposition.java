@@ -1,12 +1,18 @@
 package org.usfirst.frc.team4183.robot.subsystems.ElevatorSubsystem;
 
 import org.usfirst.frc.team4183.robot.Robot;
+import org.usfirst.frc.team4183.robot.RobotMap;
 import org.usfirst.frc.team4183.utils.CommandUtils;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Reposition extends Command{
+	
+	private double initTime;
+	
+	// Seconds to wait for pneumatics to open
+	private final double TIME_FOR_PNEUMATICS = 0.5; 
 
 	public Reposition()
 	{
@@ -16,10 +22,20 @@ public class Reposition extends Command{
 	public void init()
 	{
 		Robot.elevatorSubsystem.releasePos();
+		initTime = timeSinceInitialized();
+		
 	}
 	
 	public void execute()
 	{
+		
+		if(timeSinceInitialized() - initTime > TIME_FOR_PNEUMATICS) {
+			Robot.oi.sbtnOpenMandible.release();
+			double currPos = Robot.elevatorSubsystem.getElevatorNativeUnits();
+			Robot.elevatorSubsystem.setSystemPower((currPos > RobotMap.ELEVATOR_SAFE_ZONE) 
+													? Robot.oi.rightRampAxis.get() 
+													: RobotMap.signedSqrt(Robot.oi.rightRampAxis.get()));
+		}
 		//Robot.elevatorSubsystem.setSystemPower(Robot.oi.leftRampAxis.get());
 		
 		/*
@@ -80,7 +96,6 @@ public class Reposition extends Command{
 			}
 		}
 		*/
-		Robot.elevatorSubsystem.setSystemPower(Robot.oi.leftRampAxis.get());
 		
 	}
 
@@ -97,7 +112,7 @@ public class Reposition extends Command{
 				return CommandUtils.stateChange(this, new Idle());
 			}
 			*/
-		if (Math.abs(Robot.oi.leftRampAxis.get()) < .06 || Robot.oi.btnIdle.get())
+		if (Math.abs(Robot.oi.rightRampAxis.get()) < .06 || Robot.oi.btnIdle.get())
 		{
 			return CommandUtils.stateChange(this, new Idle());
 		}
