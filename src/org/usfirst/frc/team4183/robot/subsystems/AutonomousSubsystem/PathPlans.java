@@ -32,7 +32,8 @@ public class PathPlans
 	{
 		// This enumeration corresponds to the similarly named Path and Trajectory
 		NONE,
-		TEST0
+		TEST0,
+		autoTest
 	}
 	
 	private static SendableChooser<PathPlanChoice> pathChooser;
@@ -42,7 +43,7 @@ public class PathPlans
 		pathChooser = new SendableChooser<PathPlanChoice>();
 		pathChooser.addDefault( "NONE",		PathPlanChoice.NONE);
 		pathChooser.addObject(  "TEST-0",   PathPlanChoice.TEST0);
-		   
+		pathChooser.addObject("autoTest", PathPlanChoice.autoTest);
 		SmartDashboard.putData( "Path Plan", pathChooser);
 		
 	}
@@ -50,7 +51,7 @@ public class PathPlans
 	static Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, // Type of curve to fit
 													 Trajectory.Config.SAMPLES_LOW,     // Smooth fit (high) or fast fit (low)
 													 RobotMap.MOTION_PROFILE_PERIOD_MS / 1000.0, // Time between segments
-													 0.80*0.3048*RobotMap.DRIVE_MAXIMUM_NO_LOAD_SPEED_FT_PER_SEC, 	    // Max speed m/s
+													 0.10*0.3048*RobotMap.DRIVE_MAXIMUM_NO_LOAD_SPEED_FT_PER_SEC, 	    // Max speed m/s
 													 2.55, 			// Max acceleration m/s^2
 													 60.0);			// Max jerk m/s^3
 	
@@ -61,7 +62,7 @@ public class PathPlans
 	// In this example, define the path start as 0,0,0 meaning we are aligned to the x-axis
 	//	
 	
-	private final static double R_m = 1.5; // Test radius in meters (so 1.5 m is approx. 5 feet)
+	private final static double R_m = 0.5; // Test radius in meters (so 1.5 m is approx. 5 feet)
     private static Waypoint[] testPath0 = new Waypoint[] 
     {
     		// A simple S curve to reach point across a square
@@ -72,8 +73,20 @@ public class PathPlans
             new Waypoint(3*R_m, 	4*R_m, 	Pathfinder.d2r(0)),
             new Waypoint(4*R_m, 	4*R_m, 	Pathfinder.d2r(0))
     };
-        
+    
+    private static Waypoint[] autoTest = new Waypoint[]
+    {
+    		new Waypoint(0,0,0),
+    		new Waypoint(0.699, 0.864, -0.785),
+    		new Waypoint(1.245, 1.817, 0),
+    		new Waypoint(1.245, 6.008,0),
+    		new Waypoint(0.689, 6.884,-0.785),
+    		new Waypoint(-0.124, 7.367, 1.570)
+    };
+   
     public static RobotTrajectory testTrajectory0;
+    
+    public static RobotTrajectory autoTestTrajectory;
 
     public static void initialize()
     {
@@ -87,7 +100,7 @@ public class PathPlans
 	    // Extract the right and left trajectories
 	    testTrajectory0.left = modifier.getLeftTrajectory();
 	    testTrajectory0.right = modifier.getRightTrajectory();
-	        }
+	 }
     
 	public static RobotTrajectory getSelectedTrajectory() 
 	{
@@ -101,6 +114,7 @@ public class PathPlans
 			//System.out.println("TEST0 PATH SELECTED");			
 			trajectory = PathPlans.testTrajectory0;			
 			break;
+		case autoTest:
 		default:
 			//System.out.println("BAD PATH CHOICE");
 			break;

@@ -234,6 +234,16 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 	public double getElevatorNativeUnits() {
 		return getMotorNativeUnits(elevatorMotorA);
 	}
+	
+	public double getElevatorCurrent() {
+		return elevatorMotorA.getOutputCurrent();
+	}
+	
+	// Limits the value to the provided limit, maintaining input sign
+	// sign(value) * min(|value|, limit)
+	public double limitJoystickCommand(double value, double limit) {
+		return Math.signum(value) * Math.min(Math.abs(value), limit);
+	}
 
 	@Override
 	public void diagnosticsCheck() {
@@ -256,6 +266,7 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 	public void periodic() {
 		if(telemetryState.getSelected() == SubsystemTelemetryState.ON) {
 			SmartDashboard.putNumber("ElevatorPosition", getElevatorNativeUnits());
+			SmartDashboard.putNumber("ElevatorCurrent", elevatorMotorA.getOutputCurrent());
 		}
 		
 	}
