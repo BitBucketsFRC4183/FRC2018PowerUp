@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj.command.Command;
 
 public class Idle extends Command{
 
+	private int holdPosition = 0;
+	
 	public Idle()
 	{
 		requires(Robot.elevatorSubsystem);
@@ -17,13 +19,16 @@ public class Idle extends Command{
 	{
 		Robot.elevatorSubsystem.disable();
 		Robot.oi.sbtnOpenMandible.release();
+		
+		holdPosition = (int) Robot.elevatorSubsystem.getElevatorNativeUnits();
+		
 		//Robot.elevatorSubsystem.holdEncodPos(false);
 		//Robot.elevatorSubsystem.holdEncodPos(true);
 	}
 	
 	public void execute()
 	{
-		
+		Robot.elevatorSubsystem.holdPosition(holdPosition);
 	}
 	
 	protected boolean isFinished()

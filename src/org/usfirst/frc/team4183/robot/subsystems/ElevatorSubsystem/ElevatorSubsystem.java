@@ -221,6 +221,11 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 		throatMotorA.set(ControlMode.PercentOutput,0);
 		throatMotorB.set(ControlMode.PercentOutput,0);
 	}
+
+	public void holdPosition(int ticks)
+	{
+		elevatorMotorA.set(ControlMode.MotionMagic,ticks);
+	}
 	
 	public void setSystemPower(double power)
 	{
