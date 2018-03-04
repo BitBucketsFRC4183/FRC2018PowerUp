@@ -254,7 +254,6 @@ public class MotionProfileDriver
 					 * timeout. Really this is so that you can unplug your talon in
 					 * the middle of an MP and react to it.
 					 */
-					System.out.println()
 					if (_statusL.isUnderrun == false&& _statusR.isUnderrun==false) {
 						_loopTimeout = kNumLoopsTimeout;
 					}
