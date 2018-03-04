@@ -171,6 +171,7 @@ public class MotionProfileDriver
 	 */
 	public void control() 
 	{
+		System.out.printf("******** CONTROL *******\n");
 		/* Get the motion profile status every loop */
 		_talonL.getMotionProfileStatus(_statusL);
 		_talonR.getMotionProfileStatus(_statusR);
@@ -213,8 +214,10 @@ public class MotionProfileDriver
 			 * progress, and possibly interrupting MPs if thats what you want to
 			 * do.
 			 */
+			System.out.printf("STATE = %d\n", _state);
 			switch (_state) {
 				case 0: /* wait for application to tell us to start an MP */
+					System.out.println("In case 0");
 					if (_bStart) {
 						_bStart = false;
 	
@@ -228,6 +231,7 @@ public class MotionProfileDriver
 							 */
 							_state = 1;
 							_loopTimeout = kNumLoopsTimeout;
+							System.out.println("Startfilling did not fail");
 						}
 						else
 						{
@@ -240,10 +244,12 @@ public class MotionProfileDriver
 						 * points
 						 */
 					/* do we have a minimum numberof points in Talon */
+					System.out.println("In case 1");
 					if (_statusL.btmBufferCnt > kMinPointsInTalon && _statusR.btmBufferCnt > kMinPointsInTalon) {
 						/* start (once) the motion profile */
 						_setValue = SetValueMotionProfile.Enable;
 						/* MP will start once the control frame gets scheduled */
+						System.out.println("Reached minimum number of points in Talon");
 						_state = 2;
 						_loopTimeout = kNumLoopsTimeout;
 					}
@@ -254,8 +260,11 @@ public class MotionProfileDriver
 					 * timeout. Really this is so that you can unplug your talon in
 					 * the middle of an MP and react to it.
 					 */
+					System.out.println("In case 2");
 					if (_statusL.isUnderrun == false&& _statusR.isUnderrun==false) {
 						_loopTimeout = kNumLoopsTimeout;
+						System.out.println("Talon says things are good, not underrun");
+
 					}
 					/*
 					 * If we are executing an MP and the MP finished, start loading
@@ -267,14 +276,14 @@ public class MotionProfileDriver
 						 * because we set the last point's isLast to true, we will
 						 * get here when the MP is done
 						 */
+						System.out.println("Motion Profile is done");
 						_setValue = SetValueMotionProfile.Hold;
 						_state = 0;
 						_loopTimeout = -1;
 					}
 					break;
 			}
-
-			System.out.println("if we made it this far, i literally don't know what's wrong");
+			System.out.println("Receives status of talons");
 			/* Get the motion profile status every loop */
 			_talonL.getMotionProfileStatus(_statusL);
 			_talonR.getMotionProfileStatus(_statusR);

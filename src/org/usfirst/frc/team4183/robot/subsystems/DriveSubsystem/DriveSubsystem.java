@@ -296,7 +296,7 @@ public class DriveSubsystem extends BitBucketsSubsystem
 	    	
 	    	
 	    	// Create the motion profile driver
-    		motionProfileDriver = new MotionProfileDriver(leftFrontMotor, leftFrontMotor, RobotMap.MOTION_PROFILE_PERIOD_MS);
+    		motionProfileDriver = new MotionProfileDriver(leftFrontMotor, rightFrontMotor, RobotMap.MOTION_PROFILE_PERIOD_MS);
 	    	
 
     		    	
@@ -721,6 +721,12 @@ public class DriveSubsystem extends BitBucketsSubsystem
 		motionProfileDriver.setCurrentTrajectory(aTrajectory);
 		motionProfileDriver.startCurrentTrajectory();
 	}	
+	
+	public void profileDrive()
+	{
+		leftFrontMotor.set(ControlMode.MotionProfile,  motionProfileDriver.getSetValue().value);
+		rightFrontMotor.set(ControlMode.MotionProfile,  motionProfileDriver.getSetValue().value);
+	}
 
 }
 

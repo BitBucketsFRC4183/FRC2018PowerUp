@@ -41,6 +41,7 @@ public class DriveProfile extends Command {
     	System.out.println("reached execute");
 
     	Robot.driveSubsystem.motionProfileDriver.control();
+    	Robot.driveSubsystem.profileDrive();
     }
 
     // Make this return true when this Command no longer needs to run execute()
