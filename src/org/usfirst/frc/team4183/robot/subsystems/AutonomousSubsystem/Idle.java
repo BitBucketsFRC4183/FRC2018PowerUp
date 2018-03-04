@@ -44,7 +44,8 @@ public class Idle extends Command {
     		++counter;
     		if (counter == 1) 
     		{
-    			AutoTasks blah = new AutoTasks();
+    			//AutoTasks blah = new AutoTasks();
+    			AutoTaskNew blah= new AutoTaskNew();
     			blah.start();
     		}
     	}

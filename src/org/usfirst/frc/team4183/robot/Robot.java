@@ -95,7 +95,7 @@ public class Robot extends IterativeRobot {
 		//addSubsystemToDebug(driveSubsystem);
         addSubsystemToDebug(intakeSubsystem);
         //addSubsystemToDebug(visionSubsystem);
-        //addSubsystemToDebug(autonomousSubsystem);
+        addSubsystemToDebug(autonomousSubsystem);
         addSubsystemToDebug(elevatorSubsystem);
 		showDebugInfo();		
 		
