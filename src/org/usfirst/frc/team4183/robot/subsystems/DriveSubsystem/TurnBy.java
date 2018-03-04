@@ -41,7 +41,7 @@ public class TurnBy extends Command {
     {
     	boolean timeout = (timeSinceInitialized() > timeout_sec);
     	
-    	if (timeout || Robot.driveSubsystem.isTurnComplete()) 
+    	if (timeout || Robot.driveSubsystem.isTurnComplete(angle_deg)) 
     	{
     		return CommandUtils.autoStateChange(this, new Idle());
     		

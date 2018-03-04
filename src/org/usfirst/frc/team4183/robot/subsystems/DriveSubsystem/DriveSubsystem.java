@@ -702,13 +702,18 @@ public class DriveSubsystem extends BitBucketsSubsystem
 		
 	}
 	
-	public boolean isTurnComplete() // A timeout should be used with this
+	public boolean isTurnComplete(double  angle_degrees) // A timeout should be used with this
 	{
 		// Using the same drive error for move and turn is not a universal thing
 		// In this case if the wheels are 6.25 and track is 24.25 and tolerance is 0.125 inches on move
 		// then the equivalent angle is about 0.6 degrees of frame rotation.
-		return (Math.abs(leftFrontMotor.getClosedLoopError(RobotMap.PRIMARY_PID_LOOP))  < RobotMap.DRIVE_MOTOR_MAX_CLOSED_LOOP_ERROR_TICKS) &&
-			   (Math.abs(rightFrontMotor.getClosedLoopError(RobotMap.PRIMARY_PID_LOOP)) < RobotMap.DRIVE_MOTOR_MAX_CLOSED_LOOP_ERROR_TICKS);
+		
+		double targetPos_ticks = (angle_degrees * RobotMap.WHEEL_ROTATION_PER_FRAME_DEGREES) * RobotMap.DRIVE_MOTOR_NATIVE_TICKS_PER_REV;
+		int errorL = (int) Math.abs(targetPos_ticks - (leftFrontMotor.getSelectedSensorPosition(RobotMap.PRIMARY_PID_LOOP)));
+		int errorR = (int) Math.abs(-targetPos_ticks - (rightFrontMotor.getSelectedSensorPosition(RobotMap.PRIMARY_PID_LOOP)));
+		return (errorL  < RobotMap.DRIVE_MOTOR_MAX_CLOSED_LOOP_ERROR_TICKS_ROTATION) &&
+			   (errorR < RobotMap.DRIVE_MOTOR_MAX_CLOSED_LOOP_ERROR_TICKS_ROTATION);
+		
 	}
 
 	public void startTrajectory(RobotTrajectory aTrajectory) 

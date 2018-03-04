@@ -70,7 +70,7 @@ public class RobotMap
 	public static final double WHEEL_CIRCUMFERENCE_INCHES = (WHEEL_DIAMETER_INCHES * Math.PI);
 
 	public static final double MAXIMUM_MOTION_ERROR_INCHES = 0.125;	// Convert into native ticks later
-
+	public static final double MAXIMUM_ROTATION_ERROR_INCHES = 0.50;
 	
 	public static final double MINUMUM_MOTOR_CURR = 1.25; 
 	public static final double MOTOR_TEST_PERCENT = 0.5; 	
@@ -182,6 +182,8 @@ public class RobotMap
 	
 	public static final int DRIVE_MOTOR_MAX_CLOSED_LOOP_ERROR_TICKS = (int) (MAXIMUM_MOTION_ERROR_INCHES * DRIVE_MOTOR_NATIVE_TICKS_PER_REV / WHEEL_CIRCUMFERENCE_INCHES);
 	
+	public static final int DRIVE_MOTOR_MAX_CLOSED_LOOP_ERROR_TICKS_ROTATION = (int) (MAXIMUM_ROTATION_ERROR_INCHES * DRIVE_MOTOR_NATIVE_TICKS_PER_REV / WHEEL_CIRCUMFERENCE_INCHES);
+	
 	public static final double DRIVE_MOTOR_NATIVE_TICKS_PER_FRAME_DEGREES = DRIVE_MOTOR_NATIVE_TICKS_PER_REV * WHEEL_ROTATION_PER_FRAME_DEGREES;
 	
 	public static final double DRIVE_MOTOR_OPEN_LOOP_RAMP_SEC   = 0.250;	// Second from neutral to full (easy on the gears)
@@ -214,7 +216,7 @@ public class RobotMap
 	/// conditions (e.g., carpet vs wood vs smooth or rough concrete)
 	public final static int DRIVE_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS = (int)(0.80 * 
 			                                                               DRIVE_MOTOR_FULL_THROTTLE_AVERAGE_SPEED_NATIVE_TICKS);
-	public final static int DRIVE_MOTOR_MOTION_ACCELERATION_NATIVE_TICKS = 4346; // 0.26 g on wood//DRIVE_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS;
+	public final static int DRIVE_MOTOR_MOTION_ACCELERATION_NATIVE_TICKS = (int) (4346/1.5); // 0.26 g on wood//DRIVE_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS;
 	
 	// The magic number 1023 is in the SRM based on the characteristics of the TalonSRX
 	// It is likely based on the internal workings of the A-to-D conversions, but the details

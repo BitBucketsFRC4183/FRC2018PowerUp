@@ -91,7 +91,7 @@ public class PathPlans
     public static void initialize()
     {
     
-    	testTrajectory0 = new RobotTrajectory("Test0");
+    	testTrajectory0 = new RobotTrajectory("Test0");//determines the path
 	    testTrajectory0.center = Pathfinder.generate(testPath0, config);
 	
 	    // We don't need to store the modifier persistently

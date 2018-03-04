@@ -32,13 +32,10 @@ public class AutoTasks extends CommandGroup {
     
     public void autoTaskA()
     {
-    	addSequential(new MoveBy(24, 3));
-    	addSequential(new TurnBy(500, 3));
-    	addSequential(new MoveBy(-24, 3));
+    	addSequential(new MoveBy(60, 3));
+    	addSequential(new TurnBy(180, 3));
+    	addSequential(new TurnBy(-180, 3));
+    	addSequential(new MoveBy(-60, 3));
     }
-    
-    public void autoTaskB()
-    {
-    	
-    }
+ 
 }

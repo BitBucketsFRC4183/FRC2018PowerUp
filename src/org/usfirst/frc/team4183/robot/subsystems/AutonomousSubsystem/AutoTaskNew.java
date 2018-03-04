@@ -30,7 +30,7 @@ public class AutoTaskNew extends CommandGroup
         // a CommandGroup containing them would require both the chassis and the
         // arm.
 		
-		addSequential(new DriveProfile(PathPlans.autoTestTrajectory));
+		addSequential(new DriveProfile(PathPlans.testTrajectory0));
 		
 	}
 

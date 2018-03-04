@@ -180,16 +180,19 @@ public class MotionProfileDriver
 		 * sure things never get stuck.
 		 */
 		if (_loopTimeout < 0) {
+			System.out.println("Our loopTimeout is below 0... rip");
 			/* do nothing, timeout is disabled */
 		} else {
 			/* our timeout is nonzero */
 			if (_loopTimeout == 0) {
+				System.out.println("Our loopTimeout is 0 this should not be happening");
 				/*
 				 * something is wrong. Talon is not present, unplugged, breaker
 				 * tripped
 				 */
 				MotionProfileInstrumentation.OnNoProgress();
 			} else {
+				System.out.println("Our looptimeout is not the issue");
 				--_loopTimeout;
 			}
 		}
@@ -201,6 +204,7 @@ public class MotionProfileDriver
 			 * we are not in MP mode. We are probably driving the robot around
 			 * using gamepads or some other mode.
 			 */
+			System.out.println("talons are not in correct control mode");
 			_state =0;
 			_loopTimeout = -1;
 		} else {
@@ -250,6 +254,7 @@ public class MotionProfileDriver
 					 * timeout. Really this is so that you can unplug your talon in
 					 * the middle of an MP and react to it.
 					 */
+					System.out.println()
 					if (_statusL.isUnderrun == false&& _statusR.isUnderrun==false) {
 						_loopTimeout = kNumLoopsTimeout;
 					}
@@ -270,6 +275,7 @@ public class MotionProfileDriver
 					break;
 			}
 
+			System.out.println("if we made it this far, i literally don't know what's wrong");
 			/* Get the motion profile status every loop */
 			_talonL.getMotionProfileStatus(_statusL);
 			_talonR.getMotionProfileStatus(_statusR);

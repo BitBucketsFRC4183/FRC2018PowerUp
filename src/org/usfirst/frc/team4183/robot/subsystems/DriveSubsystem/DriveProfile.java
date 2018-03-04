@@ -17,7 +17,7 @@ public class DriveProfile extends Command {
 	
     public DriveProfile(RobotTrajectory aTrajectory) 
     {
-    	requires(Robot.autonomousSubsystem);
+    	requires(Robot.driveSubsystem);
     	
     	trajectory = aTrajectory;
     	
@@ -29,12 +29,17 @@ public class DriveProfile extends Command {
     // Called just before this Command runs the first time
     protected void initialize() 
     {
+    	System.out.println("reached initialize");
     	Robot.driveSubsystem.startTrajectory(trajectory);
+    	Robot.driveSubsystem.motionProfileDriver.control();
+
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() 
     {
+    	System.out.println("reached execute");
+
     	Robot.driveSubsystem.motionProfileDriver.control();
     }
 
@@ -44,12 +49,15 @@ public class DriveProfile extends Command {
     	// Send back to idle when auto ends or profile is complete
     	/// TODO: go to next auto state when doing multiple actions
     	/// as either a command group or is it better to let idle and subsystem design what is next
+    	System.out.println("reached isFinished");
+
     	boolean timeout = (timeSinceInitialized() > timeout_sec);
     	if ( (Robot.runMode != Robot.RunMode.AUTO) ||
     		 (Robot.driveSubsystem.motionProfileDriver.getSetValue() != SetValueMotionProfile.Enable) ||
     		 timeout
-    	   )
+    	   ) 
     	{
+    		System.out.println("Motion Profile is in the state " + Robot.driveSubsystem.motionProfileDriver.getSetValue());
     		if (timeout)
     		{
     			//System.out.println("WARNING: DriveProfile Timedout!");
