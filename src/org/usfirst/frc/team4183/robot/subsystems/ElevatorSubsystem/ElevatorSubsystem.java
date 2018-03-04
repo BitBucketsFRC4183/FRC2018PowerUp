@@ -249,6 +249,14 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 	public double limitJoystickCommand(double value, double limit) {
 		return Math.signum(value) * Math.min(Math.abs(value), limit);
 	}
+	
+	// Move is complete when we are within tolerance and can consider starting the next move
+	public boolean isMoveComplete(int targetTicks)	// At timeout should be used with this
+	{
+		int error = (int) Math.abs(targetTicks - elevatorMotorA.getSelectedSensorPosition(RobotMap.PRIMARY_PID_LOOP));
+		return (error  < RobotMap.ELEVATOR_POSITION_TOLERANCE_NATIVE_TICKS);
+	}
+	
 
 	@Override
 	public void diagnosticsCheck() {

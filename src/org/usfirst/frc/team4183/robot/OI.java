@@ -51,10 +51,10 @@ public class OI {
 	public final LogicalButton releaseRampOper = new ModalButton(operatorController.bPS4);
 	
 	//Elevator Buttons
-	public final LogicalButton btnHighPosElev = new ModalButton(operatorController.bPovUp);
-	public final LogicalButton btnLowPosElev = new ModalButton(operatorController.bPovDown);
-	public final LogicalButton btnMedPosElev = new ModalButton(operatorController.bPovRight);
-	public final LogicalButton btnTransPosElev = new ModalButton(driverController.bPovLeft);
+	public final LogicalButton btnElevatorTop = new ModalButton(operatorController.bR1);
+	public final LogicalButton btnElevatorHigh = new ModalButton(operatorController.bL1);
+	public final LogicalButton btnElevatorMiddle = new ModalButton(operatorController.bR2);
+	public final LogicalButton btnElevatorBottom = new ModalButton(driverController.bL2);
 
 	
 	
