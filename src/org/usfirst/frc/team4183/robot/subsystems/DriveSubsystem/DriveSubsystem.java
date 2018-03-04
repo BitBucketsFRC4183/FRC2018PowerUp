@@ -718,6 +718,7 @@ public class DriveSubsystem extends BitBucketsSubsystem
 
 	public void startTrajectory(RobotTrajectory aTrajectory) 
 	{
+		System.out.printf("Starting Trajectory\n");
 		motionProfileDriver.setCurrentTrajectory(aTrajectory);
 		motionProfileDriver.startCurrentTrajectory();
 	}	

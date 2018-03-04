@@ -92,7 +92,7 @@ public class Robot extends IterativeRobot {
 		autonomousSubsystem.initialize();
 				
 		// Add all subsystems for debugging
-		//addSubsystemToDebug(driveSubsystem);
+		addSubsystemToDebug(driveSubsystem);
         addSubsystemToDebug(intakeSubsystem);
         //addSubsystemToDebug(visionSubsystem);
         addSubsystemToDebug(autonomousSubsystem);

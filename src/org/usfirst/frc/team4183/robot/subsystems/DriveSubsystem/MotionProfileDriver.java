@@ -165,13 +165,17 @@ public class MotionProfileDriver
 		_bStart = false;
 
 	}
+	
+	public boolean minPointsLoaded()
 
+	{
+		return (_statusL.btmBufferCnt > kMinPointsInTalon && _statusR.btmBufferCnt > kMinPointsInTalon);
+	}
 	/**
 	 * Called every loop.
 	 */
 	public void control() 
 	{
-		System.out.printf("******** CONTROL *******\n");
 		/* Get the motion profile status every loop */
 		_talonL.getMotionProfileStatus(_statusL);
 		_talonR.getMotionProfileStatus(_statusR);
@@ -181,19 +185,16 @@ public class MotionProfileDriver
 		 * sure things never get stuck.
 		 */
 		if (_loopTimeout < 0) {
-			System.out.println("Our loopTimeout is below 0... rip");
 			/* do nothing, timeout is disabled */
 		} else {
 			/* our timeout is nonzero */
 			if (_loopTimeout == 0) {
-				System.out.println("Our loopTimeout is 0 this should not be happening");
 				/*
 				 * something is wrong. Talon is not present, unplugged, breaker
 				 * tripped
 				 */
 				MotionProfileInstrumentation.OnNoProgress();
 			} else {
-				System.out.println("Our looptimeout is not the issue");
 				--_loopTimeout;
 			}
 		}
@@ -205,7 +206,6 @@ public class MotionProfileDriver
 			 * we are not in MP mode. We are probably driving the robot around
 			 * using gamepads or some other mode.
 			 */
-			System.out.println("talons are not in correct control mode");
 			_state =0;
 			_loopTimeout = -1;
 		} else {
@@ -231,11 +231,9 @@ public class MotionProfileDriver
 							 */
 							_state = 1;
 							_loopTimeout = kNumLoopsTimeout;
-							System.out.println("Startfilling did not fail");
 						}
 						else
 						{
-							System.out.printf("*************** FILL FAILED ***********\n");
 						}
 					}
 					break;
@@ -244,12 +242,10 @@ public class MotionProfileDriver
 						 * points
 						 */
 					/* do we have a minimum numberof points in Talon */
-					System.out.println("In case 1");
 					if (_statusL.btmBufferCnt > kMinPointsInTalon && _statusR.btmBufferCnt > kMinPointsInTalon) {
 						/* start (once) the motion profile */
 						_setValue = SetValueMotionProfile.Enable;
 						/* MP will start once the control frame gets scheduled */
-						System.out.println("Reached minimum number of points in Talon");
 						_state = 2;
 						_loopTimeout = kNumLoopsTimeout;
 					}
@@ -260,10 +256,8 @@ public class MotionProfileDriver
 					 * timeout. Really this is so that you can unplug your talon in
 					 * the middle of an MP and react to it.
 					 */
-					System.out.println("In case 2");
 					if (_statusL.isUnderrun == false&& _statusR.isUnderrun==false) {
 						_loopTimeout = kNumLoopsTimeout;
-						System.out.println("Talon says things are good, not underrun");
 
 					}
 					/*
@@ -276,14 +270,12 @@ public class MotionProfileDriver
 						 * because we set the last point's isLast to true, we will
 						 * get here when the MP is done
 						 */
-						System.out.println("Motion Profile is done");
 						_setValue = SetValueMotionProfile.Hold;
 						_state = 0;
 						_loopTimeout = -1;
 					}
 					break;
 			}
-			System.out.println("Receives status of talons");
 			/* Get the motion profile status every loop */
 			_talonL.getMotionProfileStatus(_statusL);
 			_talonR.getMotionProfileStatus(_statusR);
@@ -444,6 +436,7 @@ public class MotionProfileDriver
 	 */
 	private void startMotionProfile() {
 		_bStart = true;
+		System.out.printf("Start = true\n");
 	}
 
 	/**
