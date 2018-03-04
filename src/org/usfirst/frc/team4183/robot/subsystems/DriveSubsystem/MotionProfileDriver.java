@@ -165,7 +165,12 @@ public class MotionProfileDriver
 		_bStart = false;
 
 	}
+	
+	public boolean minPointsLoaded()
 
+	{
+		return (_statusL.btmBufferCnt > kMinPointsInTalon && _statusR.btmBufferCnt > kMinPointsInTalon);
+	}
 	/**
 	 * Called every loop.
 	 */
@@ -180,19 +185,16 @@ public class MotionProfileDriver
 		 * sure things never get stuck.
 		 */
 		if (_loopTimeout < 0) {
-			System.out.println("Our loopTimeout is below 0... rip");
 			/* do nothing, timeout is disabled */
 		} else {
 			/* our timeout is nonzero */
 			if (_loopTimeout == 0) {
-				System.out.println("Our loopTimeout is 0 this should not be happening");
 				/*
 				 * something is wrong. Talon is not present, unplugged, breaker
 				 * tripped
 				 */
 				MotionProfileInstrumentation.OnNoProgress();
 			} else {
-				System.out.println("Our looptimeout is not the issue");
 				--_loopTimeout;
 			}
 		}
@@ -204,7 +206,6 @@ public class MotionProfileDriver
 			 * we are not in MP mode. We are probably driving the robot around
 			 * using gamepads or some other mode.
 			 */
-			System.out.println("talons are not in correct control mode");
 			_state =0;
 			_loopTimeout = -1;
 		} else {
@@ -213,8 +214,10 @@ public class MotionProfileDriver
 			 * progress, and possibly interrupting MPs if thats what you want to
 			 * do.
 			 */
+			System.out.printf("STATE = %d\n", _state);
 			switch (_state) {
 				case 0: /* wait for application to tell us to start an MP */
+					System.out.println("In case 0");
 					if (_bStart) {
 						_bStart = false;
 	
@@ -231,7 +234,6 @@ public class MotionProfileDriver
 						}
 						else
 						{
-							System.out.printf("*************** FILL FAILED ***********\n");
 						}
 					}
 					break;
@@ -256,6 +258,7 @@ public class MotionProfileDriver
 					 */
 					if (_statusL.isUnderrun == false&& _statusR.isUnderrun==false) {
 						_loopTimeout = kNumLoopsTimeout;
+
 					}
 					/*
 					 * If we are executing an MP and the MP finished, start loading
@@ -273,8 +276,6 @@ public class MotionProfileDriver
 					}
 					break;
 			}
-
-			System.out.println("if we made it this far, i literally don't know what's wrong");
 			/* Get the motion profile status every loop */
 			_talonL.getMotionProfileStatus(_statusL);
 			_talonR.getMotionProfileStatus(_statusR);
@@ -435,6 +436,7 @@ public class MotionProfileDriver
 	 */
 	private void startMotionProfile() {
 		_bStart = true;
+		System.out.printf("Start = true\n");
 	}
 
 	/**

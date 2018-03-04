@@ -48,11 +48,11 @@ public class PathPlans
 		
 	}
 
-	static Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, // Type of curve to fit
+	static Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_QUINTIC, // Type of curve to fit
 													 Trajectory.Config.SAMPLES_LOW,     // Smooth fit (high) or fast fit (low)
 													 RobotMap.MOTION_PROFILE_PERIOD_MS / 1000.0, // Time between segments
-													 0.10*0.3048*RobotMap.DRIVE_MAXIMUM_NO_LOAD_SPEED_FT_PER_SEC, 	    // Max speed m/s
-													 2.55, 			// Max acceleration m/s^2
+													 0.3048*6, 	    // Max speed m/s
+													 2.0, 			// Max acceleration m/s^2
 													 60.0);			// Max jerk m/s^3
 	
 	// Paths are defined as waypoints in x,y,heading
@@ -76,12 +76,17 @@ public class PathPlans
     
     private static Waypoint[] autoTest = new Waypoint[]
     {
-    		new Waypoint(0,0,0),
-    		new Waypoint(0.699, 0.864, -0.785),
-    		new Waypoint(1.245, 1.817, 0),
-    		new Waypoint(1.245, 6.008,0),
-    		new Waypoint(0.689, 6.884,-0.785),
-    		new Waypoint(-0.124, 7.367, 1.570)
+    		new Waypoint(0, 0, Pathfinder.d2r(0)),
+    		new Waypoint(0.864, -0.699, Pathfinder.d2r(-45)),
+    		new Waypoint(1.817+0.5, -1.245, Pathfinder.d2r(0)),
+    		//ALT1:
+    		//new Waypoint(6.008, 1.245, Pathfinder.d2r(0)),
+    		//new Waypoint(6.884, 0.689, Pathfinder.d2r(-45)),
+    		//new Waypoint(7.367, -0.124, Pathfinder.d2r(-90))
+    		//ALT 2:
+    		new Waypoint(2.922+0.3, -1.245+0.3, Pathfinder.d2r(45)),
+    		new Waypoint(3.405, 0, Pathfinder.d2r(90))
+	    		
     };
    
     public static RobotTrajectory testTrajectory0;
@@ -92,7 +97,7 @@ public class PathPlans
     {
     
     	testTrajectory0 = new RobotTrajectory("Test0");//determines the path
-	    testTrajectory0.center = Pathfinder.generate(testPath0, config);
+	    testTrajectory0.center = Pathfinder.generate(autoTest, config);
 	
 	    // We don't need to store the modifier persistently
 	    TankModifier modifier = new TankModifier(testTrajectory0.center).modify(RobotMap.inch2Meter(RobotMap.WHEEL_TRACK_INCHES));
