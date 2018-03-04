@@ -111,9 +111,9 @@ public class RobotMap
 	
 	public static final double ELEVATOR_INCHES_PER_NATIVE_TICKS = ELEVATOR_SPROCKET_CIRCUMFERENCE_INCHES / ELEVATOR_MOTOR_NATIVE_TICKS_PER_REV;
 
-	public static final double ELEVATOR_POSITION_TOLERANCE_INCH = 0.25;	/// TODO: What is possible and what do we want?
+	public static final double ELEVATOR_POSITION_TOLERANCE_INCH = 1.0;
 	public static final int ELEVATOR_POSITION_TOLERANCE_NATIVE_TICKS = (int) (ELEVATOR_POSITION_TOLERANCE_INCH / ELEVATOR_INCHES_PER_NATIVE_TICKS); //50;	/// TODO: Convert from inches or meter tolerance
-	
+		
 	// The magic number 1023 is in the SRM based on the characteristics of the TalonSRX
 	// It is likely based on the internal workings of the A-to-D conversions, but the details
 	// are not important at this point; just consider it a scaling factor to make the numbers

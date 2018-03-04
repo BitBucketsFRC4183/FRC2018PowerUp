@@ -12,11 +12,19 @@ public class Reposition extends Command{
 	private double initTime;
 	
 	// Seconds to wait for pneumatics to open
-	private final double TIME_FOR_PNEUMATICS = 0.5; 
+	private final double TIME_FOR_PNEUMATICS = 0.5;
+	
+	private int requestedPosition = -1; // Use -1 as indicator for joystice
 
 	public Reposition()
 	{
-		requires(Robot.elevatorSubsystem);	
+		requires(Robot.elevatorSubsystem);
+		requestedPosition = -1;
+	}
+	public Reposition(int targetPosition)
+	{
+		requires(Robot.elevatorSubsystem);
+		requestedPosition = targetPosition;
 	}
 	
 	public void init()
@@ -32,71 +40,19 @@ public class Reposition extends Command{
 		if(timeSinceInitialized() - initTime > TIME_FOR_PNEUMATICS) {
 			Robot.oi.sbtnOpenMandible.release();
 			double currPos = Robot.elevatorSubsystem.getElevatorNativeUnits();
-			Robot.elevatorSubsystem.setSystemPower((currPos > RobotMap.ELEVATOR_SAFE_ZONE) 
-													? Robot.oi.rightRampAxis.get() 
-													: RobotMap.signedSquare(Robot.elevatorSubsystem.limitJoystickCommand(Robot.oi.rightRampAxis.get(), 0.8), 3));
-		}
-		//Robot.elevatorSubsystem.setSystemPower(Robot.oi.leftRampAxis.get());
-		
-		/*
-		if (Robot.oi.btnHighPosElev.get())
-		{
-			Robot.elevatorSubsystem.setElevPos(ElevatorSubsystem.ElevatorPositions.SCALE);
-		}
-		else if (Robot.oi.btnMedPosElev.get())
-		{
-			Robot.elevatorSubsystem.setElevPos(ElevatorSubsystem.ElevatorPositions.SWITCH);
-		}
-		else if (Robot.oi.btnLowPosElev.get())
-		{
-			Robot.elevatorSubsystem.setElevPos(ElevatorSubsystem.ElevatorPositions.SCALE);
-		}
-		else if (Robot.oi.btnTransPosElev.get())
-		{
-			Robot.elevatorSubsystem.setElevPos(ElevatorSubsystem.ElevatorPositions.TRANS);
-		}
 			
-		if  (!Robot.elevatorSubsystem.posGreaterThanMin())
-		{
-			Robot.oi.sbtnOpenMandible.push();
-		}
-		else if (Robot.elevatorSubsystem.posCloseToInit())
-		{
-			Robot.oi.sbtnCloseMandible.push();
-		}
-
-		if (Math.abs(Robot.oi.leftRampAxis.get()) > .06)
-		{
-			Robot.elevatorSubsystem.setElevPos(ElevatorSubsystem.ElevatorPositions.MANUAL);
-		}
-		
-		//Checks to see if the current ElevPos state is not in manual mode and sees if the elevator is not closeToItsDesired Position
-		if (Robot.elevatorSubsystem.getElevPos() != ElevatorSubsystem.ElevatorPositions.MANUAL && !Robot.elevatorSubsystem.closeToDesiredPos())
-		{
-			Robot.elevatorSubsystem.goToPosition(Robot.elevatorSubsystem.getElevPos().getUnits());
-			if (Robot.elevatorSubsystem.getElevPos().getUnits() > ElevatorSubsystem.ElevatorPositions.INIT.getUnits())
+			// Use the joystick unless otherwise told to reach a position
+			if (requestedPosition == -1)
 			{
-				Robot.elevatorSubsystem.intakeThroat();
+				Robot.elevatorSubsystem.setSystemPower((currPos > RobotMap.ELEVATOR_SAFE_ZONE) 
+														? Robot.oi.rightRampAxis.get() 
+														: RobotMap.signedSquare(Robot.elevatorSubsystem.limitJoystickCommand(Robot.oi.rightRampAxis.get(), 0.8), 3));
 			}
 			else
 			{
-				Robot.elevatorSubsystem.disableThroat();
+				Robot.elevatorSubsystem.holdPosition(requestedPosition);
 			}
-		}
-		else
-		{
-			Robot.elevatorSubsystem.addToPosition(Robot.oi.leftRampAxis.get());
-			if (Robot.elevatorSubsystem.getElevPos().getUnits() > ElevatorSubsystem.ElevatorPositions.INIT.getUnits())
-			{
-				Robot.elevatorSubsystem.intakeThroat();
-			}
-			else
-			{
-				Robot.elevatorSubsystem.disableThroat();
-			}
-		}
-		*/
-		
+		}		
 	}
 
 	@Override
@@ -112,8 +68,13 @@ public class Reposition extends Command{
 				return CommandUtils.stateChange(this, new Idle());
 			}
 			*/
-		if (Math.abs(Robot.oi.rightRampAxis.get()) < .06 || Robot.oi.btnIdle.get() || 
-				(Robot.elevatorSubsystem.getElevatorCurrent() > RobotMap.ELEVATOR_MAX_DOWN_CURRENT && Robot.oi.rightRampAxis.get() < 0))
+		if (((requestedPosition == -1) && 
+			 (Math.abs(Robot.oi.rightRampAxis.get()) < .06)) || 
+			Robot.oi.btnIdle.get() || 
+			((Robot.elevatorSubsystem.getElevatorCurrent() > RobotMap.ELEVATOR_MAX_DOWN_CURRENT) && 
+			 (Robot.oi.rightRampAxis.get() < 0)) ||
+			((requestedPosition != -1) && 
+			 Robot.elevatorSubsystem.isMoveComplete(requestedPosition)))
 		{
 			return CommandUtils.stateChange(this, new Idle());
 		}

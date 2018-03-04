@@ -40,6 +40,28 @@ public class Idle extends Command{
 			Robot.oi.sbtnOpenMandible.push();
 			return CommandUtils.stateChange(this, new Reposition());
 		}
+		else if (Robot.oi.btnElevatorTop.get())
+		{
+			Robot.oi.sbtnOpenMandible.push();
+			return CommandUtils.stateChange(this, new Reposition());			
+		}
+		else if (Robot.oi.btnElevatorHigh.get())
+		{
+			Robot.oi.sbtnOpenMandible.push();
+			return CommandUtils.stateChange(this, new Reposition());			
+		}
+		else if (Robot.oi.btnElevatorMiddle.get())
+		{
+			Robot.oi.sbtnOpenMandible.push();
+			return CommandUtils.stateChange(this, new Reposition());			
+		}
+		else if (Robot.oi.btnElevatorBottom.get())
+		{
+			Robot.oi.sbtnOpenMandible.push();
+			return CommandUtils.stateChange(this, new Reposition());			
+		}
+		
+		
 		return false;
 	}
 
