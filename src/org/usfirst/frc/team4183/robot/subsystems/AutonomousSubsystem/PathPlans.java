@@ -79,10 +79,10 @@ public class PathPlans
     private static Waypoint[] shortSwitchRightStart = new Waypoint[]
     {
     		new Waypoint(0, 0, Pathfinder.d2r(0)),
-    		new Waypoint(0.864, -0.699, Pathfinder.d2r(-45)),
-    		new Waypoint(1.817+0.5, -1.245, Pathfinder.d2r(0)),
-    		new Waypoint(2.922+0.3, -1.245+0.3, Pathfinder.d2r(45)),
-    		new Waypoint(3.405, 0, Pathfinder.d2r(90))
+    		new Waypoint(0.864, -0.699-0.3048, Pathfinder.d2r(-45)),
+    		new Waypoint(1.817+0.5, -1.245-0.3048, Pathfinder.d2r(0)),
+    		new Waypoint(2.922+0.3, -1.245+0.3-0.3048, Pathfinder.d2r(45)),
+    		new Waypoint(3.405, 0-0.3048, Pathfinder.d2r(90))
 	    		
     };
 
@@ -92,12 +92,12 @@ public class PathPlans
     		new Waypoint(0.864, -0.699, Pathfinder.d2r(-45)),
     		new Waypoint(1.817+0.5, -1.245, Pathfinder.d2r(0)),
     		
-    		new Waypoint(4.318, -1.245, Pathfinder.d2r(0)),
-    		new Waypoint(5.182, 0.254, Pathfinder.d2r(90)),
-    		new Waypoint(5.182, 3.937, Pathfinder.d2r(90)),
-    		new Waypoint(4.318, 5.436, Pathfinder.d2r(180)),
-    		new Waypoint(3.600+0.4, 5.136, Pathfinder.d2r(225)),
-    		new Waypoint(3.405+0.4, 4.191, Pathfinder.d2r(310))
+    		new Waypoint(4.318, -1.245-0.3048, Pathfinder.d2r(0)),
+    		new Waypoint(5.182, 0.254-0.3048, Pathfinder.d2r(90)),
+    		new Waypoint(5.182, 3.937-0.3048, Pathfinder.d2r(90)),
+    		new Waypoint(4.318, 5.436-0.3048, Pathfinder.d2r(180)),
+    		new Waypoint(3.600+0.4, 5.136-0.3048, Pathfinder.d2r(225)),
+    		new Waypoint(3.405+0.4, 4.191-0.3048, Pathfinder.d2r(310))
 	    		
     };
     
