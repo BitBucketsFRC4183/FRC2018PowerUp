@@ -1,5 +1,6 @@
 package org.usfirst.frc.team4183.utils;
 
+import edu.wpi.first.wpilibj.Timer;
 import jaci.pathfinder.Trajectory;
 
 public class RobotTrajectory
@@ -19,5 +20,7 @@ public class RobotTrajectory
 	{
 		name = aName;
 		runCount = 1; // Until otherwise specified
+		
+		System.out.println("Time: " + Timer.getFPGATimestamp() + ": Creating Trajectory: " + name);
 	}
 }

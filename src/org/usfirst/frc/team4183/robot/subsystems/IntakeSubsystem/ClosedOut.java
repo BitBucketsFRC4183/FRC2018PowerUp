@@ -46,7 +46,7 @@ public class ClosedOut extends Command {
     	
     	if (timeout == 0.0)
     	{
-    		System.out.println("First End Condition");
+    		System.out.println("First End Condition, time:" + timeSinceInitialized());
     		System.out.flush();
 	    	if(Robot.oi.btnIdle.get() || (! Robot.oi.btnOutIntake.get() && !Robot.oi.sbtnOuttakeThroat.get())) 
 	    		return CommandUtils.stateChange(this, new Idle());
