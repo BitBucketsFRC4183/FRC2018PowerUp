@@ -2,6 +2,7 @@ package org.usfirst.frc.team4183.robot.subsystems.ElevatorSubsystem;
 
 import org.usfirst.frc.team4183.robot.Robot;
 import org.usfirst.frc.team4183.utils.CommandUtils;
+import org.usfirst.frc.team4183.robot.subsystems.ElevatorSubsystem.ElevatorSubsystem.ElevatorPresets;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -43,22 +44,22 @@ public class Idle extends Command{
 		else if (Robot.oi.btnElevatorTop.get())
 		{
 			Robot.oi.sbtnOpenMandible.push();
-			return CommandUtils.stateChange(this, new Reposition());			
+			return CommandUtils.stateChange(this, new Reposition(ElevatorPresets.TOP.getNativeTicks()));			
 		}
 		else if (Robot.oi.btnElevatorHigh.get())
 		{
 			Robot.oi.sbtnOpenMandible.push();
-			return CommandUtils.stateChange(this, new Reposition());			
+			return CommandUtils.stateChange(this, new Reposition(ElevatorPresets.HIGH.getNativeTicks()));			
 		}
 		else if (Robot.oi.btnElevatorMiddle.get())
 		{
 			Robot.oi.sbtnOpenMandible.push();
-			return CommandUtils.stateChange(this, new Reposition());			
+			return CommandUtils.stateChange(this, new Reposition(ElevatorPresets.MIDDLE.getNativeTicks()));			
 		}
 		else if (Robot.oi.btnElevatorBottom.get())
 		{
 			Robot.oi.sbtnOpenMandible.push();
-			return CommandUtils.stateChange(this, new Reposition());			
+			return CommandUtils.stateChange(this, new Reposition(ElevatorPresets.BOTTOM.getNativeTicks()));			
 		}
 		
 		
