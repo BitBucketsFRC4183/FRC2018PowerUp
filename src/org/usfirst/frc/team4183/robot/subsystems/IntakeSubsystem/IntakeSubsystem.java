@@ -255,6 +255,13 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 		
 		return average;
 		}
+
+	public void initialize() {
+		// TODO Auto-generated method stub
+		Idle initialCommand = new Idle();
+		initialCommand.start();
+		
+	}
 	}
 
 

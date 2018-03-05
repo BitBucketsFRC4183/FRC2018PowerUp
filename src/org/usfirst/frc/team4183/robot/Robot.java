@@ -163,6 +163,8 @@ public class Robot extends IterativeRobot {
 		runMode = RunMode.TELEOP;
 		oi.setTeleopMode();
 		
+		intakeSubsystem.initialize();
+		
 	}
 	
 	/**
