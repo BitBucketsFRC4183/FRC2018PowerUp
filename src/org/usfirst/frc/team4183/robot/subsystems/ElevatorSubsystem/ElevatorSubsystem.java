@@ -46,7 +46,7 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 	public static enum ElevatorPresets
 	{
 		/// TODO: Change to inches, millimeters or meters
-		BOTTOM(0), MIDDLE(72000), HIGH(111000), TOP(150000);
+		BOTTOM(100), MIDDLE(47500), HIGH(127384), TOP(150000);
 		
 		private int nativeTicks;
 		ElevatorPresets(int nativeTicks)
