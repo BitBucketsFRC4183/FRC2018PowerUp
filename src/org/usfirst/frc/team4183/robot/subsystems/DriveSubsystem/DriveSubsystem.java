@@ -419,10 +419,19 @@ public class DriveSubsystem extends BitBucketsSubsystem
 	@Override
 	protected void initDefaultCommand() 
 	{
-		setDefaultCommand(new Idle());		
+		// Moved to initialize so it does not automatically interfere
+		// setDefaultCommand(new Idle());		
 		
 	}
 
+	public void initialize() 
+	{
+		Idle initialCommand = new Idle();
+		initialCommand.start();
+		
+	}
+	
+	
 	public void disable() {
 		setAllMotorsZero();
 	}

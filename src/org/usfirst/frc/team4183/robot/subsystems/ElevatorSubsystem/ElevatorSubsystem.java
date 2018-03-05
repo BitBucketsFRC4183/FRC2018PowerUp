@@ -286,7 +286,8 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 
 	@Override
 	protected void initDefaultCommand() {
-		setDefaultCommand(new Idle());		
+		// Not here, use initialize and explicit start instead of setDefaultCommand(new Idle());
+		// this prevent problems when using the subsystem from an autonomous mode
 	}
 
 	@Override
@@ -321,6 +322,13 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 	public boolean getDiagnosticsFlag() {
 		// TODO Auto-generated method stub
 		return runDiagnostics;
+	}
+
+	public void initialize() {
+		// TODO Auto-generated method stub
+		Idle initialCommand = new Idle();
+		initialCommand.start();
+		
 	}
 	
 	

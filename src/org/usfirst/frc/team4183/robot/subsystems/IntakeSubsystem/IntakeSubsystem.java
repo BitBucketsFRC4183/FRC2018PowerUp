@@ -262,7 +262,7 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 		initialCommand.start();
 		
 	}
-	}
+}
 
 
 

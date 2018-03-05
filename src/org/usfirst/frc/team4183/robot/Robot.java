@@ -107,12 +107,17 @@ public class Robot extends IterativeRobot {
 	private void setSubsystemsDebug() 
 	{
 		driveSubsystem.setDiagnosticsFlag(true);
-//		intakeSubsystem.setDiagnosticsFlag(true);
+		intakeSubsystem.setDiagnosticsFlag(true);		
+		elevatorSubsystem.setDiagnosticsFlag(true);
 		
-        /// WARNING WARNING WARNING: ONLY ONE		
-		//springShooterSubsystem.setDiagnosticsFlag(true);
-//		elevatorSubsystem.setDiagnosticsFlag(true);
-		
+	}
+	
+	protected void initialize()
+	{
+		// Only the physical subsystems
+		driveSubsystem.initialize();
+		intakeSubsystem.initialize();
+		elevatorSubsystem.initialize();
 	}
 	
 	@Override
@@ -125,6 +130,12 @@ public class Robot extends IterativeRobot {
 		// Will result in only Default Commands (==Idle-s) running,
 		// effectively forcing all State Machines into Idle state.
 		Scheduler.getInstance().removeAll();
+		
+		// NOTE: We don't use the default commands because it causes problems
+		// when trying to cross initiate tasks from an autonomous state machine
+		// Instead we explicitly initialize the subsystems to start the
+		// the first commands states
+		initialize();
 
 	}
 	@Override
@@ -134,20 +145,14 @@ public class Robot extends IterativeRobot {
 		runWatch.stop();
 	}
 	
-	Waypoint[] points = new Waypoint[]
-			{
-				new Waypoint(0, 0, 0),
-				new Waypoint(1, 2, Pathfinder.d2r(45)),
-                new Waypoint(3, 4, 0),
-                new Waypoint(5,6, Pathfinder.d2r(45))
-			};
-	
 	@Override
 	public void autonomousInit() {
 		autonomousSubsystem.convertGameData();
 		
 		runMode = RunMode.AUTO;
 		oi.setAutoMode();
+		
+		initialize();
 	}
 	/**
 	 * This function is called periodically during autonomous.
@@ -163,7 +168,7 @@ public class Robot extends IterativeRobot {
 		runMode = RunMode.TELEOP;
 		oi.setTeleopMode();
 		
-		intakeSubsystem.initialize();
+		initialize();
 		
 	}
 	
