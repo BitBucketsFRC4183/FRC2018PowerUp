@@ -43,6 +43,27 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 		}
 	}
 	
+	public static enum ElevatorPresets
+	{
+		/// TODO: Change to inches, millimeters or meters
+		BOTTOM(0), MIDDLE(72000), HIGH(111000), TOP(150000);
+		
+		private int nativeTicks;
+		ElevatorPresets(int nativeTicks)
+		{
+			this.nativeTicks = nativeTicks;
+		}
+		
+		public double getPosition_in() {
+			return this.nativeTicks / RobotMap.ELEVATOR_INCHES_PER_NATIVE_TICKS;
+		}
+		
+		public int getNativeTicks()
+		{
+			return this.nativeTicks;
+		}
+	}
+	
 	public static final double timeUntilBrakeSec = .75;	/// TODO: Remove all brake concepts?
 	
 	public static int holdUnits = 0;
