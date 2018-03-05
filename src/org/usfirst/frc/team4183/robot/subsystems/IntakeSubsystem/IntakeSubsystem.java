@@ -60,6 +60,9 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 		leftIntakeMotor.setInverted(true);
 		rightIntakeMotor.setInverted(false);
 		
+		throatMotorA.configNeutralDeadband(0.0, RobotMap.CONTROLLER_TIMEOUT_MS);
+		throatMotorB.configNeutralDeadband(0.0, RobotMap.CONTROLLER_TIMEOUT_MS);
+		
 		leftIntakeMotor.configOpenloopRamp(0.5, RobotMap.CONTROLLER_TIMEOUT_MS);
 		rightIntakeMotor.configOpenloopRamp(0.5, RobotMap.CONTROLLER_TIMEOUT_MS);
 		throatMotorA.configOpenloopRamp(0.0, RobotMap.CONTROLLER_TIMEOUT_MS);
@@ -170,7 +173,7 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 	
 	public void initDefaultCommand() {
         // Set the default command for a subsystem here.
-        setDefaultCommand(new Idle());
+        //setDefaultCommand(new Idle());
     }
 	
 	public boolean checkCurrentLimit(double currTimeInit)

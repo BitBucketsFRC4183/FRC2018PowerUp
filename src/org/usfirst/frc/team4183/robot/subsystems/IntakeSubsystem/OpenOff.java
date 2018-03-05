@@ -24,6 +24,8 @@ public class OpenOff extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	Robot.intakeSubsystem.setLeftThroatSpeed(-0.05);
+    	Robot.intakeSubsystem.setRightThroatSpeed(-0.05);
     }
 
     // Make this return true when this Command no longer needs to run execute()

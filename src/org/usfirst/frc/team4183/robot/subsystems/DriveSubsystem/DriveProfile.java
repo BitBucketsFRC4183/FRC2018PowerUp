@@ -61,6 +61,15 @@ public class DriveProfile extends Command {
 	    		return CommandUtils.stateChange(this, new Idle());
 	    	}
     	}
+    	else
+    	{
+	    	if ( (Robot.runMode != Robot.RunMode.AUTO) ||
+		    		 (Robot.driveSubsystem.motionProfileDriver.getSetValue() == SetValueMotionProfile.Hold)
+		    	   ) 
+		    	{
+		    		return CommandUtils.stateChange(this, new Idle());
+		    	}
+    	}
     	
         return false;
     }

@@ -80,6 +80,7 @@ public class OI {
 	public final LogicalButton sbtnOpenMandible = new SoftButton();
 	public final LogicalButton sbtnIntakeThroat = new SoftButton();
 	public final LogicalButton sbtnOuttakeThroat = new SoftButton();
+	
 
 	/*
 	 * I removed the driver/operator specific remappings because we didn't use them 
