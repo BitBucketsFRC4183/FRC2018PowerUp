@@ -185,6 +185,9 @@ public class RobotMap
    		public static final double INTAKE_MOTOR_PERCENT = 0.9;
    		public static final double THROAT_MOTOR_PERCENT = 0.9;
    		
+   		public static final double THROAT_LEFT_HOLD_PERCENT  = -0.05;
+   		public static final double THROAT_RIGHT_HOLD_PERCENT = -0.05;
+   		
    		public static final double INTAKE_MAX_CURRENT = 10;
    		
    	/* DRIVE SUBSYSTEM*/
