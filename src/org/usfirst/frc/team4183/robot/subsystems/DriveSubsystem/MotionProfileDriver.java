@@ -214,10 +214,8 @@ public class MotionProfileDriver
 			 * progress, and possibly interrupting MPs if thats what you want to
 			 * do.
 			 */
-			System.out.printf("STATE = %d\n", _state);
 			switch (_state) {
 				case 0: /* wait for application to tell us to start an MP */
-					System.out.println("In case 0");
 					if (_bStart) {
 						_bStart = false;
 	
@@ -436,7 +434,6 @@ public class MotionProfileDriver
 	 */
 	private void startMotionProfile() {
 		_bStart = true;
-		System.out.printf("Start = true\n");
 	}
 
 	/**

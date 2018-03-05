@@ -2,6 +2,7 @@ package org.usfirst.frc.team4183.robot.subsystems.AutonomousSubsystem;
 
 import java.util.List;
 
+import org.usfirst.frc.team4183.robot.Robot;
 import org.usfirst.frc.team4183.robot.subsystems.BitBucketsSubsystem;
 import org.usfirst.frc.team4183.utils.Positions;
 import org.usfirst.frc.team4183.utils.Positions.GenericPositions;
@@ -26,7 +27,6 @@ public class AutonomousSubsystem extends BitBucketsSubsystem
 
 	public void initialize()
 	{
-		//for(int a=0; a<100; a++) System.out.println("?!?!?!??!?!??!?!?!");
 		PathPlans.initialize();	
 
 	}
@@ -65,6 +65,16 @@ public class AutonomousSubsystem extends BitBucketsSubsystem
     public void initDefaultCommand() 
     {
         setDefaultCommand(new Idle());
+    }
+    
+    public void pressOuttakeButton()
+    {
+    	Robot.oi.sbtnOuttakeThroat.push();
+    }
+    
+    public void releaseOuttakeButton()
+    {
+    	Robot.oi.sbtnOuttakeThroat.release();
     }
 
 	@Override

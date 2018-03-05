@@ -79,25 +79,37 @@ public class PathPlans
     		new Waypoint(0, 0, Pathfinder.d2r(0)),
     		new Waypoint(0.864, -0.699, Pathfinder.d2r(-45)),
     		new Waypoint(1.817+0.5, -1.245, Pathfinder.d2r(0)),
-    		//ALT1:
-    		//new Waypoint(6.008, 1.245, Pathfinder.d2r(0)),
-    		//new Waypoint(6.884, 0.689, Pathfinder.d2r(-45)),
-    		//new Waypoint(7.367, -0.124, Pathfinder.d2r(-90))
-    		//ALT 2:
     		new Waypoint(2.922+0.3, -1.245+0.3, Pathfinder.d2r(45)),
     		new Waypoint(3.405, 0, Pathfinder.d2r(90))
 	    		
     };
-   
+
+    private static Waypoint[] longSwitchRightStart = new Waypoint[]
+    {
+    		new Waypoint(0, 0, Pathfinder.d2r(0)),
+    		new Waypoint(0.864, -0.699, Pathfinder.d2r(-45)),
+    		new Waypoint(1.817+0.5, -1.245, Pathfinder.d2r(0)),
+    		
+    		new Waypoint(4.318, -1.245, Pathfinder.d2r(0)),
+    		new Waypoint(5.182, 0.254, Pathfinder.d2r(90)),
+    		new Waypoint(5.182, 3.937, Pathfinder.d2r(90)),
+    		new Waypoint(4.318, 5.436, Pathfinder.d2r(180)),
+    		new Waypoint(3.600, 5.136, Pathfinder.d2r(225)),
+    		new Waypoint(3.405, 4.191, Pathfinder.d2r(310))
+	    		
+    };
+    
     public static RobotTrajectory testTrajectory0;
     
     public static RobotTrajectory autoTestTrajectory;
+    
+    public static RobotTrajectory longSwitchRightStartTrajectory;
 
     public static void initialize()
     {
     
     	testTrajectory0 = new RobotTrajectory("Test0");//determines the path
-	    testTrajectory0.center = Pathfinder.generate(autoTest, config);
+	    testTrajectory0.center = Pathfinder.generate(longSwitchRightStart, config);
 	
 	    // We don't need to store the modifier persistently
 	    TankModifier modifier = new TankModifier(testTrajectory0.center).modify(RobotMap.inch2Meter(RobotMap.WHEEL_TRACK_INCHES));

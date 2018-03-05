@@ -25,6 +25,8 @@ public class Idle extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	Robot.intakeSubsystem.setLeftThroatSpeed(-0.05);
+    	Robot.intakeSubsystem.setRightThroatSpeed(-0.05);
     	
     }
 
@@ -32,7 +34,7 @@ public class Idle extends Command {
     protected boolean isFinished() {
     	if(Robot.oi.btnOpenGate.get() || Robot.oi.sbtnOpenMandible.get())
     		return CommandUtils.stateChange(this, new OpenOff());
-    	else if(Robot.oi.btnOutIntake.get()) {
+    	else if(Robot.oi.btnOutIntake.get()|| Robot.oi.sbtnOuttakeThroat.get()) {
     		return CommandUtils.stateChange(this, new ClosedOut());
     	}
     	else if(Robot.oi.btnInIntake.get()) {

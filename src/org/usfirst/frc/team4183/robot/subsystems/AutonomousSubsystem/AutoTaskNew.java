@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 import org.usfirst.frc.team4183.utils.*;
 
 import org.usfirst.frc.team4183.robot.subsystems.DriveSubsystem.*;
+import org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem.ClosedOut;
 /**
  *
  */
@@ -29,8 +30,10 @@ public class AutoTaskNew extends CommandGroup
         // e.g. if Command1 requires chassis, and Command2 requires arm,
         // a CommandGroup containing them would require both the chassis and the
         // arm.
-		
+		addParallel(new org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem.Idle());
 		addSequential(new DriveProfile(PathPlans.testTrajectory0));
+		addSequential(new ClosedOut(1.0));
+		
 		
 	}
 
