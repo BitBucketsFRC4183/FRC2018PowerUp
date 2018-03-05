@@ -198,6 +198,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotPeriodic() {
 		SmartDashboard.putString("CurrMode", runMode.name());
+		SmartDashboard.putBoolean("ElevatorBottom", Robot.oi.btnElevatorBottom.get());
 		
 		loopWatch.stop();
 		loopWatch.start();

@@ -54,7 +54,7 @@ public class OI {
 	public final LogicalButton btnElevatorTop = new ModalButton(operatorController.bR1);
 	public final LogicalButton btnElevatorHigh = new ModalButton(operatorController.bL1);
 	public final LogicalButton btnElevatorMiddle = new ModalButton(operatorController.bR2);
-	public final LogicalButton btnElevatorBottom = new ModalButton(driverController.bL2);
+	public final LogicalButton btnElevatorBottom = new ModalButton(operatorController.bL2);
 
 	
 	
