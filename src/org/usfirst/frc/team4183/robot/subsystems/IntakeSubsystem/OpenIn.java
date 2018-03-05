@@ -32,7 +32,7 @@ public class OpenIn extends Command {
     	if(Robot.oi.btnIdle.get())
     		return CommandUtils.stateChange(this, new Idle());
     	else if (! Robot.oi.btnInIntake.get())
-    		return CommandUtils.stateChange(this, new OpenOff());
+    		return CommandUtils.stateChange(this, new ThroatHold());
     	else if(Robot.oi.btnCloseGate.get())
     		return CommandUtils.stateChange(this, new ClosedIn());
         return false;

@@ -9,32 +9,41 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class ClosedIn extends Command {
+public class ThroatHold extends Command {
 
-    public ClosedIn() {
+    public ThroatHold() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
-    	requires(Robot.intakeSubsystem);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	Robot.intakeSubsystem.closeMandible();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.intakeSubsystem.setIntakeMotorToSpeed(-RobotMap.INTAKE_MOTOR_PERCENT, -RobotMap.THROAT_MOTOR_PERCENT);
+    	Robot.intakeSubsystem.setLeftThroatSpeed(RobotMap.THROAT_LEFT_HOLD_PERCENT);
+    	Robot.intakeSubsystem.setRightThroatSpeed(RobotMap.THROAT_RIGHT_HOLD_PERCENT);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	if(Robot.oi.btnIdle.get()) 
+    	if(Robot.oi.btnIdle.get())
     		return CommandUtils.stateChange(this, new Idle());
-    	else if(! Robot.oi.btnInIntake.get())
-    		return CommandUtils.stateChange(this, new ThroatHold());
-    	else if(Robot.oi.btnOpenGate.get())
-    		return CommandUtils.stateChange(this, new OpenIn());
+    	else if(Robot.oi.btnOpenGate.get() || Robot.oi.sbtnOpenMandible.get())
+			return CommandUtils.stateChange(this, new OpenOff());
+		else if(Robot.oi.btnOutIntake.get()|| Robot.oi.sbtnOuttakeThroat.get()) {
+			return CommandUtils.stateChange(this, new ClosedOut());
+		}
+		else if(Robot.oi.btnInIntake.get()) {
+			return CommandUtils.stateChange(this, new ClosedIn());
+		}
+		else if(Robot.oi.btnLeftIntake.get()) {
+			return CommandUtils.stateChange(this, new ClosedLeft());
+		}
+		else if(Robot.oi.btnRightIntake.get()) {
+			return CommandUtils.stateChange(this, new ClosedRight());
+		}
         return false;
     }
 
@@ -45,6 +54,5 @@ public class ClosedIn extends Command {
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
-    	end();
     }
 }
