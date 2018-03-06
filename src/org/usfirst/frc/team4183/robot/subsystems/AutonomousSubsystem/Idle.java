@@ -45,23 +45,29 @@ public class Idle extends Command {
     		++counter;
     		if (counter == 1) 
     		{
-    			//AutoMoveTurnTest blah = new AutoMoveTurnTest();
-    			AutoTasks blah= new AutoTasks();
-    			blah.start();
+    			// Choose auto mode
+    			switch (Robot.autonomousSubsystem.getAutoChoice())
+    			{
+    			case PLAY_GAME:
+        			AutoGameTasks game= new AutoGameTasks();
+        			game.start();
+    				break;
+    			case MOVE_TURN_TEST:
+    				AutoMoveTurnTest move_turn = new AutoMoveTurnTest();
+    				move_turn.start();
+    				break;
+    			case DRIVE_PROFILE_TEST:
+    				
+				default:
+					break;
+    			}
+
     		}
     	}
     	
     	
-    	// Auto Idle just keeps running, doing nothing until
-    	// something tells us what is next; we dispatch the
-    	// state change and expect that it will complete, timeout
-    	// or be told of a replanning need and will end up back
-    	// in this state (idle); this allows the re-evaluation
-    	// of the plan or simply popping the next step.
-    	// Re-planning hangs here to keep synchronous with the
-    	// planning cycle without any additional "fancy" synchronization
-    	// techniques that could block the WPI scheduler which sequences
-    	// the subsystem periodic and these commands, making the 
+    	// Auto Idle never finished on its own
+    	// Just let the FMS disable us when the period is over
     	return false;
     	
     }

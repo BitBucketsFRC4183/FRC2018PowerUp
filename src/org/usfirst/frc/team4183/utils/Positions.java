@@ -12,7 +12,9 @@ public static enum StartingPosition {
 
 public static enum GenericPositions
 {
-	LEFT, RIGHT;
+	LEFT, 
+	RIGHT,
+	UNKNOWN
 	
 	
 }

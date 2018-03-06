@@ -1,6 +1,7 @@
 package org.usfirst.frc.team4183.robot.subsystems.AutonomousSubsystem;
 
 import org.usfirst.frc.team4183.robot.RobotMap;
+import org.usfirst.frc.team4183.utils.Positions.StartingPosition;
 import org.usfirst.frc.team4183.utils.RobotTrajectory;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -32,19 +33,42 @@ public class PathPlans
 	{
 		// This enumeration corresponds to the similarly named Path and Trajectory
 		NONE,
-		TEST0,
-		SHORT_SWITCH_NOT_CENTER,
-		LONG_SWITCH,
-		RIGHT_SWITCH_CENTER
+		// NOTE: The test path plan is selected directly when needed
+		RIGHT_START_RIGHT_SWITCH,
+		RIGHT_START_LEFT_SWITCH,
+		CENTER_START_RIGHT_SWITCH
 	}
 	
 	private static SendableChooser<PathPlanChoice> pathChooser;
+	
+	private static SendableChooser<StartingPosition> startingPositionChooser;
+	
+	public enum PrimaryRole
+	{
+		CROSS_LINE,
+		SWITCH,
+		SCALE,
+		EXCHANGE
+	}
+	
+	private static SendableChooser<PrimaryRole> primaryRollChooser;
+	
+	public enum CrossingMode
+	{
+		ENABLE_CROSSING,
+		DISABLE_CROSSING
+	}
+	
+	private static SendableChooser<CrossingMode> crossingModeChooser;
+	
 	
 	PathPlans()
 	{
 		
 	}
 
+	// For now, a single configuration is sufficient
+	// If we really need different ones then we will make them
 	static Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_QUINTIC, // Type of curve to fit
 													 Trajectory.Config.SAMPLES_LOW,     // Smooth fit (high) or fast fit (low)
 													 RobotMap.MOTION_PROFILE_PERIOD_MS / 1000.0, // Time between segments
@@ -59,7 +83,7 @@ public class PathPlans
 	// In this example, define the path start as 0,0,0 meaning we are aligned to the x-axis
 	//	
 	
-	private final static double R_m = 1.0; // Test radius in meters (so 1.5 m is approx. 5 feet)
+	private final static double R_m = 1.0; // Test radius in meters
     private static Waypoint[] testPath0 = new Waypoint[] 
     {
     		// A simple S curve to reach point across a square
@@ -71,57 +95,108 @@ public class PathPlans
             new Waypoint(4*R_m, 	4*R_m, 	Pathfinder.d2r(0))
     };
     
-    private static Waypoint[] rightSwitchCenter = new Waypoint[]
+    // **************************************
+    // NOTE: NOTE: NOTE: NOTE:
+    // **************************************
+    // The values for the paths contain arithmetic to keep track of where we started
+    // and may be replaced with final values after testing
+    
+    private static Waypoint[] centerStartRightSwitchPath = new Waypoint[]
     {
-    		new Waypoint(0,0,Pathfinder.d2r(0)),
-    		new Waypoint(.8382,-.6096,Pathfinder.d2r(-40)),
+    		new Waypoint(0,            0,      Pathfinder.d2r(0)),
+    		new Waypoint(.8382,        -.6096, Pathfinder.d2r(-40)),
     		new Waypoint(2.4638 + 0.15,-1.0668,Pathfinder.d2r(0))
     };
     
-    private static Waypoint[] shortSwitchRightStart = new Waypoint[]
+    private static Waypoint[] rightStartRightSwitchPath = new Waypoint[]
     {
-    		new Waypoint(0, 0, Pathfinder.d2r(0)),
-    		new Waypoint(0.864, -0.699-0.3048, Pathfinder.d2r(-45)),
-    		new Waypoint(1.817+0.5, -1.245-0.3048, Pathfinder.d2r(0)),
+    		new Waypoint(0,                     0,     Pathfinder.d2r(0)),
+    		new Waypoint(0.864,     -0.699-0.3048,     Pathfinder.d2r(-45)),
+    		new Waypoint(1.817+0.5, -1.245-0.3048,     Pathfinder.d2r(0)),
     		new Waypoint(2.922+0.3, -1.245+0.3-0.3048, Pathfinder.d2r(45)),
-    		new Waypoint(3.405, 0-0.3048, Pathfinder.d2r(100))
+    		new Waypoint(3.405,          0-0.3048,     Pathfinder.d2r(100))
+	    		
+    };
+    
+    // basically a left/right (y) mirror of the above
+    // Rather than loading programmatically, we place the value explicitly
+    // just in case we need to make slight adjustments
+    private static Waypoint[] leftStartLeftSwitchPath = new Waypoint[]
+    {
+    		new Waypoint(0,         0,                Pathfinder.d2r(0)),
+    		new Waypoint(0.864,     0.699+0.3048,     Pathfinder.d2r(45)),
+    		new Waypoint(1.817+0.5, 1.245+0.3048,     Pathfinder.d2r(0)),
+    		new Waypoint(2.922+0.3, 1.245-0.3+0.3048, Pathfinder.d2r(-45)),
+    		new Waypoint(3.405,         0+0.3048,     Pathfinder.d2r(-100))
+    };
+
+    private static Waypoint[] rightStartLeftSwitchPath = new Waypoint[]
+    {
+    		new Waypoint(0,              0, Pathfinder.d2r(0)),
+    		new Waypoint(0.864,     -0.699, Pathfinder.d2r(-45)),
+    		new Waypoint(1.817+0.5, -1.245, Pathfinder.d2r(0)),
+    		
+    		new Waypoint(4.318,       -1.245-0.3048, Pathfinder.d2r(0)),
+    		new Waypoint(5.182,       0.254-0.3048,  Pathfinder.d2r(90)),
+    		new Waypoint(5.182,       3.937-0.3048,  Pathfinder.d2r(90)),
+    		new Waypoint(4.318,       5.436-0.3048,  Pathfinder.d2r(180)),
+    		new Waypoint(3.600+0.4,   5.136-0.3048,  Pathfinder.d2r(225)),
+    		new Waypoint(3.405+0.4,   4.191-0.3048,  Pathfinder.d2r(310))
 	    		
     };
 
-    private static Waypoint[] longSwitchRightStart = new Waypoint[]
+    // Again, a mirror but nor programmatically just in case
+    private static Waypoint[] leftStartRightSwitchPath = new Waypoint[]
     {
-    		new Waypoint(0, 0, Pathfinder.d2r(0)),
-    		new Waypoint(0.864, -0.699, Pathfinder.d2r(-45)),
-    		new Waypoint(1.817+0.5, -1.245, Pathfinder.d2r(0)),
+    		new Waypoint(0,              0, Pathfinder.d2r(0)),
+    		new Waypoint(0.864,     0.699, Pathfinder.d2r(45)),
+    		new Waypoint(1.817+0.5, 1.245, Pathfinder.d2r(0)),
     		
-    		new Waypoint(4.318, -1.245-0.3048, Pathfinder.d2r(0)),
-    		new Waypoint(5.182, 0.254-0.3048, Pathfinder.d2r(90)),
-    		new Waypoint(5.182, 3.937-0.3048, Pathfinder.d2r(90)),
-    		new Waypoint(4.318, 5.436-0.3048, Pathfinder.d2r(180)),
-    		new Waypoint(3.600+0.4, 5.136-0.3048, Pathfinder.d2r(225)),
-    		new Waypoint(3.405+0.4, 4.191-0.3048, Pathfinder.d2r(310))
+    		new Waypoint(4.318,       1.245+0.3048, Pathfinder.d2r(0)),
+    		new Waypoint(5.182,       -0.254+0.3048,  Pathfinder.d2r(-90)),
+    		new Waypoint(5.182,       -3.937+0.3048,  Pathfinder.d2r(-90)),
+    		new Waypoint(4.318,       -5.436+0.3048,  Pathfinder.d2r(-180)),
+    		new Waypoint(3.600+0.4,   -5.136+0.3048,  Pathfinder.d2r(-225)),
+    		new Waypoint(3.405+0.4,   -4.191+0.3048,  Pathfinder.d2r(-310))
 	    		
     };
     
     public static RobotTrajectory testTrajectory0;
     
-    public static RobotTrajectory shortSwitchRightStartTrajectory;
+    public static RobotTrajectory rightStartRightSwitchTrajectory;
+    public static RobotTrajectory leftStartLeftSwitchTrajectory;
     
-    public static RobotTrajectory switchRightCenterStartTrajectory;
+    public static RobotTrajectory centerStartRightSwitchTrajectory;
     
-    public static RobotTrajectory longSwitchRightStartTrajectory;
+    public static RobotTrajectory rightStartLeftSwitchTrajectory;
+    public static RobotTrajectory leftStartRightSwitchTrajectory;
     
     
 
     public static void initialize()
     {
+    	startingPositionChooser = new SendableChooser<StartingPosition>();
+    	startingPositionChooser.addDefault(  "LEFT",    StartingPosition.LEFT);
+    	startingPositionChooser.addObject(   "CENTER",  StartingPosition.CENTER);
+    	startingPositionChooser.addObject(   "RIGHT",    StartingPosition.RIGHT);
     	
+    	
+    	primaryRollChooser = new SendableChooser<PrimaryRole>();
+    	primaryRollChooser.addDefault(  "CROSS LINE",    PrimaryRole.CROSS_LINE);
+    	primaryRollChooser.addObject(   "SWITCH",        PrimaryRole.SWITCH);
+    	primaryRollChooser.addObject(   "SCALE",         PrimaryRole.SCALE);
+    	primaryRollChooser.addObject(   "EXCAHNGE",      PrimaryRole.EXCHANGE);
+    	    	
+    	crossingModeChooser = new SendableChooser<CrossingMode>() ;
+    	crossingModeChooser.addDefault(  "DISABLE CROSSING",    CrossingMode.DISABLE_CROSSING);
+    	crossingModeChooser.addObject(   "ENABLE CROSSING",     CrossingMode.ENABLE_CROSSING);
+    	
+    	/// TODO: This will be replaced with logic based on the above choices
 		pathChooser = new SendableChooser<PathPlanChoice>();
 		pathChooser.addDefault( "NONE",		PathPlanChoice.NONE);
-		pathChooser.addObject(  "TEST-0",   PathPlanChoice.TEST0);
-		pathChooser.addObject("SHORT-SWITCH-NOT-CENTER", PathPlanChoice.SHORT_SWITCH_NOT_CENTER);
-		pathChooser.addObject("LONG-SWITCH", PathPlanChoice.LONG_SWITCH);
-		pathChooser.addDefault("RIGHT-SWITCH-CENTER",PathPlanChoice.RIGHT_SWITCH_CENTER);
+		pathChooser.addObject("RIGHT RIGHT", PathPlanChoice.RIGHT_START_RIGHT_SWITCH);
+		pathChooser.addObject("RIGHT LEFT", PathPlanChoice.RIGHT_START_LEFT_SWITCH);
+		pathChooser.addDefault("CENTER RIGHT",PathPlanChoice.CENTER_START_RIGHT_SWITCH);
 		SmartDashboard.putData( "Path Plan", pathChooser);
 		
     	/// TODO: May want to pre-compute these and store them as files to speed up startup
@@ -139,38 +214,61 @@ public class PathPlans
 	    testTrajectory0.right = modifier.getRightTrajectory();
 	    
 	    
-	  //***********
-	    shortSwitchRightStartTrajectory = new RobotTrajectory("shortSwitchRightStart");
-	    shortSwitchRightStartTrajectory.center = Pathfinder.generate(shortSwitchRightStart, config);
+	 //***********
+	    rightStartRightSwitchTrajectory = new RobotTrajectory("rightStartRightSwitch");
+	    rightStartRightSwitchTrajectory.center = Pathfinder.generate(rightStartRightSwitchPath, config);
 
 	    // We don't need to store the modifier persistently
-	    modifier = new TankModifier(shortSwitchRightStartTrajectory.center).modify(RobotMap.inch2Meter(RobotMap.WHEEL_TRACK_INCHES));
+	    modifier = new TankModifier(rightStartRightSwitchTrajectory.center).modify(RobotMap.inch2Meter(RobotMap.WHEEL_TRACK_INCHES));
 	    
 	    // Extract the right and left trajectories
-	    shortSwitchRightStartTrajectory.left = modifier.getLeftTrajectory();
-	    shortSwitchRightStartTrajectory.right = modifier.getRightTrajectory();
-	    
-	    
-	  //***********
-	    longSwitchRightStartTrajectory = new RobotTrajectory("longSwitchRightStart");
-	    longSwitchRightStartTrajectory.center = Pathfinder.generate(longSwitchRightStart, config);
+	    rightStartRightSwitchTrajectory.left = modifier.getLeftTrajectory();
+	    rightStartRightSwitchTrajectory.right = modifier.getRightTrajectory();
+
+	//***********
+	    leftStartLeftSwitchTrajectory = new RobotTrajectory("leftStartLeftSwitch");
+	    leftStartLeftSwitchTrajectory.center = Pathfinder.generate(leftStartLeftSwitchPath, config);
 
 	    // We don't need to store the modifier persistently
-	    modifier = new TankModifier(longSwitchRightStartTrajectory.center).modify(RobotMap.inch2Meter(RobotMap.WHEEL_TRACK_INCHES));
+	    modifier = new TankModifier(leftStartLeftSwitchTrajectory.center).modify(RobotMap.inch2Meter(RobotMap.WHEEL_TRACK_INCHES));
+	    
+	    // Extract the right and left trajectories
+	    leftStartLeftSwitchTrajectory.left = modifier.getLeftTrajectory();
+	    leftStartLeftSwitchTrajectory.right = modifier.getRightTrajectory();
+	    
+	    
+	  //***********
+	    rightStartLeftSwitchTrajectory = new RobotTrajectory("rightStartLeftSwitch");
+	    rightStartLeftSwitchTrajectory.center = Pathfinder.generate(rightStartLeftSwitchPath, config);
+
+	    // We don't need to store the modifier persistently
+	    modifier = new TankModifier(rightStartLeftSwitchTrajectory.center).modify(RobotMap.inch2Meter(RobotMap.WHEEL_TRACK_INCHES));
 
 	    
 	    // Extract the right and left trajectories
-	    longSwitchRightStartTrajectory.left = modifier.getLeftTrajectory();
-	    longSwitchRightStartTrajectory.right = modifier.getRightTrajectory();
+	    rightStartLeftSwitchTrajectory.left = modifier.getLeftTrajectory();
+	    rightStartLeftSwitchTrajectory.right = modifier.getRightTrajectory();
+
+	 //***********
+	    leftStartRightSwitchTrajectory = new RobotTrajectory("leftStartRightSwitch");
+	    leftStartRightSwitchTrajectory.center = Pathfinder.generate(leftStartRightSwitchPath, config);
+
+	    // We don't need to store the modifier persistently
+	    modifier = new TankModifier(leftStartRightSwitchTrajectory.center).modify(RobotMap.inch2Meter(RobotMap.WHEEL_TRACK_INCHES));
+
+	    
+	    // Extract the right and left trajectories
+	    leftStartRightSwitchTrajectory.left = modifier.getLeftTrajectory();
+	    leftStartRightSwitchTrajectory.right = modifier.getRightTrajectory();
 	    
 	  //***********
-	    switchRightCenterStartTrajectory = new RobotTrajectory("rightSwitchCenterStart");
-	    switchRightCenterStartTrajectory.center = Pathfinder.generate(rightSwitchCenter, config);
+	    centerStartRightSwitchTrajectory = new RobotTrajectory("centerStartRightSwitch");
+	    centerStartRightSwitchTrajectory.center = Pathfinder.generate(centerStartRightSwitchPath, config);
 
-	    modifier = new TankModifier(switchRightCenterStartTrajectory.center).modify(RobotMap.inch2Meter(RobotMap.WHEEL_TRACK_INCHES));
+	    modifier = new TankModifier(centerStartRightSwitchTrajectory.center).modify(RobotMap.inch2Meter(RobotMap.WHEEL_TRACK_INCHES));
 		
-	    switchRightCenterStartTrajectory.left = modifier.getLeftTrajectory();
-	    switchRightCenterStartTrajectory.right = modifier.getRightTrajectory();
+	    centerStartRightSwitchTrajectory.left = modifier.getLeftTrajectory();
+	    centerStartRightSwitchTrajectory.right = modifier.getRightTrajectory();
 	    
 	    
 	 }
@@ -179,25 +277,24 @@ public class PathPlans
 	{
 		RobotTrajectory trajectory = null;
 		
+		/// TODO: Replace below with logic based on better selectors
+		/// including starting side, roll, crossing allowance
+		
 		switch (pathChooser.getSelected())
 		{
 		case NONE:
 			break;
-		case TEST0:
-			System.out.println("TEST0 PATH SELECTED");			
-			trajectory = PathPlans.testTrajectory0;			
+		case RIGHT_START_RIGHT_SWITCH:
+			System.out.println("RIGHT_START_RIGHT_SWITCH PATH SELECTED");			
+			trajectory = PathPlans.rightStartRightSwitchTrajectory;
 			break;
-		case SHORT_SWITCH_NOT_CENTER:
-			System.out.println("SHORT SWITCH NOT CENTER PATH SELECTED");			
-			trajectory = PathPlans.shortSwitchRightStartTrajectory;
+		case RIGHT_START_LEFT_SWITCH:
+			System.out.println("RIGHT_START_LEFT_SWITCH PATH SELECTED");			
+			trajectory = PathPlans.rightStartLeftSwitchTrajectory;
 			break;
-		case LONG_SWITCH:
-			System.out.println("LONG SWITCH PATH SELECTED");			
-			trajectory = PathPlans.longSwitchRightStartTrajectory;
-			break;
-		case RIGHT_SWITCH_CENTER:
-			System.out.println("RIGHT SWITCH CENTER SELECTED");
-			trajectory= PathPlans.switchRightCenterStartTrajectory;
+		case CENTER_START_RIGHT_SWITCH:
+			System.out.println("CENTER_START_RIGHT_SWITCH PATH SELECTED");
+			trajectory= PathPlans.centerStartRightSwitchTrajectory;
 			break;
 		default:
 			System.out.println("BAD PATH CHOICE");

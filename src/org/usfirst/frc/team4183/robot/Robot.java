@@ -7,8 +7,6 @@
 package org.usfirst.frc.team4183.robot;
 import java.util.HashSet;
 import java.util.Set;
-import org.usfirst.frc.team4183.robot.Robot.RunMode;
-import org.usfirst.frc.team4183.robot.subsystems.AutonomousSubsystem.RunScript;
 import org.usfirst.frc.team4183.robot.subsystems.AutonomousSubsystem.AutonomousSubsystem;
 import org.usfirst.frc.team4183.robot.subsystems.DriveSubsystem.DriveSubsystem;
 import org.usfirst.frc.team4183.robot.subsystems.ElevatorSubsystem.ElevatorSubsystem;
@@ -19,17 +17,13 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import jaci.pathfinder.Pathfinder;
-import jaci.pathfinder.Waypoint;
 
 import org.usfirst.frc.team4183.utils.DoEveryN;
 import org.usfirst.frc.team4183.utils.Stopwatch;
 
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
-import edu.wpi.first.wpilibj.DriverStation;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -50,21 +44,15 @@ public class Robot extends IterativeRobot {
 	// Other may be optional or interchangable
 	public static DriveSubsystem driveSubsystem;
 	public static IntakeSubsystem intakeSubsystem;
-	public static AutonomousSubsystem autonomousSubsystem;
 	public static VisionSubsystem visionSubsystem;
 	public static RampSubsystem rampSubsystem;
 	public static ElevatorSubsystem elevatorSubsystem;
-	
-	
-	// The following subsystems are mutually exclusive
-	// with regard to overall robot function cannot be considered
-	// at the same time. Rather than create a complex selector
-	// and state exclusions we will just prevent creation.
-    /// WARNING WARNING WARNING: ONLY ONE
 
+	public static AutonomousSubsystem autonomousSubsystem;
 	
-    public static OI oi;
+	public static OI oi;
 	
+	// Here for now, but may not be used this year
 	public static LightingControl lightingControl;	
 	public static NavxIMU imu;
 		
@@ -94,11 +82,15 @@ public class Robot extends IterativeRobot {
 		// Add all subsystems for debugging
 		addSubsystemToDebug(driveSubsystem);
         addSubsystemToDebug(intakeSubsystem);
-        //addSubsystemToDebug(visionSubsystem);
-        addSubsystemToDebug(autonomousSubsystem);
+        addSubsystemToDebug(visionSubsystem);
         addSubsystemToDebug(elevatorSubsystem);
-		showDebugInfo();		
+        addSubsystemToDebug(rampSubsystem);
+
+        addSubsystemToDebug(autonomousSubsystem);
+        
+        showDebugInfo();		
 		
+        /// TODO: Consider moving to vision subsystem
         UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
         camera.setResolution(640, 480);
         camera.setFPS(120);
@@ -112,12 +104,14 @@ public class Robot extends IterativeRobot {
 		
 	}
 	
-	protected void initialize()
+	protected void initializePhysicalSubsystems()
 	{
 		// Only the physical subsystems
 		driveSubsystem.initialize();
 		intakeSubsystem.initialize();
 		elevatorSubsystem.initialize();
+		
+		/// TODO: climbing and or ramps
 	}
 	
 	@Override
@@ -135,7 +129,7 @@ public class Robot extends IterativeRobot {
 		// when trying to cross initiate tasks from an autonomous state machine
 		// Instead we explicitly initialize the subsystems to start the
 		// the first commands states
-		initialize();
+		initializePhysicalSubsystems();
 
 	}
 	@Override
@@ -147,12 +141,14 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void autonomousInit() {
-		autonomousSubsystem.convertGameData();
 		
 		runMode = RunMode.AUTO;
 		oi.setAutoMode();
 		
-		initialize();
+		initializePhysicalSubsystems();
+		
+		autonomousSubsystem.start();
+
 	}
 	/**
 	 * This function is called periodically during autonomous.
@@ -168,7 +164,7 @@ public class Robot extends IterativeRobot {
 		runMode = RunMode.TELEOP;
 		oi.setTeleopMode();
 		
-		initialize();
+		initializePhysicalSubsystems();
 		
 	}
 	
