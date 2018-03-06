@@ -21,7 +21,8 @@ public class Idle extends Command {
     protected void initialize() 
     {
     	Robot.intakeSubsystem.disable();	// Turn everything off and close it
-    }
+    	System.out.println(this.getClass().getSimpleName());
+    	}
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
@@ -30,18 +31,18 @@ public class Idle extends Command {
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
     	if(Robot.oi.btnOpenGate.get() || Robot.oi.sbtnOpenMandible.get())
-    		return CommandUtils.stateChange(this, new OpenOff());
+    		return CommandUtils.autoStateChange(this, new OpenOff());
     	else if(Robot.oi.btnOutIntake.get()|| Robot.oi.sbtnOuttakeThroat.get()) {
-    		return CommandUtils.stateChange(this, new ClosedOut());
+    		return CommandUtils.autoStateChange(this, new ClosedOut());
     	}
     	else if(Robot.oi.btnInIntake.get()) {
-    		return CommandUtils.stateChange(this, new ClosedIn());
+    		return CommandUtils.autoStateChange(this, new ClosedIn());
     	}
     	else if(Robot.oi.btnLeftIntake.get()) {
-    		return CommandUtils.stateChange(this, new ClosedLeft());
+    		return CommandUtils.autoStateChange(this, new ClosedLeft());
     	}
     	else if(Robot.oi.btnRightIntake.get()) {
-    		return CommandUtils.stateChange(this, new ClosedRight());
+    		return CommandUtils.autoStateChange(this, new ClosedRight());
     	}
     	return false;
     }

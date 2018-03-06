@@ -15,6 +15,7 @@ public class RampSubsystem extends BitBucketsSubsystem{
 
 	public RampSubsystem()
 	{
+		this.setName("RampSubsystem");
 		leftRampMotor = new WPI_TalonSRX(RobotMap.LEFT_RAMP_MOTOR_ID);
 		rightRampMotor = new WPI_TalonSRX(RobotMap.RIGHT_RAMP_MOTOR_ID);
 		rampReleaseServ = new Servo(RobotMap.RAMP_RELEASE_SERVO_ID);

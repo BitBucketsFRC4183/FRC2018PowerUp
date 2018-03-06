@@ -20,6 +20,7 @@ public class OpenOff extends Command {
     protected void initialize() {
     	Robot.intakeSubsystem.openMandible();
     	Robot.intakeSubsystem.setIntakeMotorToSpeed(0.0, 0.0);
+    	System.out.println(this.getClass().getSimpleName());
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -30,15 +31,15 @@ public class OpenOff extends Command {
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
     	if(Robot.oi.btnIdle.get() || Robot.oi.btnCloseGate.get() || Robot.oi.sbtnCloseMandible.get())
-    		return CommandUtils.stateChange(this, new Idle());
+    		return CommandUtils.autoStateChange(this, new Idle());
     	else if(Robot.oi.btnInIntake.get())
-    		return CommandUtils.stateChange(this, new OpenIn());
+    		return CommandUtils.autoStateChange(this, new OpenIn());
     	else if(Robot.oi.btnOutIntake.get())
-    		return CommandUtils.stateChange(this, new OpenOut());
+    		return CommandUtils.autoStateChange(this, new OpenOut());
     	else if(Robot.oi.btnLeftIntake.get())
-    		return CommandUtils.stateChange(this, new OpenLeft());
+    		return CommandUtils.autoStateChange(this, new OpenLeft());
     	else if(Robot.oi.btnRightIntake.get())
-    		return CommandUtils.stateChange(this, new OpenRight());
+    		return CommandUtils.autoStateChange(this, new OpenRight());
         return false;
     }
 

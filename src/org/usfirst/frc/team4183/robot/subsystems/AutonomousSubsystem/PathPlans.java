@@ -34,19 +34,14 @@ public class PathPlans
 		NONE,
 		TEST0,
 		SHORT_SWITCH_NOT_CENTER,
-		LONG_SWITCH
+		LONG_SWITCH,
+		RIGHT_SWITCH_CENTER
 	}
 	
 	private static SendableChooser<PathPlanChoice> pathChooser;
 	
 	PathPlans()
 	{
-		pathChooser = new SendableChooser<PathPlanChoice>();
-		pathChooser.addDefault( "NONE",		PathPlanChoice.NONE);
-		pathChooser.addObject(  "TEST-0",   PathPlanChoice.TEST0);
-		pathChooser.addObject("SHORT-SWITCH-NOT-CENTER", PathPlanChoice.SHORT_SWITCH_NOT_CENTER);
-		pathChooser.addObject("LONG-SWITCH", PathPlanChoice.LONG_SWITCH);
-		SmartDashboard.putData( "Path Plan", pathChooser);
 		
 	}
 
@@ -76,13 +71,20 @@ public class PathPlans
             new Waypoint(4*R_m, 	4*R_m, 	Pathfinder.d2r(0))
     };
     
+    private static Waypoint[] rightSwitchCenter = new Waypoint[]
+    {
+    		new Waypoint(0,0,Pathfinder.d2r(0)),
+    		new Waypoint(.8382,-.6096,Pathfinder.d2r(-40)),
+    		new Waypoint(2.4638 + 0.15,-1.0668,Pathfinder.d2r(0))
+    };
+    
     private static Waypoint[] shortSwitchRightStart = new Waypoint[]
     {
     		new Waypoint(0, 0, Pathfinder.d2r(0)),
     		new Waypoint(0.864, -0.699-0.3048, Pathfinder.d2r(-45)),
     		new Waypoint(1.817+0.5, -1.245-0.3048, Pathfinder.d2r(0)),
     		new Waypoint(2.922+0.3, -1.245+0.3-0.3048, Pathfinder.d2r(45)),
-    		new Waypoint(3.405, 0-0.3048, Pathfinder.d2r(90))
+    		new Waypoint(3.405, 0-0.3048, Pathfinder.d2r(100))
 	    		
     };
 
@@ -105,14 +107,27 @@ public class PathPlans
     
     public static RobotTrajectory shortSwitchRightStartTrajectory;
     
+    public static RobotTrajectory switchRightCenterStartTrajectory;
+    
     public static RobotTrajectory longSwitchRightStartTrajectory;
     
     
 
     public static void initialize()
     {
+    	
+		pathChooser = new SendableChooser<PathPlanChoice>();
+		pathChooser.addDefault( "NONE",		PathPlanChoice.NONE);
+		pathChooser.addObject(  "TEST-0",   PathPlanChoice.TEST0);
+		pathChooser.addObject("SHORT-SWITCH-NOT-CENTER", PathPlanChoice.SHORT_SWITCH_NOT_CENTER);
+		pathChooser.addObject("LONG-SWITCH", PathPlanChoice.LONG_SWITCH);
+		pathChooser.addDefault("RIGHT-SWITCH-CENTER",PathPlanChoice.RIGHT_SWITCH_CENTER);
+		SmartDashboard.putData( "Path Plan", pathChooser);
+		
     	/// TODO: May want to pre-compute these and store them as files to speed up startup
     	
+	    
+	  //***********
     	testTrajectory0 = new RobotTrajectory("Test0");//determines the path
 	    testTrajectory0.center = Pathfinder.generate(testPath0, config);
 	    
@@ -123,25 +138,40 @@ public class PathPlans
 	    testTrajectory0.left = modifier.getLeftTrajectory();
 	    testTrajectory0.right = modifier.getRightTrajectory();
 	    
+	    
+	  //***********
 	    shortSwitchRightStartTrajectory = new RobotTrajectory("shortSwitchRightStart");
 	    shortSwitchRightStartTrajectory.center = Pathfinder.generate(shortSwitchRightStart, config);
 
 	    // We don't need to store the modifier persistently
 	    modifier = new TankModifier(shortSwitchRightStartTrajectory.center).modify(RobotMap.inch2Meter(RobotMap.WHEEL_TRACK_INCHES));
-	
+	    
 	    // Extract the right and left trajectories
 	    shortSwitchRightStartTrajectory.left = modifier.getLeftTrajectory();
 	    shortSwitchRightStartTrajectory.right = modifier.getRightTrajectory();
 	    
+	    
+	  //***********
 	    longSwitchRightStartTrajectory = new RobotTrajectory("longSwitchRightStart");
 	    longSwitchRightStartTrajectory.center = Pathfinder.generate(longSwitchRightStart, config);
 
 	    // We don't need to store the modifier persistently
 	    modifier = new TankModifier(longSwitchRightStartTrajectory.center).modify(RobotMap.inch2Meter(RobotMap.WHEEL_TRACK_INCHES));
-	
+
+	    
 	    // Extract the right and left trajectories
 	    longSwitchRightStartTrajectory.left = modifier.getLeftTrajectory();
 	    longSwitchRightStartTrajectory.right = modifier.getRightTrajectory();
+	    
+	  //***********
+	    switchRightCenterStartTrajectory = new RobotTrajectory("rightSwitchCenterStart");
+	    switchRightCenterStartTrajectory.center = Pathfinder.generate(rightSwitchCenter, config);
+
+	    modifier = new TankModifier(switchRightCenterStartTrajectory.center).modify(RobotMap.inch2Meter(RobotMap.WHEEL_TRACK_INCHES));
+		
+	    switchRightCenterStartTrajectory.left = modifier.getLeftTrajectory();
+	    switchRightCenterStartTrajectory.right = modifier.getRightTrajectory();
+	    
 	    
 	 }
     
@@ -164,6 +194,10 @@ public class PathPlans
 		case LONG_SWITCH:
 			System.out.println("LONG SWITCH PATH SELECTED");			
 			trajectory = PathPlans.longSwitchRightStartTrajectory;
+			break;
+		case RIGHT_SWITCH_CENTER:
+			System.out.println("RIGHT SWITCH CENTER SELECTED");
+			trajectory= PathPlans.switchRightCenterStartTrajectory;
 			break;
 		default:
 			System.out.println("BAD PATH CHOICE");

@@ -22,6 +22,7 @@ public class AlignLock extends Command
     // Called just before this Command runs the first time
     protected void initialize() 
     {
+    	System.out.println(this.getClass().getSimpleName());
     	Robot.lightingControl.set(LightingObjects.DRIVE_SUBSYSTEM,
                                   LightingControl.FUNCTION_BLINK,
                                   LightingControl.COLOR_GREEN,

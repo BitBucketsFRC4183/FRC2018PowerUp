@@ -20,6 +20,7 @@ public class OpenRight extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.intakeSubsystem.openMandible();
+    	System.out.println(this.getClass().getSimpleName());
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -31,11 +32,11 @@ public class OpenRight extends Command {
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
     	if(Robot.oi.btnIdle.get())
-    		return CommandUtils.stateChange(this, new Idle());
+    		return CommandUtils.autoStateChange(this, new Idle());
     	else if (! Robot.oi.btnRightIntake.get())
-    		return CommandUtils.stateChange(this, new OpenOff());
+    		return CommandUtils.autoStateChange(this, new OpenOff());
     	else if(Robot.oi.btnCloseGate.get())
-    		return CommandUtils.stateChange(this, new ClosedIn());
+    		return CommandUtils.autoStateChange(this, new ClosedIn());
         return false;
     }
 

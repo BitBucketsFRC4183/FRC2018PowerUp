@@ -65,6 +65,7 @@ public class VisionSubsystem extends Subsystem
 
 	public VisionSubsystem()
 	{
+		this.setName("VisionSubsystem");
 		// Set up defaults 
 		bvtable = NetworkTable.getTable("BucketVision");
 		bvtable.putString(FRONT_CAM_MODE, currentFrontCamMode);

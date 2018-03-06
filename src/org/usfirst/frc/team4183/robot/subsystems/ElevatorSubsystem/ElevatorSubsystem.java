@@ -77,6 +77,7 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 
 	public ElevatorSubsystem()
 	{
+		this.setName("ElevatorSubsystem");
 		elevatorMotorA = new TalonSRX(RobotMap.ELEVATOR_MOTOR_A_ID);
 		elevatorMotorA.setSensorPhase(RobotMap.ELEVATOR_MOTOR_SENSOR_PHASE);
 		elevatorMotorA.setInverted(RobotMap.ELEVATOR_MOTOR_INVERSION);

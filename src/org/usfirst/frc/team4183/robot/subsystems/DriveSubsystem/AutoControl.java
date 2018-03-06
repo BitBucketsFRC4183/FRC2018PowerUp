@@ -29,6 +29,7 @@ public class AutoControl extends Command
     // Called just before this Command runs the first time
     protected void initialize() 
     {
+    	System.out.println(this.getClass().getSimpleName());
     	// Each time we re-enter AutoControl, reset the drive subsystem encoder
     	// states to allow for relative motion (the AutonomousSubsystem is
     	// responsible for knowing the absolute state)
