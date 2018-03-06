@@ -6,6 +6,7 @@ import org.usfirst.frc.team4183.utils.*;
 
 import org.usfirst.frc.team4183.robot.subsystems.DriveSubsystem.*;
 import org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem.ClosedOut;
+import org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem.ThroatHold;
 /**
  *
  */
@@ -33,6 +34,7 @@ public class AutoTasks extends CommandGroup
 		RobotTrajectory trajectory = PathPlans.getSelectedTrajectory();
 		
 		// Assume all subsystems have been commanded to Idle at initialization
+		//addParallel(new ThroatHold());
 		if (trajectory != null)
 		{
 			/// TODO: consider a parallel command to pre-lift to mid height while driving
@@ -43,11 +45,14 @@ public class AutoTasks extends CommandGroup
 		}
 		else // good for just running into the scale
 		{
+			
 			// Default to move forward in no more than 3 seconds
 			/// TODO: Consider making the distance a robot constant, a chooser, or a preference
 			addSequential(new MoveBy(85.0, 3.0));			// Need correct distance to just get to fence + a little
 			addSequential(new ClosedOut(1.0));				// Spit out the cube at the end if it did not fall out
 		}	
+		addSequential(new MoveBy(10.0, 3.0));
+		addSequential(new org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem.Idle());
 	}
 
 }

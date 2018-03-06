@@ -22,6 +22,7 @@ public class Idle extends Command{
 		Robot.oi.sbtnOpenMandible.release();
 		
 		holdPosition = (int) Robot.elevatorSubsystem.getElevatorNativeUnits();
+		System.out.println(this.getClass().getSimpleName());
 		
 		//Robot.elevatorSubsystem.holdEncodPos(false);
 		//Robot.elevatorSubsystem.holdEncodPos(true);

@@ -45,6 +45,7 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 	private static SendableChooser<SubsystemTelemetryState> telemetryState;
 
 	public IntakeSubsystem() {
+		this.setName("IntakeSubsystem");
 		motors = new ArrayList<WPI_TalonSRX>();
 		solenoids = new ArrayList<DoubleSolenoid>();
 		

@@ -20,7 +20,8 @@ public class ClosedRight extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.intakeSubsystem.closeMandible();
-    }
+    	System.out.println(this.getClass().getSimpleName());
+    	}
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
@@ -31,9 +32,9 @@ public class ClosedRight extends Command {
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
     	if(Robot.oi.btnIdle.get() || ! Robot.oi.btnRightIntake.get()) 
-    		return CommandUtils.stateChange(this, new Idle());
+    		return CommandUtils.autoStateChange(this, new Idle());
     	else if(Robot.oi.btnOpenGate.get())
-    		return CommandUtils.stateChange(this, new OpenRight());
+    		return CommandUtils.autoStateChange(this, new OpenRight());
         return false;
     }
 

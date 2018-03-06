@@ -29,6 +29,7 @@ public class Reposition extends Command{
 	
 	public void init()
 	{
+		System.out.println(this.getClass().getSimpleName());
 		Robot.elevatorSubsystem.releasePos();
 		initTime = timeSinceInitialized();
 		

@@ -18,6 +18,7 @@ public class End extends Command {
     	Robot.oi.axisForward.set(0.0);
     	Robot.oi.axisTurn.set(0.0);
     	Robot.oi.btnIdle.hit();
+    	System.out.println(this.getClass().getSimpleName());
     }
 
     // Called repeatedly when this Command is scheduled to run

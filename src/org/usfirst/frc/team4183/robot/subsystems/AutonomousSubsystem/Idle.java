@@ -29,6 +29,7 @@ public class Idle extends Command {
     // Called just before this Command runs the first time
     protected void initialize() 
     {
+    	System.out.println(this.getClass().getSimpleName());
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -44,7 +45,7 @@ public class Idle extends Command {
     		++counter;
     		if (counter == 1) 
     		{
-    			//AutoMoveTurnTests blah = new AutoMoveTurnTests();
+    			//AutoMoveTurnTest blah = new AutoMoveTurnTest();
     			AutoTasks blah= new AutoTasks();
     			blah.start();
     		}

@@ -73,6 +73,7 @@ public class DriveSubsystem extends BitBucketsSubsystem
 	
     public DriveSubsystem()
     {
+    	this.setName("DriveSubsystem");
     		setName("DriveSubsystem");
     		    		
 			// Make joystick scale chooser and put it on the dashboard

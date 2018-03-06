@@ -13,7 +13,7 @@ public class Lift extends Command{
 	
 	public void initialize()
 	{
-		
+		System.out.println(this.getClass().getSimpleName());	
 	}
 	protected void execute()
 	{

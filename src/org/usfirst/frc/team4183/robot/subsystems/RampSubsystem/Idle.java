@@ -26,6 +26,7 @@ public class Idle extends Command{
 	
 	@Override
 	protected boolean isFinished() {
+		System.out.println(this.getClass().getSimpleName());
 		if (Robot.runMode == Robot.runMode.TELEOP)
 		{
 		if (Robot.oi.releaseRampDriv.get() && Robot.oi.releaseRampOper.get())

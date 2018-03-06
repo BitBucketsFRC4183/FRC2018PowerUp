@@ -11,13 +11,13 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class ClosedOut extends Command {
 
-	private double timeout = 0.0;
+	private double timeout_sec = 0.0;
 	
     public ClosedOut() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     	requires(Robot.intakeSubsystem);
-    	timeout  = 0.0;
+    	timeout_sec  = 0.0;
     }
 
     public ClosedOut(double aTimeout) {
@@ -25,17 +25,18 @@ public class ClosedOut extends Command {
         // eg. requires(chassis);
     	requires(Robot.intakeSubsystem);
     	
-    	timeout = aTimeout;
+    	timeout_sec = aTimeout;
     }
     // Called just before this Command runs the first time
     protected void initialize() {
+    	System.out.println(this.getClass().getSimpleName());
     	Robot.intakeSubsystem.closeMandible();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	Robot.intakeSubsystem.setIntakeMotorToSpeed(RobotMap.INTAKE_MOTOR_PERCENT, RobotMap.THROAT_MOTOR_PERCENT);
-    	System.out.println("Timeout: " + timeout + " TIME SINCE INIT = " + timeSinceInitialized());
+    	System.out.println("Timeout: " + timeout_sec + " TIME SINCE INIT = " + timeSinceInitialized());
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -44,24 +45,24 @@ public class ClosedOut extends Command {
     	System.out.println("Blah");
 		System.out.flush();
     	
-    	if (timeout == 0.0)
+    	if (timeout_sec == 0.0)
     	{
     		System.out.println("First End Condition, time:" + timeSinceInitialized());
     		System.out.flush();
 	    	if(Robot.oi.btnIdle.get() || (! Robot.oi.btnOutIntake.get() && !Robot.oi.sbtnOuttakeThroat.get())) 
-	    		return CommandUtils.stateChange(this, new Idle());
+	    		return CommandUtils.autoStateChange(this, new Idle());
 	    	else if(Robot.oi.btnOpenGate.get())
-	    		return CommandUtils.stateChange(this, new OpenOut());
+	    		return CommandUtils.autoStateChange(this, new OpenOut());
     	}
     	else
     	{
     		System.out.println("second if statement, time: " + timeSinceInitialized());
     		System.out.flush();
-    		if (timeSinceInitialized() >= timeout)
+    		if (timeSinceInitialized() >= timeout_sec)
     		{
     			System.out.println("Second end condition");
     			System.out.flush();
-    			return CommandUtils.stateChange(this, new Idle());
+    			return CommandUtils.autoStateChange(this, new Idle());
     		}
     	}
     	return false;
