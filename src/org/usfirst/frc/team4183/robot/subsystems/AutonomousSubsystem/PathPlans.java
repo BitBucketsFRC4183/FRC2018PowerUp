@@ -45,10 +45,10 @@ public class PathPlans
 	
 	public enum PrimaryRole
 	{
-		CROSS_LINE,
 		SWITCH,
 		SCALE,
-		EXCHANGE
+		EXCHANGE,
+		CROSS_LINE
 	}
 	
 	private static SendableChooser<PrimaryRole> primaryRollChooser;
@@ -280,6 +280,23 @@ public class PathPlans
 		/// TODO: Replace below with logic based on better selectors
 		/// including starting side, roll, crossing allowance
 		
+		// Description as comments
+		//		Available Primary choices:
+		//			Switch
+		//			Scale
+		//          Exchange
+		//			Cross Line
+		//		Decisions for Switch and Scale:
+		//			If primary is on same side, proceed
+		//			If primary is on opposite side and crossing allowed, proceed
+		//			If primary is on opposite side and crossing DISALLOWED, check for secondary
+		//			If secondary is on same side, proceed
+		//			If secondary is on opposite side and crossing allowed, proceed
+		//			If secondary is on opposite side and crossing DISALLOWED, cross line and wait
+		//
+		/// TODO: Consider exchange as choice?
+		
+		/// TODO: Again, replace the below with something like above
 		switch (pathChooser.getSelected())
 		{
 		case NONE:
