@@ -1,7 +1,10 @@
 package org.usfirst.frc.team4183.robot.subsystems.ElevatorSubsystem;
 
+import org.usfirst.frc.team4183.robot.Robot;
 import org.usfirst.frc.team4183.robot.RobotMap;
 import org.usfirst.frc.team4183.robot.subsystems.BitBucketsSubsystem;
+import org.usfirst.frc.team4183.robot.subsystems.SubsystemUtilities.DiagnosticsInformation;
+import org.usfirst.frc.team4183.robot.subsystems.SubsystemUtilities.DiagnosticsState;
 import org.usfirst.frc.team4183.robot.subsystems.SubsystemUtilities.SubsystemTelemetryState;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -64,7 +67,7 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 		}
 	}
 	
-	public static final double timeUntilBrakeSec = .75;	/// TODO: Remove all brake concepts?
+	private static double testModePeriod_sec = 2.0;
 	
 	public static int holdUnits = 0;
 	
@@ -119,6 +122,8 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 				                                RobotMap.CONTROLLER_TIMEOUT_MS);
 		
 		elevatorMotorA.setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_LOOP, RobotMap.CONTROLLER_TIMEOUT_MS);
+		
+		DIAG_LOOPS_RUN = 10;
 		
 		telemetryState = new SendableChooser<SubsystemTelemetryState>();
     	telemetryState.addDefault("Off", SubsystemTelemetryState.OFF);
@@ -279,10 +284,43 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 		return (error  < RobotMap.ELEVATOR_POSITION_TOLERANCE_NATIVE_TICKS);
 	}
 	
+	
+	public double getTestModePeriod_sec()
+	{
+		return testModePeriod_sec;
+	}
 
 	@Override
+	public void diagnosticsInit() {
+		
+	}
+	
+	@Override
+	public void diagnosticsExecute() {
+		elevatorMotorA.set(ControlMode.PercentOutput, RobotMap.MOTOR_TEST_PERCENT);
+	}
+	
+	@Override
 	public void diagnosticsCheck() {
-		// TODO Auto-generated method stub
+		/* Reset Flag */
+		runDiagnostics = false;
+		
+		/* Diagnostics */
+		lastKnownState = DiagnosticsState.PASS;
+		SmartDashboard.putBoolean(getName() + "Diagnostics", true); // Innocent until proven guilt
+		
+		
+		if(Robot.diagInformation.getSelected() == DiagnosticsInformation.SUBSYSTEM_EXTENDED) {
+			SmartDashboard.putBoolean("ElevatorMotor", true);
+		}
+		if(elevatorMotorA.getOutputCurrent() <= RobotMap.MINIMUM_MOTOR_CURR) {
+			SmartDashboard.putBoolean(getName() + "Diagnostics", false);
+			lastKnownState = DiagnosticsState.FAIL;
+			if(Robot.diagInformation.getSelected() == DiagnosticsInformation.SUBSYSTEM_EXTENDED)
+				SmartDashboard.putBoolean("ElevatorMotor", false);
+		}
+		elevatorMotorA.set(ControlMode.PercentOutput, 0.0);
+		
 	}
 
 	@Override
@@ -291,11 +329,6 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 		// this prevent problems when using the subsystem from an autonomous mode
 	}
 
-	@Override
-	public void diagnosticsInit() {
-		// TODO Auto-generated method stub
-		
-	}
 
 
 	@Override
@@ -307,11 +340,6 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 		
 	}
 	
-	@Override
-	public void diagnosticsExecute() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void setDiagnosticsFlag(boolean enable) {

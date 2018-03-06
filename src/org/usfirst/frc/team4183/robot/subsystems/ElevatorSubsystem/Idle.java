@@ -37,7 +37,13 @@ public class Idle extends Command{
 	{
 		/// Temporary code for testing linkage
 		/// TODO: magic 0.06
-		if (Math.abs(Robot.oi.rightRampAxis.get()) > .06)		/// TODO: Need comment here explaining that sharing joytick!
+		if(Robot.runMode == Robot.RunMode.TEST) {
+			if(Robot.elevatorSubsystem.getDiagnosticsFlag()) {
+				return CommandUtils.stateChange(this, new Diagnostics());
+			}
+		}
+		
+		else if (Math.abs(Robot.oi.rightRampAxis.get()) > .06)		/// TODO: Need comment here explaining that sharing joytick!
 		{														/// TODO: May want two instances with different names and put comment at definition
 			Robot.oi.sbtnOpenMandible.push();
 			return CommandUtils.stateChange(this, new Reposition());

@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import org.usfirst.frc.team4183.robot.Robot;
 import org.usfirst.frc.team4183.robot.RobotMap;
 import org.usfirst.frc.team4183.robot.subsystems.BitBucketsSubsystem;
+import org.usfirst.frc.team4183.robot.subsystems.SubsystemUtilities.DiagnosticsInformation;
+import org.usfirst.frc.team4183.robot.subsystems.SubsystemUtilities.DiagnosticsState;
 import org.usfirst.frc.team4183.robot.subsystems.SubsystemUtilities.SubsystemTelemetryState;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -48,6 +50,8 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 		this.setName("IntakeSubsystem");
 		motors = new ArrayList<WPI_TalonSRX>();
 		solenoids = new ArrayList<DoubleSolenoid>();
+		
+		DIAG_LOOPS_RUN = 10;
 		
 		leftIntakeMotor = new WPI_TalonSRX(RobotMap.INTAKE_MOTOR_LEFT_ID);
 		rightIntakeMotor = new WPI_TalonSRX(RobotMap.INTAKE_MOTOR_RIGHT_ID);
@@ -167,7 +171,7 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 		setRightThroatSpeed(throatSpeed);
 	}
 	
-	public void setIntakeMotorToSpeed(double intakeSpeed, double throatSpeed) {
+	public void setIntakeMotorsToSpeed(double intakeSpeed, double throatSpeed) {
 		setLeftMotorSpeed(intakeSpeed, throatSpeed);
 		setRightMotorSpeed(intakeSpeed, throatSpeed);
 	}
@@ -204,18 +208,63 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 	
 	@Override
 	public void diagnosticsInit() {
-		
-		// Checks motors for any current
-		for(WPI_TalonSRX talon: motors) {
-			if(talon.getOutputCurrent() == 0) {
-				
-			}
-		}
+		//TODO: Might want to move this but I figure opening pneumatics first is safest
+		openMandible();
+	}
+	
+	@Override
+	public void diagnosticsExecute() {
+		setIntakeMotorsToSpeed(RobotMap.MOTOR_TEST_PERCENT, RobotMap.MOTOR_TEST_PERCENT);
 	}
 	
 	@Override
 	public void diagnosticsCheck() {
+		/* Reset Flag */
+		runDiagnostics = false;
 		
+		/* Diagnostics */
+		lastKnownState = DiagnosticsState.PASS; // Passes unless we find a fault
+		SmartDashboard.putBoolean(getName() + "Diagnostics", true);
+		
+		if(Robot.diagInformation.getSelected() == DiagnosticsInformation.SUBSYSTEM_EXTENDED)
+		{
+			SmartDashboard.putBoolean("ThroatMotorA", true);
+			SmartDashboard.putBoolean("ThroatMotorB", true);
+			SmartDashboard.putBoolean("IntakeLeft",  true);
+			SmartDashboard.putBoolean("IntakeRight", true);
+		}
+		
+		if(throatMotorA.getOutputCurrent() <= RobotMap.MINIMUM_MOTOR_CURR) {
+			if(Robot.diagInformation.getSelected() == DiagnosticsInformation.SUBSYSTEM_EXTENDED)
+				SmartDashboard.putBoolean("ThroatMotorA", false);
+			SmartDashboard.putBoolean(getName() + "Diagnostics", false);
+			lastKnownState = DiagnosticsState.FAIL;
+		}
+		throatMotorA.set(ControlMode.PercentOutput, 0.0);
+		
+		if(throatMotorB.getOutputCurrent() <= RobotMap.MINIMUM_MOTOR_CURR) {
+			if(Robot.diagInformation.getSelected() == DiagnosticsInformation.SUBSYSTEM_EXTENDED)
+				SmartDashboard.putBoolean("ThroatMotorB", false);
+			SmartDashboard.putBoolean(getName() + "Diagnostics", false);
+			lastKnownState = DiagnosticsState.FAIL;
+		}
+		throatMotorB.set(ControlMode.PercentOutput, 0.0);
+		
+		if(leftIntakeMotor.getOutputCurrent() <= RobotMap.MINIMUM_MOTOR_CURR) {
+			if(Robot.diagInformation.getSelected() == DiagnosticsInformation.SUBSYSTEM_EXTENDED)
+				SmartDashboard.putBoolean("IntakeLeft", false);
+			SmartDashboard.putBoolean(getName() + "Diagnostics", false);
+			lastKnownState = DiagnosticsState.FAIL;
+		}
+		leftIntakeMotor.set(ControlMode.PercentOutput, 0.0);
+		
+		if(rightIntakeMotor.getOutputCurrent() <= RobotMap.MINIMUM_MOTOR_CURR) {
+			if(Robot.diagInformation.getSelected() == DiagnosticsInformation.SUBSYSTEM_EXTENDED)
+				SmartDashboard.putBoolean("IntakeRight", false);
+			SmartDashboard.putBoolean(getName() + "Diagnostics", false);
+			lastKnownState = DiagnosticsState.FAIL;
+		}
+		rightIntakeMotor.set(ControlMode.PercentOutput, 0.0);
 	}
 	@Override
 	public void periodic() {
@@ -231,11 +280,6 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 			SmartDashboard.putNumber("LeftIntakeMotor", leftIntakeMotor.getOutputCurrent());
 			SmartDashboard.putNumber("RightIntakeMotor", rightIntakeMotor.getOutputCurrent());
 		}
-	}
-	@Override
-	public void diagnosticsExecute() {
-		// TODO Auto-generated method stub
-		
 	}
 	@Override
 	public void setDiagnosticsFlag(boolean enable) {

@@ -242,6 +242,6 @@ public class RobotMap
  * 								========== DIAGNOSTICS CONSTANTS ==========	
  * 								===========================================
  */
-   		public static final double MINUMUM_MOTOR_CURR = 1.25; 
+   		public static final double MINIMUM_MOTOR_CURR = 1.25; 
    		public static final double MOTOR_TEST_PERCENT = 0.5; 
 }
