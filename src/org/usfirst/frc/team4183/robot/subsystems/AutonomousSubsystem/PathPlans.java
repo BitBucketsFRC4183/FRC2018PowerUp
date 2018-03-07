@@ -113,8 +113,8 @@ public class PathPlans
     private static Waypoint[] centerStartLeftSwitchPath = new Waypoint[]
     {
     		new Waypoint(0,0, Pathfinder.d2r(0)),
-    		new Waypoint(.8382, .6096 + 0.8382, Pathfinder.d2r(40)),
-    		new Waypoint(2.4638+.15, 1.0668+0.8382, Pathfinder.d2r(0))
+    		new Waypoint(.8382, .6096 + 0.3, Pathfinder.d2r(40)),
+    		new Waypoint(2.4638+.15, 1.0668+0.3, Pathfinder.d2r(0))
     };
     
     private static Waypoint[] rightStartRightSwitchPath = new Waypoint[]
@@ -133,10 +133,10 @@ public class PathPlans
     private static Waypoint[] leftStartLeftSwitchPath = new Waypoint[]
     {
     		new Waypoint(0,         0,                Pathfinder.d2r(0)),
-    		new Waypoint(0.864,     0.699+0.3048,     Pathfinder.d2r(45)),
-    		new Waypoint(1.817+0.5, 1.245+0.3048,     Pathfinder.d2r(0)),
-    		new Waypoint(2.922+0.3, 1.245-0.3+0.3048, Pathfinder.d2r(-45)),
-    		new Waypoint(3.405,         0+0.3048,     Pathfinder.d2r(-100))
+    		new Waypoint(0.864,     0.699-0.3048,     Pathfinder.d2r(45)),
+    		new Waypoint(1.817+0.5, 1.245-0.3048,     Pathfinder.d2r(0)),
+    		new Waypoint(2.922+0.3, 1.245-0.3-0.3048,     Pathfinder.d2r(-45)),
+    		new Waypoint(3.405,         0,     Pathfinder.d2r(-100))
     };
 
     private static Waypoint[] rightStartLeftSwitchPath = new Waypoint[]
@@ -148,9 +148,9 @@ public class PathPlans
     		new Waypoint(4.318,       -1.245-0.3048, Pathfinder.d2r(0)),
     		new Waypoint(5.182,       0.254-0.3048,  Pathfinder.d2r(90)),
     		new Waypoint(5.182,       3.937-0.3048,  Pathfinder.d2r(90)),
-    		new Waypoint(4.318,       5.436-0.3048,  Pathfinder.d2r(180)),
-    		new Waypoint(3.600+0.4,   5.136-0.3048,  Pathfinder.d2r(225)),
-    		new Waypoint(3.405+0.4,   4.191-0.3048,  Pathfinder.d2r(310))
+    		new Waypoint(4.318+0.3048,   5.436-3*0.3048,  Pathfinder.d2r(180)),
+    		new Waypoint(3.600+0.3048,   5.136-3*0.3048,  Pathfinder.d2r(225)),
+    		new Waypoint(3.405+0.3048,   4.191-3*0.3048,  Pathfinder.d2r(310))
 	    		
     };
 
@@ -161,12 +161,12 @@ public class PathPlans
     		new Waypoint(0.864,     0.699, Pathfinder.d2r(45)),
     		new Waypoint(1.817+0.5, 1.245, Pathfinder.d2r(0)),
     		
-    		new Waypoint(4.318,       1.245+0.3048, Pathfinder.d2r(0)),
-    		new Waypoint(5.182,       -0.254+0.3048,  Pathfinder.d2r(-90)),
-    		new Waypoint(5.182,       -3.937+0.3048,  Pathfinder.d2r(-90)),
-    		new Waypoint(4.318,       -5.436+0.3048,  Pathfinder.d2r(-180)),
-    		new Waypoint(3.600+0.4,   -5.136+0.3048,  Pathfinder.d2r(-225)),
-    		new Waypoint(3.405+0.4,   -4.191+0.3048,  Pathfinder.d2r(-310))
+    		new Waypoint(4.318,       1.245-0.3048, Pathfinder.d2r(0)),
+    		new Waypoint(5.182,       -0.254-0.3048,  Pathfinder.d2r(-90)),
+    		new Waypoint(5.182,       -3.937-0.3048,  Pathfinder.d2r(-90)),
+    		new Waypoint(4.318+0.3048,  -5.436-0.3048,  Pathfinder.d2r(-180)),
+    		new Waypoint(3.600+0.3048,  -5.136+2*0.3048,  Pathfinder.d2r(-225)),
+    		new Waypoint(3.405+0.3048,  -4.191+2*0.3048,  Pathfinder.d2r(-310))
 	    		
     };
     
@@ -189,6 +189,7 @@ public class PathPlans
     	startingPositionChooser.addDefault(  "LEFT",    StartingPosition.LEFT);
     	startingPositionChooser.addObject(   "CENTER",  StartingPosition.CENTER);
     	startingPositionChooser.addObject(   "RIGHT",    StartingPosition.RIGHT);
+    	SmartDashboard.putData( "Starting Position", startingPositionChooser);
     	
     	
     	primaryRollChooser = new SendableChooser<PrimaryRole>();
@@ -196,10 +197,12 @@ public class PathPlans
     	primaryRollChooser.addObject(   "SWITCH",        PrimaryRole.SWITCH);
     	primaryRollChooser.addObject(   "SCALE",         PrimaryRole.SCALE);
     	primaryRollChooser.addObject(   "EXCAHNGE",      PrimaryRole.EXCHANGE);
-    	    	
+    	SmartDashboard.putData( "Primary Roll", primaryRollChooser);
+    	
     	crossingModeChooser = new SendableChooser<CrossingMode>() ;
     	crossingModeChooser.addDefault(  "DISABLE CROSSING",    CrossingMode.DISABLE_CROSSING);
     	crossingModeChooser.addObject(   "ENABLE CROSSING",     CrossingMode.ENABLE_CROSSING);
+    	SmartDashboard.putData( "Crossing Mode", crossingModeChooser);
     	
     	/// TODO: This will be replaced with logic based on the above choices
 		pathChooser = new SendableChooser<PathPlanChoice>();
