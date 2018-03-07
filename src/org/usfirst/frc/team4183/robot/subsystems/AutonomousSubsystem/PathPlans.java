@@ -291,8 +291,10 @@ public class PathPlans
 		//			If primary is on opposite side and crossing allowed, proceed
 		//			If primary is on opposite side and crossing DISALLOWED, check for secondary
 		//			If secondary is on same side, proceed
-		//			If secondary is on opposite side and crossing allowed, proceed
 		//			If secondary is on opposite side and crossing DISALLOWED, cross line and wait
+		//      Decision for Exchange:
+		//			If position is center, proceed
+		//			If position is right or left, cross line and wait
 		//
 		/// TODO: Consider exchange as choice?
 		
