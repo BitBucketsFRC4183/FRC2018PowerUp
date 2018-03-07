@@ -13,10 +13,12 @@ import org.usfirst.frc.team4183.robot.subsystems.ElevatorSubsystem.ElevatorSubsy
 import org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem.IntakeSubsystem;
 import org.usfirst.frc.team4183.robot.subsystems.RampSubsystem.RampSubsystem;
 import org.usfirst.frc.team4183.robot.subsystems.VisionSubsystem.VisionSubsystem;
+import org.usfirst.frc.team4183.robot.subsystems.SubsystemUtilities.DiagnosticsInformation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team4183.utils.DoEveryN;
@@ -55,6 +57,8 @@ public class Robot extends IterativeRobot {
 	// Here for now, but may not be used this year
 	public static LightingControl lightingControl;	
 	public static NavxIMU imu;
+	
+	public static SendableChooser<DiagnosticsInformation> diagInformation;
 		
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -79,6 +83,12 @@ public class Robot extends IterativeRobot {
 		autonomousSubsystem = new AutonomousSubsystem();
 		autonomousSubsystem.initialize();
 				
+		diagInformation = new SendableChooser<DiagnosticsInformation>();
+		diagInformation.addDefault("Subsystem_Basic", DiagnosticsInformation.SUBSYSTEM_BASIC);
+		diagInformation.addObject("Subsystem_Extended", DiagnosticsInformation.SUBSYSTEM_EXTENDED);
+		
+		SmartDashboard.putData("DiagInfo", diagInformation);
+		
 		// Add all subsystems for debugging
 		addSubsystemToDebug(driveSubsystem);
         addSubsystemToDebug(intakeSubsystem);

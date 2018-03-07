@@ -17,7 +17,7 @@ import org.usfirst.frc.team4183.robot.Robot;
 import org.usfirst.frc.team4183.robot.RobotMap;
 import org.usfirst.frc.team4183.utils.Deadzone;
 import org.usfirst.frc.team4183.robot.subsystems.BitBucketsSubsystem;
-
+import org.usfirst.frc.team4183.robot.subsystems.SubsystemUtilities.DiagnosticsInformation;
 import org.usfirst.frc.team4183.robot.subsystems.SubsystemUtilities.DiagnosticsState;
 import org.usfirst.frc.team4183.robot.subsystems.SubsystemUtilities.SubsystemTelemetryState;
 
@@ -615,33 +615,41 @@ public class DriveSubsystem extends BitBucketsSubsystem
 		lastKnownState = DiagnosticsState.PASS;
 		SmartDashboard.putBoolean(getName() + "Diagnostics", true); // All good until we find a fault
 		
-		SmartDashboard.putBoolean("DiagnosticsFR", true);
-		if(rightFrontMotor.getOutputCurrent() <= RobotMap.MINUMUM_MOTOR_CURR) {
-			SmartDashboard.putBoolean("DiagnosticsFR", false);
+		if(Robot.diagInformation.getSelected() == DiagnosticsInformation.SUBSYSTEM_EXTENDED)
+		{
+			SmartDashboard.putBoolean("DiagnosticsFR", true);
+			SmartDashboard.putBoolean("DiagnosticsBR", true);
+			SmartDashboard.putBoolean("DiagnosticsFL", true);
+			SmartDashboard.putBoolean("DiagnosticsBL", true);
+			
+		}
+		if(rightFrontMotor.getOutputCurrent() <= RobotMap.MINIMUM_MOTOR_CURR) {
+			if(Robot.diagInformation.getSelected() == DiagnosticsInformation.SUBSYSTEM_EXTENDED)
+				SmartDashboard.putBoolean("DiagnosticsFR", false);
 			SmartDashboard.putBoolean(getName() + "Diagnostics", false);
 			lastKnownState = DiagnosticsState.FAIL;
 		}
 		rightFrontMotor.set(ControlMode.PercentOutput, 0.0);
 		
-		SmartDashboard.putBoolean("DiagnosticsBR", true);
-		if(rightRearMotor.getOutputCurrent() <= RobotMap.MINUMUM_MOTOR_CURR) {
-			SmartDashboard.putBoolean("DiagnosticsBR", false);
+		if(rightRearMotor.getOutputCurrent() <= RobotMap.MINIMUM_MOTOR_CURR) {
+			if(Robot.diagInformation.getSelected() == DiagnosticsInformation.SUBSYSTEM_EXTENDED)
+				SmartDashboard.putBoolean("DiagnosticsBR", false);
 			SmartDashboard.putBoolean(getName() + "Diagnostics", false);
 			lastKnownState = DiagnosticsState.FAIL;
 		}
 		rightRearMotor.set(ControlMode.PercentOutput, 0.0);
 		
-		SmartDashboard.putBoolean("DiagnosticsFL", true);
-		if(leftFrontMotor.getOutputCurrent() <= RobotMap.MINUMUM_MOTOR_CURR) {
-			SmartDashboard.putBoolean("DiagnosticsFL", false);
+		if(leftFrontMotor.getOutputCurrent() <= RobotMap.MINIMUM_MOTOR_CURR) {
+			if(Robot.diagInformation.getSelected() == DiagnosticsInformation.SUBSYSTEM_EXTENDED)
+				SmartDashboard.putBoolean("DiagnosticsFL", false);
 			SmartDashboard.putBoolean(getName() + "Diagnostics", false);
 			lastKnownState = DiagnosticsState.FAIL;
 		}
 		leftFrontMotor.set(ControlMode.PercentOutput, 0.0);
 		
-		SmartDashboard.putBoolean("DiagnosticsBL", true);
-		if(leftRearMotor.getOutputCurrent() <= RobotMap.MINUMUM_MOTOR_CURR) {
-			SmartDashboard.putBoolean("DiagnosticsBL", false);
+		if(leftRearMotor.getOutputCurrent() <= RobotMap.MINIMUM_MOTOR_CURR) {
+			if(Robot.diagInformation.getSelected() == DiagnosticsInformation.SUBSYSTEM_EXTENDED)
+				SmartDashboard.putBoolean("DiagnosticsBL", false);
 			SmartDashboard.putBoolean(getName() + "Diagnostics", false);
 			lastKnownState = DiagnosticsState.FAIL;
 		}

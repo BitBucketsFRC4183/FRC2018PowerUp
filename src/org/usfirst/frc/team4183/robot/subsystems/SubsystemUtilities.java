@@ -8,6 +8,12 @@ public class SubsystemUtilities {
 		ON
 	}
 	
+	public enum DiagnosticsInformation 
+	{
+		SUBSYSTEM_BASIC,
+		SUBSYSTEM_EXTENDED
+	}
+	
 	public enum BITMode
 	{
 		INIT, 
