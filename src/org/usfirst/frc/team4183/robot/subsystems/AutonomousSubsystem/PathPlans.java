@@ -310,7 +310,7 @@ public class PathPlans
 		//			If primary is on opposite side and crossing allowed, proceed
 		//			If primary is on opposite side and crossing DISALLOWED, check for secondary
 		//			If secondary is on same side, proceed
-		//			If secondary is on opposite side and crossing DISALLOWED, cross line and wait
+		//			Secondary is on opposite side and crossing DISALLOWED so cross line and wait
 		//      Decision for Exchange:
 		//			If position is center, proceed
 		//			If position is right or left, cross line and wait
@@ -323,58 +323,83 @@ public class PathPlans
 		//INSERT SECONDARY GOALS WHEN THE SELECTOR IS ADDED
 		CrossingMode crossingMode = crossingModeChooser.getSelected();
 		
+		Positions.GenericPositions switchPos = Robot.autonomousSubsystem.getSwitchPosition();
+		Positions.GenericPositions scalePos = Robot.autonomousSubsystem.getScalePosition();
+		
 		switch (primaryRollChooser.getSelected())
 		{
 		case SWITCH:
-			Positions.GenericPositions switchPos = Robot.autonomousSubsystem.getSwitchPosition();
 			if (startingPositionChooser.getSelected() == StartingPosition.LEFT)
 			{
 				if (switchPos == Positions.GenericPositions.LEFT)
 				{
-					System.out.println("SWITCHPOS LEFT, PLACE, LEFT");
+					System.out.println("LEFT START LEFT SWITCH (PRIMARY)");
 					trajectory = PathPlans.leftStartLeftSwitchTrajectory;
 				}
+				// explicitly check for right in case FMS has bug
 				else if (switchPos == Positions.GenericPositions.RIGHT && crossingMode == CrossingMode.ENABLE_CROSSING)
 				{
-					System.out.println("SWITCHPOS LEFT, PLACE, RIGHT");
+					System.out.println("LEFT START RIGHT SWITCH (PRIMARY)");
 					trajectory = PathPlans.leftStartRightSwitchTrajectory;
 				}
-				else
+				else // Primary is out of reach or unspecified
 				{
-					System.out.println("DRIVING FORWARD - CROSSING LINE");
-					//INSERT SECONDARY GOAL CHECKS
+					if (scalePos == Positions.GenericPositions.LEFT)
+					{
+						System.out.println("LEFT START RIGHT SCALE (SECONDARY)");
+						/// TODO: trajectory = PathPlans.leftStartLeftScaleTrajectory;
+					}
+					else
+					{
+						System.out.println("NO SOLUTION: DRIVING FORWARD - CROSSING LINE");
+					}
+					// In all other cases crossing is disabled or FMS messed up, so just drive forward
 				}
 			}
 			else if (startingPositionChooser.getSelected() == StartingPosition.CENTER)
 			{
 				if (switchPos == Positions.GenericPositions.LEFT)
 				{
-					System.out.println("SWITCHPOS CENTER, PLACE, LEFT");
+					System.out.println("CENTER START LEFT SWITCH (PRIMARY)");
 					trajectory = PathPlans.centerStartLeftSwitchTrajectory;
 					
 				}
 				else if (switchPos == Positions.GenericPositions.RIGHT)
 				{
-					System.out.println("SWITCHPOS CENTER, PLACE, RIGHT");
+					System.out.println("CENTER START RIGHT SWITCH (PRIMARY)");
 					trajectory = PathPlans.centerStartRightSwitchTrajectory;
 				}
+				else
+				{
+					System.out.println("NO SOLUTION: FMS ERROR");
+				}
+				
+				// NOTE: If FMS messes up, we will drive into stack... do we want to suppress?
 			}
 			else if (startingPositionChooser.getSelected() == StartingPosition.RIGHT)
 			{
 				if (switchPos == Positions.GenericPositions.RIGHT)
 				{
 					trajectory = PathPlans.rightStartRightSwitchTrajectory;
-					System.out.println("SWITCHPOS RIGHT, PLACE, RIGHT");	
+					System.out.println("RIGHT START RIGHT SWITCH (PRIMARY)");	
 				}
 				else if (switchPos == Positions.GenericPositions.LEFT && crossingMode == CrossingMode.ENABLE_CROSSING)
 				{
-					System.out.println("SWITCHPOS RIGHT, PLACE, LEFT");
+					System.out.println("RIGHT START LEFT SWITCH (PRIMARY)");
 					trajectory = PathPlans.rightStartLeftSwitchTrajectory;
 				}
 				else
 				{
-					//INSERT SECONDARY GOAL CHECK
-					System.out.println("DRIVING FORWARD - CROSSING LINE");
+					if (scalePos == Positions.GenericPositions.RIGHT)
+					{
+						System.out.println("RIGHT START RIGHT SCALE (SECONDARY)");
+						/// TODO: trajectory = PathPlans.rightStartRightScaleTrajectory;
+					}
+					else
+					{
+						System.out.println("DRIVING FORWARD - CROSSING LINE");
+					}
+					// In all other cases crossing is disabled or FMS messed up, so just drive forward
 				}
 			}
 			break;
@@ -382,14 +407,58 @@ public class PathPlans
 		case SCALE:
 			if (startingPositionChooser.getSelected() == StartingPosition.LEFT)
 			{
-				
-			}
-			else if (startingPositionChooser.getSelected() == StartingPosition.CENTER)
-			{
-				
+				if (scalePos == Positions.GenericPositions.LEFT)
+				{
+					System.out.println("LEFT START LEFT SCALE (PRIMARY)");
+					/// TODO: trajectory = PathPlans.leftStartLeftScaleTrajectory;
+				}
+				// explicitly check for right in case FMS has bug
+				else if (scalePos == Positions.GenericPositions.RIGHT && crossingMode == CrossingMode.ENABLE_CROSSING)
+				{
+					System.out.println("LEFT START RIGHT SCALE (PRIMARY)");
+					/// TODO: trajectory = PathPlans.leftStartRightScaleTrajectory;
+				}
+				else // Primary is out of reach or unspecified
+				{
+					if (switchPos == Positions.GenericPositions.LEFT)
+					{
+						System.out.println("LEFT START LEFT SWITCH (SECONDARY)");
+						trajectory = PathPlans.leftStartLeftSwitchTrajectory;
+					}
+					else
+					{
+						System.out.println("DRIVING FORWARD - CROSSING LINE");
+					}
+					// In all other cases crossing is disabled or FMS messed up, so just drive forward
+				}				
 			}
 			else if (startingPositionChooser.getSelected() == StartingPosition.RIGHT)
 			{
+				if (scalePos == Positions.GenericPositions.RIGHT)
+				{
+					System.out.println("RIGHT START RIGHT SCALE (PRIMARY)");
+					/// TODO: trajectory = PathPlans.rightStartRightScaleTrajectory;
+				}
+				// explicitly check for right in case FMS has bug
+				else if (scalePos == Positions.GenericPositions.LEFT && crossingMode == CrossingMode.ENABLE_CROSSING)
+				{
+					System.out.println("RIGHT START LEFT SCALE (PRIMARY)");
+					/// TODO: trajectory = PathPlans.rightStartLeftScaleTrajectory;
+				}
+				else // Primary is out of reach or unspecified
+				{
+					if (switchPos == Positions.GenericPositions.RIGHT)
+					{
+						System.out.println("RIGHT START RIGHT SWITCH (SECONDARY)");
+						trajectory = PathPlans.rightStartRightSwitchTrajectory;
+					}
+					else
+					{
+						System.out.println("DRIVING FORWARD - CROSSING LINE");
+					}
+					
+					// In all other cases crossing is disabled or FMS messed up, so just drive forward
+				}				
 				
 			}
 			break;
@@ -397,11 +466,11 @@ public class PathPlans
 		case EXCHANGE:
 			if (startingPositionChooser.getSelected() == StartingPosition.CENTER)
 			{
-				
+				/// TODO:
 			}
 			else
 			{
-				System.out.println("DRIVER POSITION ERROR");
+				System.out.println("DRIVER POSITION ERROR: Can only do exchange from center");
 			}
 			break;
 			
