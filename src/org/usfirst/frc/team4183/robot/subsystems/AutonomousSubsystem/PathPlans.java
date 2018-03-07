@@ -1,7 +1,9 @@
 package org.usfirst.frc.team4183.robot.subsystems.AutonomousSubsystem;
 
+import org.usfirst.frc.team4183.robot.Robot;
 import org.usfirst.frc.team4183.robot.RobotMap;
 import org.usfirst.frc.team4183.utils.Positions.StartingPosition;
+import org.usfirst.frc.team4183.utils.Positions;
 import org.usfirst.frc.team4183.utils.RobotTrajectory;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -108,6 +110,13 @@ public class PathPlans
     		new Waypoint(2.4638 + 0.15,-1.0668,Pathfinder.d2r(0))
     };
     
+    private static Waypoint[] centerStartLeftSwitchPath = new Waypoint[]
+    {
+    		new Waypoint(0,0, Pathfinder.d2r(0)),
+    		new Waypoint(.8382, .6096 + 0.8382, Pathfinder.d2r(40)),
+    		new Waypoint(2.4638+.15, 1.0668+0.8382, Pathfinder.d2r(0))
+    };
+    
     private static Waypoint[] rightStartRightSwitchPath = new Waypoint[]
     {
     		new Waypoint(0,                     0,     Pathfinder.d2r(0)),
@@ -167,6 +176,7 @@ public class PathPlans
     public static RobotTrajectory leftStartLeftSwitchTrajectory;
     
     public static RobotTrajectory centerStartRightSwitchTrajectory;
+    public static RobotTrajectory centerStartLeftSwitchTrajectory;
     
     public static RobotTrajectory rightStartLeftSwitchTrajectory;
     public static RobotTrajectory leftStartRightSwitchTrajectory;
@@ -270,6 +280,15 @@ public class PathPlans
 	    centerStartRightSwitchTrajectory.left = modifier.getLeftTrajectory();
 	    centerStartRightSwitchTrajectory.right = modifier.getRightTrajectory();
 	    
+	    //***********
+	    centerStartLeftSwitchTrajectory = new RobotTrajectory("centerStartLeftSwitch");
+	    centerStartLeftSwitchTrajectory.center = Pathfinder.generate(centerStartLeftSwitchPath, config);
+
+	    modifier = new TankModifier(centerStartLeftSwitchTrajectory.center).modify(RobotMap.inch2Meter(RobotMap.WHEEL_TRACK_INCHES));
+		
+	    centerStartLeftSwitchTrajectory.left = modifier.getLeftTrajectory();
+	    centerStartLeftSwitchTrajectory.right = modifier.getRightTrajectory();
+	    
 	    
 	 }
     
@@ -297,6 +316,100 @@ public class PathPlans
 		/// TODO: Consider exchange as choice?
 		
 		/// TODO: Again, replace the below with something like above
+		
+		
+		//INSERT SECONDARY GOALS WHEN THE SELECTOR IS ADDED
+		CrossingMode crossingMode = crossingModeChooser.getSelected();
+		
+		switch (primaryRollChooser.getSelected())
+		{
+		case SWITCH:
+			Positions.GenericPositions switchPos = Robot.autonomousSubsystem.getSwitchPosition();
+			if (startingPositionChooser.getSelected() == StartingPosition.LEFT)
+			{
+				if (switchPos == Positions.GenericPositions.LEFT)
+				{
+					System.out.println("SWITCHPOS LEFT, PLACE, LEFT");
+					trajectory = PathPlans.leftStartLeftSwitchTrajectory;
+				}
+				else if (switchPos == Positions.GenericPositions.RIGHT && crossingMode == CrossingMode.ENABLE_CROSSING)
+				{
+					System.out.println("SWITCHPOS LEFT, PLACE, RIGHT");
+					trajectory = PathPlans.leftStartRightSwitchTrajectory;
+				}
+				else
+				{
+					System.out.println("DRIVING FORWARD - CROSSING LINE");
+					//INSERT SECONDARY GOAL CHECKS
+				}
+			}
+			else if (startingPositionChooser.getSelected() == StartingPosition.CENTER)
+			{
+				if (switchPos == Positions.GenericPositions.LEFT)
+				{
+					System.out.println("SWITCHPOS CENTER, PLACE, LEFT");
+					trajectory = PathPlans.centerStartLeftSwitchTrajectory;
+					
+				}
+				else if (switchPos == Positions.GenericPositions.RIGHT)
+				{
+					System.out.println("SWITCHPOS CENTER, PLACE, RIGHT");
+					trajectory = PathPlans.centerStartRightSwitchTrajectory;
+				}
+			}
+			else if (startingPositionChooser.getSelected() == StartingPosition.RIGHT)
+			{
+				if (switchPos == Positions.GenericPositions.RIGHT)
+				{
+					trajectory = PathPlans.rightStartRightSwitchTrajectory;
+					System.out.println("SWITCHPOS RIGHT, PLACE, RIGHT");	
+				}
+				else if (switchPos == Positions.GenericPositions.LEFT && crossingMode == CrossingMode.ENABLE_CROSSING)
+				{
+					System.out.println("SWITCHPOS RIGHT, PLACE, LEFT");
+					trajectory = PathPlans.rightStartLeftSwitchTrajectory;
+				}
+				else
+				{
+					//INSERT SECONDARY GOAL CHECK
+					System.out.println("DRIVING FORWARD - CROSSING LINE");
+				}
+			}
+			break;
+			
+		case SCALE:
+			if (startingPositionChooser.getSelected() == StartingPosition.LEFT)
+			{
+				
+			}
+			else if (startingPositionChooser.getSelected() == StartingPosition.CENTER)
+			{
+				
+			}
+			else if (startingPositionChooser.getSelected() == StartingPosition.RIGHT)
+			{
+				
+			}
+			break;
+			
+		case EXCHANGE:
+			if (startingPositionChooser.getSelected() == StartingPosition.CENTER)
+			{
+				
+			}
+			else
+			{
+				System.out.println("DRIVER POSITION ERROR");
+			}
+			break;
+			
+		case CROSS_LINE: //Done purposely
+		default:
+			System.out.println("RETURNING DRIVE FORWARD");
+			break;
+		}
+		
+		/*
 		switch (pathChooser.getSelected())
 		{
 		case NONE:
@@ -318,7 +431,7 @@ public class PathPlans
 			break;
 		
 		}
-		
+	*/	
 		return trajectory;
 		
 	}
