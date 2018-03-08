@@ -2,6 +2,7 @@ package org.usfirst.frc.team4183.robot.subsystems.ElevatorSubsystem;
 
 import org.usfirst.frc.team4183.robot.Robot;
 import org.usfirst.frc.team4183.robot.RobotMap;
+import org.usfirst.frc.team4183.robot.subsystems.ElevatorSubsystem.ElevatorSubsystem.ElevatorPresets;
 import org.usfirst.frc.team4183.utils.CommandUtils;
 
 import edu.wpi.first.wpilibj.command.Command;
@@ -60,22 +61,18 @@ public class Reposition extends Command{
 	protected boolean isFinished() {
 		
 		//Basically checks to see if the there is not any joystick movement or any buttons pressed for the elevPositions
+		// Or just got past the top limit
 		 
-		/*if (Robot.oi.btnIdle.get() || Math.abs(Robot.oi.leftRampAxis.get()) < .06 || !Robot.oi.btnMedPosElev.get() 
-				 || !Robot.oi.btnHighPosElev.get() || !Robot.oi.btnLowPosElev.get() || !Robot.oi.btnTransPosElev.get() 
-				 || Robot.elevatorSubsystem.closeToDesiredPos())
-			{
-				Robot.elevatorSubsystem.holdPos();
-				return CommandUtils.stateChange(this, new Idle());
-			}
-			*/
+		double currPos = Robot.elevatorSubsystem.getElevatorNativeUnits();
+		
 		if (((requestedPosition == -1) && 
 			 (Math.abs(Robot.oi.rightRampAxis.get()) < .06)) || 
 			Robot.oi.btnIdle.get() || 
 			((Robot.elevatorSubsystem.getElevatorCurrent() > RobotMap.ELEVATOR_MAX_DOWN_CURRENT) && 
 			 (Robot.oi.rightRampAxis.get() < 0)) ||
 			((requestedPosition != -1) && 
-			 Robot.elevatorSubsystem.isMoveComplete(requestedPosition)))
+			 Robot.elevatorSubsystem.isMoveComplete(requestedPosition)) ||
+			(currPos >= ElevatorPresets.TOP.getNativeTicks()))
 		{
 			return CommandUtils.stateChange(this, new Idle());
 		}
