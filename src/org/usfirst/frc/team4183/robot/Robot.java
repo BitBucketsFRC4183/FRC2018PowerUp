@@ -116,6 +116,7 @@ public class Robot extends IterativeRobot {
 	
 	protected void initializePhysicalSubsystems()
 	{
+		System.out.println("Initializing");
 		// Only the physical subsystems
 		driveSubsystem.initialize();
 		intakeSubsystem.initialize();
@@ -194,6 +195,8 @@ public class Robot extends IterativeRobot {
 
 		setSubsystemsDebug();
 		LiveWindow.setEnabled(false);
+		Scheduler.getInstance().run();
+		initializePhysicalSubsystems();
 		
 	}
 	/**

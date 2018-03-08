@@ -33,7 +33,7 @@ public class ClosedIn extends Command {
     	if(Robot.oi.btnIdle.get()) 
     		return CommandUtils.autoStateChange(this, new Idle());
     	else if(! Robot.oi.btnInIntake.get())
-    		return CommandUtils.autoStateChange(this, new ThroatHold());
+    		return CommandUtils.autoStateChange(this, new ClosedThroatHold());
     	else if(Robot.oi.btnOpenGate.get())
     		return CommandUtils.autoStateChange(this, new OpenIn());
         return false;

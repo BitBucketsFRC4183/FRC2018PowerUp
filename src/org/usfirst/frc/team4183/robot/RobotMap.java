@@ -57,7 +57,7 @@ public class RobotMap
 		public static final int INTAKE_MOTOR_LEFT_ID 	= 10;
 		public static final int INTAKE_MOTOR_RIGHT_ID 	= 9;		
 		public static final int THROAT_MOTOR_LEFT_ID 	= 5;
-		public static final int THROAT_MOTOR_RIGHT_ID 	= 3;
+		public static final int THROAT_MOTOR_RIGHT_ID 	= 3;//3;
 		
 		public static final int INTAKE_LIMIT_LEFT_MAX_ID  = 0;
 		public static final int INTAKE_LIMIT_LEFT_MIN_ID  = 1;

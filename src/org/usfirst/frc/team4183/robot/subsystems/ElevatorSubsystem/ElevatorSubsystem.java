@@ -48,8 +48,7 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 	
 	public static enum ElevatorPresets
 	{
-		/// TODO: Change to inches, millimeters or meters
-		BOTTOM(100), MIDDLE(47500), HIGH(127384), TOP(150000);
+		BOTTOM(100), MIDDLE(47500), HIGH(141000), TOP(150000);
 		
 		private int nativeTicks;
 		ElevatorPresets(int nativeTicks)
@@ -118,7 +117,7 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 		/* set acceleration and vcruise velocity - see documentation */
 		elevatorMotorA.configMotionCruiseVelocity(RobotMap.ELEVATOR_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS, 
 				                                  RobotMap.CONTROLLER_TIMEOUT_MS);
-		elevatorMotorA.configMotionAcceleration(RobotMap.ELEVATOR_MOTOR_MOTION_ACCELERATION_NATIVE_TICKS, 
+		elevatorMotorA.configMotionAcceleration(2*RobotMap.ELEVATOR_MOTOR_MOTION_ACCELERATION_NATIVE_TICKS, 
 				                                RobotMap.CONTROLLER_TIMEOUT_MS);
 		
 		elevatorMotorA.setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_LOOP, RobotMap.CONTROLLER_TIMEOUT_MS);
