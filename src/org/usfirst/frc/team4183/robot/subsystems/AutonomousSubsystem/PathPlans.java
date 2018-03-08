@@ -164,9 +164,9 @@ public class PathPlans
     		new Waypoint(4.318,       1.245-0.3048, Pathfinder.d2r(0)),
     		new Waypoint(5.182,       -0.254-0.3048,  Pathfinder.d2r(-90)),
     		new Waypoint(5.182,       -3.937-0.3048,  Pathfinder.d2r(-90)),
-    		new Waypoint(4.318+0.3048,  -5.436-0.3048,  Pathfinder.d2r(-180)),
-    		new Waypoint(3.600+0.3048,  -5.136+2*0.3048,  Pathfinder.d2r(-225)),
-    		new Waypoint(3.405+0.3048,  -4.191+2*0.3048,  Pathfinder.d2r(-310))
+    		new Waypoint(4.318+0.3048,  -5.436+1*0.3048,  Pathfinder.d2r(-180)),
+    		new Waypoint(3.600+0.3048,  -5.136+1*0.3048,  Pathfinder.d2r(-225)),
+    		new Waypoint(3.405+0.3048,  -4.191+1*0.3048,  Pathfinder.d2r(-310))
 	    		
     };
     
