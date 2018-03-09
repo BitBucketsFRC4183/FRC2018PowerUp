@@ -35,9 +35,7 @@ public class AutonomousSubsystem extends BitBucketsSubsystem
 	}
 
 	public void initialize()
-	{
-		SmartDashboard.putNumber("Auto Delay(sec)", 0);
-		
+	{		
 		autoChooser = new SendableChooser<AutoChoices>();
 		autoChooser.addDefault("PLAY GAME", AutoChoices.PLAY_GAME);
 		autoChooser.addObject("MOVE TURN TEST", AutoChoices.MOVE_TURN_TEST);

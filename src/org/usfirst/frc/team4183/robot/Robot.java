@@ -68,6 +68,8 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		oi = OI.instance();
 		
+		SmartDashboard.putNumber("Auto Delay(sec)", 0);
+
 		// Always instantiate the subsystems for this robot
 		// Auto subsystem is constructed last as it may want to reference the others
 		// (Not a best practice)
