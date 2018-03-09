@@ -346,11 +346,11 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 
 	@Override
 	public void periodic() {
-		if(telemetryState.getSelected() == SubsystemTelemetryState.ON) {
+		//if(telemetryState.getSelected() == SubsystemTelemetryState.ON) {
 			SmartDashboard.putNumber("ElevatorPosition", getElevatorNativeUnits());
 			SmartDashboard.putNumber("ElevatorCurrent", elevatorMotorA.getOutputCurrent());
 			SmartDashboard.putBoolean("Forward Limit Switch", elevatorMotorAFaults.ForwardLimitSwitch);
-		}
+		//}
 		elevatorMotorA.getFaults(elevatorMotorAFaults);
 		if(elevatorMotorAFaults.ForwardLimitSwitch)
 		{
