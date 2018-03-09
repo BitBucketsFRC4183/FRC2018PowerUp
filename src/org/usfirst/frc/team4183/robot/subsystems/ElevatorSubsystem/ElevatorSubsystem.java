@@ -130,7 +130,7 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 		
 		elevatorMotorA.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector,LimitSwitchNormal.NormallyOpen,0);
 		
-		elevatorMotorA.overrideLimitSwitchesEnable(false);
+		elevatorMotorA.overrideLimitSwitchesEnable(true);
 		
 		
 		elevatorMotorA.setNeutralMode(NeutralMode.Brake);
@@ -285,6 +285,10 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 		return elevatorMotorA.getOutputCurrent();
 	}
 	
+	public boolean getElevatorLimitSwitch() {
+		return elevatorMotorA.getSensorCollection().isRevLimitSwitchClosed();
+	}
+	
 	// Limits the value to the provided limit, maintaining input sign
 	// sign(value) * min(|value|, limit)
 	public double limitJoystickCommand(double value, double limit) {
@@ -347,7 +351,7 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 
 	@Override
 	public void periodic() {
-		//if(telemetryState.getSelected() == SubsystemTelemetryState.ON) {
+		if(telemetryState.getSelected() == SubsystemTelemetryState.ON) {
 			SmartDashboard.putNumber("ElevatorPosition", getElevatorNativeUnits());
 			SmartDashboard.putNumber("ElevatorCurrent", elevatorMotorA.getOutputCurrent());
 			SmartDashboard.putBoolean("Forward Limit Switch",  elevatorMotorA.getSensorCollection().isFwdLimitSwitchClosed());
@@ -355,11 +359,12 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 			SmartDashboard.putBoolean("Reverse Limit Switch", elevatorMotorA.getSensorCollection().isRevLimitSwitchClosed());
 
 
-		//}
+		}
 		elevatorMotorA.getFaults(elevatorMotorAFaults);
 		if(elevatorMotorA.getSensorCollection().isRevLimitSwitchClosed())
 		{
 			elevatorMotorA.setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_LOOP, RobotMap.CONTROLLER_TIMEOUT_MS);
+			new Idle();
 		}
 		
 	}

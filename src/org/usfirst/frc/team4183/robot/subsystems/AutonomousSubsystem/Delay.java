@@ -11,6 +11,11 @@ public class Delay extends Command {
 
 	private long msecs;
 	
+	public Delay() {
+		requires( Robot.autonomousSubsystem);
+		this.msecs = 0;
+	}
+	
     public Delay( long msecs) {
     	requires( Robot.autonomousSubsystem);
     	this.msecs = msecs;

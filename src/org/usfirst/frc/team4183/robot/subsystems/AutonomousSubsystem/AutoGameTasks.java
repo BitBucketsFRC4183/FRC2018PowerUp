@@ -1,6 +1,7 @@
 package org.usfirst.frc.team4183.robot.subsystems.AutonomousSubsystem;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team4183.utils.*;
 
@@ -37,6 +38,7 @@ public class AutoGameTasks extends CommandGroup
 		//addParallel(new ThroatHold());
 		if (trajectory != null)
 		{
+			addSequential(new Delay((long) (1000 * SmartDashboard.getNumber("Auto Delay(sec)", 0))));
 			/// TODO: consider a parallel command to pre-lift to mid height while driving
 			/// to the scale, if selected. The rest of the lift will be commanded at the end
 			addSequential(new DriveProfile(trajectory));	// Got from A to B
