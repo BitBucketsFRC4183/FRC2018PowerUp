@@ -130,7 +130,8 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 		
 		elevatorMotorA.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector,LimitSwitchNormal.NormallyOpen,0);
 		
-		elevatorMotorA.overrideLimitSwitchesEnable(true);
+		elevatorMotorA.overrideLimitSwitchesEnable(false);
+		
 		
 		elevatorMotorA.setNeutralMode(NeutralMode.Brake);
 		
@@ -349,10 +350,14 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 		//if(telemetryState.getSelected() == SubsystemTelemetryState.ON) {
 			SmartDashboard.putNumber("ElevatorPosition", getElevatorNativeUnits());
 			SmartDashboard.putNumber("ElevatorCurrent", elevatorMotorA.getOutputCurrent());
-			SmartDashboard.putBoolean("Forward Limit Switch", elevatorMotorAFaults.ForwardLimitSwitch);
+			SmartDashboard.putBoolean("Forward Limit Switch",  elevatorMotorA.getSensorCollection().isFwdLimitSwitchClosed());
+			//SmartDashboard.putBoolean("Reverse Limit Switch", elevatorMotorAFaults.ReverseLimitSwitch);
+			SmartDashboard.putBoolean("Reverse Limit Switch", elevatorMotorA.getSensorCollection().isRevLimitSwitchClosed());
+
+
 		//}
 		elevatorMotorA.getFaults(elevatorMotorAFaults);
-		if(elevatorMotorAFaults.ForwardLimitSwitch)
+		if(elevatorMotorA.getSensorCollection().isRevLimitSwitchClosed())
 		{
 			elevatorMotorA.setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_LOOP, RobotMap.CONTROLLER_TIMEOUT_MS);
 		}
