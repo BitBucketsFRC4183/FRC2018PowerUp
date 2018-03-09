@@ -123,7 +123,7 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 		/* set acceleration and vcruise velocity - see documentation */
 		elevatorMotorA.configMotionCruiseVelocity(RobotMap.ELEVATOR_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS, 
 				                                  RobotMap.CONTROLLER_TIMEOUT_MS);
-		elevatorMotorA.configMotionAcceleration(2*RobotMap.ELEVATOR_MOTOR_MOTION_ACCELERATION_NATIVE_TICKS, 
+		elevatorMotorA.configMotionAcceleration(RobotMap.ELEVATOR_MOTOR_MOTION_ACCELERATION_NATIVE_TICKS, 
 				                                RobotMap.CONTROLLER_TIMEOUT_MS);
 		
 		elevatorMotorA.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen,0);
