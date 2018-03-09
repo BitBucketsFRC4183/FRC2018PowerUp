@@ -421,12 +421,14 @@ public class DriveSubsystem extends BitBucketsSubsystem
 	protected void initDefaultCommand() 
 	{
 		// Moved to initialize so it does not automatically interfere
+		System.out.println("Setting default command normally");
 		// setDefaultCommand(new Idle());		
 		
 	}
 
 	public void initialize() 
 	{
+		System.out.println("Setting default command Mike's way");
 		Idle initialCommand = new Idle();
 		initialCommand.start();
 		

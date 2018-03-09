@@ -60,42 +60,48 @@ public class Idle extends Command
     		// b) running some tests back-to-back can make it hard to see what is happening
     		// A changeable default test period of 2 seconds provides a reasonable chance to see
     		// what is happening
-    		double now_sec = Timer.getFPGATimestamp();
-    		if ((now_sec - lastTestModeTime_sec) > Robot.driveSubsystem.getTestModePeriod_sec())
+    		if (Robot.driveSubsystem.getDiagnosticsFlag())	// Diagnostics can only be run once per reset cycle
     		{
-    			lastTestModeTime_sec = now_sec;
-    			
-	    		switch (Robot.driveSubsystem.getTestSubmode())
-	    		{
-	    		case DIAGNOSTICS:
-	    			if (Robot.driveSubsystem.getDiagnosticsFlag())	// Diagnostics can only be run once per reset cycle
-	    			{
-	    				// Don't run repeatedly because it could be harmful
-	    				return CommandUtils.stateChange(this, new Diagnostics());
-	    			}
-	    		case MOVE_TEST:
-	    			// This test can run multiple cycles without trouble
-	    			moveDistance_inches *= -1.0;
-	    			return CommandUtils.stateChange(this, new MoveBy(moveDistance_inches, 5.0));	// Magic timeout value
-	    		case TURN_TEST:
-	    			// This test can run multiple cycles without trouble
-	    			turnAngle_deg *= -1;
-	    			return CommandUtils.stateChange(this, new TurnBy(turnAngle_deg, 5.0));			// Magic timeout value
-	    		case PROFILE_TEST:
-	    			RobotTrajectory trajectory = PathPlans.getSelectedTrajectory();
-	    			if (trajectory != null)
-	    			{
-	    				if (trajectory.runCount > 0) 	// Only run trajectories up to the limit defined
-	    				{								// This prevents running into things due to space (reset and try again)
-	    					--trajectory.runCount;
-	    					return CommandUtils.stateChange(this, new DriveProfile(trajectory));
-	    				}
-	    			}
-	    			break;
-	    		default:
-	    			break;
-	    		}
+    				// Don't run repeatedly because it could be harmful
+    			return CommandUtils.stateChange(this, new Diagnostics());
     		}
+    		
+//    		double now_sec = Timer.getFPGATimestamp();
+//    		if ((now_sec - lastTestModeTime_sec) > Robot.driveSubsystem.getTestModePeriod_sec())
+//    		{
+//    			lastTestModeTime_sec = now_sec;
+//    			
+//	    		switch (Robot.driveSubsystem.getTestSubmode())
+//	    		{
+//	    		case DIAGNOSTICS:
+//	    			if (Robot.driveSubsystem.getDiagnosticsFlag())	// Diagnostics can only be run once per reset cycle
+//	    			{
+//	    				// Don't run repeatedly because it could be harmful
+//	    				return CommandUtils.stateChange(this, new Diagnostics());
+//	    			}
+//	    		case MOVE_TEST:
+//	    			// This test can run multiple cycles without trouble
+//	    			moveDistance_inches *= -1.0;
+//	    			return CommandUtils.stateChange(this, new MoveBy(moveDistance_inches, 5.0));	// Magic timeout value
+//	    		case TURN_TEST:
+//	    			// This test can run multiple cycles without trouble
+//	    			turnAngle_deg *= -1;
+//	    			return CommandUtils.stateChange(this, new TurnBy(turnAngle_deg, 5.0));			// Magic timeout value
+//	    		case PROFILE_TEST:
+//	    			RobotTrajectory trajectory = PathPlans.getSelectedTrajectory();
+//	    			if (trajectory != null)
+//	    			{
+//	    				if (trajectory.runCount > 0) 	// Only run trajectories up to the limit defined
+//	    				{								// This prevents running into things due to space (reset and try again)
+//	    					--trajectory.runCount;
+//	    					return CommandUtils.stateChange(this, new DriveProfile(trajectory));
+//	    				}
+//	    			}
+//	    			break;
+//	    		default:
+//	    			break;
+//	    		}
+//    		}
     	}    	
     	// When disabled, we stay in idle; other states should return here
     	// when disable causes the default command to be invoked (if this is the default)

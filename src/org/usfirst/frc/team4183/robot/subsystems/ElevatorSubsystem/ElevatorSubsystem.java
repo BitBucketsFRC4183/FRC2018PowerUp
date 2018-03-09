@@ -8,6 +8,10 @@ import org.usfirst.frc.team4183.robot.subsystems.SubsystemUtilities.DiagnosticsS
 import org.usfirst.frc.team4183.robot.subsystems.SubsystemUtilities.SubsystemTelemetryState;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.Faults;
+import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
+import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
@@ -29,6 +33,8 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 		
 	private static SendableChooser<SubsystemTelemetryState> telemetryState;
 	
+	Faults elevatorMotorAFaults = new Faults();
+	
 	static enum ElevatorPositions
 	{
 		/// TODO: Change to inches, millimeters or meters
@@ -48,8 +54,7 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 	
 	public static enum ElevatorPresets
 	{
-		/// TODO: Change to inches, millimeters or meters
-		BOTTOM(100), MIDDLE(47500), HIGH(127384), TOP(150000);
+		BOTTOM(100), MIDDLE(47500), HIGH(141000), TOP(150000);
 		
 		private int nativeTicks;
 		ElevatorPresets(int nativeTicks)
@@ -120,6 +125,14 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 				                                  RobotMap.CONTROLLER_TIMEOUT_MS);
 		elevatorMotorA.configMotionAcceleration(RobotMap.ELEVATOR_MOTOR_MOTION_ACCELERATION_NATIVE_TICKS, 
 				                                RobotMap.CONTROLLER_TIMEOUT_MS);
+		
+		elevatorMotorA.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen,0);
+		
+		elevatorMotorA.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector,LimitSwitchNormal.NormallyOpen,0);
+		
+		elevatorMotorA.overrideLimitSwitchesEnable(true);
+		
+		elevatorMotorA.setNeutralMode(NeutralMode.Brake);
 		
 		elevatorMotorA.setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_LOOP, RobotMap.CONTROLLER_TIMEOUT_MS);
 		
@@ -336,6 +349,12 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 		if(telemetryState.getSelected() == SubsystemTelemetryState.ON) {
 			SmartDashboard.putNumber("ElevatorPosition", getElevatorNativeUnits());
 			SmartDashboard.putNumber("ElevatorCurrent", elevatorMotorA.getOutputCurrent());
+			SmartDashboard.putBoolean("Forward Limit Switch", elevatorMotorAFaults.ForwardLimitSwitch);
+		}
+		elevatorMotorA.getFaults(elevatorMotorAFaults);
+		if(elevatorMotorAFaults.ForwardLimitSwitch)
+		{
+			elevatorMotorA.setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_LOOP, RobotMap.CONTROLLER_TIMEOUT_MS);
 		}
 		
 	}

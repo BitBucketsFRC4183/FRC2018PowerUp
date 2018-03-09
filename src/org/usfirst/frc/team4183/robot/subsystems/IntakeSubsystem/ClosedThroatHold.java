@@ -9,9 +9,9 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class ThroatHold extends Command {
+public class ClosedThroatHold extends Command {
 
-    public ThroatHold() {
+    public ClosedThroatHold() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     	requires(Robot.intakeSubsystem);
@@ -20,6 +20,9 @@ public class ThroatHold extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	System.out.println(this.getClass().getSimpleName());
+    	Robot.intakeSubsystem.closeMandible();
+    	Robot.intakeSubsystem.setLeftIntakeSpeed(0.0);
+    	Robot.intakeSubsystem.setRightIntakeSpeed(0.0);
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -33,7 +36,7 @@ public class ThroatHold extends Command {
     	if(Robot.oi.btnIdle.get())
     		return CommandUtils.autoStateChange(this, new Idle());
     	else if(Robot.oi.btnOpenGate.get() || Robot.oi.sbtnOpenMandible.get())
-			return CommandUtils.autoStateChange(this, new OpenOff());
+			return CommandUtils.autoStateChange(this, new OpenThroatHold());
 		else if(Robot.oi.btnOutIntake.get()|| Robot.oi.sbtnOuttakeThroat.get()) {
 			return CommandUtils.autoStateChange(this, new ClosedOut());
 		}

@@ -9,9 +9,9 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class OpenIn extends Command {
+public class OpenThroatHold extends Command {
 
-    public OpenIn() {
+    public OpenThroatHold() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     	requires(Robot.intakeSubsystem);
@@ -21,21 +21,34 @@ public class OpenIn extends Command {
     protected void initialize() {
     	Robot.intakeSubsystem.openMandible();
     	System.out.println(this.getClass().getSimpleName());
+    	Robot.intakeSubsystem.setLeftIntakeSpeed(0.0);
+    	Robot.intakeSubsystem.setRightIntakeSpeed(0.0);
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.intakeSubsystem.setIntakeMotorsToSpeed(-RobotMap.INTAKE_MOTOR_PERCENT, -RobotMap.THROAT_MOTOR_PERCENT);
+    	Robot.intakeSubsystem.setLeftThroatSpeed(RobotMap.THROAT_LEFT_HOLD_PERCENT);
+    	Robot.intakeSubsystem.setRightThroatSpeed(RobotMap.THROAT_RIGHT_HOLD_PERCENT);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
     	if(Robot.oi.btnIdle.get())
     		return CommandUtils.autoStateChange(this, new Idle());
-    	else if (! Robot.oi.btnInIntake.get())
-    		return CommandUtils.autoStateChange(this, new OpenThroatHold());
-    	else if(Robot.oi.btnCloseGate.get())
-    		return CommandUtils.autoStateChange(this, new ClosedIn());
+    	else if(Robot.oi.btnCloseGate.get() || Robot.oi.sbtnCloseMandible.get())
+			return CommandUtils.autoStateChange(this, new ClosedThroatHold());
+    	else if(Robot.oi.btnOutIntake.get()|| Robot.oi.sbtnOuttakeThroat.get()) {
+			return CommandUtils.autoStateChange(this, new OpenOut());
+		}
+		else if(Robot.oi.btnInIntake.get()) {
+			return CommandUtils.autoStateChange(this, new OpenIn());
+		}
+		else if(Robot.oi.btnLeftIntake.get()) {
+			return CommandUtils.autoStateChange(this, new OpenLeft());
+		}
+		else if(Robot.oi.btnRightIntake.get()) {
+			return CommandUtils.autoStateChange(this, new OpenRight());
+		}
         return false;
     }
 
@@ -46,6 +59,5 @@ public class OpenIn extends Command {
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
-    	end();
     }
 }

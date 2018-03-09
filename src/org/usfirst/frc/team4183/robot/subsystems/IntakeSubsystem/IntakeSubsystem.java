@@ -161,13 +161,21 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 		throatMotorB.set(ControlMode.PercentOutput, speed);
 	}
 	
+	public void setLeftIntakeSpeed(double speed) {
+		leftIntakeMotor.set(ControlMode.PercentOutput, speed);
+	}
+	
+	public void setRightIntakeSpeed(double speed) {
+		rightIntakeMotor.set(ControlMode.PercentOutput, speed);
+	}
+	
 	public void setLeftMotorSpeed(double intakeSpeed, double throatSpeed) {
-		leftIntakeMotor.set(ControlMode.PercentOutput, intakeSpeed);
+		setLeftIntakeSpeed(intakeSpeed);
 		setLeftThroatSpeed(throatSpeed);
 	}
 	
 	public void setRightMotorSpeed(double intakeSpeed, double throatSpeed) {
-		rightIntakeMotor.set(ControlMode.PercentOutput, intakeSpeed);
+		setRightIntakeSpeed(intakeSpeed);
 		setRightThroatSpeed(throatSpeed);
 	}
 	

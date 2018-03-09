@@ -71,8 +71,9 @@ public class Reposition extends Command{
 			((Robot.elevatorSubsystem.getElevatorCurrent() > RobotMap.ELEVATOR_MAX_DOWN_CURRENT) && 
 			 (Robot.oi.rightRampAxis.get() < 0)) ||
 			((requestedPosition != -1) && 
-			 Robot.elevatorSubsystem.isMoveComplete(requestedPosition)) ||
-			(currPos >= ElevatorPresets.TOP.getNativeTicks()))
+			 Robot.elevatorSubsystem.isMoveComplete(requestedPosition)) 
+			//|| (currPos >= ElevatorPresets.TOP.getNativeTicks())
+			)
 		{
 			return CommandUtils.stateChange(this, new Idle());
 		}

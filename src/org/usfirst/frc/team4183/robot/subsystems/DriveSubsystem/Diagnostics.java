@@ -4,6 +4,7 @@ import org.usfirst.frc.team4183.robot.Robot;
 import org.usfirst.frc.team4183.utils.CommandUtils;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
@@ -22,10 +23,12 @@ public class Diagnostics extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.driveSubsystem.diagnosticsInit();
+    	System.out.println("Entering Drive Diagnostics");
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	System.out.println("Executing Drive Diagnostics");
     	if(diagInitLoops < Robot.driveSubsystem.DIAG_LOOPS_RUN) {
     		Robot.driveSubsystem.diagnosticsExecute();
     		diagInitLoops++;
@@ -36,6 +39,7 @@ public class Diagnostics extends Command {
     protected boolean isFinished() {
 
     	if(diagInitLoops >= Robot.driveSubsystem.DIAG_LOOPS_RUN) {
+    		System.out.println("Checking Drive Diagnostics");
     		Robot.driveSubsystem.diagnosticsCheck();
     		return CommandUtils.stateChange(this, new Idle());
     	}
