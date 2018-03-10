@@ -74,7 +74,7 @@ public class PathPlans
 	static Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_QUINTIC, // Type of curve to fit
 													 Trajectory.Config.SAMPLES_LOW,     // Smooth fit (high) or fast fit (low)
 													 RobotMap.MOTION_PROFILE_PERIOD_MS / 1000.0, // Time between segments
-													 0.3048*1, 	    // Max speed m/s
+													 0.3048*6, 	    // Max speed m/s
 													 2.0, 			// Max acceleration m/s^2
 													 60.0);			// Max jerk m/s^3
 	
