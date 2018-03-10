@@ -278,11 +278,7 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 	public void periodic() {
 		// TODO Auto-generated method stub
 		
-		if(telemetryState.getSelected() == SubsystemTelemetryState.ON) {
-			SmartDashboard.putNumber("Intake Current", Robot.intakeSubsystem.getCurrentMax());
-			SmartDashboard.putBoolean("Min Limit Intake", Robot.intakeSubsystem.getMinLimit());
-			SmartDashboard.putBoolean("Max Limit Intake", Robot.intakeSubsystem.getMaxLimit());
-			
+		if(telemetryState.getSelected() == SubsystemTelemetryState.ON) {			
 			SmartDashboard.putNumber("ThroatMotorA", throatMotorA.getOutputCurrent());
 			SmartDashboard.putNumber("ThroatMotorB", throatMotorB.getOutputCurrent());
 			SmartDashboard.putNumber("LeftIntakeMotor", leftIntakeMotor.getOutputCurrent());

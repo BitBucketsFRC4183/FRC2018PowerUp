@@ -1,38 +1,36 @@
-package org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem;
+package org.usfirst.frc.team4183.robot.subsystems.ClimberSubsystem;
 
 import org.usfirst.frc.team4183.robot.Robot;
-import org.usfirst.frc.team4183.robot.RobotMap;
 import org.usfirst.frc.team4183.utils.CommandUtils;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
  */
-public class ClosedLeft extends Command {
+public class Idle extends Command {
 
-    public ClosedLeft() {
+    public Idle() {
         // Use requires() here to declare subsystem dependencies
-    	requires(Robot.intakeSubsystem);    
+        // eg. requires(chassis);
+    	requires(Robot.climberSubsystem);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	Robot.intakeSubsystem.closeMandible();
-    	System.out.println(this.getClass().getSimpleName());    }
+    }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.intakeSubsystem.setLeftMotorSpeed(-RobotMap.INTAKE_MOTOR_PERCENT, -RobotMap.THROAT_MOTOR_PERCENT);
-    	Robot.intakeSubsystem.setRightMotorSpeed(RobotMap.INTAKE_MOTOR_PERCENT/4, RobotMap.THROAT_MOTOR_PERCENT);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	if(Robot.oi.btnIdle.get() || ! Robot.oi.btnLeftIntake.get())
-    		return CommandUtils.autoStateChange(this, new Idle());
-    	else if (Robot.oi.btnOpenGate.get())
-    		return CommandUtils.autoStateChange(this, new OpenLeft());
+    	if(Robot.getTeleopTimeRemaining() <= 30.0 || SmartDashboard.getNumber("ClimberTimeOverride", 0) == 141367) {
+    		return CommandUtils.stateChange(this, new Climb());
+    	}
         return false;
     }
 
@@ -43,6 +41,5 @@ public class ClosedLeft extends Command {
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
-    	end();
     }
 }

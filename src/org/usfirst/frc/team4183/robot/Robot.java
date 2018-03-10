@@ -8,6 +8,7 @@ package org.usfirst.frc.team4183.robot;
 import java.util.HashSet;
 import java.util.Set;
 import org.usfirst.frc.team4183.robot.subsystems.AutonomousSubsystem.AutonomousSubsystem;
+import org.usfirst.frc.team4183.robot.subsystems.ClimberSubsystem.ClimberSubsystem;
 import org.usfirst.frc.team4183.robot.subsystems.DriveSubsystem.DriveSubsystem;
 import org.usfirst.frc.team4183.robot.subsystems.ElevatorSubsystem.ElevatorSubsystem;
 import org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem.IntakeSubsystem;
@@ -44,6 +45,7 @@ public class Robot extends IterativeRobot {
 
 	// All robots will have these subsystems
 	// Other may be optional or interchangable
+	public static ClimberSubsystem climberSubsystem;
 	public static DriveSubsystem driveSubsystem;
 	public static IntakeSubsystem intakeSubsystem;
 	public static VisionSubsystem visionSubsystem;
@@ -57,6 +59,7 @@ public class Robot extends IterativeRobot {
 	// Here for now, but may not be used this year
 	public static LightingControl lightingControl;	
 	public static NavxIMU imu;
+	public static long teleopInitTime;
 	
 	public static SendableChooser<DiagnosticsInformation> diagInformation;
 		
@@ -73,6 +76,7 @@ public class Robot extends IterativeRobot {
 		// Always instantiate the subsystems for this robot
 		// Auto subsystem is constructed last as it may want to reference the others
 		// (Not a best practice)
+		climberSubsystem = new ClimberSubsystem();
 		driveSubsystem = new DriveSubsystem();
 		intakeSubsystem = new IntakeSubsystem();
 		visionSubsystem = new VisionSubsystem();
@@ -90,8 +94,10 @@ public class Robot extends IterativeRobot {
 		diagInformation.addObject("Subsystem_Extended", DiagnosticsInformation.SUBSYSTEM_EXTENDED);
 		
 		SmartDashboard.putData("DiagInfo", diagInformation);
+		SmartDashboard.putNumber("ClimberTimeOverride", 0);
 		
 		// Add all subsystems for debugging
+		addSubsystemToDebug(climberSubsystem);
 		addSubsystemToDebug(driveSubsystem);
         addSubsystemToDebug(intakeSubsystem);
         addSubsystemToDebug(visionSubsystem);
@@ -120,6 +126,7 @@ public class Robot extends IterativeRobot {
 	{
 		System.out.println("Initializing");
 		// Only the physical subsystems
+		climberSubsystem.initialize();
 		driveSubsystem.initialize();
 		intakeSubsystem.initialize();
 		elevatorSubsystem.initialize();
@@ -178,6 +185,7 @@ public class Robot extends IterativeRobot {
 		oi.setTeleopMode();
 		
 		initializePhysicalSubsystems();
+		teleopInitTime = System.currentTimeMillis();
 		
 	}
 	
@@ -219,13 +227,18 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putBoolean("ElevatorBottom", Robot.oi.btnElevatorBottom.get());
 		
 		loopWatch.stop();
-		loopWatch.start();
+		loopWatch.start();			
 		
 		periodicSDdebugLoop.update();
 		
 		
 		
 		
+	}
+	
+	public static double getTeleopTimeRemaining() {
+		double time = (System.currentTimeMillis() - teleopInitTime) / 1000;
+		return RobotMap.TELEOP_TOTAL_TIME - time;
 	}
 	
 	// Some ancillary debugging stuff below here
