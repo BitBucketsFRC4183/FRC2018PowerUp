@@ -26,7 +26,7 @@ public class OpenLeft extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	Robot.intakeSubsystem.setLeftMotorSpeed(-RobotMap.INTAKE_MOTOR_PERCENT, -RobotMap.THROAT_MOTOR_PERCENT);
-    	Robot.intakeSubsystem.setRightMotorSpeed(RobotMap.INTAKE_MOTOR_PERCENT, RobotMap.THROAT_MOTOR_PERCENT);
+    	Robot.intakeSubsystem.setRightMotorSpeed(RobotMap.INTAKE_MOTOR_PERCENT/4, RobotMap.THROAT_MOTOR_PERCENT);
     }
 
     // Make this return true when this Command no longer needs to run execute()

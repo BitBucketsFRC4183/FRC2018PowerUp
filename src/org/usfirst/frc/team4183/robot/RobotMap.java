@@ -33,6 +33,7 @@ public class RobotMap
 		else 
 			return 0;
 	}
+	public static final int TELEOP_TOTAL_TIME = 135; // 2mins 15sec
 	
 	public static final int PRIMARY_PID_LOOP  = 0; // Constants to support new Talon interface types
 	public static final int CASCADED_PID_LOOP = 1; // That should have been enumerated rather than int
@@ -84,6 +85,10 @@ public class RobotMap
   		public static final int LEFT_RAMP_MOTOR_ID 		= 1;
   		public static final int RIGHT_RAMP_MOTOR_ID 	= 2;
    		public static final int RAMP_RELEASE_SERVO_ID 	= 1;
+   		
+   	/* CLIMBER SUBSYSTEM */
+   		public static final int CLIMBER_MOTOR_A = 1;
+   		public static final int CLIMBER_MOTOR_B = 2;
 	
 /*
  * 								====================================
@@ -185,8 +190,8 @@ public class RobotMap
    		public static final double INTAKE_MOTOR_PERCENT = 0.9;
    		public static final double THROAT_MOTOR_PERCENT = 0.9;
    		
-   		public static final double THROAT_LEFT_HOLD_PERCENT  = -0.05;
-   		public static final double THROAT_RIGHT_HOLD_PERCENT = -0.05;
+   		public static final double THROAT_LEFT_HOLD_PERCENT  = -0.15;
+   		public static final double THROAT_RIGHT_HOLD_PERCENT = -0.15;
    		
    		public static final double INTAKE_MAX_CURRENT = 10;
    		
