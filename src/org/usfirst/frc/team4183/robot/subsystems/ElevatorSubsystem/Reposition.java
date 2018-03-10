@@ -48,7 +48,7 @@ public class Reposition extends Command{
 			{
 				Robot.elevatorSubsystem.setSystemPower((currPos > RobotMap.ELEVATOR_SAFE_ZONE) 
 														? Robot.oi.rightRampAxis.get() 
-														: RobotMap.signedSquare(Robot.elevatorSubsystem.limitJoystickCommand(Robot.oi.rightRampAxis.get(), 0.8), 3));
+														: RobotMap.signedSquare(Robot.elevatorSubsystem.limitJoystickCommand(Robot.oi.rightRampAxis.get(), 0.7), 4));
 			}
 			else
 			{
