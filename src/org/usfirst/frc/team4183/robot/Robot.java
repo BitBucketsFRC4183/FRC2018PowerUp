@@ -80,7 +80,7 @@ public class Robot extends IterativeRobot {
 		driveSubsystem = new DriveSubsystem();
 		intakeSubsystem = new IntakeSubsystem();
 		visionSubsystem = new VisionSubsystem();
-		rampSubsystem = new RampSubsystem();		
+		//rampSubsystem = new RampSubsystem();		
 		elevatorSubsystem = new ElevatorSubsystem();
 				
 		imu = new NavxIMU();
@@ -102,7 +102,7 @@ public class Robot extends IterativeRobot {
         addSubsystemToDebug(intakeSubsystem);
         addSubsystemToDebug(visionSubsystem);
         addSubsystemToDebug(elevatorSubsystem);
-        addSubsystemToDebug(rampSubsystem);
+        //addSubsystemToDebug(rampSubsystem);
 
         addSubsystemToDebug(autonomousSubsystem);
         

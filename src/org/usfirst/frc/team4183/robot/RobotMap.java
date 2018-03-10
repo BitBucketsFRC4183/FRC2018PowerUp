@@ -126,6 +126,11 @@ public class RobotMap
    	/* RAMP SUBSYSTEM */
    		// None here yet
    		
+   	/* CLIMB SUBSYSTEM */
+		public static final boolean CLIMBER_MOTOR_A_INVERSION_FLAG = true; 
+		public static final boolean CLIMBER_MOTOR_B_INVERSION_FLAG = true; 
+
+   		
 /*
  * 								========================================
  * 								========== HARDWARE CONSTANTS ==========
@@ -248,5 +253,5 @@ public class RobotMap
  * 								===========================================
  */
    		public static final double MINIMUM_MOTOR_CURR = 1.25; 
-   		public static final double MOTOR_TEST_PERCENT = 0.5; 
+   		public static final double MOTOR_TEST_PERCENT = 0.5;
 }

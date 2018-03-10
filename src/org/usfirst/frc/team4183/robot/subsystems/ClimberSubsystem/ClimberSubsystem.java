@@ -22,6 +22,9 @@ public class ClimberSubsystem extends Subsystem {
 	public ClimberSubsystem() {
 		climbMotorA = new TalonSRX(RobotMap.CLIMBER_MOTOR_A);
 		climbMotorB = new TalonSRX(RobotMap.CLIMBER_MOTOR_B);
+
+		climbMotorA.setInverted(RobotMap.CLIMBER_MOTOR_A_INVERSION_FLAG);
+		climbMotorB.setInverted(RobotMap.CLIMBER_MOTOR_B_INVERSION_FLAG);
 		
 	}
 	

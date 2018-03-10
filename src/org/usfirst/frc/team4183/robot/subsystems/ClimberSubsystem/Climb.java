@@ -21,7 +21,16 @@ public class Climb extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.climberSubsystem.setClimberPower(Math.abs(Robot.oi.leftRampAxis.get()));
+    	double x = Robot.oi.leftRampAxis.get();
+    	x *= x;
+    	if (x > 0.06)
+    	{
+    		Robot.climberSubsystem.setClimberPower(x);
+    	}
+    	else
+    	{
+    		Robot.climberSubsystem.setClimberPower(0);	
+    	}
     }
 
     // Make this return true when this Command no longer needs to run execute()
