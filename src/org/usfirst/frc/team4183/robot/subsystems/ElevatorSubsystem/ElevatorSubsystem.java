@@ -54,7 +54,7 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 	
 	public static enum ElevatorPresets
 	{
-		BOTTOM(100), MIDDLE(47500), HIGH(141000), TOP(150000);
+		BOTTOM(100), MIDDLE(47500), HIGH(117000), TOP(150000);
 		
 		private int nativeTicks;
 		ElevatorPresets(int nativeTicks)
