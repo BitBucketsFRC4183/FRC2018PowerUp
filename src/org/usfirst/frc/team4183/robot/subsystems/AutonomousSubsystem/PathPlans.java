@@ -108,26 +108,45 @@ public class PathPlans
     // The values for the paths contain arithmetic to keep track of where we started
     // and may be replaced with final values after testing
     
+    private static Waypoint[] rightStartMoveOnlyPath = new Waypoint[]
+    {
+		new Waypoint(0,                     0,     Pathfinder.d2r(0)),
+		new Waypoint(0.864,     -0.699-0.3048,     Pathfinder.d2r(-45)),
+		new Waypoint(2.317,     -1.245-0.3048,     Pathfinder.d2r(0)),	    		
+    };
+    
+    private static Waypoint[] leftStartMoveOnlyPath = new Waypoint[]
+    {
+    		new Waypoint(0,         0,                Pathfinder.d2r(0)),
+    		new Waypoint(0.864,     0.699-0.3048,     Pathfinder.d2r(45)),
+    		new Waypoint(2.317,     1.245-0.3048,     Pathfinder.d2r(0)),
+    		//Adjust the final position of this
+    };
+    
+    // *****************************************************************
+    // SWITCH PATHS
+    // *****************************************************************
     private static Waypoint[] centerStartRightSwitchPath = new Waypoint[]
     {
-    		new Waypoint(0,            0,      Pathfinder.d2r(0)),
-    		new Waypoint(.8382,        -.6096, Pathfinder.d2r(-40)),
-    		new Waypoint(2.4638 + 0.15,-1.0668,Pathfinder.d2r(0))
+    		new Waypoint(0,            0,       Pathfinder.d2r(0)),
+    		new Waypoint(0.8382,       -0.6096, Pathfinder.d2r(-40)),
+    		new Waypoint(2.6138,      -1.0668,  Pathfinder.d2r(0))
     };
     
     private static Waypoint[] centerStartLeftSwitchPath = new Waypoint[]
     {
-    		new Waypoint(0,0, Pathfinder.d2r(0)),
-    		new Waypoint(.8382, .6096 + 0.3, Pathfinder.d2r(40)),
-    		new Waypoint(2.4638+.15, 1.0668+0.3, Pathfinder.d2r(0))
+    		new Waypoint(0,              0, Pathfinder.d2r(0)),
+    		new Waypoint(0.8382,    0.9096, Pathfinder.d2r(40)),	// Includes y-bias
+    		new Waypoint(2.6138,    1.3668, Pathfinder.d2r(0))		// Includes y-bias
     };
     
     private static Waypoint[] rightStartRightSwitchPath = new Waypoint[]
     {
     		new Waypoint(0,                     0,     Pathfinder.d2r(0)),
     		new Waypoint(0.864,     -0.699-0.3048,     Pathfinder.d2r(-45)),
-    		new Waypoint(1.817+0.5, -1.245-0.3048,     Pathfinder.d2r(0)),
-    		new Waypoint(2.922+0.3, -1.245+0.3-0.3048, Pathfinder.d2r(45)),
+    		new Waypoint(2.317,     -1.245-0.3048,     Pathfinder.d2r(0)),
+    		
+    		new Waypoint(3.222, -1.245+0.3-0.3048, 	   Pathfinder.d2r(45)),
     		new Waypoint(3.405,          0-0.3048,     Pathfinder.d2r(100))
 	    		
     };
@@ -139,63 +158,106 @@ public class PathPlans
     {
     		new Waypoint(0,         0,                Pathfinder.d2r(0)),
     		new Waypoint(0.864,     0.699-0.3048,     Pathfinder.d2r(45)),
-    		new Waypoint(1.817+0.5, 1.245-0.3048,     Pathfinder.d2r(0)),
-    		new Waypoint(2.922+0.3, 1.245-0.3-0.3048,     Pathfinder.d2r(-45)),
-    		new Waypoint(3.405,         0,     Pathfinder.d2r(-100))
+    		new Waypoint(2.317,     1.245-0.3048,     Pathfinder.d2r(0)),
+    		
+    		new Waypoint(3.222,     1.245-0.3-0.3048, Pathfinder.d2r(-45)),
+    		new Waypoint(3.405,         0,            Pathfinder.d2r(-100))
     };
 
     private static Waypoint[] rightStartLeftSwitchPath = new Waypoint[]
     {
-    		new Waypoint(0,              0, Pathfinder.d2r(0)),
-    		new Waypoint(0.864,     -0.699, Pathfinder.d2r(-45)),
-    		new Waypoint(1.817+0.5, -1.245, Pathfinder.d2r(0)),
+    		new Waypoint(0,              0,        		Pathfinder.d2r(0)),
+    		new Waypoint(0.864,     -0.699-0.3048, 		Pathfinder.d2r(-45)),
+    		new Waypoint(2.317,     -1.245-0.3048, 		Pathfinder.d2r(0)),
     		
-    		new Waypoint(4.318,       -1.245-0.3048, Pathfinder.d2r(0)),
-    		new Waypoint(5.182,       0.254-0.3048,  Pathfinder.d2r(90)),
-    		new Waypoint(5.182,       3.937-0.3048,  Pathfinder.d2r(90)),
-    		new Waypoint(4.318+0.3048,   5.436-3*0.3048,  Pathfinder.d2r(180)),
-    		new Waypoint(3.600+0.3048,   5.136-3*0.3048,  Pathfinder.d2r(225)),
-    		new Waypoint(3.405+0.3048,   4.191-3*0.3048,  Pathfinder.d2r(310))
+    		new Waypoint(4.318,         -1.245-0.3048, 		Pathfinder.d2r(0)),
+    		new Waypoint(5.182,          0.254-0.3048,  	Pathfinder.d2r(90)),
+    		new Waypoint(5.182,          3.937-0.3048,  	Pathfinder.d2r(90)),
+    		new Waypoint(4.318+0.3048,   5.436-3*0.3048,  	Pathfinder.d2r(180)),
+    		new Waypoint(3.600+0.3048,   5.136-3*0.3048,  	Pathfinder.d2r(225)),
+    		new Waypoint(3.405+0.3048,   4.191-3*0.3048,  	Pathfinder.d2r(310))
 	    		
     };
     
-    private static Waypoint[] rightStartLeftSwitchPathNoCross = new Waypoint[]
-    	    {
-    	    		new Waypoint(0,              0, Pathfinder.d2r(0)),
-    	    		new Waypoint(0.864,     -0.699, Pathfinder.d2r(-45)),
-    	    		new Waypoint(1.817+0.5, -1.245, Pathfinder.d2r(0)),
-    	    		//Adjust the final position of this
-    		    		
-    	    };
-
-    // Again, a mirror but nor programmatically just in case
+    // Again, a mirror but not programmatically just in case
+    // NOTE: Includes y-biases observed
     private static Waypoint[] leftStartRightSwitchPath = new Waypoint[]
     {
-    		new Waypoint(0,              0, Pathfinder.d2r(0)),
-    		new Waypoint(0.864,     0.699, Pathfinder.d2r(45)),
-    		new Waypoint(1.817+0.5, 1.245, Pathfinder.d2r(0)),
+    		new Waypoint(0,              0,               Pathfinder.d2r(0)),	// NOTE: y-bias
+    		new Waypoint(0.864,      0.699,               Pathfinder.d2r(45)),
+    		new Waypoint(1.817+0.5,  1.245,               Pathfinder.d2r(0)),
     		
-    		new Waypoint(4.318,       1.245-0.3048, Pathfinder.d2r(0)),
-    		new Waypoint(5.182,       -0.254-0.3048,  Pathfinder.d2r(-90)),
-    		new Waypoint(5.182,       -3.937-0.3048,  Pathfinder.d2r(-90)),
-    		new Waypoint(4.318+0.3048,  -5.436+1*0.3048,  Pathfinder.d2r(-180)),
-    		new Waypoint(3.600+0.3048,  -5.136+1*0.3048,  Pathfinder.d2r(-225)),
-    		new Waypoint(3.405+0.3048,  -4.191+1*0.3048,  Pathfinder.d2r(-310))
+    		new Waypoint(4.318,          1.245, 	      Pathfinder.d2r(0)),
+    		new Waypoint(5.182,         -0.254,    		  Pathfinder.d2r(-90)),
+    		new Waypoint(5.182,         -3.937,           Pathfinder.d2r(-90)),
+    		new Waypoint(4.318+0.3048,  -5.436+2*0.3048,  Pathfinder.d2r(-180)),
+    		new Waypoint(3.600+0.3048,  -5.136+2*0.3048,  Pathfinder.d2r(-225)),
+    		new Waypoint(3.405+0.3048,  -4.191+2*0.3048,  Pathfinder.d2r(-310))
 	    		
     };
     
-    private static Waypoint[] leftStartRightSwitchPathNoCross = new Waypoint[]
-    	    {
-    	    		new Waypoint(0,              0, Pathfinder.d2r(0)),
-    	    		new Waypoint(0.864,     0.699, Pathfinder.d2r(45)),
-    	    		new Waypoint(1.817+0.5, 1.245, Pathfinder.d2r(0)),	 
-    	    		//Adjust the final position of this
-    	    };
+    // ***************************************************************************
+    // SCALE PATHS
+    // ***************************************************************************
+    private static Waypoint[] rightStartRightScalePath = new Waypoint[]
+    {
+        new Waypoint(0,                     0,     Pathfinder.d2r(0)),
+        new Waypoint(0.864,            -1.004,     Pathfinder.d2r(-45)),
+        new Waypoint(2.317,            -1.550,     Pathfinder.d2r(0)),
+        new Waypoint(5.508,            -1.550,     Pathfinder.d2r(0)),
+        new Waypoint(6.682,            -0.376,     Pathfinder.d2r(45))
+    };
+
+    private static Waypoint[] leftStartLeftScalePath = new Waypoint[]
+    {
+        new Waypoint(0,                     0,     Pathfinder.d2r(0)),
+        new Waypoint(0.864,             1.004,     Pathfinder.d2r(45)),
+        new Waypoint(2.317,             1.550,     Pathfinder.d2r(0)),
+        new Waypoint(5.508,             1.550,     Pathfinder.d2r(0)),
+        new Waypoint(6.682,             0.376,     Pathfinder.d2r(-45))
+    };
     
+    private static Waypoint[] rightStartLeftScalePath = new Waypoint[]
+    {
+        new Waypoint(0,                     0, 		Pathfinder.d2r(0)),
+        new Waypoint(0.864,            -1.004, 		Pathfinder.d2r(-45)),
+        new Waypoint(2.317, 	       -1.550, 		Pathfinder.d2r(0)),
+
+        new Waypoint(4.318,            -1.550, 		Pathfinder.d2r(0)),
+        new Waypoint(5.182,       	   -0.051,  	Pathfinder.d2r(90)),
+        new Waypoint(5.182,             3.632,  	Pathfinder.d2r(90)),
+        new Waypoint(4.623,             4.522,   	Pathfinder.d2r(90)),
+
+        new Waypoint(5.062,   	         5.088,  	Pathfinder.d2r(0)),
+        new Waypoint(5.812,              5.088,  	Pathfinder.d2r(0)),
+        new Waypoint(6.790,              4.110,  	Pathfinder.d2r(-45))
+
+    };
     
-    
+    private static Waypoint[] leftStartRightScalePath = new Waypoint[]
+    {
+        new Waypoint(0,                     0, 		Pathfinder.d2r(0)),
+        new Waypoint(0.864,             1.004, 		Pathfinder.d2r(45)),
+        new Waypoint(2.317, 	        1.550, 		Pathfinder.d2r(0)),
+
+        new Waypoint(4.318,             1.550, 		Pathfinder.d2r(0)),
+        new Waypoint(5.182,       	    0.051,  	Pathfinder.d2r(-90)),
+        new Waypoint(5.182,            -3.632,  	Pathfinder.d2r(-90)),
+        new Waypoint(4.623,            -4.522,   	Pathfinder.d2r(-90)),
+
+        new Waypoint(5.062,   	        -5.088,  	Pathfinder.d2r(0)),
+        new Waypoint(5.812,             -5.088,  	Pathfinder.d2r(0)),
+        new Waypoint(6.790,             -4.110,  	Pathfinder.d2r(45))
+
+    };    
+        
     public static RobotTrajectory testTrajectory0;
     
+    // *************************** MOTION ONLY TRAJECTORIES ************************
+    public static RobotTrajectory leftStartMoveOnlyTrajectory;
+    public static RobotTrajectory rightStartMoveOnlyTrajectory;
+
+    // *************************** SWITCH TRAJECTORIES ************************
     public static RobotTrajectory rightStartRightSwitchTrajectory;
     public static RobotTrajectory leftStartLeftSwitchTrajectory;
     
@@ -205,10 +267,12 @@ public class PathPlans
     public static RobotTrajectory rightStartLeftSwitchTrajectory;
     public static RobotTrajectory leftStartRightSwitchTrajectory;
     
-    public static RobotTrajectory leftStartRightSwitchNoCrossTrajectory;
-    public static RobotTrajectory rightStartLeftSwitchNoCrossTrajectory;
-    
-    
+    // *************************** SCALE TRAJECTORIES ************************
+    public static RobotTrajectory rightStartRightScaleTrajectory;
+    public static RobotTrajectory leftStartLeftScaleTrajectory;
+        
+    public static RobotTrajectory rightStartLeftScaleTrajectory;
+    public static RobotTrajectory leftStartRightScaleTrajectory;
 
     public static void initialize()
     {
@@ -329,23 +393,67 @@ public class PathPlans
 	    centerStartLeftSwitchTrajectory.left = modifier.getLeftTrajectory();
 	    centerStartLeftSwitchTrajectory.right = modifier.getRightTrajectory();
 	    
-	    //********
-	    leftStartRightSwitchNoCrossTrajectory = new RobotTrajectory("leftStartRightSwitchNoCross");
-	    leftStartRightSwitchNoCrossTrajectory.center = Pathfinder.generate(leftStartRightSwitchPathNoCross, config);
+	//***********
+	    rightStartRightScaleTrajectory = new RobotTrajectory("rightStartRightScale");
+	    rightStartRightScaleTrajectory.center = Pathfinder.generate(rightStartRightScalePath, config);
+
+	    // We don't need to store the modifier persistently
+	    modifier = new TankModifier(rightStartRightScaleTrajectory.center).modify(RobotMap.inch2Meter(RobotMap.WHEEL_TRACK_INCHES));
 	    
-	    modifier = new TankModifier(leftStartRightSwitchNoCrossTrajectory.center).modify(RobotMap.inch2Meter(RobotMap.WHEEL_TRACK_INCHES));
+	    // Extract the right and left trajectories
+	    rightStartRightScaleTrajectory.left = modifier.getLeftTrajectory();
+	    rightStartRightScaleTrajectory.right = modifier.getRightTrajectory();
+
+	//***********
+	    leftStartLeftScaleTrajectory = new RobotTrajectory("leftStartLeftScale");
+	    leftStartLeftScaleTrajectory.center = Pathfinder.generate(leftStartLeftScalePath, config);
+
+	    // We don't need to store the modifier persistently
+	    modifier = new TankModifier(leftStartLeftScaleTrajectory.center).modify(RobotMap.inch2Meter(RobotMap.WHEEL_TRACK_INCHES));
 	    
-	    leftStartRightSwitchNoCrossTrajectory.left = modifier.getLeftTrajectory();
-	    leftStartRightSwitchNoCrossTrajectory.right = modifier.getRightTrajectory();
+	    // Extract the right and left trajectories
+	    leftStartLeftScaleTrajectory.left = modifier.getLeftTrajectory();
+	    leftStartLeftScaleTrajectory.right = modifier.getRightTrajectory();
+
+	//***********
+	    rightStartLeftScaleTrajectory = new RobotTrajectory("rightStartLefttScale");
+	    rightStartLeftScaleTrajectory.center = Pathfinder.generate(rightStartLeftScalePath, config);
+
+	    // We don't need to store the modifier persistently
+	    modifier = new TankModifier(rightStartLeftScaleTrajectory.center).modify(RobotMap.inch2Meter(RobotMap.WHEEL_TRACK_INCHES));
+	    
+	    // Extract the right and left trajectories
+	    rightStartLeftScaleTrajectory.left = modifier.getLeftTrajectory();
+	    rightStartLeftScaleTrajectory.right = modifier.getRightTrajectory();
+
+	//***********
+	    leftStartRightScaleTrajectory = new RobotTrajectory("leftStartRightScale");
+	    leftStartRightScaleTrajectory.center = Pathfinder.generate(leftStartRightScalePath, config);
+
+	    // We don't need to store the modifier persistently
+	    modifier = new TankModifier(leftStartRightScaleTrajectory.center).modify(RobotMap.inch2Meter(RobotMap.WHEEL_TRACK_INCHES));
+	    
+	    // Extract the right and left trajectories
+	    leftStartRightScaleTrajectory.left = modifier.getLeftTrajectory();
+	    leftStartRightScaleTrajectory.right = modifier.getRightTrajectory();
+	    
+	//********
+	    leftStartMoveOnlyTrajectory = new RobotTrajectory("leftStartRightSwitchNoCross");
+	    leftStartMoveOnlyTrajectory.center = Pathfinder.generate(leftStartMoveOnlyPath, config);
+
+	    modifier = new TankModifier(leftStartMoveOnlyTrajectory.center).modify(RobotMap.inch2Meter(RobotMap.WHEEL_TRACK_INCHES));
+	    
+	    leftStartMoveOnlyTrajectory.left = modifier.getLeftTrajectory();
+	    leftStartMoveOnlyTrajectory.right = modifier.getRightTrajectory();
 	    
 	    
-	    //********
-	    rightStartLeftSwitchNoCrossTrajectory = new RobotTrajectory("rightStartLeftSwitchNoCross");
-	    rightStartLeftSwitchNoCrossTrajectory.center = Pathfinder.generate(rightStartLeftSwitchPathNoCross, config);
-	    modifier = new TankModifier(rightStartLeftSwitchNoCrossTrajectory.center).modify(RobotMap.inch2Meter(RobotMap.WHEEL_TRACK_INCHES));
+	 //********
+	    rightStartMoveOnlyTrajectory = new RobotTrajectory("rightStartLeftSwitchNoCross");
+	    rightStartMoveOnlyTrajectory.center = Pathfinder.generate(rightStartMoveOnlyPath, config);
+	    modifier = new TankModifier(rightStartMoveOnlyTrajectory.center).modify(RobotMap.inch2Meter(RobotMap.WHEEL_TRACK_INCHES));
 	    
-	    rightStartLeftSwitchNoCrossTrajectory.left = modifier.getLeftTrajectory();
-	    rightStartLeftSwitchNoCrossTrajectory.right = modifier.getRightTrajectory();
+	    rightStartMoveOnlyTrajectory.left = modifier.getLeftTrajectory();
+	    rightStartMoveOnlyTrajectory.right = modifier.getRightTrajectory();
 	     
 	 }
     
@@ -399,7 +507,7 @@ public class PathPlans
 					else
 					{
 						System.out.println("LEFT START LEFT SWITCH TRUST");
-						trajectory = PathPlans.leftStartRightSwitchNoCrossTrajectory;
+						trajectory = PathPlans.leftStartMoveOnlyTrajectory;
 					}
 				}
 				// explicitly check for right in case FMS has bug
@@ -408,20 +516,21 @@ public class PathPlans
 					System.out.println("LEFT START RIGHT SWITCH (PRIMARY)");
 					trajectory = PathPlans.leftStartRightSwitchTrajectory;
 				}
-				else // Primary is out of reach or unspecified
+				else // Primary is out of reach or unspecified, check for secondary scoring chance
 				{
 					System.out.println("LEFT START RIGHT SWITCH UNREACHABLE - Crossing Line");
-					trajectory = PathPlans.leftStartRightSwitchNoCrossTrajectory;
+					trajectory = PathPlans.leftStartMoveOnlyTrajectory;
 					
 					/*
 					if (scalePos == Positions.GenericPositions.LEFT)
 					{
-						System.out.println("LEFT START RIGHT SCALE (SECONDARY)");
-						/// TODO: trajectory = PathPlans.leftStartLeftScaleTrajectory;
+						System.out.println("LEFT START LEFT SCALE (SECONDARY)");
+						trajectory = PathPlans.leftStartLeftScaleTrajectory;
 					}
 					else
 					{
 						System.out.println("NO SOLUTION: DRIVING FORWARD - CROSSING LINE");
+						/// TODO: Consider a side trajectory to avoid impact with alliance
 					}
 					*/
 					// In all other cases crossing is disabled or FMS messed up, so just drive forward
@@ -459,7 +568,7 @@ public class PathPlans
 					}
 					else
 					{
-						trajectory = PathPlans.rightStartLeftSwitchNoCrossTrajectory;
+						trajectory = PathPlans.rightStartMoveOnlyTrajectory;
 						System.out.println("RIGHT START RIGHT SWITCH TRUST CENTER");
 					}
 				}
@@ -470,13 +579,13 @@ public class PathPlans
 				}
 				else
 				{
-					trajectory = PathPlans.rightStartLeftSwitchNoCrossTrajectory;
+					trajectory = PathPlans.rightStartMoveOnlyTrajectory;
 					System.out.println("RIGHT START RIGHT SWITCH: UNREACHABLE - CROSSING LINE");	
 					/*
 					if (scalePos == Positions.GenericPositions.RIGHT)
 					{
 						System.out.println("RIGHT START RIGHT SCALE (SECONDARY)");
-						/// TODO: trajectory = PathPlans.rightStartRightScaleTrajectory;
+						trajectory = PathPlans.rightStartRightScaleTrajectory;
 					}
 					else
 					{
@@ -494,13 +603,13 @@ public class PathPlans
 				if (scalePos == Positions.GenericPositions.LEFT)
 				{
 					System.out.println("LEFT START LEFT SCALE (PRIMARY)");
-					/// TODO: trajectory = PathPlans.leftStartLeftScaleTrajectory;
+					trajectory = PathPlans.leftStartLeftScaleTrajectory;
 				}
 				// explicitly check for right in case FMS has bug
 				else if (scalePos == Positions.GenericPositions.RIGHT && crossingMode == CrossingMode.ENABLE_CROSSING)
 				{
 					System.out.println("LEFT START RIGHT SCALE (PRIMARY)");
-					/// TODO: trajectory = PathPlans.leftStartRightScaleTrajectory;
+					trajectory = PathPlans.leftStartRightScaleTrajectory;
 				}
 				else // Primary is out of reach or unspecified
 				{
@@ -521,13 +630,13 @@ public class PathPlans
 				if (scalePos == Positions.GenericPositions.RIGHT)
 				{
 					System.out.println("RIGHT START RIGHT SCALE (PRIMARY)");
-					/// TODO: trajectory = PathPlans.rightStartRightScaleTrajectory;
+					trajectory = PathPlans.rightStartRightScaleTrajectory;
 				}
 				// explicitly check for right in case FMS has bug
 				else if (scalePos == Positions.GenericPositions.LEFT && crossingMode == CrossingMode.ENABLE_CROSSING)
 				{
 					System.out.println("RIGHT START LEFT SCALE (PRIMARY)");
-					/// TODO: trajectory = PathPlans.rightStartLeftScaleTrajectory;
+					trajectory = PathPlans.rightStartLeftScaleTrajectory;
 				}
 				else // Primary is out of reach or unspecified
 				{
@@ -564,29 +673,6 @@ public class PathPlans
 			break;
 		}
 		
-		/*
-		switch (pathChooser.getSelected())
-		{
-		case NONE:
-			break;
-		case RIGHT_START_RIGHT_SWITCH:
-			System.out.println("RIGHT_START_RIGHT_SWITCH PATH SELECTED");			
-			trajectory = PathPlans.rightStartRightSwitchTrajectory;
-			break;
-		case RIGHT_START_LEFT_SWITCH:
-			System.out.println("RIGHT_START_LEFT_SWITCH PATH SELECTED");			
-			trajectory = PathPlans.rightStartLeftSwitchTrajectory;
-			break;
-		case CENTER_START_RIGHT_SWITCH:
-			System.out.println("CENTER_START_RIGHT_SWITCH PATH SELECTED");
-			trajectory= PathPlans.centerStartRightSwitchTrajectory;
-			break;
-		default:
-			System.out.println("BAD PATH CHOICE");
-			break;
-		
-		}
-	*/	
 		return trajectory;
 		
 	}
