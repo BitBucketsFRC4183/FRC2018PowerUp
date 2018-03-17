@@ -24,6 +24,7 @@ import org.usfirst.frc.team4183.robot.subsystems.SubsystemUtilities.SubsystemTel
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
 import jaci.pathfinder.Waypoint;
+import jaci.pathfinder.followers.EncoderFollower;
 import jaci.pathfinder.modifiers.TankModifier;
 import org.usfirst.frc.team4183.utils.JoystickScale;
 import org.usfirst.frc.team4183.utils.RobotTrajectory;
@@ -325,7 +326,9 @@ public class DriveSubsystem extends BitBucketsSubsystem
 		return Math.signum(x) * (x*x);
 	}
     
+    //Have this so we can get feedback to where we are in the path
 	
+    
 	// +turnStick produces right turn (CW from above, -yaw angle)
     /// TODO: Consider re-designing this to reduce turn by up to 50% at full forward speed
 	public void arcadeDrive(double fwdStick, double turnStick) 
