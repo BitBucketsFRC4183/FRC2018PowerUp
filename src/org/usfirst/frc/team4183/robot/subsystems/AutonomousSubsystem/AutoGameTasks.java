@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team4183.utils.*;
-
+import org.usfirst.frc.team4183.robot.RobotMap;
 import org.usfirst.frc.team4183.robot.subsystems.DriveSubsystem.*;
 import org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem.ClosedOut;
 import org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem.OpenThroatHold;
@@ -50,6 +50,10 @@ public class AutoGameTasks extends CommandGroup
 			
 			// Default to move forward in no more than 3 seconds
 			/// TODO: Consider making the distance a robot constant, a chooser, or a preference
+			
+			//Value for the delay so we don't hit our alliance on accident.
+			addSequential(new Delay(RobotMap.DRIVE_FORWARD_DELAY_MS));
+			
 			addSequential(new MoveBy(85.0, 3.0));			// Need correct distance to just get to fence + a little
 		}	
 		addSequential(new org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem.Idle());

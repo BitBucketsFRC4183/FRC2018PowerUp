@@ -247,6 +247,8 @@ public class RobotMap
    		public static final double MOTION_PROFILE_PERIOD_MS = 50;
    		public static final double MINIMUM_MOVE_FORWARD_INCH = 85;	/// TODO: Check This, front of bumper well across line	
 
+   		//The else case if all desired paths fail and we want the robot to drive forward only.
+   		public static final long DRIVE_FORWARD_DELAY_MS = 3000;
 /*
  * 								===========================================
  * 								========== DIAGNOSTICS CONSTANTS ==========	

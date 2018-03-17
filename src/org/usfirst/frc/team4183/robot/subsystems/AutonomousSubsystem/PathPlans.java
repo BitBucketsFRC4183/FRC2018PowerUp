@@ -63,6 +63,11 @@ public class PathPlans
 	
 	private static SendableChooser<CrossingMode> crossingModeChooser;
 	
+	public enum TrustCenterBot
+	{
+		TRUST, DONT_TRUST
+	}
+	private static SendableChooser<TrustCenterBot> trustCenterChooser;
 	
 	PathPlans()
 	{
@@ -153,6 +158,15 @@ public class PathPlans
     		new Waypoint(3.405+0.3048,   4.191-3*0.3048,  Pathfinder.d2r(310))
 	    		
     };
+    
+    private static Waypoint[] rightStartLeftSwitchPathNoCross = new Waypoint[]
+    	    {
+    	    		new Waypoint(0,              0, Pathfinder.d2r(0)),
+    	    		new Waypoint(0.864,     -0.699, Pathfinder.d2r(-45)),
+    	    		new Waypoint(1.817+0.5, -1.245, Pathfinder.d2r(0)),
+    	    		//Adjust the final position of this
+    		    		
+    	    };
 
     // Again, a mirror but nor programmatically just in case
     private static Waypoint[] leftStartRightSwitchPath = new Waypoint[]
@@ -170,6 +184,16 @@ public class PathPlans
 	    		
     };
     
+    private static Waypoint[] leftStartRightSwitchPathNoCross = new Waypoint[]
+    	    {
+    	    		new Waypoint(0,              0, Pathfinder.d2r(0)),
+    	    		new Waypoint(0.864,     0.699, Pathfinder.d2r(45)),
+    	    		new Waypoint(1.817+0.5, 1.245, Pathfinder.d2r(0)),	 
+    	    		//Adjust the final position of this
+    	    };
+    
+    
+    
     public static RobotTrajectory testTrajectory0;
     
     public static RobotTrajectory rightStartRightSwitchTrajectory;
@@ -180,6 +204,9 @@ public class PathPlans
     
     public static RobotTrajectory rightStartLeftSwitchTrajectory;
     public static RobotTrajectory leftStartRightSwitchTrajectory;
+    
+    public static RobotTrajectory leftStartRightSwitchNoCrossTrajectory;
+    public static RobotTrajectory rightStartLeftSwitchNoCrossTrajectory;
     
     
 
@@ -212,12 +239,19 @@ public class PathPlans
 		pathChooser.addDefault("CENTER RIGHT",PathPlanChoice.CENTER_START_RIGHT_SWITCH);
 		SmartDashboard.putData( "Path Plan", pathChooser);
 		
+		trustCenterChooser = new SendableChooser<TrustCenterBot>();
+		trustCenterChooser.addDefault("DON'T TRUST", TrustCenterBot.DONT_TRUST);
+		trustCenterChooser.addObject("TRUST", TrustCenterBot.TRUST);
+		trustCenterChooser.addObject("DON'T TRUST", TrustCenterBot.DONT_TRUST);
+		SmartDashboard.putData("Trust Center Bot", trustCenterChooser);
+		
     	/// TODO: May want to pre-compute these and store them as files to speed up startup
     	
 	    
 	  //***********
     	testTrajectory0 = new RobotTrajectory("Test0");//determines the path
 	    testTrajectory0.center = Pathfinder.generate(testPath0, config);
+	    
 	    
 	    // We don't need to store the modifier persistently
 	    TankModifier modifier = new TankModifier(testTrajectory0.center).modify(RobotMap.inch2Meter(RobotMap.WHEEL_TRACK_INCHES));
@@ -238,6 +272,7 @@ public class PathPlans
 	    rightStartRightSwitchTrajectory.left = modifier.getLeftTrajectory();
 	    rightStartRightSwitchTrajectory.right = modifier.getRightTrajectory();
 
+	    
 	//***********
 	    leftStartLeftSwitchTrajectory = new RobotTrajectory("leftStartLeftSwitch");
 	    leftStartLeftSwitchTrajectory.center = Pathfinder.generate(leftStartLeftSwitchPath, config);
@@ -249,6 +284,7 @@ public class PathPlans
 	    leftStartLeftSwitchTrajectory.left = modifier.getLeftTrajectory();
 	    leftStartLeftSwitchTrajectory.right = modifier.getRightTrajectory();
 	    
+	  
 	    
 	  //***********
 	    rightStartLeftSwitchTrajectory = new RobotTrajectory("rightStartLeftSwitch");
@@ -274,6 +310,7 @@ public class PathPlans
 	    leftStartRightSwitchTrajectory.left = modifier.getLeftTrajectory();
 	    leftStartRightSwitchTrajectory.right = modifier.getRightTrajectory();
 	    
+	    
 	  //***********
 	    centerStartRightSwitchTrajectory = new RobotTrajectory("centerStartRightSwitch");
 	    centerStartRightSwitchTrajectory.center = Pathfinder.generate(centerStartRightSwitchPath, config);
@@ -292,7 +329,24 @@ public class PathPlans
 	    centerStartLeftSwitchTrajectory.left = modifier.getLeftTrajectory();
 	    centerStartLeftSwitchTrajectory.right = modifier.getRightTrajectory();
 	    
+	    //********
+	    leftStartRightSwitchNoCrossTrajectory = new RobotTrajectory("leftStartRightSwitchNoCross");
+	    leftStartRightSwitchNoCrossTrajectory.center = Pathfinder.generate(leftStartRightSwitchPathNoCross, config);
 	    
+	    modifier = new TankModifier(leftStartRightSwitchNoCrossTrajectory.center).modify(RobotMap.inch2Meter(RobotMap.WHEEL_TRACK_INCHES));
+	    
+	    leftStartRightSwitchNoCrossTrajectory.left = modifier.getLeftTrajectory();
+	    leftStartRightSwitchNoCrossTrajectory.right = modifier.getRightTrajectory();
+	    
+	    
+	    //********
+	    rightStartLeftSwitchNoCrossTrajectory = new RobotTrajectory("rightStartLeftSwitchNoCross");
+	    rightStartLeftSwitchNoCrossTrajectory.center = Pathfinder.generate(rightStartLeftSwitchPathNoCross, config);
+	    modifier = new TankModifier(rightStartLeftSwitchNoCrossTrajectory.center).modify(RobotMap.inch2Meter(RobotMap.WHEEL_TRACK_INCHES));
+	    
+	    rightStartLeftSwitchNoCrossTrajectory.left = modifier.getLeftTrajectory();
+	    rightStartLeftSwitchNoCrossTrajectory.right = modifier.getRightTrajectory();
+	     
 	 }
     
 	public static RobotTrajectory getSelectedTrajectory() 
@@ -336,8 +390,17 @@ public class PathPlans
 			{
 				if (switchPos == Positions.GenericPositions.LEFT)
 				{
-					System.out.println("LEFT START LEFT SWITCH (PRIMARY)");
+					
+					if (trustCenterChooser.getSelected() == TrustCenterBot.DONT_TRUST)
+					{
+					System.out.println("LEFT START LEFT SWITCH DONT TRUST");
 					trajectory = PathPlans.leftStartLeftSwitchTrajectory;
+					}
+					else
+					{
+						System.out.println("LEFT START LEFT SWITCH TRUST");
+						trajectory = PathPlans.leftStartRightSwitchNoCrossTrajectory;
+					}
 				}
 				// explicitly check for right in case FMS has bug
 				else if (switchPos == Positions.GenericPositions.RIGHT && crossingMode == CrossingMode.ENABLE_CROSSING)
@@ -347,6 +410,10 @@ public class PathPlans
 				}
 				else // Primary is out of reach or unspecified
 				{
+					System.out.println("LEFT START RIGHT SWITCH UNREACHABLE - Crossing Line");
+					trajectory = PathPlans.leftStartRightSwitchNoCrossTrajectory;
+					
+					/*
 					if (scalePos == Positions.GenericPositions.LEFT)
 					{
 						System.out.println("LEFT START RIGHT SCALE (SECONDARY)");
@@ -356,7 +423,9 @@ public class PathPlans
 					{
 						System.out.println("NO SOLUTION: DRIVING FORWARD - CROSSING LINE");
 					}
+					*/
 					// In all other cases crossing is disabled or FMS messed up, so just drive forward
+					 
 				}
 			}
 			else if (startingPositionChooser.getSelected() == StartingPosition.CENTER)
@@ -383,8 +452,16 @@ public class PathPlans
 			{
 				if (switchPos == Positions.GenericPositions.RIGHT)
 				{
+					if (trustCenterChooser.getSelected() == TrustCenterBot.DONT_TRUST)
+					{
 					trajectory = PathPlans.rightStartRightSwitchTrajectory;
-					System.out.println("RIGHT START RIGHT SWITCH (PRIMARY)");	
+					System.out.println("RIGHT START RIGHT SWITCH DONT TRUST CENTER");
+					}
+					else
+					{
+						trajectory = PathPlans.rightStartLeftSwitchNoCrossTrajectory;
+						System.out.println("RIGHT START RIGHT SWITCH TRUST CENTER");
+					}
 				}
 				else if (switchPos == Positions.GenericPositions.LEFT && crossingMode == CrossingMode.ENABLE_CROSSING)
 				{
@@ -393,6 +470,9 @@ public class PathPlans
 				}
 				else
 				{
+					trajectory = PathPlans.rightStartLeftSwitchNoCrossTrajectory;
+					System.out.println("RIGHT START RIGHT SWITCH: UNREACHABLE - CROSSING LINE");	
+					/*
 					if (scalePos == Positions.GenericPositions.RIGHT)
 					{
 						System.out.println("RIGHT START RIGHT SCALE (SECONDARY)");
@@ -402,6 +482,7 @@ public class PathPlans
 					{
 						System.out.println("DRIVING FORWARD - CROSSING LINE");
 					}
+					*/
 					// In all other cases crossing is disabled or FMS messed up, so just drive forward
 				}
 			}
