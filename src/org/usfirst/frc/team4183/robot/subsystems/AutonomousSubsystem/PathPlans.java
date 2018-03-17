@@ -282,12 +282,11 @@ public class PathPlans
     	startingPositionChooser.addObject(   "RIGHT",    StartingPosition.RIGHT);
     	SmartDashboard.putData( "Starting Position", startingPositionChooser);
     	
-    	
     	primaryRollChooser = new SendableChooser<PrimaryRole>();
     	primaryRollChooser.addDefault(  "CROSS LINE",    PrimaryRole.CROSS_LINE);
     	primaryRollChooser.addObject(   "SWITCH",        PrimaryRole.SWITCH);
     	primaryRollChooser.addObject(   "SCALE",         PrimaryRole.SCALE);
-    	primaryRollChooser.addObject(   "EXCAHNGE",      PrimaryRole.EXCHANGE);
+    	primaryRollChooser.addObject(   "EXCHANGE",      PrimaryRole.EXCHANGE);
     	SmartDashboard.putData( "Primary Roll", primaryRollChooser);
     	
     	crossingModeChooser = new SendableChooser<CrossingMode>() ;
@@ -491,6 +490,7 @@ public class PathPlans
 		Positions.GenericPositions switchPos = Robot.autonomousSubsystem.getSwitchPosition();
 		Positions.GenericPositions scalePos = Robot.autonomousSubsystem.getScalePosition();
 		
+		
 		switch (primaryRollChooser.getSelected())
 		{
 		case SWITCH:
@@ -613,15 +613,7 @@ public class PathPlans
 				}
 				else // Primary is out of reach or unspecified
 				{
-					if (switchPos == Positions.GenericPositions.LEFT)
-					{
-						System.out.println("LEFT START LEFT SWITCH (SECONDARY)");
-						trajectory = PathPlans.leftStartLeftSwitchTrajectory;
-					}
-					else
-					{
 						System.out.println("DRIVING FORWARD - CROSSING LINE");
-					}
 					// In all other cases crossing is disabled or FMS messed up, so just drive forward
 				}				
 			}
@@ -637,6 +629,11 @@ public class PathPlans
 				{
 					System.out.println("RIGHT START LEFT SCALE (PRIMARY)");
 					trajectory = PathPlans.rightStartLeftScaleTrajectory;
+				}
+				else if (scalePos == Positions.GenericPositions.LEFT && crossingMode == CrossingMode.DISABLE_CROSSING)
+				{
+					break;
+					
 				}
 				else // Primary is out of reach or unspecified
 				{

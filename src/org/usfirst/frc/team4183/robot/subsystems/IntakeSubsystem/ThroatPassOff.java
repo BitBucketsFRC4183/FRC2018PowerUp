@@ -1,39 +1,47 @@
 package org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem;
 
 import org.usfirst.frc.team4183.robot.Robot;
-import org.usfirst.frc.team4183.robot.RobotMap;
+import org.usfirst.frc.team4183.robot.Robot.RunMode;
 import org.usfirst.frc.team4183.utils.CommandUtils;
+
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
  *
  */
-public class ClosedLeft extends Command {
+public class ThroatPassOff extends Command {
 
-    public ClosedLeft() {
+    public ThroatPassOff() {
         // Use requires() here to declare subsystem dependencies
-    	requires(Robot.intakeSubsystem);    
+        // eg. requires(chassis);
+    	requires(Robot.intakeSubsystem);	
     }
 
     // Called just before this Command runs the first time
-    protected void initialize() {
-    	Robot.intakeSubsystem.closeMandible();
-    	System.out.println(this.getClass().getSimpleName());    }
+    protected void initialize() 
+    {
+    	Robot.intakeSubsystem.disable();	// Turn everything off and close it
+    	//Robot.intakeSubsystem.intakeUpPivet();
+    	Robot.intakeSubsystem.setIntakeNeutral(NeutralMode.Coast);
+    	System.out.println(this.getClass().getSimpleName());
+    	}
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.intakeSubsystem.setLeftMotorSpeed(-RobotMap.INTAKE_MOTOR_PERCENT, -RobotMap.THROAT_MOTOR_PERCENT);
-    	Robot.intakeSubsystem.setRightMotorSpeed(RobotMap.INTAKE_MOTOR_PERCENT/4, RobotMap.THROAT_MOTOR_PERCENT);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	if(Robot.oi.btnIdle.get() || ! Robot.oi.btnLeftIntake.get())
-    		return CommandUtils.autoStateChange(this, new Idle());
-    	else if (Robot.oi.btnOpenGate.get())
-    		return CommandUtils.autoStateChange(this, new OpenLeft());
-        return false;
+    	if(Robot.runMode == Robot.RunMode.TEST) {
+    		if(Robot.intakeSubsystem.getDiagnosticsFlag()) {
+    			return CommandUtils.stateChange(this, new Diagnostics());
+    		}
+    		
+    	}
+    	
+    	return false;
     }
 
     // Called once after isFinished returns true

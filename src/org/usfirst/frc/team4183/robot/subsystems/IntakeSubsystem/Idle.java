@@ -21,6 +21,7 @@ public class Idle extends Command {
     protected void initialize() 
     {
     	Robot.intakeSubsystem.disable();	// Turn everything off and close it
+    	Robot.intakeSubsystem.intakeDownPivet();
     	System.out.println(this.getClass().getSimpleName());
     	}
 
@@ -34,21 +35,9 @@ public class Idle extends Command {
     		if(Robot.intakeSubsystem.getDiagnosticsFlag()) {
     			return CommandUtils.stateChange(this, new Diagnostics());
     		}
+    		
     	}
-    	else if(Robot.oi.btnOpenGate.get() || Robot.oi.sbtnOpenMandible.get())
-    		return CommandUtils.autoStateChange(this, new OpenOff());
-    	else if(Robot.oi.btnOutIntake.get()|| Robot.oi.sbtnOuttakeThroat.get()) {
-    		return CommandUtils.autoStateChange(this, new ClosedOut());
-    	}
-    	else if(Robot.oi.btnInIntake.get()) {
-    		return CommandUtils.autoStateChange(this, new ClosedIn());
-    	}
-    	else if(Robot.oi.btnLeftIntake.get()) {
-    		return CommandUtils.autoStateChange(this, new ClosedLeft());
-    	}
-    	else if(Robot.oi.btnRightIntake.get()) {
-    		return CommandUtils.autoStateChange(this, new ClosedRight());
-    	}
+    	
     	return false;
     }
 

@@ -54,6 +54,10 @@ public class AutoGameTasks extends CommandGroup
 				//sets the elevator to this state which only moves the elevator to the high position if the the robot has completed 60% of the path
 				addParallel(new RepositionAuto(ElevatorSubsystem.ElevatorPresets.HIGH.getNativeTicks(),.6));
 			}
+			else if (trajectory.name.toLowerCase().contains("switch"))
+			{
+				addParallel(new RepositionAuto(ElevatorSubsystem.ElevatorPresets.MIDDLE.getNativeTicks(),.25));
+			}
 			addSequential(new DriveProfile(trajectory));
 						
 			// Only spit the cube out if there is a scoring solution
