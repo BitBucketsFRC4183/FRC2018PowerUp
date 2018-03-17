@@ -3,6 +3,7 @@ package org.usfirst.frc.team4183.robot.subsystems.AutonomousSubsystem;
 import java.util.List;
 
 import org.usfirst.frc.team4183.robot.Robot;
+import org.usfirst.frc.team4183.robot.RobotMap;
 import org.usfirst.frc.team4183.robot.subsystems.BitBucketsSubsystem;
 import org.usfirst.frc.team4183.robot.subsystems.AutonomousSubsystem.PathPlans.PathPlanChoice;
 import org.usfirst.frc.team4183.utils.Positions;
@@ -13,12 +14,18 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import jaci.pathfinder.Trajectory;
+import jaci.pathfinder.followers.EncoderFollower;
 
 /**
  *
  */
 public class AutonomousSubsystem extends BitBucketsSubsystem 
 {
+	
+	//these are used for the pathFollower
+	private EncoderFollower pathTracker;
+	private Trajectory lastSetTrajectory;
 	
 	public enum AutoChoices
 	{
@@ -32,6 +39,41 @@ public class AutonomousSubsystem extends BitBucketsSubsystem
 	{						
 		
 		
+	}
+	
+	public void initTrajectoryFollower(Trajectory aTrajectory)
+	{
+		lastSetTrajectory = aTrajectory;
+		pathTracker = new EncoderFollower(aTrajectory);
+		pathTracker.configureEncoder((int)Robot.driveSubsystem.getLeftEncoderUnits(), RobotMap.DRIVE_MOTOR_NATIVE_TICKS_PER_REV/4, RobotMap.WHEEL_CIRCUMFERENCE_INCHES/.0254);
+		pathTracker.configurePIDVA(1, 1, 1, 1, 1);
+	}
+	
+	public void updatePathFollower()
+	{
+		pathTracker.calculate((int)Robot.driveSubsystem.getLeftEncoderUnits());
+	}
+	
+	//checks to how much the path has been complete and sees if it is greater than or equal to the passed in parameter
+	public boolean percentageComplete(double percentPathComplete)
+	{
+		return getPercentageComplete() >= percentPathComplete;
+	}
+	
+	public double getPercentageComplete()
+	{
+		Trajectory.Segment currSegment = pathTracker.getSegment();
+		
+		int index = 0;
+		for (int i = 0; i < lastSetTrajectory.segments.length; i++)
+		{
+			if (currSegment == lastSetTrajectory.segments[i])
+			{
+				index = i;
+				break;
+			}
+		}
+		return index/lastSetTrajectory.segments.length;
 	}
 
 	public void initialize()

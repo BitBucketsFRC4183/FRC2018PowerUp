@@ -8,6 +8,7 @@ import org.usfirst.frc.team4183.utils.RobotTrajectory;
 import com.ctre.phoenix.motion.SetValueMotionProfile;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveProfile extends Command {
 
@@ -32,7 +33,8 @@ public class DriveProfile extends Command {
     	System.out.println(this.getClass().getSimpleName());
     	Robot.driveSubsystem.startTrajectory(trajectory);
     	Robot.driveSubsystem.motionProfileDriver.control();
-
+    	Robot.autonomousSubsystem.initTrajectoryFollower(trajectory.left);
+    	
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -40,6 +42,8 @@ public class DriveProfile extends Command {
     {
     	Robot.driveSubsystem.motionProfileDriver.control();
     	Robot.driveSubsystem.profileDrive();
+    	Robot.autonomousSubsystem.updatePathFollower();
+    	SmartDashboard.putNumber("Path Completion Percentage", Robot.autonomousSubsystem.getPercentageComplete());
     }
 
     // Make this return true when this Command no longer needs to run execute()

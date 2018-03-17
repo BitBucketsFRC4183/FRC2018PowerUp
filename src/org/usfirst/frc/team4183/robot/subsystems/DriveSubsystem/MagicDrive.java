@@ -30,7 +30,7 @@ public class MagicDrive {
 		}
 	}
 	
-	
+	//TRY this to see if the using a timer instead of match time works instead
 	/***
 	 * Magic Drive Method. Place this method into any team's code and if their motor controllers implement SpeedController this should allow them to drive by time
 	 * @param pwr the power parameter
@@ -40,15 +40,16 @@ public class MagicDrive {
 	public void magicDriveTime(double pwr, double timeRemain, Direction direction)
 	{		
 		pwr = Math.abs(pwr) * direction.getPowDir();
-		if (Timer.getMatchTime() > timeRemain)
+		Timer timerMagic = new Timer();
+		timerMagic.reset();
+		timerMagic.start();
+		while (timerMagic.get() > timeRemain)
 		{
 			leftDrive.set(pwr);
 			rightDrive.set(pwr);
 		}
-		else
-		{
 			leftDrive.set(0);
 			rightDrive.set(0);
-		}
+		
 	}
 }
