@@ -456,7 +456,28 @@ public class PathPlans
 	    rightStartMoveOnlyTrajectory.right = modifier.getRightTrajectory();
 	     
 	 }
-    
+
+    // To trigger a call to the following function, create a Boolean object for the dashboard
+    // that is polled in robot periodic or something like it, if the value becomes true,
+    // set it back to false and then call this function.
+	public static void writeTrajectoriesToFiles()
+	{
+		// When called, will write each trajectory to a file
+		// Each RobotTrajectory instance has a name member that can be used as the file name
+		
+		// Each RobotTrajectory instance has a left and right member containing Segments
+		// An easier way to do this without needing to write a lot of code for each new trajectory is 
+		// to make an array of the above RobotTrajectory objects and simply loop through that array
+		// repeating the logic, below.
+
+		// Write the length as first value in file (integer then new line)
+		// Loop through the segments 
+		// 	Write dt, left.position, left.velocity, right.position, right.velocity (then new line)
+		
+		// Close file and move on to the next trajectory
+		
+	}
+
 	public static RobotTrajectory getSelectedTrajectory() 
 	{
 		// A null trajectory means the robot will not move
