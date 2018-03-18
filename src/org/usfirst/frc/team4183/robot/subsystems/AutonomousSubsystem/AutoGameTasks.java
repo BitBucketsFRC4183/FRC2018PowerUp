@@ -6,10 +6,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team4183.utils.*;
 import org.usfirst.frc.team4183.robot.RobotMap;
 import org.usfirst.frc.team4183.robot.subsystems.DriveSubsystem.*;
-import org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem.ClosedOut;
 import org.usfirst.frc.team4183.robot.subsystems.ElevatorSubsystem.ElevatorSubsystem;
 import org.usfirst.frc.team4183.robot.subsystems.ElevatorSubsystem.RepositionAuto;
-import org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem.OpenThroatHold;
+import org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem.UpShoot;
 /**
  *
  */
@@ -64,7 +63,7 @@ public class AutoGameTasks extends CommandGroup
 			// Trajectories named "MoveOnly" or similar indicate that we should NOT eject the cube
 			if (! trajectory.name.toLowerCase().contains("moveonly"))
 			{
-				addSequential(new ClosedOut(1.0));
+				addSequential(new UpShoot(1));
 			}
 			
 			// TODO: If a two cube auto is desired then we would add the details here.

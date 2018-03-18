@@ -2,6 +2,7 @@ package org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem;
  
 import org.usfirst.frc.team4183.robot.Robot;
 import org.usfirst.frc.team4183.robot.Robot.RunMode;
+import org.usfirst.frc.team4183.robot.RobotMap;
 import org.usfirst.frc.team4183.utils.CommandUtils;
  
 import edu.wpi.first.wpilibj.command.Command;
@@ -9,9 +10,9 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class UpOff extends Command {
+public class DownIn extends Command {
  
-    public UpOff() {
+    public DownIn() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
       requires(Robot.intakeSubsystem);  
@@ -20,24 +21,21 @@ public class UpOff extends Command {
     // Called just before this Command runs the first time
     protected void initialize() 
     {
-      Robot.intakeSubsystem.disable();  // Turn everything off and close it
-      Robot.intakeSubsystem.intakeUpPivet();
+      Robot.intakeSubsystem.intakeDownPivet();
       System.out.println(this.getClass().getSimpleName());
       }
  
     // Called repeatedly when this Command is scheduled to run
-    protected void execute() {
+    protected void execute() {   Robot.intakeSubsystem.setIntakeMotorsToSpeed(-RobotMap.INTAKE_MOTOR_PERCENT, -RobotMap.INTAKE_MOTOR_PERCENT);
     }
-    
-
-
+ 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
       if (Robot.oi.btnOutIntake.get())
       {
         return CommandUtils.stateChange(this, new ThroatPassOff());
       }
-      if (Robot.oi.btnIdle.get() || Robot.oi.btnCloseGate.get())
+      if (Robot.oi.btnIdle.get() || Robot.oi.btnOpenGate.get() || !Robot.oi.btnInIntake.get())
       {
         return CommandUtils.stateChange(this, new Idle());
       }
@@ -47,6 +45,7 @@ public class UpOff extends Command {
  
     // Called once after isFinished returns true
     protected void end() {
+      Robot.intakeSubsystem.disable();
     }
  
     // Called when another command which requires one or more of the same

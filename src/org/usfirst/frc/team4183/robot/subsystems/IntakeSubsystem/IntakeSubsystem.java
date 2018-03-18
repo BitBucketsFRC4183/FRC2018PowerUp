@@ -310,8 +310,8 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 
 	public void initialize() {
 		// TODO Auto-generated method stub
-		Idle initialCommand = new Idle();
-		initialCommand.start();
+		    UpOff initialCommand = new UpOff(); 
+		    initialCommand.start(); 
 		
 	}
 }

@@ -484,10 +484,13 @@ public class PathPlans
 		Positions.GenericPositions switchPos = Robot.autonomousSubsystem.getSwitchPosition();
 		Positions.GenericPositions scalePos = Robot.autonomousSubsystem.getScalePosition();
 		
+<<<<<<< Updated upstream
 		// NOTE: NOTE: NOTE:
 		// The following code is not pretty but clearly identifies the selection logic
 		// At some point, a student is free to improve on the selection logic by using
 		// referential techniques, tables, and such to traverse a series of choices.
+=======
+>>>>>>> Stashed changes
 		
 		switch (primaryRollChooser.getSelected())
 		{
@@ -505,10 +508,22 @@ public class PathPlans
 					System.out.println("LEFT START RIGHT SWITCH (PRIMARY)");
 					trajectory = PathPlans.leftStartRightSwitchTrajectory;
 				}
+<<<<<<< Updated upstream
 				else // Primary is out of reach or unspecified, check for secondary scoring chance
 				{
 					System.out.println("SWITCH SOLUTION (PRIMARY) EXCLUDED");
 					
+=======
+				else if (switchPos == Positions.GenericPositions.RIGHT && crossingMode == CrossingMode.DISABLE_CROSSING)
+				{
+					
+				}
+				else // Primary is out of reach or unspecified
+				{
+					System.out.println("LEFT START RIGHT SWITCH UNREACHABLE - Crossing Line");
+					trajectory = PathPlans.leftStartRightSwitchNoCrossTrajectory;
+					/*
+>>>>>>> Stashed changes
 					if (scalePos == Positions.GenericPositions.LEFT)
 					{
 						System.out.println("LEFT START LEFT SCALE (SECONDARY)");
@@ -565,8 +580,13 @@ public class PathPlans
 				}
 				else  // Primary is out of reach or unspecified, check for secondary scoring chance
 				{
+<<<<<<< Updated upstream
 					System.out.println("SWITCH SOLUTION (PRIMARY) EXCLUDED");
 					
+=======
+					System.out.println("RIGHT START RIGHT SWITCH: UNREACHABLE - CROSSING LINE");	
+					/*
+>>>>>>> Stashed changes
 					if (scalePos == Positions.GenericPositions.RIGHT)
 					{
 						System.out.println("RIGHT START RIGHT SCALE (SECONDARY)");
@@ -607,6 +627,7 @@ public class PathPlans
 				}
 				else // Primary is out of reach or unspecified
 				{
+<<<<<<< Updated upstream
 					if (switchPos == Positions.GenericPositions.LEFT)
 					{
 						System.out.println("LEFT START LEFT SWITCH (SECONDARY)");
@@ -627,6 +648,11 @@ public class PathPlans
 					    trajectory = PathPlans.leftStartMoveOnlyTrajectory;
 					} // end if switch positions secondary choices on left side start
 				} // end if scale positions primary choices on left side start
+=======
+						System.out.println("DRIVING FORWARD - CROSSING LINE");
+					// In all other cases crossing is disabled or FMS messed up, so just drive forward
+				}				
+>>>>>>> Stashed changes
 			}
 			else if (startingPositionChooser.getSelected() == StartingPosition.RIGHT)
 			{
@@ -640,6 +666,11 @@ public class PathPlans
 				{
 					System.out.println("RIGHT START LEFT SCALE (PRIMARY)");
 					trajectory = PathPlans.rightStartLeftScaleTrajectory;
+				}
+				else if (scalePos == Positions.GenericPositions.LEFT && crossingMode == CrossingMode.DISABLE_CROSSING)
+				{
+					break;
+					
 				}
 				else if (scalePos == Positions.GenericPositions.LEFT && crossingMode == CrossingMode.DISABLE_CROSSING)
 				{

@@ -37,7 +37,18 @@ public class Idle extends Command {
     		}
     		
     	}
-    	
+    	 else if (Robot.oi.btnOpenGate.get()) 
+         { 
+           return CommandUtils.stateChange(this, new UpOff()); 
+         } 
+         else if (Robot.oi.btnOutIntake.get()) 
+         { 
+           return CommandUtils.stateChange(this, new DownOut()); 
+         }   
+         else if (Robot.oi.btnOutIntake.get()) 
+         { 
+           return CommandUtils.stateChange(this, new DownIn()); 
+         } 
     	return false;
     }
 
