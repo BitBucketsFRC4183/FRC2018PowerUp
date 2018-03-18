@@ -1,5 +1,14 @@
 package org.usfirst.frc.team4183.robot.subsystems.DriveSubsystem;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.LineNumberReader;
+
+import javax.swing.Spring;
+
 import org.usfirst.frc.team4183.robot.RobotMap;
 import org.usfirst.frc.team4183.utils.RobotTrajectory;
 
@@ -112,7 +121,7 @@ public class MotionProfileDriver
 	}
 	Notifier _notifer = new Notifier(new PeriodicRunnable());
 	
-
+//
 	/**
 	 * C'tor
 	 * 
@@ -321,6 +330,105 @@ public class MotionProfileDriver
 		}
 		return fillOk;
 	}
+	
+	private void startFillingFile(String fileName)
+	{
+		
+		if (_statusL.hasUnderrun || _statusR.hasUnderrun) {
+			/* better log it so we know about it */
+			MotionProfileInstrumentation.OnUnderrun();
+			/*
+			 * clear the error. This flag does not auto clear, this way 
+			 * we never miss logging it.
+			 */
+			if(_statusL.hasUnderrun) _talonL.clearMotionProfileHasUnderrun(0);
+			if(_statusR.hasUnderrun) _talonR.clearMotionProfileHasUnderrun(0);
+		}
+		
+		_talonL.clearMotionProfileTrajectories();
+		_talonR.clearMotionProfileTrajectories();
+
+		/* set the base trajectory period to zero, use the individual trajectory period below */
+		_talonL.configMotionProfileTrajectoryPeriod(BASE_CONTROL_PERIOD_MS, RobotMap.CONTROLLER_TIMEOUT_MS);
+		_talonR.configMotionProfileTrajectoryPeriod(BASE_CONTROL_PERIOD_MS, RobotMap.CONTROLLER_TIMEOUT_MS);
+		
+		
+		TrajectoryPoint pointL = new TrajectoryPoint();
+		TrajectoryPoint pointR = new TrajectoryPoint();
+		
+		String line = null;
+		
+		//This value is set by the first line of the trajectory text file.
+		double trajLeng = 0;
+		
+		//an incremented value which is used to determine which line we are on when reading the text file.
+		int lineNumber = 0;
+
+		try {
+			FileReader fileReader = new FileReader(fileName);
+			
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
+			
+			while ((line = bufferedReader.readLine()) != null)
+			{
+				if ((lineNumber + 1) == trajLeng+1)
+				{
+				pointL.isLastPoint = true;
+				pointR.isLastPoint = true;
+				}
+				else if (lineNumber == 1)
+				{
+					pointL.zeroPos = true;
+					pointR.zeroPos = true;
+				}
+				
+					if (line.length() < 5)
+				{
+					trajLeng =  Integer.parseInt(line);
+				}
+				else
+				{
+					String[] tempLineValues = line.split(",");
+					pointL.timeDur = GetTrajectoryDuration((int)(Double.parseDouble(tempLineValues[0])*1000));
+					pointR.timeDur = pointL.timeDur;
+					
+					pointL.position = RobotMap.meter2inch(Double.parseDouble(tempLineValues[1]))/RobotMap.WHEEL_CIRCUMFERENCE_INCHES;
+					pointL.velocity = RobotMap.meter2inch(Double.parseDouble(tempLineValues[2]))/RobotMap.WHEEL_CIRCUMFERENCE_INCHES*60;
+					pointR.position = RobotMap.meter2inch(Double.parseDouble(tempLineValues[3]))/RobotMap.WHEEL_CIRCUMFERENCE_INCHES;
+					pointR.velocity = RobotMap.meter2inch(Double.parseDouble(tempLineValues[4]))/RobotMap.WHEEL_CIRCUMFERENCE_INCHES*60;
+					
+					
+					pointL.headingDeg = 0; /* future feature - not used in this example*/
+					pointL.profileSlotSelect0 = 0; /* which set of gains would you like to use [0,3]? */
+					pointL.profileSlotSelect1 = 0; /* future feature  - not used in this example - cascaded PID [0,1], leave zero */
+				
+					pointR.headingDeg = 0; /* future feature - not used in this example*/
+					pointR.profileSlotSelect0 = 0; /* which set of gains would you like to use [0,3]? */
+					pointR.profileSlotSelect1 = 0; /* future feature  - not used in this example - cascaded PID [0,1], leave zero */
+				
+					_talonL.pushMotionProfileTrajectory(pointL);
+					_talonR.pushMotionProfileTrajectory(pointR);
+				}
+				lineNumber++;
+				
+				
+			}
+			
+			bufferedReader.close();
+		}
+		catch(FileNotFoundException ex)
+		{
+			System.out.println("FILE NOT FOUND: "+fileName);
+		}
+		catch(IOException ex) {
+            System.out.println(
+                "Error reading file '" 
+                + fileName + "'");                  
+        }
+	}
+	
+	
+	
 	private void startFilling(Trajectory profileL, Trajectory profileR) {
 
 		/* create an empty point */
