@@ -458,10 +458,8 @@ public class PathPlans
     
 	public static RobotTrajectory getSelectedTrajectory() 
 	{
+		// A null trajectory means the robot will not move
 		RobotTrajectory trajectory = null;
-		
-		/// TODO: Replace below with logic based on better selectors
-		/// including starting side, roll, crossing allowance
 		
 		// Description as comments
 		//		Available Primary choices:
@@ -480,16 +478,16 @@ public class PathPlans
 		//			If position is right or left, cross line and wait
 		//
 		/// TODO: Consider exchange as choice?
-		
-		/// TODO: Again, replace the below with something like above
-		
-		
-		//INSERT SECONDARY GOALS WHEN THE SELECTOR IS ADDED
+				
 		CrossingMode crossingMode = crossingModeChooser.getSelected();
 		
 		Positions.GenericPositions switchPos = Robot.autonomousSubsystem.getSwitchPosition();
 		Positions.GenericPositions scalePos = Robot.autonomousSubsystem.getScalePosition();
 		
+		// NOTE: NOTE: NOTE:
+		// The following code is not pretty but clearly identifies the selection logic
+		// At some point, a student is free to improve on the selection logic by using
+		// referential techniques, tables, and such to traverse a series of choices.
 		
 		switch (primaryRollChooser.getSelected())
 		{
@@ -498,17 +496,8 @@ public class PathPlans
 			{
 				if (switchPos == Positions.GenericPositions.LEFT)
 				{
-					
-					if (trustCenterChooser.getSelected() == TrustCenterBot.DONT_TRUST)
-					{
-					System.out.println("LEFT START LEFT SWITCH DONT TRUST");
+					System.out.println("LEFT START LEFT SWITCH (PRIMARY)");
 					trajectory = PathPlans.leftStartLeftSwitchTrajectory;
-					}
-					else
-					{
-						System.out.println("LEFT START LEFT SWITCH TRUST");
-						trajectory = PathPlans.leftStartMoveOnlyTrajectory;
-					}
 				}
 				// explicitly check for right in case FMS has bug
 				else if (switchPos == Positions.GenericPositions.RIGHT && crossingMode == CrossingMode.ENABLE_CROSSING)
@@ -518,24 +507,28 @@ public class PathPlans
 				}
 				else // Primary is out of reach or unspecified, check for secondary scoring chance
 				{
-					System.out.println("LEFT START RIGHT SWITCH UNREACHABLE - Crossing Line");
-					trajectory = PathPlans.leftStartMoveOnlyTrajectory;
+					System.out.println("SWITCH SOLUTION (PRIMARY) EXCLUDED");
 					
-					/*
 					if (scalePos == Positions.GenericPositions.LEFT)
 					{
 						System.out.println("LEFT START LEFT SCALE (SECONDARY)");
 						trajectory = PathPlans.leftStartLeftScaleTrajectory;
 					}
-					else
+					// In EXTREMELY unlikely cases the FMS could have an error on switch position tags
+					// We will be complete with the logic and check for crossing... there is also
+					// just as likely that this scale position data is corrupted as well, in which
+					// case we will fall through
+					else if (scalePos == Positions.GenericPositions.RIGHT && crossingMode == CrossingMode.ENABLE_CROSSING)
 					{
-						System.out.println("NO SOLUTION: DRIVING FORWARD - CROSSING LINE");
-						/// TODO: Consider a side trajectory to avoid impact with alliance
+						System.out.println("LEFT START RIGHT SCALE (SECONDARY)");
+						trajectory = PathPlans.leftStartRightScaleTrajectory;						
 					}
-					*/
-					// In all other cases crossing is disabled or FMS messed up, so just drive forward
-					 
-				}
+					else // We got here because crossing was disabled and all solution are on the other side of field
+					{	 // or there was some error in the FMS and switch and scale sides are unknown
+						System.out.println("NO SOLUTION: DRIVING FORWARD - CROSSING LINE");
+					    trajectory = PathPlans.leftStartMoveOnlyTrajectory;
+					} // end if scale secondary on left side start
+				} // end if switch primary on left side start
 			}
 			else if (startingPositionChooser.getSelected() == StartingPosition.CENTER)
 			{
@@ -553,48 +546,49 @@ public class PathPlans
 				else
 				{
 					System.out.println("NO SOLUTION: FMS ERROR");
-				}
-				
-				// NOTE: If FMS messes up, we will drive into stack... do we want to suppress?
+					// NOTE: If FMS messes up, we won't move
+					/// TODO: Consider Exchange?
+				} // end if switch primary on center starts
 			}
 			else if (startingPositionChooser.getSelected() == StartingPosition.RIGHT)
 			{
 				if (switchPos == Positions.GenericPositions.RIGHT)
 				{
-					if (trustCenterChooser.getSelected() == TrustCenterBot.DONT_TRUST)
-					{
+					System.out.println("RIGHT START RIGHT SWITCH (PRIMARY)");
 					trajectory = PathPlans.rightStartRightSwitchTrajectory;
-					System.out.println("RIGHT START RIGHT SWITCH DONT TRUST CENTER");
-					}
-					else
-					{
-						trajectory = PathPlans.rightStartMoveOnlyTrajectory;
-						System.out.println("RIGHT START RIGHT SWITCH TRUST CENTER");
-					}
 				}
+				// explicitly check for left in case FMS has bug
 				else if (switchPos == Positions.GenericPositions.LEFT && crossingMode == CrossingMode.ENABLE_CROSSING)
 				{
 					System.out.println("RIGHT START LEFT SWITCH (PRIMARY)");
 					trajectory = PathPlans.rightStartLeftSwitchTrajectory;
 				}
-				else
+				else  // Primary is out of reach or unspecified, check for secondary scoring chance
 				{
-					trajectory = PathPlans.rightStartMoveOnlyTrajectory;
-					System.out.println("RIGHT START RIGHT SWITCH: UNREACHABLE - CROSSING LINE");	
-					/*
+					System.out.println("SWITCH SOLUTION (PRIMARY) EXCLUDED");
+					
 					if (scalePos == Positions.GenericPositions.RIGHT)
 					{
 						System.out.println("RIGHT START RIGHT SCALE (SECONDARY)");
 						trajectory = PathPlans.rightStartRightScaleTrajectory;
 					}
-					else
+					// In EXTREMELY unlikely cases the FMS could have an error on switch position tags
+					// We will be complete with the logic and check for crossing... there is also
+					// just as likely that this scale position data is corrupted as well, in which
+					// case we will fall through
+					else if (scalePos == Positions.GenericPositions.LEFT && crossingMode == CrossingMode.ENABLE_CROSSING)
 					{
-						System.out.println("DRIVING FORWARD - CROSSING LINE");
+						System.out.println("RIGHT START LEFT SCALE (SECONDARY)");
+						trajectory = PathPlans.rightStartLeftScaleTrajectory;
+						
 					}
-					*/
-					// In all other cases crossing is disabled or FMS messed up, so just drive forward
-				}
-			}
+					else // We got here because crossing was disabled and all solution are on the other side of field
+					{	 // or there was some error in the FMS and switch and scale sides are unknown
+						System.out.println("NO SOLUTION: DRIVING FORWARD - CROSSING LINE");
+					    trajectory = PathPlans.rightStartMoveOnlyTrajectory;
+					} // end if scale secondary on right side start
+				} // end if switch primary on right side start
+			} // end if switch primary on any side start
 			break;
 			
 		case SCALE:
@@ -613,9 +607,26 @@ public class PathPlans
 				}
 				else // Primary is out of reach or unspecified
 				{
-						System.out.println("DRIVING FORWARD - CROSSING LINE");
-					// In all other cases crossing is disabled or FMS messed up, so just drive forward
-				}				
+					if (switchPos == Positions.GenericPositions.LEFT)
+					{
+						System.out.println("LEFT START LEFT SWITCH (SECONDARY)");
+						trajectory = PathPlans.leftStartLeftSwitchTrajectory;
+					}
+					// In EXTREMELY unlikely cases the FMS could have an error on scale position tags
+					// We will be complete with the logic and check for crossing... there is also
+					// just as likely that this switch position data is corrupted as well, in which
+					// case we will fall through
+					else if (switchPos == Positions.GenericPositions.RIGHT && crossingMode == CrossingMode.ENABLE_CROSSING)
+					{
+						System.out.println("LEFT START RIGHT SWITCH (SECONDARY)");
+						trajectory = PathPlans.leftStartRightSwitchTrajectory;	
+					}
+					else // We got here because crossing was disabled and all solution are on the other side of field
+					{	 // or there was some error in the FMS and switch and scale sides are unknown
+						System.out.println("NO SOLUTION: DRIVING FORWARD - CROSSING LINE");
+					    trajectory = PathPlans.leftStartMoveOnlyTrajectory;
+					} // end if switch positions secondary choices on left side start
+				} // end if scale positions primary choices on left side start
 			}
 			else if (startingPositionChooser.getSelected() == StartingPosition.RIGHT)
 			{
@@ -642,15 +653,22 @@ public class PathPlans
 						System.out.println("RIGHT START RIGHT SWITCH (SECONDARY)");
 						trajectory = PathPlans.rightStartRightSwitchTrajectory;
 					}
-					else
+					// In EXTREMELY unlikely cases the FMS could have an error on scale position tags
+					// We will be complete with the logic and check for crossing... there is also
+					// just as likely that this switch position data is corrupted as well, in which
+					// case we will fall through
+					else if (switchPos == Positions.GenericPositions.LEFT && crossingMode == CrossingMode.ENABLE_CROSSING)
 					{
-						System.out.println("DRIVING FORWARD - CROSSING LINE");
+						System.out.println("RIGHT START LEFT SWITCH (SECONDARY)");
+						trajectory = PathPlans.rightStartLeftSwitchTrajectory;	
 					}
-					
-					// In all other cases crossing is disabled or FMS messed up, so just drive forward
-				}				
-				
-			}
+					else // We got here because crossing was disabled and all solution are on the other side of field
+					{	 // or there was some error in the FMS and switch and scale sides are unknown
+						System.out.println("NO SOLUTION: DRIVING FORWARD - CROSSING LINE");
+					    trajectory = PathPlans.rightStartMoveOnlyTrajectory;
+					} // end if switch position secondary choices on right side start
+				} // end if scale positions primary choices on right side start		
+			} // end if scale primary on either side start
 			break;
 			
 		case EXCHANGE:
@@ -665,6 +683,19 @@ public class PathPlans
 			break;
 			
 		case CROSS_LINE: //Done purposely
+			if (startingPositionChooser.getSelected() == StartingPosition.LEFT)
+			{
+				System.out.println("CROSSING LINE ON LEFT SIDE");
+				trajectory = PathPlans.leftStartMoveOnlyTrajectory;
+			}
+			else if (startingPositionChooser.getSelected() == StartingPosition.LEFT)
+			{
+				System.out.println("CROSSING LINE ON RIGHT SIDE");
+				trajectory = PathPlans.rightStartMoveOnlyTrajectory;
+			}
+			// else center and we don't move
+			/// TODO: Maybe we should, but better negotiation with alliance is prefered
+			break;
 		default:
 			System.out.println("RETURNING DRIVE FORWARD");
 			break;
