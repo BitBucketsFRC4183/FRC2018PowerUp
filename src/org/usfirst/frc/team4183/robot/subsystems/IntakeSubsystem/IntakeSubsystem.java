@@ -29,7 +29,7 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 	private final TalonSRX throatMotorA;
 	private final TalonSRX throatMotorB;
 	
-	private final DoubleSolenoid intakegate;
+	private final DoubleSolenoid intakePivet;
 	
 	private final DigitalInput leftMaxLimit;
 	private final DigitalInput leftMinLimit;
@@ -42,14 +42,12 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 	boolean lastCurrentState = false;
 
 	private static ArrayList<WPI_TalonSRX> motors;
-	private static ArrayList<DoubleSolenoid> solenoids;
 	
 	private static SendableChooser<SubsystemTelemetryState> telemetryState;
 
 	public IntakeSubsystem() {
 		this.setName("IntakeSubsystem");
 		motors = new ArrayList<WPI_TalonSRX>();
-		solenoids = new ArrayList<DoubleSolenoid>();
 		
 		DIAG_LOOPS_RUN = 10;
 		
@@ -73,15 +71,12 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 		throatMotorA.configOpenloopRamp(0.0, RobotMap.CONTROLLER_TIMEOUT_MS);
 		throatMotorB.configOpenloopRamp(0.0, RobotMap.CONTROLLER_TIMEOUT_MS);
 
-		intakegate = new DoubleSolenoid(RobotMap.INTAKE_PNEUMA_OPEN_CHANNEL, RobotMap.INTAKE_PNEUMA_CLOSED_CHANNEL);
+		intakePivet = new DoubleSolenoid(RobotMap.INTAKE_PNEUMA_OPEN_CHANNEL, RobotMap.INTAKE_PNEUMA_CLOSED_CHANNEL);
 		
 		leftMaxLimit = new DigitalInput(RobotMap.INTAKE_LIMIT_LEFT_MAX_ID);
 		leftMinLimit = new DigitalInput(RobotMap.INTAKE_LIMIT_LEFT_MIN_ID);
 		rightMaxLimit = new DigitalInput(RobotMap.INTAKE_LIMIT_RIGHT_MAX_ID);
 		rightMinLimit = new DigitalInput(RobotMap.INTAKE_LIMIT_RIGHT_MIN_ID);
-		
-		
-		solenoids.add(intakegate);
 		
 		telemetryState = new SendableChooser<SubsystemTelemetryState>();
     	telemetryState.addDefault("Off", SubsystemTelemetryState.OFF);
@@ -98,6 +93,12 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 		throatMotorA.setNeutralMode(neutralMode);
 		throatMotorB.setNeutralMode(neutralMode);
 		
+	}
+	
+	public void setIntakeNeutral(NeutralMode neutralMode)
+	{
+		leftIntakeMotor.setNeutralMode(neutralMode);
+		rightIntakeMotor.setNeutralMode(neutralMode);
 	}
 	
 	//checks to see if the either of the Min Limit Switches are hit for the pneumatics
@@ -130,7 +131,6 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 	}
 	public void disable() {
 		setAllMotorsZero();
-    	closeMandible();
 	}
 	
 	public void rotatePow(double pow)
@@ -139,11 +139,14 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 		rightIntakeMotor.set(-pow);
 	}
 	
-	public void closeMandible() {
-		intakegate.set(DoubleSolenoid.Value.kReverse);
+	public void intakeDownPivet()
+	{
+		intakePivet.set(DoubleSolenoid.Value.kReverse);
 	}
-	public void openMandible() {
-		intakegate.set(DoubleSolenoid.Value.kForward);
+	
+	public void intakeUpPivet()
+	{
+		intakePivet.set(DoubleSolenoid.Value.kForward);
 	}
 	
 	private void setAllMotorsZero() 
@@ -217,7 +220,7 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 	@Override
 	public void diagnosticsInit() {
 		//TODO: Might want to move this but I figure opening pneumatics first is safest
-		openMandible();
+		intakeUpPivet();
 	}
 	
 	@Override
@@ -307,8 +310,8 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 
 	public void initialize() {
 		// TODO Auto-generated method stub
-		Idle initialCommand = new Idle();
-		initialCommand.start();
+		    UpOff initialCommand = new UpOff(); 
+		    initialCommand.start(); 
 		
 	}
 }

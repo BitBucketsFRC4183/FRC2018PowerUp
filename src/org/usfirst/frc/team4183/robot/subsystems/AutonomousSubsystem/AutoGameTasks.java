@@ -6,10 +6,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team4183.utils.*;
 import org.usfirst.frc.team4183.robot.RobotMap;
 import org.usfirst.frc.team4183.robot.subsystems.DriveSubsystem.*;
-import org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem.ClosedOut;
 import org.usfirst.frc.team4183.robot.subsystems.ElevatorSubsystem.ElevatorSubsystem;
 import org.usfirst.frc.team4183.robot.subsystems.ElevatorSubsystem.RepositionAuto;
-import org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem.OpenThroatHold;
+import org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem.UpShoot;
 /**
  *
  */
@@ -54,13 +53,17 @@ public class AutoGameTasks extends CommandGroup
 				//sets the elevator to this state which only moves the elevator to the high position if the the robot has completed 60% of the path
 				addParallel(new RepositionAuto(ElevatorSubsystem.ElevatorPresets.HIGH.getNativeTicks(),.6));
 			}
+			else if (trajectory.name.toLowerCase().contains("switch"))
+			{
+				addParallel(new RepositionAuto(ElevatorSubsystem.ElevatorPresets.MIDDLE.getNativeTicks(),.25));
+			}
 			addSequential(new DriveProfile(trajectory));
 						
 			// Only spit the cube out if there is a scoring solution
 			// Trajectories named "MoveOnly" or similar indicate that we should NOT eject the cube
 			if (! trajectory.name.toLowerCase().contains("moveonly"))
 			{
-				addSequential(new ClosedOut(1.0));
+				addSequential(new UpShoot(1));
 			}
 			
 			// TODO: If a two cube auto is desired then we would add the details here.

@@ -5,11 +5,6 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 import org.usfirst.frc.team4183.utils.*;
 
 import org.usfirst.frc.team4183.robot.subsystems.DriveSubsystem.*;
-import org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem.ClosedOut;
-import org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem.OpenThroatHold;
-/**
- *
- */
 public class DriveProfileTest extends CommandGroup
 {
 	
