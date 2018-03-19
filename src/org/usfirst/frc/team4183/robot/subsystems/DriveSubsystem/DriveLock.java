@@ -32,7 +32,6 @@ public class DriveLock extends Command
     	
     	
         Robot.driveSubsystem.resetMotion();
-    	
     }
 
     // Called repeatedly when this Command is scheduled to run
