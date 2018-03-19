@@ -8,6 +8,7 @@ package org.usfirst.frc.team4183.robot;
 import java.util.HashSet;
 import java.util.Set;
 import org.usfirst.frc.team4183.robot.subsystems.AutonomousSubsystem.AutonomousSubsystem;
+import org.usfirst.frc.team4183.robot.subsystems.AutonomousSubsystem.PathPlans;
 import org.usfirst.frc.team4183.robot.subsystems.ClimberSubsystem.ClimberSubsystem;
 import org.usfirst.frc.team4183.robot.subsystems.DriveSubsystem.DriveSubsystem;
 import org.usfirst.frc.team4183.robot.subsystems.ElevatorSubsystem.ElevatorSubsystem;
@@ -150,12 +151,15 @@ public class Robot extends IterativeRobot {
 		// Instead we explicitly initialize the subsystems to start the
 		// the first commands states
 		initializePhysicalSubsystems();
+		
+		
 
 	}
 	@Override
-	public void disabledPeriodic() {
+	public void disabledPeriodic()  {
 		runWatch.start();
 		Scheduler.getInstance().run();
+		PathPlans.processFiles();
 		runWatch.stop();
 	}
 	
