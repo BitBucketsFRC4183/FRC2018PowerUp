@@ -277,20 +277,23 @@ public class PathPlans
     
     public static void processFiles() 
     {
+    	// Simple toggle to write files for later use
     	if(SmartDashboard.getBoolean("Write Paths", false)==true)
     	{
-    		SmartDashboard.getBoolean("Write Paths", false);
+    		SmartDashboard.putBoolean("Write Paths", false);
     		try {
 				writeTrajectoriesToFiles();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				System.out.println("Unable to write files");
+				System.out.println("Unable to write path plan files");
 			}
     	}
     }
     public static void initialize()
     {
+    	// Operator toggle here will cause files to be written
     	SmartDashboard.putBoolean("Write Paths", false);
+    	
     	startingPositionChooser = new SendableChooser<StartingPosition>();
     	startingPositionChooser.addDefault(  "LEFT",    StartingPosition.LEFT);
     	startingPositionChooser.addObject(   "CENTER",  StartingPosition.CENTER);
