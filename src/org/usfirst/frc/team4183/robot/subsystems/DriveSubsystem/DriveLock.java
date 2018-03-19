@@ -5,7 +5,6 @@ import org.usfirst.frc.team4183.robot.Robot;
 import org.usfirst.frc.team4183.robot.LightingControl.LightingObjects;
 import org.usfirst.frc.team4183.utils.CommandUtils;
 
-import MagicDrive.MagicDrive;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
