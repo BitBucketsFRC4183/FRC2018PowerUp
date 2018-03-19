@@ -12,6 +12,7 @@ import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
 import jaci.pathfinder.Waypoint;
 import jaci.pathfinder.modifiers.TankModifier;
+import java.io.*;
 
 /*
  * PathPlans contains our pre-planned paths for autonomous operations
@@ -273,9 +274,23 @@ public class PathPlans
         
     public static RobotTrajectory rightStartLeftScaleTrajectory;
     public static RobotTrajectory leftStartRightScaleTrajectory;
-
+    
+    public static void processFiles() 
+    {
+    	if(SmartDashboard.getBoolean("Write Paths", false)==true)
+    	{
+    		SmartDashboard.getBoolean("Write Paths", false);
+    		try {
+				writeTrajectoriesToFiles();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				System.out.println("Unable to write files");
+			}
+    	}
+    }
     public static void initialize()
     {
+    	SmartDashboard.putBoolean("Write Paths", false);
     	startingPositionChooser = new SendableChooser<StartingPosition>();
     	startingPositionChooser.addDefault(  "LEFT",    StartingPosition.LEFT);
     	startingPositionChooser.addObject(   "CENTER",  StartingPosition.CENTER);
@@ -453,15 +468,33 @@ public class PathPlans
 	    modifier = new TankModifier(rightStartMoveOnlyTrajectory.center).modify(RobotMap.inch2Meter(RobotMap.WHEEL_TRACK_INCHES));
 	    
 	    rightStartMoveOnlyTrajectory.left = modifier.getLeftTrajectory();
-	    rightStartMoveOnlyTrajectory.right = modifier.getRightTrajectory();
-	     
+	    rightStartMoveOnlyTrajectory.right = modifier.getRightTrajectory();   
 	 }
 
     // To trigger a call to the following function, create a Boolean object for the dashboard
     // that is polled in robot periodic or something like it, if the value becomes true,
     // set it back to false and then call this function.
-	public static void writeTrajectoriesToFiles()
+    
+   
+
+	public static void writeTrajectoriesToFiles() throws IOException
 	{
+		
+		RobotTrajectory[] listofRobotTrajectories = {testTrajectory0, rightStartRightSwitchTrajectory, leftStartLeftSwitchTrajectory, rightStartLeftSwitchTrajectory,leftStartRightSwitchTrajectory, centerStartRightSwitchTrajectory, rightStartRightScaleTrajectory, leftStartLeftScaleTrajectory,rightStartLeftScaleTrajectory, leftStartRightScaleTrajectory, leftStartMoveOnlyTrajectory, rightStartMoveOnlyTrajectory};
+		for(int a=0; a<listofRobotTrajectories.length; a++)
+		{
+			RobotTrajectory selectedTrajectory = listofRobotTrajectories[a];
+			PrintWriter out
+			= new PrintWriter(new BufferedWriter(new FileWriter(selectedTrajectory.name)));
+			out.println(selectedTrajectory.center.length());
+			for(int b=0; b<selectedTrajectory.center.length(); b++)
+			{
+				Trajectory.Segment segL = selectedTrajectory.left.get(b);
+				Trajectory.Segment segR = selectedTrajectory.right.get(b);
+				out.println(segL.dt + "," + segL.position + "," + segL.velocity + "," + segR.position + "," + segR.velocity);
+			}
+			out.close();
+		}
 		// When called, will write each trajectory to a file
 		// Each RobotTrajectory instance has a name member that can be used as the file name
 		
