@@ -40,7 +40,7 @@ public class Idle extends Command {
     		}
     		
     	}
-    	 else if (Robot.oi.btnCloseGate.get()) 
+    	 else if (Robot.oi.btnOpenGate.get()) 
          { 
            return CommandUtils.stateChange(this, new UpOff()); 
          } 

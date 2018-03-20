@@ -2,8 +2,12 @@ package org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem;
  
 import org.usfirst.frc.team4183.robot.Robot;
 import org.usfirst.frc.team4183.robot.Robot.RunMode;
+import org.usfirst.frc.team4183.robot.RobotMap;
+import org.usfirst.frc.team4183.robot.subsystems.ElevatorSubsystem.ElevatorSubsystem;
 import org.usfirst.frc.team4183.utils.CommandUtils;
- 
+
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+
 import edu.wpi.first.wpilibj.command.Command;
  
 /**
@@ -27,7 +31,21 @@ public class UpOff extends Command {
  
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    }
+    	if (Robot.elevatorSubsystem.getElevatorNativeUnits() > ElevatorSubsystem.ElevatorPresets.BOTTOM.getNativeTicks())
+    	{
+    		Robot.intakeSubsystem.setNeutral(NeutralMode.Coast);
+    		Robot.intakeSubsystem.setIntakeMotorsToSpeed(0, 0);
+    		Robot.intakeSubsystem.setLeftThroatSpeed(0);
+    		Robot.intakeSubsystem.setRightThroatSpeed(0);
+    	}
+    	else
+    	{
+    		Robot.intakeSubsystem.setNeutral(NeutralMode.Brake);
+    	Robot.intakeSubsystem.setIntakeMotorsToSpeed(RobotMap.THROAT_LEFT_HOLD_PERCENT, RobotMap.THROAT_RIGHT_HOLD_PERCENT);
+    	Robot.intakeSubsystem.setLeftThroatSpeed(RobotMap.THROAT_LEFT_HOLD_PERCENT);
+    	Robot.intakeSubsystem.setRightThroatSpeed(RobotMap.THROAT_RIGHT_HOLD_PERCENT);
+    	}
+    	}
     
 
 
@@ -40,6 +58,10 @@ public class UpOff extends Command {
       if (Robot.oi.btnIdle.get() || Robot.oi.btnCloseGate.get())
       {
         return CommandUtils.stateChange(this, new Idle());
+      }
+      if (Robot.oi.btnLeftIntake.get())
+      {
+    	  return CommandUtils.stateChange(this, new UpShoot());
       }
       
       return false;
