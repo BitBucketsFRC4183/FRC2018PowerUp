@@ -34,10 +34,6 @@ public class DownOut extends Command {
  
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-      if (Robot.oi.btnOutIntake.get())
-      {
-        return CommandUtils.stateChange(this, new ThroatPassOff());
-      }
       if (Robot.oi.btnIdle.get() || Robot.oi.btnOpenGate.get() || !Robot.oi.btnOutIntake.get())
       {
         return CommandUtils.stateChange(this, new Idle());
