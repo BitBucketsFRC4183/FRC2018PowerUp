@@ -495,6 +495,7 @@ public class PathPlans
 				Trajectory.Segment segL = selectedTrajectory.left.get(b);
 				Trajectory.Segment segR = selectedTrajectory.right.get(b);
 				out.println(segL.dt + "," + segL.position + "," + segL.velocity + "," + segR.position + "," + segR.velocity);
+				System.out.println(a + " of " + listofRobotTrajectories.length + "files completed");
 			}
 			out.close();
 		}
