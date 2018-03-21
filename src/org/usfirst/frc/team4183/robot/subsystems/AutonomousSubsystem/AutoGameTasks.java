@@ -73,7 +73,7 @@ public class AutoGameTasks extends CommandGroup
 		// NOTE: There are some problems with the ClosedOut actually completing execution
 		// There appears to be an interrupted condition that causes the command to exit early
 		// and prevents this auto sequence from completing correctly
-		addSequential(new org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem.Idle());
+		addSequential(new org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem.DownHold());
 	}
 
 }

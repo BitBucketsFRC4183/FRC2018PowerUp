@@ -5,16 +5,14 @@ import org.usfirst.frc.team4183.robot.Robot.RunMode;
 import org.usfirst.frc.team4183.robot.RobotMap;
 import org.usfirst.frc.team4183.utils.CommandUtils;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
  *
  */
-public class Idle extends Command {
+public class DownHold extends Command {
 
-    public Idle() {
+    public DownHold() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     	requires(Robot.intakeSubsystem);	
@@ -23,14 +21,16 @@ public class Idle extends Command {
     // Called just before this Command runs the first time
     protected void initialize() 
     {
-    	Robot.intakeSubsystem.setNeutral(NeutralMode.Coast);
     	Robot.intakeSubsystem.disable();	// Turn everything off and close it
-    	Robot.intakeSubsystem.intakeUpPivet();
+    	Robot.intakeSubsystem.intakeDownPivet();
     	System.out.println(this.getClass().getSimpleName());
     	}
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	Robot.intakeSubsystem.setLeftThroatSpeed(RobotMap.THROAT_LEFT_HOLD_PERCENT);
+    	Robot.intakeSubsystem.setRightThroatSpeed(RobotMap.THROAT_RIGHT_HOLD_PERCENT);
+    	Robot.intakeSubsystem.setIntakeMotorsToSpeed(RobotMap.THROAT_LEFT_HOLD_PERCENT, RobotMap.THROAT_RIGHT_HOLD_PERCENT);
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -41,20 +41,27 @@ public class Idle extends Command {
     		}
     		
     	}
+    	else if (Robot.oi.btnIdle.get())
+    	{
+    		return CommandUtils.stateChange(this, new Idle());
+    	}
     	 else if (Robot.oi.btnUpIntake.get()) 
          { 
            return CommandUtils.stateChange(this, new UpHold()); 
-         }
-    	 else if (Robot.oi.btnDownIntake.get())
-    	 {
-    		 return CommandUtils.stateChange(this, new DownOff());
-    	 }
+         } 
+         else if (Robot.oi.btnOutIntake.get()) 
+         { 
+           return CommandUtils.stateChange(this, new DownOut()); 
+         }   
+         else if (Robot.oi.btnInIntake.get()) 
+         { 
+           return CommandUtils.stateChange(this, new DownIn()); 
+         } 
     	return false;
     }
 
     // Called once after isFinished returns true
     protected void end() {
-    	Robot.intakeSubsystem.setNeutral(NeutralMode.Brake);
     	Robot.intakeSubsystem.disable();
     }
 

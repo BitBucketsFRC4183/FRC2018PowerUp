@@ -317,6 +317,11 @@ public class DriveSubsystem extends BitBucketsSubsystem
     {
     	return testModeChooser.getSelected();
     }
+    
+    public int getLeftActiveTrajectoryPos()
+    {
+    	return leftFrontMotor.getActiveTrajectoryPosition();
+    }
         
     /// TODO: Should provide more control, see junk bot example for an enumerated
     /// selector that can be different per axis

@@ -33,7 +33,6 @@ public class DriveProfile extends Command {
     	System.out.println(this.getClass().getSimpleName());
     	Robot.driveSubsystem.startTrajectory(trajectory);
     	Robot.driveSubsystem.motionProfileDriver.control();
-    	Robot.autonomousSubsystem.initTrajectoryFollower(trajectory.left);
     	
     }
 
@@ -42,8 +41,6 @@ public class DriveProfile extends Command {
     {
     	Robot.driveSubsystem.motionProfileDriver.control();
     	Robot.driveSubsystem.profileDrive();
-    	Robot.autonomousSubsystem.updatePathFollower();
-    	SmartDashboard.putNumber("Path Completion Percentage", Robot.autonomousSubsystem.getPercentageComplete());
     }
 
     // Make this return true when this Command no longer needs to run execute()
