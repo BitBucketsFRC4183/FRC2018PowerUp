@@ -54,7 +54,8 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 	
 	public static enum ElevatorPresets
 	{
-		BOTTOM(100), MIDDLE(47500), HIGH(117000), TOP(150000);
+		BOTTOM(15), MIDDLE(30000), HIGH(62000), TOP(95000);
+		//BOTTOM(100), MIDDLE(47500), HIGH(117000), TOP(150000);
 		
 		private int nativeTicks;
 		ElevatorPresets(int nativeTicks)
@@ -163,6 +164,18 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 	public ElevatorPositions getElevPos()		/// TODO: inches, meeter, what?
 	{
 		return this.currentElevatorPosition;
+	}
+	
+	public boolean outputDangerZoneInfo()
+	{
+		double currPos = Robot.elevatorSubsystem.getElevatorNativeUnits();
+		double cmd = Robot.oi.rightRampAxis.get();
+		boolean dangerZone = (currPos < RobotMap.ELEVATOR_SAFE_ZONE);
+		
+		boolean restrictCmd = (dangerZone && (cmd < 0));
+		SmartDashboard.putBoolean("Dangerzone", dangerZone);
+		SmartDashboard.putBoolean("Restrict Command", restrictCmd);
+		return dangerZone;
 	}
 	
 	//method that checks if the intake mandibles should be open
@@ -351,6 +364,7 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 
 	@Override
 	public void periodic() {
+		outputDangerZoneInfo();
 		if(telemetryState.getSelected() == SubsystemTelemetryState.ON) {
 			SmartDashboard.putNumber("ElevatorPosition", getElevatorNativeUnits());
 			SmartDashboard.putNumber("ElevatorCurrent", elevatorMotorA.getOutputCurrent());

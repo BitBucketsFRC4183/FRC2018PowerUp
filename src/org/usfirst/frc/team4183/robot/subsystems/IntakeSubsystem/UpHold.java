@@ -41,7 +41,7 @@ public class UpHold extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-      if (Robot.oi.btnOutIntake.get())
+      if (Robot.oi.btnInIntake.get())
       {
         return CommandUtils.stateChange(this, new ThroatPassOff());
       }
@@ -49,7 +49,7 @@ public class UpHold extends Command {
       {
         return CommandUtils.stateChange(this, new DownHold());
       }
-      else if (Robot.oi.btnLeftIntake.get())
+      else if (Robot.oi.btnOutIntake.get() && !Robot.elevatorSubsystem.outputDangerZoneInfo())
       {
     	  return CommandUtils.stateChange(this, new UpShoot());
       }

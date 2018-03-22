@@ -32,10 +32,12 @@ public class RepositionAuto extends Command{
 	
 	public void execute()
 	{
+		/*
 		if (Robot.autonomousSubsystem.getPercentComplete() >  pathCompPercent)
 		{
 		Robot.elevatorSubsystem.holdPosition(requestedPosition);
 		}
+		*/
 		}
 
 	@Override

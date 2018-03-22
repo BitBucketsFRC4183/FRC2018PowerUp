@@ -55,11 +55,12 @@ public class AutonomousSubsystem extends BitBucketsSubsystem
 	}
 	
 	//checks to how much the path has been complete and sees if it is greater than or equal to the passed in parameter
+	/*
 	public double getPercentComplete()
 	{
 		return Robot.driveSubsystem.getLeftActiveTrajectoryPos()/RobotMap.meter2inch(Robot.autonomousSubsystem.lastSetTrajectory.segments.length)/ RobotMap.WHEEL_CIRCUMFERENCE_INCHES;
 	}
-	
+	*/
 	public void initialize()
 	{		
 		autoChooser = new SendableChooser<AutoChoices>();

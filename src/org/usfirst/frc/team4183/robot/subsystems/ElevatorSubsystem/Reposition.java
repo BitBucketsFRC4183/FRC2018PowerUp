@@ -42,13 +42,17 @@ public class Reposition extends Command{
 		if(timeSinceInitialized() - initTime > TIME_FOR_PNEUMATICS) {
 			Robot.oi.sbtnOpenMandible.release();
 			double currPos = Robot.elevatorSubsystem.getElevatorNativeUnits();
-			
+			double cmd = Robot.oi.rightRampAxis.get();
+			boolean dangerZone = (currPos < RobotMap.ELEVATOR_SAFE_ZONE);
+			boolean restrictCmd = (dangerZone && (cmd < 0));
+			SmartDashboard.putBoolean("Dangerzone", dangerZone);
+			SmartDashboard.putBoolean("Restrict Command", restrictCmd);
 			// Use the joystick unless otherwise told to reach a position
 			if (requestedPosition == -1)
 			{
-				Robot.elevatorSubsystem.setSystemPower((currPos > RobotMap.ELEVATOR_SAFE_ZONE) 
-														? Robot.oi.rightRampAxis.get() 
-														: RobotMap.signedSquare(Robot.elevatorSubsystem.limitJoystickCommand(Robot.oi.rightRampAxis.get(), 0.7), 4));
+				Robot.elevatorSubsystem.setSystemPower(( restrictCmd) 
+														? RobotMap.signedSquare(Robot.elevatorSubsystem.limitJoystickCommand(cmd, 0.3), 4) 
+														: cmd);
 			}
 			else
 			{

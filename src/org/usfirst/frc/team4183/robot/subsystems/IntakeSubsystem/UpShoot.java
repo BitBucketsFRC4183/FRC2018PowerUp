@@ -45,7 +45,7 @@ public class UpShoot extends Command {
     protected boolean isFinished() {
       if (timeout_sec == 0)
       {
-      if (!Robot.oi.btnLeftIntake.get())
+      if (!Robot.oi.btnOutIntake.get())
       {
         return CommandUtils.stateChange(this, new UpHold());
       }

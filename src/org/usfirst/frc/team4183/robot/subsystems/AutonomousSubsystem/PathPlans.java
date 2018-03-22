@@ -113,7 +113,7 @@ public class PathPlans
     {
 		new Waypoint(0,                     0,     Pathfinder.d2r(0)),
 		new Waypoint(0.864,     -0.699-0.3048,     Pathfinder.d2r(-45)),
-		new Waypoint(2.317,     -1.245-0.3048,     Pathfinder.d2r(0)),	    		
+		new Waypoint(2.317+.6,     -1.245-0.3048,     Pathfinder.d2r(0)),	    		
     };
     
     private static Waypoint[] leftStartMoveOnlyPath = new Waypoint[]
@@ -138,7 +138,7 @@ public class PathPlans
     {
     		new Waypoint(0,              0, Pathfinder.d2r(0)),
     		new Waypoint(0.8382,    0.9096, Pathfinder.d2r(40)),	// Includes y-bias
-    		new Waypoint(2.6138,    1.3668, Pathfinder.d2r(0))		// Includes y-bias
+    		new Waypoint(2.6138+.3,    1.3668, Pathfinder.d2r(0))		// Includes y-bias
     };
     
     private static Waypoint[] rightStartRightSwitchPath = new Waypoint[]
