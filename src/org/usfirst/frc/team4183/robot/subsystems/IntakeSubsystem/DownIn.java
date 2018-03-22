@@ -35,9 +35,17 @@ public class DownIn extends Command {
       {
         return CommandUtils.stateChange(this, new ThroatPassOff());
       }
-      if (Robot.oi.btnIdle.get() || Robot.oi.btnOpenGate.get() || !Robot.oi.btnInIntake.get())
+      else if (!Robot.oi.btnInIntake.get())
       {
-        return CommandUtils.stateChange(this, new Idle());
+        return CommandUtils.stateChange(this, new DownHold());
+      }
+      else if (Robot.oi.btnUpIntake.get())
+      {
+    	  return CommandUtils.stateChange(this, new UpHold());
+      }
+      else if (Robot.oi.btnIdle.get())
+      {
+    	  return CommandUtils.stateChange(this, new Idle());
       }
       
       return false;

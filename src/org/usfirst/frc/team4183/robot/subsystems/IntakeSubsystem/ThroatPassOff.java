@@ -32,17 +32,18 @@ public class ThroatPassOff extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
         Robot.intakeSubsystem.setLeftThroatSpeed(-RobotMap.THROAT_MOTOR_PERCENT);
+        Robot.intakeSubsystem.setRightThroatSpeed(-RobotMap.THROAT_MOTOR_PERCENT);
       }
    
       // Make this return true when this Command no longer needs to run execute()
       protected boolean isFinished() {
         if (!Robot.oi.btnOutIntake.get())
         {
-          return CommandUtils.stateChange(this, new UpOff());
+          return CommandUtils.stateChange(this, new UpHold());
         }
         if (Robot.oi.btnIdle.get())
         {
-          return CommandUtils.stateChange(this, new Idle());
+          return CommandUtils.stateChange(this, new DownHold());
         }
         
         return false;

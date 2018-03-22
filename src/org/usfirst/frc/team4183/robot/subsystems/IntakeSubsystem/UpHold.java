@@ -13,9 +13,9 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class UpOff extends Command {
+public class UpHold extends Command {
  
-    public UpOff() {
+    public UpHold() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
       requires(Robot.intakeSubsystem);  
@@ -31,37 +31,31 @@ public class UpOff extends Command {
  
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	if (Robot.elevatorSubsystem.getElevatorNativeUnits() > ElevatorSubsystem.ElevatorPresets.BOTTOM.getNativeTicks())
-    	{
-    		Robot.intakeSubsystem.setNeutral(NeutralMode.Coast);
-    		Robot.intakeSubsystem.setIntakeMotorsToSpeed(0, 0);
-    		Robot.intakeSubsystem.setLeftThroatSpeed(0);
-    		Robot.intakeSubsystem.setRightThroatSpeed(0);
-    	}
-    	else
-    	{
     		Robot.intakeSubsystem.setNeutral(NeutralMode.Brake);
     	Robot.intakeSubsystem.setIntakeMotorsToSpeed(RobotMap.THROAT_LEFT_HOLD_PERCENT, RobotMap.THROAT_RIGHT_HOLD_PERCENT);
     	Robot.intakeSubsystem.setLeftThroatSpeed(RobotMap.THROAT_LEFT_HOLD_PERCENT);
     	Robot.intakeSubsystem.setRightThroatSpeed(RobotMap.THROAT_RIGHT_HOLD_PERCENT);
-    	}
     	}
     
 
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-      if (Robot.oi.btnOutIntake.get())
+      if (Robot.oi.btnInIntake.get())
       {
         return CommandUtils.stateChange(this, new ThroatPassOff());
       }
-      if (Robot.oi.btnIdle.get() || Robot.oi.btnCloseGate.get())
+      else if (Robot.oi.btnDownIntake.get())
       {
-        return CommandUtils.stateChange(this, new Idle());
+        return CommandUtils.stateChange(this, new DownHold());
       }
-      if (Robot.oi.btnLeftIntake.get())
+      else if (Robot.oi.btnOutIntake.get() && !Robot.elevatorSubsystem.outputDangerZoneInfo())
       {
     	  return CommandUtils.stateChange(this, new UpShoot());
+      }
+      else if (Robot.oi.btnIdle.get() || Robot.elevatorSubsystem.getElevatorNativeUnits() > ElevatorSubsystem.ElevatorPresets.BOTTOM.getNativeTicks())
+      {
+    	  return CommandUtils.stateChange(this, new Idle());
       }
       
       return false;

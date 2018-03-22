@@ -60,8 +60,8 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 		
 		setNeutral(NeutralMode.Coast);
 		
-		leftIntakeMotor.setInverted(false);
-		rightIntakeMotor.setInverted(true);
+		leftIntakeMotor.setInverted(true);
+		rightIntakeMotor.setInverted(false);
 		
 		throatMotorA.configNeutralDeadband(0.0, RobotMap.CONTROLLER_TIMEOUT_MS);
 		throatMotorB.configNeutralDeadband(0.0, RobotMap.CONTROLLER_TIMEOUT_MS);
@@ -310,7 +310,7 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 
 	public void initialize() {
 		// TODO Auto-generated method stub
-		    UpOff initialCommand = new UpOff(); 
+		    Idle initialCommand = new Idle(); 
 		    initialCommand.start(); 
 		
 	}
