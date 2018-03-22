@@ -24,7 +24,7 @@ public class RobotMap
 			return 0;
 	}
 	
-	public static double signedSquare(double base, double power)
+	public static double signedPow(double base, double power)
 	{
 		if(base > 0)
 			return Math.pow(base, power);
@@ -176,7 +176,11 @@ public class RobotMap
    		public static final double ELEVATOR_TICKS_PER_INCH = 8192/4.5;
    		public static final double ELEVATOR_SAFE_ZONE = 12 * ELEVATOR_TICKS_PER_INCH;
    		public static final int    ELEVATOR_MOTOR_NATIVE_TICKS_PER_REV = 8192;
-   		public static final double ELEVATOR_MOTOR_FULL_THROTTLE_AVERAGE_SPEED_NATIVE_TICKS = 26447.5;	// per 100 ms, average of 10 samples
+   		public static final double ELEVATOR_MOTOR_FULL_THROTTLE_AVERAGE_SPEED_NATIVE_TICKS = 26447.5;	// per 100 ms, average of samples
+   		public static final double ELEVATOR_MOTOR_FULL_THROTTLE_RPS = (ELEVATOR_MOTOR_FULL_THROTTLE_AVERAGE_SPEED_NATIVE_TICKS * 10) / ELEVATOR_MOTOR_NATIVE_TICKS_PER_REV;
+   		public static final double ELEVATOR_MAX_SPEED_INCHES_PER_SECOND = ELEVATOR_SPROCKET_CIRCUMFERENCE_INCHES * ELEVATOR_MOTOR_FULL_THROTTLE_RPS;
+   		public static final double ELEVATOR_MAX_USER_SPEED_INCHES_PER_SECOND = 6.0;
+   		public static final double ELEVATOR_MAX_USER_SPEED_PERCENT_POWER = ELEVATOR_MAX_USER_SPEED_INCHES_PER_SECOND / ELEVATOR_MAX_SPEED_INCHES_PER_SECOND;
    		public static final int    ELEVATOR_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS = (int)(0.80 * 
                 ELEVATOR_MOTOR_FULL_THROTTLE_AVERAGE_SPEED_NATIVE_TICKS);
    		public static final int    ELEVATOR_MOTOR_MOTION_ACCELERATION_NATIVE_TICKS = ELEVATOR_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS;

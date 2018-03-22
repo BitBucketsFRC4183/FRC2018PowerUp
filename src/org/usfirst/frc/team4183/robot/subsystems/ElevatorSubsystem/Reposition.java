@@ -38,21 +38,41 @@ public class Reposition extends Command{
 	
 	public void execute()
 	{
-		
-		if(timeSinceInitialized() - initTime > TIME_FOR_PNEUMATICS) {
+		/// TODO: Need to clean this up... the pneuma delay is only needed if we have them
+		/// AND we are moving down AND only if we are in the danger zone (which needs to
+		/// account for a cube present on the way down)
+		if(timeSinceInitialized() - initTime > TIME_FOR_PNEUMATICS) 
+		{
 			Robot.oi.sbtnOpenMandible.release();
+
+			/// TODO: Move this to Elevator Subsystem API and query that here
+			/// The consideration of the logic for this may need to be moved into 
+			/// the state that transitioned here (vs being here)... i.e., if
+			/// the elevator is moving down we will want to move the intake mechanism
+			/// down just in case there is a cube present. The delay (above) then only
+			/// needs to be applied under those conditions
 			double currPos = Robot.elevatorSubsystem.getElevatorNativeUnits();
-			double cmd = Robot.oi.rightRampAxis.get();
 			boolean dangerZone = (currPos < RobotMap.ELEVATOR_SAFE_ZONE);
+			
+			double cmd = Robot.oi.rightRampAxis.get();
+			
 			boolean restrictCmd = (dangerZone && (cmd < 0));
-			SmartDashboard.putBoolean("Dangerzone", dangerZone);
-			SmartDashboard.putBoolean("Restrict Command", restrictCmd);
+			
 			// Use the joystick unless otherwise told to reach a position
 			if (requestedPosition == -1)
 			{
-				Robot.elevatorSubsystem.setSystemPower(( restrictCmd) 
-														? RobotMap.signedSquare(Robot.elevatorSubsystem.limitJoystickCommand(cmd, 0.3), 4) 
-														: cmd);
+				// Using the joystick is tricky because there is so much gain in the system
+				// When under manual control we severely restrict the commands to prevent
+				// breaking the elevator.
+				// In the past we allowed full control outside critical zones but now with
+				// the higher gain at the gearbox the operator is not fast enough not has
+				// good enough control over the joystick to really move the elevator with
+				// any reasonable accuracy except if going slow.
+				// Since manual control is for minor adjustments we will restrict the movement
+				// to about 4 to 6 inches per second, which should allow the operator time to visually
+				// see and then respond to a the condition and successfully stop without overshoot.
+
+				Robot.elevatorSubsystem.setSystemPower(RobotMap.ELEVATOR_MAX_USER_SPEED_PERCENT_POWER * cmd);
 			}
 			else
 			{
@@ -76,7 +96,6 @@ public class Reposition extends Command{
 			 (Robot.oi.rightRampAxis.get() < 0)) ||
 			((requestedPosition != -1) && 
 			 Robot.elevatorSubsystem.isMoveComplete(requestedPosition)) 
-			//|| (currPos >= ElevatorPresets.TOP.getNativeTicks())
 			)
 		{
 			return CommandUtils.stateChange(this, new Idle());

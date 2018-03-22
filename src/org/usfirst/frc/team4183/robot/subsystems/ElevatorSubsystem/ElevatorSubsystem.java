@@ -34,24 +34,7 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 	private static SendableChooser<SubsystemTelemetryState> telemetryState;
 	
 	Faults elevatorMotorAFaults = new Faults();
-	
-	static enum ElevatorPositions
-	{
-		/// TODO: Change to inches, millimeters or meters
-		SCALE(10000), SWITCH(1000), TRANS(500), INIT(0), MANUAL(-2), TRIGGER(600);
 		
-		private int nativeTicks;
-		ElevatorPositions(int nativeTicks)
-		{
-			this.nativeTicks = nativeTicks;
-		}
-		
-		public int getNativeTicks()
-		{
-			return this.nativeTicks;
-		}
-	}
-	
 	public static enum ElevatorPresets
 	{
 		BOTTOM(15), MIDDLE(30000), HIGH(62000), TOP(95000);
@@ -79,9 +62,7 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 	
 	//adjust this later for the driver control
 	private final int deltaPos = UNITS_PER_FEET;
-	
-	ElevatorPositions currentElevatorPosition = ElevatorPositions.INIT;
-	
+		
 	//This is used to open the intake mandible if the position is too close.
 
 	public ElevatorSubsystem()
@@ -154,18 +135,7 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 		throatMotorA.set(ControlMode.PercentOutput,0);
 		throatMotorB.set(ControlMode.PercentOutput,0);
 	}
-	
-	
-	public void setElevPos(ElevatorPositions elevPos)		/// TODO: inches, meters, what?
-	{
-		this.currentElevatorPosition = elevPos;
-	}
-	
-	public ElevatorPositions getElevPos()		/// TODO: inches, meeter, what?
-	{
-		return this.currentElevatorPosition;
-	}
-	
+		
 	public boolean outputDangerZoneInfo()
 	{
 		double currPos = Robot.elevatorSubsystem.getElevatorNativeUnits();
@@ -177,29 +147,6 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 		SmartDashboard.putBoolean("Restrict Command", restrictCmd);
 		return dangerZone;
 	}
-	
-	//method that checks if the intake mandibles should be open
-	public boolean posGreaterThanMin()
-	{
-		return (elevatorMotorA.getSelectedSensorPosition(RobotMap.PRIMARY_PID_LOOP) > ElevatorPositions.TRIGGER.getNativeTicks());
-	}
-	
-	public boolean closeToDesiredPos()
-	{
-		return (Math.abs(elevatorMotorA.getSelectedSensorPosition(RobotMap.PRIMARY_PID_LOOP)-currentElevatorPosition.getNativeTicks()) < RobotMap.ELEVATOR_POSITION_TOLERANCE_NATIVE_TICKS);
-	}
-	//returns true if the elevator is close to the floor Position
-	public boolean posCloseToInit()
-	{
-		if (Math.abs(elevatorMotorA.getSelectedSensorPosition(RobotMap.PRIMARY_PID_LOOP)-ElevatorPositions.INIT.getNativeTicks()) < RobotMap.ELEVATOR_POSITION_TOLERANCE_NATIVE_TICKS)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
 
 	//holds the current Encoder position MAKE SURE TO SET THIS METHOD TO FALSE AFTER HOLDING POSITION TO RESET HOLDUNITS
 	public void holdEncodPos(boolean holdUnitsBol)
@@ -210,28 +157,18 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 			{
 				holdUnits = elevatorMotorA.getSelectedSensorPosition(RobotMap.PRIMARY_PID_LOOP);
 			}
-			goToPosition(holdUnits);
+			holdPosition(holdUnits);
 		}
 		else
 		{
-		holdUnits = 0;
+			holdUnits = 0;
 		}
-		}
-	public void engageBrake()
-	{
-		brakePneu.set(DoubleSolenoid.Value.kForward);
-	}
-	
-	public void disengageBrake()
-	{
-		brakePneu.set(DoubleSolenoid.Value.kReverse);
 	}
 	
 	//return true if a cube is present
 	
 	public void releasePos()
 	{
-		disengageBrake();
 		holdEncodPos(false);
 	}
 	
@@ -239,7 +176,6 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 	public void holdPos()
 	{
 		holdEncodPos(true);
-		engageBrake();
 		setAllMotorsZero();
 	}
 	
@@ -259,15 +195,10 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 	
 	public void addToPosition(double joyStickVal) /// TODO: Change concept to small rate control then capture position and hold
 	{											  /// otherwise the operator will have to continue to hold joystick and elevator will move
-		goToPosition((int)(elevatorMotorA.getSelectedSensorPosition(RobotMap.PRIMARY_PID_LOOP)+Math.floor(joyStickVal*deltaPos)));
+		holdPosition((int)(elevatorMotorA.getSelectedSensorPosition(RobotMap.PRIMARY_PID_LOOP)+Math.floor(joyStickVal*deltaPos)));
 		
 	}
-	
-	public void goToPosition(int ticks)
-	{
-		elevatorMotorA.set(ControlMode.MotionMagic, ticks);
-	}
-	
+		
 	public void setAllMotorsZero()
 	{
 		elevatorMotorA.set(ControlMode.PercentOutput,0);
