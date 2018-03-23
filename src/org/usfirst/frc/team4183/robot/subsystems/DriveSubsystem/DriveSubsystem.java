@@ -7,6 +7,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import cheesecakeDrive.CheesecakeDrive;
+import cheesecakeDrive.CheesecakeSpeedController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -780,8 +781,12 @@ public class DriveSubsystem extends BitBucketsSubsystem
 
 	public void initializeCheesecake() 
 	{
-		WPI_TalonSRX left = (WPI_TalonSRX) leftFrontMotor;
-		WPI_TalonSRX right = (WPI_TalonSRX) rightFrontMotor;
+		// We expect teams that need cheesecake to also be using the WPI classes that look like
+		// speed controllers. Since we are using the TalonSRX class directly, we have a class that
+		// allows either TalonSRX or VictorSPX direct definitions to look like a speed controller
+		// This allows us to test our own cheesecake implementation
+		CheesecakeSpeedController<TalonSRX> left = new CheesecakeSpeedController<TalonSRX>(leftFrontMotor);
+		CheesecakeSpeedController<TalonSRX> right = new CheesecakeSpeedController<TalonSRX>(rightFrontMotor);
 		cheesecake = new CheesecakeDrive(left, right);
 		
 		cheesecake.initialize();

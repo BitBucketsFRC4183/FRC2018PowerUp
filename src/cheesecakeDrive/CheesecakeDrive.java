@@ -2,21 +2,20 @@ package cheesecakeDrive;
 
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 /***
  * This class is type of cheesecaking that we give to all teams in the competition that don't have an auto.
  * @author rommac100
  */
 
-
 public class CheesecakeDrive 
 {
-	private SpeedController leftDrive;
-	private SpeedController rightDrive;
 	
+	private SpeedController leftSpeedController;
+	private SpeedController rightSpeedController;
+
 	private Timer driveTimer;
+	
 	
 	/// TODO: Add a delay timer and a delay argument to drive
 	/// Will have to change initialization sequence to start the delay timer
@@ -25,8 +24,8 @@ public class CheesecakeDrive
 
 	public CheesecakeDrive(SpeedController leftDriveParr, SpeedController rightDriveParr)
 	{
-		leftDrive = leftDriveParr;
-		rightDrive = rightDriveParr;
+		leftSpeedController = leftDriveParr;
+		rightSpeedController = rightDriveParr;
 		driveTimer = new Timer();
 	}
 		
@@ -52,13 +51,13 @@ public class CheesecakeDrive
 		// Keep commanding the motors until the timer reaches the stop time
 		if (driveTimer.get() < stopTime_seconds)
 		{
-			leftDrive.set(pwr);
-			rightDrive.set(pwr);
+			leftSpeedController.set(pwr);
+			rightSpeedController.set(pwr);
 		}
 		else
 		{
-			leftDrive.set(0);
-			rightDrive.set(0);
+			leftSpeedController.set(0);
+			rightSpeedController.set(0);
 		}
 	}
 }
