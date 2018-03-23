@@ -17,7 +17,6 @@ import org.usfirst.frc.team4183.robot.Robot;
 import org.usfirst.frc.team4183.robot.RobotMap;
 import org.usfirst.frc.team4183.utils.Deadzone;
 import org.usfirst.frc.team4183.robot.subsystems.BitBucketsSubsystem;
-import org.usfirst.frc.team4183.robot.subsystems.AutonomousSubsystem.AutonomousSubsystem.TrajectoryPercent;
 import org.usfirst.frc.team4183.robot.subsystems.SubsystemUtilities.DiagnosticsInformation;
 import org.usfirst.frc.team4183.robot.subsystems.SubsystemUtilities.DiagnosticsState;
 import org.usfirst.frc.team4183.robot.subsystems.SubsystemUtilities.SubsystemTelemetryState;
@@ -63,6 +62,14 @@ public class DriveSubsystem extends BitBucketsSubsystem
 	
 	private Trajectory lastSetTrajectory;
 	private boolean trajSet =false;
+	
+	public enum TrajectoryPercent
+	{
+		PASSED,
+		NOT_PASSED,
+		FAULT
+	}
+	
 	
 	enum TestSubmodes
 	{

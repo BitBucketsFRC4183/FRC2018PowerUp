@@ -40,12 +40,6 @@ public class AutonomousSubsystem extends BitBucketsSubsystem
 		
 	}
 	
-	public enum TrajectoryPercent
-	{
-		PASSED,
-		NOT_PASSED,
-		FAULT
-	}
 	
 	//checks to how much the path has been complete and sees if it is greater than or equal to the passed in parameter
 	

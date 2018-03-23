@@ -3,6 +3,7 @@ package org.usfirst.frc.team4183.robot.subsystems.ElevatorSubsystem;
 import org.usfirst.frc.team4183.robot.Robot;
 import org.usfirst.frc.team4183.robot.RobotMap;
 import org.usfirst.frc.team4183.robot.subsystems.AutonomousSubsystem.AutonomousSubsystem;
+import org.usfirst.frc.team4183.robot.subsystems.DriveSubsystem.DriveSubsystem;
 import org.usfirst.frc.team4183.robot.subsystems.ElevatorSubsystem.ElevatorSubsystem.ElevatorPresets;
 import org.usfirst.frc.team4183.utils.CommandUtils;
 
@@ -17,6 +18,8 @@ public class Reposition extends Command{
 	private final double TIME_FOR_PNEUMATICS = 0.5;
 	
 	private int requestedPosition = -1; // Use -1 as indicator for joystice
+	
+	
 	
 	private double targetPathPerc = -1;
 	public Reposition()
@@ -92,11 +95,11 @@ public class Reposition extends Command{
 		}
 		else if (targetPathPerc > 0)
 		{
-			if (Robot.driveSubsystem.getPercentComplete(.6) == AutonomousSubsystem.TrajectoryPercent.PASSED)
+			if (Robot.driveSubsystem.getPercentComplete(.6) == DriveSubsystem.TrajectoryPercent.PASSED)
 			{
 			Robot.elevatorSubsystem.holdPosition(requestedPosition);
 			}
-			else if (Robot.driveSubsystem.getPercentComplete(.6) == AutonomousSubsystem.TrajectoryPercent.FAULT)
+			else if (Robot.driveSubsystem.getPercentComplete(.6) == DriveSubsystem.TrajectoryPercent.FAULT)
 			{
 				System.out.println("ERROR GETTING TRAJECTORY");
 				Robot.elevatorSubsystem.disable();
