@@ -25,8 +25,6 @@ public class AutonomousSubsystem extends BitBucketsSubsystem
 	
 	//these are used for the pathFollower
 	private EncoderFollower pathTracker;
-	private Trajectory lastSetTrajectory;
-	private boolean trajSet =false;
 	
 	public enum AutoChoices
 	{
@@ -49,29 +47,8 @@ public class AutonomousSubsystem extends BitBucketsSubsystem
 		FAULT
 	}
 	
-	public void storeActiveLeftTrajectory(Trajectory aTraj)
-	{
-	    	lastSetTrajectory = aTraj;
-	    	trajSet = true;
-	}
-	
 	//checks to how much the path has been complete and sees if it is greater than or equal to the passed in parameter
 	
-	public TrajectoryPercent getPercentComplete(double pathCompPercent)
-	{
-		if (trajSet)
-		{
-			if (Robot.driveSubsystem.getLeftActiveTrajectoryPos()/RobotMap.meter2inch(lastSetTrajectory.segments.length)/RobotMap.WHEEL_CIRCUMFERENCE_INCHES > pathCompPercent)
-			{
-				return TrajectoryPercent.PASSED;
-			}
-			else
-			{
-				return TrajectoryPercent.NOT_PASSED;
-			}
-		}
-		return TrajectoryPercent.FAULT;
-	}
 	public void initialize()
 	{		
 		autoChooser = new SendableChooser<AutoChoices>();

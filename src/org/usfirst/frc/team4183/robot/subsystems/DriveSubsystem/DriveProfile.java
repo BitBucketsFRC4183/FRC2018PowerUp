@@ -21,7 +21,7 @@ public class DriveProfile extends Command {
     	requires(Robot.driveSubsystem);
     	
     	trajectory = aTrajectory;
-    	Robot.autonomousSubsystem.storeActiveLeftTrajectory(trajectory.left);
+    	Robot.driveSubsystem.storeActiveLeftTrajectory(trajectory.left);
     	
     	// Timeout is set to 2 seconds beyond the estimated trajectory length based on the 
     	// sum of all delta-t values (assumed to be monotonic)

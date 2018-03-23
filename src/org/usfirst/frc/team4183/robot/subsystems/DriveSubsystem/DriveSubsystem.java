@@ -17,6 +17,7 @@ import org.usfirst.frc.team4183.robot.Robot;
 import org.usfirst.frc.team4183.robot.RobotMap;
 import org.usfirst.frc.team4183.utils.Deadzone;
 import org.usfirst.frc.team4183.robot.subsystems.BitBucketsSubsystem;
+import org.usfirst.frc.team4183.robot.subsystems.AutonomousSubsystem.AutonomousSubsystem.TrajectoryPercent;
 import org.usfirst.frc.team4183.robot.subsystems.SubsystemUtilities.DiagnosticsInformation;
 import org.usfirst.frc.team4183.robot.subsystems.SubsystemUtilities.DiagnosticsState;
 import org.usfirst.frc.team4183.robot.subsystems.SubsystemUtilities.SubsystemTelemetryState;
@@ -60,8 +61,8 @@ public class DriveSubsystem extends BitBucketsSubsystem
 	
 	public MotionProfileDriver motionProfileDriver;
 	
-	private Trajectory currLeftSetTrajectory;
-	private boolean trajSet = false;
+	private Trajectory lastSetTrajectory;
+	private boolean trajSet =false;
 	
 	enum TestSubmodes
 	{
@@ -334,6 +335,13 @@ public class DriveSubsystem extends BitBucketsSubsystem
 		return Math.signum(x) * (x*x);
 	}
     
+    
+    public void storeActiveLeftTrajectory(Trajectory aTraj)
+	{
+	    	lastSetTrajectory = aTraj;
+	    	trajSet = true;
+	}
+    
     //Have this so we can get feedback to where we are in the path
 	
     
@@ -559,6 +567,22 @@ public class DriveSubsystem extends BitBucketsSubsystem
 		double rightFront = -rightFrontMotor.getOutputCurrent() * Math.signum( rightFrontMotor.getMotorOutputVoltage());
 		double rightRear = -rightRearMotor.getOutputCurrent() * Math.signum( rightRearMotor.getMotorOutputVoltage());
 		return (leftFront + leftRear + rightFront + rightRear)/4.0;
+	}
+	
+	public TrajectoryPercent getPercentComplete(double pathCompPercent)
+	{
+		if (trajSet)
+		{
+			if (Robot.driveSubsystem.getLeftActiveTrajectoryPos()/RobotMap.meter2inch(lastSetTrajectory.segments.length)/RobotMap.WHEEL_CIRCUMFERENCE_INCHES > pathCompPercent)
+			{
+				return TrajectoryPercent.PASSED;
+			}
+			else
+			{
+				return TrajectoryPercent.NOT_PASSED;
+			}
+		}
+		return TrajectoryPercent.FAULT;
 	}
 	
 	public double getPosition_inch() {
