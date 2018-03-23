@@ -62,7 +62,7 @@ public class CheesecakeDrive
 	public void drive(double pwr, double stopTime_seconds, Direction direction)
 	{				
 		// Keep commanding the motors until the timer reaches the stop time
-		while (driveTimer.get() < stopTime_seconds)
+		if (driveTimer.get() < stopTime_seconds)
 		{
 			if (direction == Direction.REVERSE)
 			{
@@ -71,8 +71,10 @@ public class CheesecakeDrive
 			leftDrive.set(pwr);
 			rightDrive.set(pwr);
 		}
-		
-		leftDrive.set(0);
-		rightDrive.set(0);
+		else
+		{
+			leftDrive.set(0);
+			rightDrive.set(0);
+		}
 	}
 }
