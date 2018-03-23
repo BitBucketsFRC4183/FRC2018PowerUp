@@ -1,15 +1,12 @@
 package org.usfirst.frc.team4183.robot.subsystems.DriveSubsystem;
 
-import com.ctre.phoenix.motion.TrajectoryPoint;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
-import edu.wpi.first.wpilibj.Notifier;
-import edu.wpi.first.wpilibj.SpeedController;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import cheesecakeDrive.CheesecakeDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -21,11 +18,7 @@ import org.usfirst.frc.team4183.robot.subsystems.SubsystemUtilities.DiagnosticsI
 import org.usfirst.frc.team4183.robot.subsystems.SubsystemUtilities.DiagnosticsState;
 import org.usfirst.frc.team4183.robot.subsystems.SubsystemUtilities.SubsystemTelemetryState;
 
-import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
-import jaci.pathfinder.Waypoint;
-import jaci.pathfinder.followers.EncoderFollower;
-import jaci.pathfinder.modifiers.TankModifier;
 import org.usfirst.frc.team4183.utils.JoystickScale;
 import org.usfirst.frc.team4183.utils.RobotTrajectory;
 
@@ -62,6 +55,9 @@ public class DriveSubsystem extends BitBucketsSubsystem
 	
 	private Trajectory lastSetTrajectory;
 	private boolean trajSet =false;
+
+
+	private CheesecakeDrive cheesecake;
 	
 	public enum TrajectoryPercent
 	{
@@ -473,15 +469,6 @@ public class DriveSubsystem extends BitBucketsSubsystem
 		rightFrontMotor.set(ControlMode.PercentOutput, 0.0);
 		rightRearMotor.set(ControlMode.PercentOutput, 0.0);			
 	}
-	private void setupClosedLoopMaster( TalonSRX m) 
-	{
-		// TODO: New functions provide ErrorCode feedback if there is a problem setting up the controller
-		
-
-		m.setSelectedSensorPosition(0, 0, RobotMap.CONTROLLER_TIMEOUT_MS);	// Zero the sensor where we are right now
-		m.set(ControlMode.MotionMagic, 0.0);		
-	}
-	
 	/// TODO: This is redundant with other similar functions
 	public void doLockDrive(double value) 
 	{
@@ -789,6 +776,20 @@ public class DriveSubsystem extends BitBucketsSubsystem
 	{
 		leftFrontMotor.set(ControlMode.MotionProfile,  motionProfileDriver.getSetValue().value);
 		rightFrontMotor.set(ControlMode.MotionProfile,  motionProfileDriver.getSetValue().value);
+	}
+
+	public void initializeCheesecake() 
+	{
+		WPI_TalonSRX left = (WPI_TalonSRX) leftFrontMotor;
+		WPI_TalonSRX right = (WPI_TalonSRX) rightFrontMotor;
+		cheesecake = new CheesecakeDrive(left, right);
+		
+		cheesecake.initialize();
+	}
+	
+	public void driveCheesecake(double pwr, double stopTime_sec)
+	{
+		cheesecake.drive(pwr, stopTime_sec);
 	}
 
 }

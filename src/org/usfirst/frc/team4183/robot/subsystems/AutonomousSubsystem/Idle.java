@@ -57,7 +57,8 @@ public class Idle extends Command {
     				move_turn.start();
     				break;
     			case DRIVE_PROFILE_TEST:
-    				
+    			
+    			case OFF:
 				default:
 					break;
     			}

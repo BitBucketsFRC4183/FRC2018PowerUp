@@ -18,30 +18,13 @@ public class CheesecakeDrive
 	
 	private Timer driveTimer;
 
-	CheesecakeDrive(SpeedController leftDriveParr, SpeedController rightDriveParr)
+	public CheesecakeDrive(SpeedController leftDriveParr, SpeedController rightDriveParr)
 	{
 		leftDrive = leftDriveParr;
 		rightDrive = rightDriveParr;
 		driveTimer = new Timer();
 	}
-	
-	enum Direction
-	{
-		FORWARD(1),REVERSE(-1);
 		
-		private final double powerDir;
-		
-		Direction(double pow)
-		{
-			this.powerDir = pow;
-		}
-		
-		double getPowDir()
-		{
-			return powerDir;
-		}
-	}
-	
 	/***
 	 * initialize - call in autonomousInit or whenever the timer needs to be reset
 	 */
@@ -59,15 +42,11 @@ public class CheesecakeDrive
 	 * @param stopTime_sec - the number of seconds to run the motors
 	 * @param A enumeration which has the two values Forward and Backwards and returns -1 or 1 in order to flip the direction of movement
 	 */
-	public void drive(double pwr, double stopTime_seconds, Direction direction)
+	public void drive(double pwr, double stopTime_seconds)
 	{				
 		// Keep commanding the motors until the timer reaches the stop time
 		if (driveTimer.get() < stopTime_seconds)
 		{
-			if (direction == Direction.REVERSE)
-			{
-				pwr = -pwr;
-			}
 			leftDrive.set(pwr);
 			rightDrive.set(pwr);
 		}

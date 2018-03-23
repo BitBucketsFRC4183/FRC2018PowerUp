@@ -30,7 +30,8 @@ public class AutonomousSubsystem extends BitBucketsSubsystem
 	{
 		PLAY_GAME,
 		MOVE_TURN_TEST,
-		DRIVE_PROFILE_TEST
+		DRIVE_PROFILE_TEST,
+		OFF					// When testing cheesecake
 	}
 	private static SendableChooser<AutoChoices> autoChooser;
 	
@@ -49,6 +50,7 @@ public class AutonomousSubsystem extends BitBucketsSubsystem
 		autoChooser.addDefault("PLAY GAME", AutoChoices.PLAY_GAME);
 		autoChooser.addObject("MOVE TURN TEST", AutoChoices.MOVE_TURN_TEST);
 		autoChooser.addObject("DRIVE PROFILE TEST", AutoChoices.DRIVE_PROFILE_TEST);
+		autoChooser.addObject("OFF", AutoChoices.OFF);
 		SmartDashboard.putData( "Auto Choices", autoChooser);
 		
 		PathPlans.initialize();	

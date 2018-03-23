@@ -8,6 +8,7 @@ package org.usfirst.frc.team4183.robot;
 import java.util.HashSet;
 import java.util.Set;
 import org.usfirst.frc.team4183.robot.subsystems.AutonomousSubsystem.AutonomousSubsystem;
+import org.usfirst.frc.team4183.robot.subsystems.AutonomousSubsystem.AutonomousSubsystem.AutoChoices;
 import org.usfirst.frc.team4183.robot.subsystems.AutonomousSubsystem.PathPlans;
 import org.usfirst.frc.team4183.robot.subsystems.ClimberSubsystem.ClimberSubsystem;
 import org.usfirst.frc.team4183.robot.subsystems.DriveSubsystem.DriveSubsystem;
@@ -89,7 +90,7 @@ public class Robot extends IterativeRobot {
 		
 		autonomousSubsystem = new AutonomousSubsystem();
 		autonomousSubsystem.initialize();
-				
+						
 		diagInformation = new SendableChooser<DiagnosticsInformation>();
 		diagInformation.addDefault("Subsystem_Basic", DiagnosticsInformation.SUBSYSTEM_BASIC);
 		diagInformation.addObject("Subsystem_Extended", DiagnosticsInformation.SUBSYSTEM_EXTENDED);
@@ -172,6 +173,13 @@ public class Robot extends IterativeRobot {
 		initializePhysicalSubsystems();
 		
 		autonomousSubsystem.start();
+		
+		if (autonomousSubsystem.getAutoChoice() == AutoChoices.OFF)
+		{
+			// Ask DriveSubsystem to run cheesecake because that is where we have the motors
+			// Each team's code will be different, but this is how we test it for ourselves
+			driveSubsystem.initializeCheesecake();
+		}
 
 	}
 	/**
@@ -181,6 +189,15 @@ public class Robot extends IterativeRobot {
 	public void autonomousPeriodic() {
 		runWatch.start();
 		Scheduler.getInstance().run();
+		if (autonomousSubsystem.getAutoChoice() == AutoChoices.OFF)
+		{
+			// Ask DriveSubsystem to run cheesecake
+			// We do this to test it
+			// Drive approximately 1.5 to 2 ft/s for 5.5 seconds (i.e., 8 to 11 feet)
+			// In our case 0.1 is 1.9 ft/s assuming free speed of 19 ft/s at max power
+			driveSubsystem.driveCheesecake(0.1, 5.5);	// MAGIC NUMBERS, yes, but that is how we would do it
+		}
+		
 		runWatch.stop();
 	}
 	@Override
