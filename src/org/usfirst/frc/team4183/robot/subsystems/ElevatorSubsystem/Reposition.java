@@ -2,6 +2,7 @@ package org.usfirst.frc.team4183.robot.subsystems.ElevatorSubsystem;
 
 import org.usfirst.frc.team4183.robot.Robot;
 import org.usfirst.frc.team4183.robot.RobotMap;
+import org.usfirst.frc.team4183.robot.subsystems.AutonomousSubsystem.AutonomousSubsystem;
 import org.usfirst.frc.team4183.robot.subsystems.ElevatorSubsystem.ElevatorSubsystem.ElevatorPresets;
 import org.usfirst.frc.team4183.utils.CommandUtils;
 
@@ -16,7 +17,8 @@ public class Reposition extends Command{
 	private final double TIME_FOR_PNEUMATICS = 0.5;
 	
 	private int requestedPosition = -1; // Use -1 as indicator for joystice
-
+	
+	private double targetPathPerc = -1;
 	public Reposition()
 	{
 		requires(Robot.elevatorSubsystem);
@@ -26,6 +28,12 @@ public class Reposition extends Command{
 	{
 		requires(Robot.elevatorSubsystem);
 		requestedPosition = targetPosition;
+	}
+	public Reposition(int targetPosition, double targetPathPercentComp)
+	{
+		requires(Robot.elevatorSubsystem);
+		requestedPosition = targetPosition;
+		targetPathPerc = targetPathPercentComp;
 	}
 	
 	public void init()
@@ -41,6 +49,8 @@ public class Reposition extends Command{
 		/// TODO: Need to clean this up... the pneuma delay is only needed if we have them
 		/// AND we are moving down AND only if we are in the danger zone (which needs to
 		/// account for a cube present on the way down)
+		if (targetPathPerc < 0)
+		{
 		if(timeSinceInitialized() - initTime > TIME_FOR_PNEUMATICS) 
 		{
 			Robot.oi.sbtnOpenMandible.release();
@@ -78,7 +88,20 @@ public class Reposition extends Command{
 			{
 				Robot.elevatorSubsystem.holdPosition(requestedPosition);
 			}
-		}		
+		}
+		}
+		else if (targetPathPerc > 0)
+		{
+			if (Robot.autonomousSubsystem.getPercentComplete(.6) == AutonomousSubsystem.TrajectoryPercent.PASSED)
+			{
+			Robot.elevatorSubsystem.holdPosition(requestedPosition);
+			}
+			else if (Robot.autonomousSubsystem.getPercentComplete(.6) == AutonomousSubsystem.TrajectoryPercent.FAULT)
+			{
+				System.out.println("ERROR GETTING TRAJECTORY");
+				Robot.elevatorSubsystem.disable();
+			}
+			}
 	}
 
 	@Override

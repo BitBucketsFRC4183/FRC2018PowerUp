@@ -26,6 +26,7 @@ public class AutonomousSubsystem extends BitBucketsSubsystem
 	//these are used for the pathFollower
 	private EncoderFollower pathTracker;
 	private Trajectory lastSetTrajectory;
+	private boolean trajSet =false;
 	
 	public enum AutoChoices
 	{
@@ -41,26 +42,36 @@ public class AutonomousSubsystem extends BitBucketsSubsystem
 		
 	}
 	
-	public void initTrajectoryFollower(Trajectory aTrajectory)
+	public enum TrajectoryPercent
 	{
-		lastSetTrajectory = aTrajectory;
-		pathTracker = new EncoderFollower(aTrajectory);
-		pathTracker.configureEncoder((int)Robot.driveSubsystem.getLeftEncoderUnits(), RobotMap.DRIVE_MOTOR_NATIVE_TICKS_PER_REV/4, RobotMap.WHEEL_CIRCUMFERENCE_INCHES/.0254);
-		pathTracker.configurePIDVA(1, 1, 1, 1, 1);
+		PASSED,
+		NOT_PASSED,
+		FAULT
 	}
 	
-	public void updatePathFollower()
+	public void storeActiveLeftTrajectory(Trajectory aTraj)
 	{
-		pathTracker.calculate((int)Robot.driveSubsystem.getLeftEncoderUnits());
+	    	lastSetTrajectory = aTraj;
+	    	trajSet = true;
 	}
 	
 	//checks to how much the path has been complete and sees if it is greater than or equal to the passed in parameter
-	/*
-	public double getPercentComplete()
+	
+	public TrajectoryPercent getPercentComplete(double pathCompPercent)
 	{
-		return Robot.driveSubsystem.getLeftActiveTrajectoryPos()/RobotMap.meter2inch(Robot.autonomousSubsystem.lastSetTrajectory.segments.length)/ RobotMap.WHEEL_CIRCUMFERENCE_INCHES;
+		if (trajSet)
+		{
+			if (Robot.driveSubsystem.getLeftActiveTrajectoryPos()/RobotMap.meter2inch(lastSetTrajectory.segments.length)/RobotMap.WHEEL_CIRCUMFERENCE_INCHES > pathCompPercent)
+			{
+				return TrajectoryPercent.PASSED;
+			}
+			else
+			{
+				return TrajectoryPercent.NOT_PASSED;
+			}
+		}
+		return TrajectoryPercent.FAULT;
 	}
-	*/
 	public void initialize()
 	{		
 		autoChooser = new SendableChooser<AutoChoices>();

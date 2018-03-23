@@ -60,6 +60,9 @@ public class DriveSubsystem extends BitBucketsSubsystem
 	
 	public MotionProfileDriver motionProfileDriver;
 	
+	private Trajectory currLeftSetTrajectory;
+	private boolean trajSet = false;
+	
 	enum TestSubmodes
 	{
 		NONE,
