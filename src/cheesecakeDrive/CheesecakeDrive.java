@@ -17,6 +17,11 @@ public class CheesecakeDrive
 	private SpeedController rightDrive;
 	
 	private Timer driveTimer;
+	
+	/// TODO: Add a delay timer and a delay argument to drive
+	/// Will have to change initialization sequence to start the delay timer
+	/// and move the drive timer reset/start to the expired delay timer
+	/// branch inside drive
 
 	public CheesecakeDrive(SpeedController leftDriveParr, SpeedController rightDriveParr)
 	{
