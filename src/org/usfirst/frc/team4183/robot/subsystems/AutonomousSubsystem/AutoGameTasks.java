@@ -63,10 +63,16 @@ public class AutoGameTasks extends CommandGroup
 			// Trajectories named "MoveOnly" or similar indicate that we should NOT eject the cube
 			if (!trajectory.name.toLowerCase().contains("moveonly"))
 			{
-				addSequential(new UpShoot(1));
+				addSequential(new UpShoot(1.0));
 			}
-			
-			// TODO: If a two cube auto is desired then we would add the details here.
+
+			if (trajectory.name.toLowerCase().contains("scale"))
+			{
+				// Back up
+				addSequential(new MoveBy(-12.0,1.0));
+				addSequential(new Reposition(ElevatorSubsystem.ElevatorPresets.BOTTOM.getNativeTicks()));
+				// TODO: If a two cube auto is desired then we would add the details here.
+			}			
 		}
 		
 		// Be explicit about getting the intake back into idle

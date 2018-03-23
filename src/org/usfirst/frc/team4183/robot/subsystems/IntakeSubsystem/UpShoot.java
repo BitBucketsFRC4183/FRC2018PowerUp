@@ -45,18 +45,18 @@ public class UpShoot extends Command {
     protected boolean isFinished() {
       if (timeout_sec == 0)
       {
-      if (!Robot.oi.btnOutIntake.get())
-      {
-        return CommandUtils.stateChange(this, new UpHold());
-      }
-      if (Robot.oi.btnDownIntake.get())
-      {
-        return CommandUtils.stateChange(this, new DownHold());
-      }
-      else if (Robot.oi.btnIdle.get())
-      {
-    	  return CommandUtils.stateChange(this, new Idle());
-      }
+	      if (!Robot.oi.btnOutIntake.get())
+	      {
+	        return CommandUtils.stateChange(this, new UpHold());
+	      }
+	      if (Robot.oi.btnDownIntake.get())
+	      {
+	        return CommandUtils.stateChange(this, new DownHold());
+	      }
+	      else if (Robot.oi.btnIdle.get())
+	      {
+	    	  return CommandUtils.stateChange(this, new Idle());
+	      }
       }
       else
       {
