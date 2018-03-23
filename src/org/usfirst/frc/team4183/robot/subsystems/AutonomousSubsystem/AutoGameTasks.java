@@ -7,7 +7,7 @@ import org.usfirst.frc.team4183.utils.*;
 import org.usfirst.frc.team4183.robot.RobotMap;
 import org.usfirst.frc.team4183.robot.subsystems.DriveSubsystem.*;
 import org.usfirst.frc.team4183.robot.subsystems.ElevatorSubsystem.ElevatorSubsystem;
-import org.usfirst.frc.team4183.robot.subsystems.ElevatorSubsystem.RepositionAuto;
+import org.usfirst.frc.team4183.robot.subsystems.ElevatorSubsystem.Reposition;
 import org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem.UpShoot;
 /**
  *
@@ -51,17 +51,17 @@ public class AutoGameTasks extends CommandGroup
 			if (trajectory.name.toLowerCase().contains("scale"))
 			{
 				//sets the elevator to this state which only moves the elevator to the high position if the the robot has completed 60% of the path
-				addParallel(new RepositionAuto(ElevatorSubsystem.ElevatorPresets.HIGH.getNativeTicks(),.6));
+				addParallel(new Reposition(ElevatorSubsystem.ElevatorPresets.HIGH.getNativeTicks(),.6));
 			}
 			else if (trajectory.name.toLowerCase().contains("switch"))
 			{
-				addParallel(new RepositionAuto(ElevatorSubsystem.ElevatorPresets.MIDDLE.getNativeTicks(),.25));
+				addParallel(new Reposition(ElevatorSubsystem.ElevatorPresets.MIDDLE.getNativeTicks(),.25));
 			}
 			addSequential(new DriveProfile(trajectory));
 						
 			// Only spit the cube out if there is a scoring solution
 			// Trajectories named "MoveOnly" or similar indicate that we should NOT eject the cube
-			if (! trajectory.name.toLowerCase().contains("moveonly"))
+			if (!trajectory.name.toLowerCase().contains("moveonly"))
 			{
 				addSequential(new UpShoot(1));
 			}
