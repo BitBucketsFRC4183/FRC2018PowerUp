@@ -92,11 +92,11 @@ public class Reposition extends Command{
 		}
 		else if (targetPathPerc > 0)
 		{
-			if (Robot.autonomousSubsystem.getPercentComplete(.6) == AutonomousSubsystem.TrajectoryPercent.PASSED)
+			if (Robot.driveSubsystem.getPercentComplete(.6) == AutonomousSubsystem.TrajectoryPercent.PASSED)
 			{
 			Robot.elevatorSubsystem.holdPosition(requestedPosition);
 			}
-			else if (Robot.autonomousSubsystem.getPercentComplete(.6) == AutonomousSubsystem.TrajectoryPercent.FAULT)
+			else if (Robot.driveSubsystem.getPercentComplete(.6) == AutonomousSubsystem.TrajectoryPercent.FAULT)
 			{
 				System.out.println("ERROR GETTING TRAJECTORY");
 				Robot.elevatorSubsystem.disable();
