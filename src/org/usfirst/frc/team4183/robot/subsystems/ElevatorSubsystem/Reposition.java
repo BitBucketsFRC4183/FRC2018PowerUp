@@ -86,11 +86,11 @@ public class Reposition extends Command{
 
 				if (cmd > 0)
 				{
-					Robot.elevatorSubsystem.setSystemPower(.85 * cmd);
+					Robot.elevatorSubsystem.setSystemPower(0.9 * cmd);
 				}
 				else if (cmd <0)
 				{
-					Robot.elevatorSubsystem.setSystemPower(.04*cmd);
+					Robot.elevatorSubsystem.setSystemPower(0.07*cmd);
 				}
 					
 				

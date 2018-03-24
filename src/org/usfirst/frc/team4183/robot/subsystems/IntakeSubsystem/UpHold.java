@@ -53,22 +53,22 @@ public class UpHold extends Command {
     	{
     		if (Robot.elevatorSubsystem.getCurrentSetTicks() > ElevatorSubsystem.ElevatorPresets.BOTTOM.getNativeTicks())
     		{
-    		Robot.intakeSubsystem.setIntakeMotorsToSpeed(0, 0);
+    			Robot.intakeSubsystem.setIntakeOnlySpeed(0.0);
     		}
     		else if (Robot.elevatorSubsystem.getCurrentSetTicks() < ElevatorSubsystem.ElevatorPresets.MIDDLE.getNativeTicks())
     		{
-    			Robot.intakeSubsystem.setIntakeMotorsToSpeed(RobotMap.INTAKE_MOTOR_HOLD_PERCENT, RobotMap.INTAKE_MOTOR_HOLD_PERCENT);
+    			Robot.intakeSubsystem.setIntakeOnlySpeed(RobotMap.INTAKE_MOTOR_HOLD_PERCENT);
     		}
     	}
     	else if (Robot.elevatorSubsystem.outputDangerZoneInfo())
     	{
     		if (Robot.elevatorSubsystem.getCurrentSetTicks() > ElevatorSubsystem.ElevatorPresets.BOTTOM.getNativeTicks())
     		{
-    			Robot.intakeSubsystem.setIntakeMotorsToSpeed(-RobotMap.INTAKE_MOTOR_HOLD_PERCENT, -RobotMap.INTAKE_MOTOR_HOLD_PERCENT);
+    			Robot.intakeSubsystem.setIntakeOnlySpeed(-RobotMap.INTAKE_MOTOR_HOLD_PERCENT);
     		}
     		else if (Robot.elevatorSubsystem.getCurrentSetTicks() < ElevatorSubsystem.ElevatorPresets.MIDDLE.getNativeTicks())
     		{
-    			Robot.intakeSubsystem.setIntakeMotorsToSpeed(RobotMap.INTAKE_MOTOR_HOLD_PERCENT, RobotMap.INTAKE_MOTOR_HOLD_PERCENT);
+    			Robot.intakeSubsystem.setIntakeOnlySpeed(RobotMap.INTAKE_MOTOR_HOLD_PERCENT);
     		}
     	}
     	}
