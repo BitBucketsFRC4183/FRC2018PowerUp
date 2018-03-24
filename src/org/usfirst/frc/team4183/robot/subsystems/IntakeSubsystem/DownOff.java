@@ -23,7 +23,7 @@ public class DownOff extends Command {
     {
     	Robot.intakeSubsystem.disable();	// Turn everything off and close it
     	Robot.intakeSubsystem.intakeDownPivet();
-    	System.out.println(this.getClass().getSimpleName());
+    	System.out.println(this.getClass().getName() + " Start" + " " + System.currentTimeMillis()*10*10*10);
     	}
 
     // Called repeatedly when this Command is scheduled to run
@@ -55,6 +55,7 @@ public class DownOff extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
+    	System.out.println(this.getClass().getName() + " End" + " " + System.currentTimeMillis()*10*10*10);
     	Robot.intakeSubsystem.disable();
     }
 

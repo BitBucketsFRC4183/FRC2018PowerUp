@@ -16,6 +16,7 @@ public class Idle extends Command{
 	{
 		Robot.rampSubsystem.disabled();
 		Robot.rampSubsystem.closeRamp();
+		System.out.println(this.getClass().getName());
 	}
 	
 	protected void execute()

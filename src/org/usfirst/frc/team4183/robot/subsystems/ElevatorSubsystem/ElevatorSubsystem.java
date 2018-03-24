@@ -234,6 +234,12 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 	private double getMotorNativeUnits(TalonSRX m) {
 		return elevatorMotorA.getSelectedSensorPosition(RobotMap.PRIMARY_PID_LOOP);
 	}
+	
+	//Output in native units per 100ms
+	public double getElevatorVelocity()
+	{
+		return elevatorMotorA.getSelectedSensorVelocity(RobotMap.PRIMARY_PID_LOOP);
+	}
 
 	public double getElevatorNativeUnits() {
 		return getMotorNativeUnits(elevatorMotorA);
@@ -322,7 +328,7 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 			SmartDashboard.putBoolean("Forward Limit Switch",  elevatorMotorA.getSensorCollection().isFwdLimitSwitchClosed());
 			//SmartDashboard.putBoolean("Reverse Limit Switch", elevatorMotorAFaults.ReverseLimitSwitch);
 			SmartDashboard.putBoolean("Reverse Limit Switch", elevatorMotorA.getSensorCollection().isRevLimitSwitchClosed());
-
+			SmartDashboard.putNumber("Elevator Velocity", getElevatorVelocity());
 
 		}
 		elevatorMotorA.getFaults(elevatorMotorAFaults);

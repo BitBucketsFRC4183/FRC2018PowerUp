@@ -22,11 +22,13 @@ public class DownIn extends Command {
     protected void initialize() 
     {
       Robot.intakeSubsystem.intakeDownPivet();
-      System.out.println(this.getClass().getSimpleName());
+      System.out.println(this.getClass().getName() + " Start" + " " + System.currentTimeMillis()*10*10*10);
       }
  
     // Called repeatedly when this Command is scheduled to run
-    protected void execute() {   Robot.intakeSubsystem.setIntakeMotorsToSpeed(-RobotMap.INTAKE_MOTOR_PERCENT, -RobotMap.INTAKE_MOTOR_PERCENT);
+    protected void execute() {   
+    	Robot.intakeSubsystem.setIntakeOnlySpeed(-RobotMap.INTAKE_MOTOR_PERCENT);
+    	Robot.intakeSubsystem.setThroatSpeed(-RobotMap.THROAT_LEFT_HOLD_PERCENT);
     }
  
     // Make this return true when this Command no longer needs to run execute()
@@ -54,6 +56,7 @@ public class DownIn extends Command {
     // Called once after isFinished returns true
     protected void end() {
       Robot.intakeSubsystem.disable();
+      System.out.println(this.getClass().getName() + " End" + " " + System.currentTimeMillis()*10*10*10);
     }
  
     // Called when another command which requires one or more of the same

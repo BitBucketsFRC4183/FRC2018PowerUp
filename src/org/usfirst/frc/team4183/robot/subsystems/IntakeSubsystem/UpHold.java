@@ -26,7 +26,7 @@ public class UpHold extends Command {
     {
       Robot.intakeSubsystem.disable();  // Turn everything off and close it
       Robot.intakeSubsystem.intakeUpPivet();
-      System.out.println(this.getClass().getSimpleName());
+      System.out.println(this.getClass().getName() + " Start" + " " + System.currentTimeMillis()*10*10*10);
       }
  
     // Called repeatedly when this Command is scheduled to run
@@ -64,7 +64,7 @@ public class UpHold extends Command {
     	{
     		if (Robot.elevatorSubsystem.getCurrentSetTicks() > ElevatorSubsystem.ElevatorPresets.BOTTOM.getNativeTicks())
     		{
-    			Robot.intakeSubsystem.setIntakeOnlySpeed(-RobotMap.INTAKE_MOTOR_HOLD_PERCENT);
+    			Robot.intakeSubsystem.setIntakeOnlySpeed(RobotMap.INTAKE_MOTOR_ASSIST_PERCENT);
     			//Robot.intakeSubsystem.setIntakeMotorsToSpeed(-RobotMap.INTAKE_MOTOR_HOLD_PERCENT, -RobotMap.INTAKE_MOTOR_HOLD_PERCENT);
     		}
     		else if (Robot.elevatorSubsystem.getCurrentSetTicks() < ElevatorSubsystem.ElevatorPresets.MIDDLE.getNativeTicks())
@@ -101,6 +101,7 @@ public class UpHold extends Command {
  
     // Called once after isFinished returns true
     protected void end() {
+    	System.out.println(this.getClass().getName() + " END" + " " + System.currentTimeMillis()*10*10*10);
     }
  
     // Called when another command which requires one or more of the same

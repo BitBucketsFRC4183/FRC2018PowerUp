@@ -61,7 +61,7 @@ public class AutoGameTasks extends CommandGroup
 						
 			// Only spit the cube out if there is a scoring solution
 			// Trajectories named "MoveOnly" or similar indicate that we should NOT eject the cube
-			if (!trajectory.name.toLowerCase().contains("moveonly"))
+			//if (!trajectory.name.toLowerCase().contains("moveonly"))
 			{
 				addSequential(new UpShoot(1.0));
 			}
