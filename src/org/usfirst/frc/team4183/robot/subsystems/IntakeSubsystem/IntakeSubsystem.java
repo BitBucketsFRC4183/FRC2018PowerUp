@@ -95,10 +95,16 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 		
 	}
 	
-	public void setIntakeNeutral(NeutralMode neutralMode)
+	public void setIntakeOnlyNeutral(NeutralMode neutralMode)
 	{
 		leftIntakeMotor.setNeutralMode(neutralMode);
 		rightIntakeMotor.setNeutralMode(neutralMode);
+	}
+	
+	public void setThroatOnlyNeutral(NeutralMode neutralMode)
+	{
+		throatMotorA.setNeutralMode(neutralMode);
+		throatMotorB.setNeutralMode(neutralMode);
 	}
 	
 	//checks to see if the either of the Min Limit Switches are hit for the pneumatics
@@ -296,6 +302,7 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 		if(telemetryState.getSelected() == SubsystemTelemetryState.ON) {			
 			SmartDashboard.putNumber("ThroatMotorA", throatMotorA.getOutputCurrent());
 			SmartDashboard.putNumber("ThroatMotorB", throatMotorB.getOutputCurrent());
+			SmartDashboard.putNumber("ThroatMotor AVG Current", getCurrentThroatAvg());
 			SmartDashboard.putNumber("LeftIntakeMotor", leftIntakeMotor.getOutputCurrent());
 			SmartDashboard.putNumber("RightIntakeMotor", rightIntakeMotor.getOutputCurrent());
 		}
@@ -310,6 +317,15 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 		// TODO Auto-generated method stub
 		return runDiagnostics;
 	}
+	
+	public double getCurrentThroatAvg()
+	{
+		double leftThroatCurrent = throatMotorA.getOutputCurrent();
+		double rightThroatCurrent = throatMotorB.getOutputCurrent();
+		
+		return (leftThroatCurrent+rightThroatCurrent)/2;
+	}
+	
 	public double getCurrentMax()
 	{
 		double leftintakecurrent = leftIntakeMotor.getOutputCurrent(); 

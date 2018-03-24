@@ -23,13 +23,14 @@ public class DownOut extends Command {
     {
       //Double check that the intake is down
       Robot.intakeSubsystem.intakeDownPivet();
-      System.out.println(this.getClass().getSimpleName());
+      System.out.println(this.getClass().getName() + " Start" + " " + System.currentTimeMillis()*10*10*10);
       }
  
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     
-    	  Robot.intakeSubsystem.setIntakeMotorsToSpeed(RobotMap.INTAKE_MOTOR_PERCENT, RobotMap.INTAKE_MOTOR_PERCENT);
+    	  Robot.intakeSubsystem.setIntakeOnlySpeed(RobotMap.INTAKE_MOTOR_PERCENT);
+    	  Robot.intakeSubsystem.setThroatSpeed(RobotMap.THROAT_MOTOR_PERCENT);
     }
  
     // Make this return true when this Command no longer needs to run execute()
@@ -48,6 +49,7 @@ public class DownOut extends Command {
  
     // Called once after isFinished returns true
     protected void end() {
+    	System.out.println(this.getClass().getName() + " End" + " " + System.currentTimeMillis()*10*10*10);
       Robot.intakeSubsystem.disable();
     }
  

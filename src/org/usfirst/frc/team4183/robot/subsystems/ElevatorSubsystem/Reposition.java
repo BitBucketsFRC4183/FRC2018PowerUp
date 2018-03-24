@@ -42,7 +42,7 @@ public class Reposition extends Command{
 	
 	public void init()
 	{
-		System.out.println(this.getClass().getSimpleName());
+		System.out.println(this.getClass().getName() + " Start" + " " + System.currentTimeMillis()*10*10*10);
 		Robot.elevatorSubsystem.releasePos();
 		initTime = timeSinceInitialized();
 		
@@ -135,4 +135,14 @@ public class Reposition extends Command{
 		}
 	return false;
 }
+	protected void end()
+	{
+		System.out.println(this.getClass().getName() + " END" + " " + System.currentTimeMillis()*10*10*10);
+	}
+	protected void interrupted()
+	{
+		end();
+	}
+	
+	
 }

@@ -14,11 +14,11 @@ public class UpShoot extends Command {
  
   private double timeout_sec = 0;
   
-    public UpShoot(double aTimeOut) {
+    public UpShoot(double aTimeOut_sec) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
       requires(Robot.intakeSubsystem);  
-      timeout_sec = aTimeOut;
+      timeout_sec = aTimeOut_sec;
     }
     
     public UpShoot() {
@@ -30,9 +30,9 @@ public class UpShoot extends Command {
     // Called just before this Command runs the first time
     protected void initialize() 
     {
-      Robot.intakeSubsystem.disable();  // Turn everything off and close it
+      Robot.intakeSubsystem.setIntakeOnlySpeed(0);
       Robot.intakeSubsystem.intakeUpPivet();
-      System.out.println(this.getClass().getSimpleName());
+      System.out.println(this.getClass().getName() + " Start" + " " + System.currentTimeMillis()*10*10*10);
       }
  
     // Called repeatedly when this Command is scheduled to run
@@ -62,7 +62,7 @@ public class UpShoot extends Command {
       {
         if (timeSinceInitialized() > timeout_sec)
         {
-          return CommandUtils.stateChange(this, new DownHold());
+          return CommandUtils.stateChange(this, new UpHold());
         }
       }
       
@@ -71,6 +71,7 @@ public class UpShoot extends Command {
  
     // Called once after isFinished returns true
     protected void end() {
+      System.out.println(this.getClass().getName() + " END" + " " + System.currentTimeMillis()*10*10*10);
       Robot.intakeSubsystem.disable();
     }
  
