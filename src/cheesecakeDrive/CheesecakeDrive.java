@@ -16,6 +16,8 @@ public class CheesecakeDrive
 
 	private Timer driveTimer;
 	
+	private double delay_sec = 0;
+	
 	
 	/// TODO: Add a delay timer and a delay argument to drive
 	/// Will have to change initialization sequence to start the delay timer
@@ -27,6 +29,7 @@ public class CheesecakeDrive
 		leftSpeedController = leftDriveParr;
 		rightSpeedController = rightDriveParr;
 		driveTimer = new Timer();
+		delay_sec = 0;
 	}
 		
 	/***
@@ -36,6 +39,19 @@ public class CheesecakeDrive
 	{
 		driveTimer.reset();
 		driveTimer.start();
+	}
+	
+	
+	//sets a delay in seconds before the robot moves
+	public void setDelay(double aDelay_sec)
+	{
+		delay_sec = aDelay_sec;
+	}
+	
+	//returns the current delay
+	public double getCurrentDelay()
+	{
+		return delay_sec;
 	}
 	
 	/***
@@ -49,7 +65,7 @@ public class CheesecakeDrive
 	public void drive(double pwr, double stopTime_seconds)
 	{				
 		// Keep commanding the motors until the timer reaches the stop time
-		if (driveTimer.get() < stopTime_seconds)
+		if (driveTimer.get() < stopTime_seconds+delay_sec && (driveTimer.get() > delay_sec))
 		{
 			leftSpeedController.set(pwr);
 			rightSpeedController.set(pwr);

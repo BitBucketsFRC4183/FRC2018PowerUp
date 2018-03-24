@@ -32,9 +32,45 @@ public class UpHold extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     		Robot.intakeSubsystem.setNeutral(NeutralMode.Brake);
-    	Robot.intakeSubsystem.setIntakeMotorsToSpeed(RobotMap.THROAT_LEFT_HOLD_PERCENT, RobotMap.THROAT_RIGHT_HOLD_PERCENT);
     	Robot.intakeSubsystem.setLeftThroatSpeed(RobotMap.THROAT_LEFT_HOLD_PERCENT);
     	Robot.intakeSubsystem.setRightThroatSpeed(RobotMap.THROAT_RIGHT_HOLD_PERCENT);
+    	
+    	/*
+    		IntakeBehavior when the the Elevator is moving:
+    		if not in Dangerzone:
+    			Checks to see if our velocity is positive i.e. the elevator is going up
+    				Sets intake to zero power
+    			Checks to see if our velocity is negative i.e. the elevator is going down
+    				Sets intake to intake the cube.
+    		if in Dangerzone:
+    			Checks to see if our velocity is positive i.e. the elevator is going up
+    				sets intake to push the cube out.
+    			Checks to see if the our velocity is negative i.e. the elevator is going down
+    				sets intake to intake the cube.
+    	
+    	*/
+    	if (!Robot.elevatorSubsystem.outputDangerZoneInfo())
+    	{
+    		if (Robot.elevatorSubsystem.getCurrentSetTicks() > ElevatorSubsystem.ElevatorPresets.BOTTOM.getNativeTicks())
+    		{
+    		Robot.intakeSubsystem.setIntakeMotorsToSpeed(0, 0);
+    		}
+    		else if (Robot.elevatorSubsystem.getCurrentSetTicks() < ElevatorSubsystem.ElevatorPresets.MIDDLE.getNativeTicks())
+    		{
+    			Robot.intakeSubsystem.setIntakeMotorsToSpeed(RobotMap.INTAKE_MOTOR_HOLD_PERCENT, RobotMap.INTAKE_MOTOR_HOLD_PERCENT);
+    		}
+    	}
+    	else if (Robot.elevatorSubsystem.outputDangerZoneInfo())
+    	{
+    		if (Robot.elevatorSubsystem.getCurrentSetTicks() > ElevatorSubsystem.ElevatorPresets.BOTTOM.getNativeTicks())
+    		{
+    			Robot.intakeSubsystem.setIntakeMotorsToSpeed(-RobotMap.INTAKE_MOTOR_HOLD_PERCENT, -RobotMap.INTAKE_MOTOR_HOLD_PERCENT);
+    		}
+    		else if (Robot.elevatorSubsystem.getCurrentSetTicks() < ElevatorSubsystem.ElevatorPresets.MIDDLE.getNativeTicks())
+    		{
+    			Robot.intakeSubsystem.setIntakeMotorsToSpeed(RobotMap.INTAKE_MOTOR_HOLD_PERCENT, RobotMap.INTAKE_MOTOR_HOLD_PERCENT);
+    		}
+    	}
     	}
     
 
@@ -53,7 +89,7 @@ public class UpHold extends Command {
       {
     	  return CommandUtils.stateChange(this, new UpShoot());
       }
-      else if (Robot.oi.btnIdle.get() || Robot.elevatorSubsystem.getElevatorNativeUnits() > ElevatorSubsystem.ElevatorPresets.BOTTOM.getNativeTicks())
+      else if (Robot.oi.btnIdle.get())
       {
     	  return CommandUtils.stateChange(this, new Idle());
       }

@@ -58,7 +58,7 @@ public class RobotMap
 		public static final int INTAKE_MOTOR_LEFT_ID 	= 10;
 		public static final int INTAKE_MOTOR_RIGHT_ID 	= 9;		
 		public static final int THROAT_MOTOR_LEFT_ID 	= 5;
-		public static final int THROAT_MOTOR_RIGHT_ID 	= 3;//3;
+		public static final int THROAT_MOTOR_RIGHT_ID 	= 3;
 		
 		public static final int INTAKE_LIMIT_LEFT_MAX_ID  = 0;
 		public static final int INTAKE_LIMIT_LEFT_MIN_ID  = 1;
@@ -174,16 +174,16 @@ public class RobotMap
    		public static final double ELEVATOR_SPROCKET_DIAMETER_INCHES  = 1.4323944878270580219199538703526;
    		public static final double ELEVATOR_SPROCKET_CIRCUMFERENCE_INCHES = (ELEVATOR_SPROCKET_DIAMETER_INCHES*Math.PI);
    		public static final double ELEVATOR_TICKS_PER_INCH = 8192/4.5;
-   		public static final double ELEVATOR_SAFE_ZONE = 12 * ELEVATOR_TICKS_PER_INCH;
+   		public static final double ELEVATOR_DANGER_ZONE = 12 * ELEVATOR_TICKS_PER_INCH;
    		public static final int    ELEVATOR_MOTOR_NATIVE_TICKS_PER_REV = 8192;
    		public static final double ELEVATOR_MOTOR_FULL_THROTTLE_AVERAGE_SPEED_NATIVE_TICKS = 26447.5;	// per 100 ms, average of samples
    		public static final double ELEVATOR_MOTOR_FULL_THROTTLE_RPS = (ELEVATOR_MOTOR_FULL_THROTTLE_AVERAGE_SPEED_NATIVE_TICKS * 10) / ELEVATOR_MOTOR_NATIVE_TICKS_PER_REV;
    		public static final double ELEVATOR_MAX_SPEED_INCHES_PER_SECOND = ELEVATOR_SPROCKET_CIRCUMFERENCE_INCHES * ELEVATOR_MOTOR_FULL_THROTTLE_RPS;
-   		public static final double ELEVATOR_MAX_USER_SPEED_INCHES_PER_SECOND = 6.0;
+   		public static final double ELEVATOR_MAX_USER_SPEED_INCHES_PER_SECOND = 12;
    		public static final double ELEVATOR_MAX_USER_SPEED_PERCENT_POWER = ELEVATOR_MAX_USER_SPEED_INCHES_PER_SECOND / ELEVATOR_MAX_SPEED_INCHES_PER_SECOND;
    		public static final int    ELEVATOR_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS = (int)(0.80 * 
                 ELEVATOR_MOTOR_FULL_THROTTLE_AVERAGE_SPEED_NATIVE_TICKS);
-   		public static final int    ELEVATOR_MOTOR_MOTION_ACCELERATION_NATIVE_TICKS = ELEVATOR_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS;
+   		public static final int    ELEVATOR_MOTOR_MOTION_ACCELERATION_NATIVE_TICKS = (int)(0.5*ELEVATOR_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS);
    		public static final double ELEVATOR_INCHES_PER_NATIVE_TICKS = ELEVATOR_SPROCKET_CIRCUMFERENCE_INCHES / ELEVATOR_MOTOR_NATIVE_TICKS_PER_REV;
    		public static final double ELEVATOR_POSITION_TOLERANCE_INCH = 1.0;
    		
@@ -198,9 +198,11 @@ public class RobotMap
    	/* INTAKE SUBSYSTEM */
    		public static final double INTAKE_MOTOR_PERCENT = 0.9;
    		public static final double THROAT_MOTOR_PERCENT = 0.9;
+   		public static final double INTAKE_MOTOR_HOLD_PERCENT = -.15;
    		
-   		public static final double THROAT_LEFT_HOLD_PERCENT  = -0.15;
-   		public static final double THROAT_RIGHT_HOLD_PERCENT = -0.15;
+   		
+   		public static final double THROAT_LEFT_HOLD_PERCENT  = -0.25;
+   		public static final double THROAT_RIGHT_HOLD_PERCENT = -0.25;
    		
    		public static final double INTAKE_MAX_CURRENT = 10;
    		
@@ -260,4 +262,6 @@ public class RobotMap
  */
    		public static final double MINIMUM_MOTOR_CURR = 1.25; 
    		public static final double MOTOR_TEST_PERCENT = 0.5;
+   		public static final double ELEVATOR_TEST_TIMEOUT_SEC = .1;
+   		public static final double ELEVATOR_TEST_NATIVE_UNITS = 300;
 }

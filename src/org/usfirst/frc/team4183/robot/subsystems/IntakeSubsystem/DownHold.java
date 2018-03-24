@@ -30,7 +30,7 @@ public class DownHold extends Command {
     protected void execute() {
     	Robot.intakeSubsystem.setLeftThroatSpeed(RobotMap.THROAT_LEFT_HOLD_PERCENT);
     	Robot.intakeSubsystem.setRightThroatSpeed(RobotMap.THROAT_RIGHT_HOLD_PERCENT);
-    	Robot.intakeSubsystem.setIntakeMotorsToSpeed(RobotMap.THROAT_LEFT_HOLD_PERCENT, RobotMap.THROAT_RIGHT_HOLD_PERCENT);
+    	Robot.intakeSubsystem.setIntakeMotorsToSpeed(RobotMap.INTAKE_MOTOR_HOLD_PERCENT, RobotMap.INTAKE_MOTOR_HOLD_PERCENT);
     }
 
     // Make this return true when this Command no longer needs to run execute()

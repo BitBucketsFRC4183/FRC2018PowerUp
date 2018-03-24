@@ -15,7 +15,6 @@ public class Reposition extends Command{
 	private double initTime;
 	
 	// Seconds to wait for pneumatics to open
-	private final double TIME_FOR_PNEUMATICS = 0.5;
 	
 	private int requestedPosition = -1; // Use -1 as indicator for joystice
 	
@@ -31,12 +30,14 @@ public class Reposition extends Command{
 	{
 		requires(Robot.elevatorSubsystem);
 		requestedPosition = targetPosition;
+		Robot.elevatorSubsystem.setCurrentTicks(targetPosition);
 	}
 	public Reposition(int targetPosition, double targetPathPercentComp)
 	{
 		requires(Robot.elevatorSubsystem);
 		requestedPosition = targetPosition;
 		targetPathPerc = targetPathPercentComp;
+		Robot.elevatorSubsystem.setCurrentTicks(targetPosition);
 	}
 	
 	public void init()
@@ -54,8 +55,6 @@ public class Reposition extends Command{
 		/// account for a cube present on the way down)
 		if (targetPathPerc < 0)
 		{
-		if(timeSinceInitialized() - initTime > TIME_FOR_PNEUMATICS) 
-		{
 			Robot.oi.sbtnOpenMandible.release();
 
 			/// TODO: Move this to Elevator Subsystem API and query that here
@@ -65,7 +64,7 @@ public class Reposition extends Command{
 			/// down just in case there is a cube present. The delay (above) then only
 			/// needs to be applied under those conditions
 			double currPos = Robot.elevatorSubsystem.getElevatorNativeUnits();
-			boolean dangerZone = (currPos < RobotMap.ELEVATOR_SAFE_ZONE);
+			boolean dangerZone = (currPos < RobotMap.ELEVATOR_DANGER_ZONE);
 			
 			double cmd = Robot.oi.rightRampAxis.get();
 			
@@ -85,13 +84,21 @@ public class Reposition extends Command{
 				// to about 4 to 6 inches per second, which should allow the operator time to visually
 				// see and then respond to a the condition and successfully stop without overshoot.
 
-				Robot.elevatorSubsystem.setSystemPower(RobotMap.ELEVATOR_MAX_USER_SPEED_PERCENT_POWER * cmd);
+				if (cmd > 0)
+				{
+					Robot.elevatorSubsystem.setSystemPower(.85 * cmd);
+				}
+				else if (cmd <0)
+				{
+					Robot.elevatorSubsystem.setSystemPower(.04*cmd);
+				}
+					
+				
 			}
 			else
 			{
 				Robot.elevatorSubsystem.holdPosition(requestedPosition);
 			}
-		}
 		}
 		else if (targetPathPerc > 0)
 		{
