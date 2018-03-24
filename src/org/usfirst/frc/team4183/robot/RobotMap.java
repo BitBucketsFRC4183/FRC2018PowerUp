@@ -176,16 +176,16 @@ public class RobotMap
    		public static final double ELEVATOR_TICKS_PER_INCH = 8192/4.5;
    		public static final double ELEVATOR_DANGER_ZONE = 12 * ELEVATOR_TICKS_PER_INCH;
    		public static final int    ELEVATOR_MOTOR_NATIVE_TICKS_PER_REV = 8192;
-   		public static final double ELEVATOR_MOTOR_FULL_THROTTLE_AVERAGE_SPEED_NATIVE_TICKS = 26447.5;	// per 100 ms, average of samples
+   		public static final double ELEVATOR_MOTOR_FULL_THROTTLE_AVERAGE_SPEED_NATIVE_TICKS = 16880.6;	// per 100 ms, average of samples
    		public static final double ELEVATOR_MOTOR_FULL_THROTTLE_RPS = (ELEVATOR_MOTOR_FULL_THROTTLE_AVERAGE_SPEED_NATIVE_TICKS * 10) / ELEVATOR_MOTOR_NATIVE_TICKS_PER_REV;
    		public static final double ELEVATOR_MAX_SPEED_INCHES_PER_SECOND = ELEVATOR_SPROCKET_CIRCUMFERENCE_INCHES * ELEVATOR_MOTOR_FULL_THROTTLE_RPS;
    		public static final double ELEVATOR_MAX_USER_SPEED_INCHES_PER_SECOND = 12;
    		public static final double ELEVATOR_MAX_USER_SPEED_PERCENT_POWER = ELEVATOR_MAX_USER_SPEED_INCHES_PER_SECOND / ELEVATOR_MAX_SPEED_INCHES_PER_SECOND;
    		public static final int    ELEVATOR_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS = (int)(0.80 * 
                 ELEVATOR_MOTOR_FULL_THROTTLE_AVERAGE_SPEED_NATIVE_TICKS);
-   		public static final int    ELEVATOR_MOTOR_MOTION_ACCELERATION_NATIVE_TICKS = (int)(0.5*ELEVATOR_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS);
+   		public static final int    ELEVATOR_MOTOR_MOTION_ACCELERATION_NATIVE_TICKS = (int)(ELEVATOR_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS);
    		public static final double ELEVATOR_INCHES_PER_NATIVE_TICKS = ELEVATOR_SPROCKET_CIRCUMFERENCE_INCHES / ELEVATOR_MOTOR_NATIVE_TICKS_PER_REV;
-   		public static final double ELEVATOR_POSITION_TOLERANCE_INCH = 1.0;
+   		public static final double ELEVATOR_POSITION_TOLERANCE_INCH = .25;
    		
    	/* RAMP SUBSYSTEM */
    		
@@ -232,12 +232,12 @@ public class RobotMap
    		public static final double ELEVATOR_MOTOR_NEUTRAL_DEADBAND  = 0.000;
    		public static final int ELEVATOR_POSITION_TOLERANCE_NATIVE_TICKS = (int) (ELEVATOR_POSITION_TOLERANCE_INCH / ELEVATOR_INCHES_PER_NATIVE_TICKS); //50;	/// TODO: Convert from inches or meter tolerance
 
-   		// 3:1 gearbox on mini-CIM
-   		public static double elevatorMotorKf = 0.03868035368;
-   		public static double elevatorMotorKp = 0.9654738498;		
-   		public static double elevatorMotorKi = 0.004;
-   		public static double elevatorMotorKd = 9.654738498;
-   		public static int    elevatorMotorIZone = 50;   		
+   		// 5:1 gearbox on mini-CIM
+   		public static double elevatorMotorKf = 0.0606021113; 
+   		public static double elevatorMotorKp = 0.0639375*2*2*2*2*1.5; 
+   		public static double elevatorMotorKi = 0.00;
+   		public static double elevatorMotorKd = 15.345; 
+   		public static int    elevatorMotorIZone = 0;   		
    		
    	/* RAMP SUBSYSTEM */
 	
