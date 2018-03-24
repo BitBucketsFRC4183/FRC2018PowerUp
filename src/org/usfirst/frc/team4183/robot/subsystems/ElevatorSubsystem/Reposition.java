@@ -16,36 +16,33 @@ public class Reposition extends Command{
 	
 	// Seconds to wait for pneumatics to open
 	
-	private int requestedPosition = -1; // Use -1 as indicator for joystice
+	private int requestedPosition = -1; // Use -1 as indicator for joystick
+	private double targetPathPerc = -1; // Use -1 as indicator for normal control (vs path sync)
 	
-	
-	
-	private double targetPathPerc = -1;
 	public Reposition()
 	{
 		requires(Robot.elevatorSubsystem);
-		requestedPosition = -1;
+		targetPathPerc = -1;		// Don't sync to drive profile path
+		requestedPosition = -1;		// Manual control
 	}
 	public Reposition(int targetPosition)
 	{
 		requires(Robot.elevatorSubsystem);
-		requestedPosition = targetPosition;
-		Robot.elevatorSubsystem.setCurrentTicks(targetPosition);
+		targetPathPerc = -1;		// Don't sync to drive profile path
+		requestedPosition = targetPosition;	// Go to this position
+		Robot.elevatorSubsystem.setCurrentTicks(targetPosition);	// Remember where we were told to go
 	}
 	public Reposition(int targetPosition, double targetPathPercentComp)
 	{
 		requires(Robot.elevatorSubsystem);
-		requestedPosition = targetPosition;
-		targetPathPerc = targetPathPercentComp;
-		Robot.elevatorSubsystem.setCurrentTicks(targetPosition);
+		targetPathPerc = targetPathPercentComp;	// Sync to drive profile path
+		requestedPosition = targetPosition;		// Go to this position
+		Robot.elevatorSubsystem.setCurrentTicks(targetPosition);	// Remember where we were told to go
 	}
 	
-	public void init()
+	public void initialize()
 	{
 		System.out.println(this.getClass().getName() + " Start" + " " + System.currentTimeMillis()*10*10*10);
-		Robot.elevatorSubsystem.releasePos();
-		initTime = timeSinceInitialized();
-		
 	}
 	
 	public void execute()
@@ -55,8 +52,6 @@ public class Reposition extends Command{
 		/// account for a cube present on the way down)
 		if (targetPathPerc < 0)
 		{
-			Robot.oi.sbtnOpenMandible.release();
-
 			/// TODO: Move this to Elevator Subsystem API and query that here
 			/// The consideration of the logic for this may need to be moved into 
 			/// the state that transitioned here (vs being here)... i.e., if
@@ -92,8 +87,6 @@ public class Reposition extends Command{
 				{
 					Robot.elevatorSubsystem.setSystemPower(0.07*cmd);
 				}
-					
-				
 			}
 			else
 			{
@@ -102,35 +95,39 @@ public class Reposition extends Command{
 		}
 		else if (targetPathPerc > 0)
 		{
-			if (Robot.driveSubsystem.getPercentComplete(.6) == DriveSubsystem.TrajectoryPercent.PASSED)
+			if (Robot.driveSubsystem.getPercentComplete(targetPathPerc) == DriveSubsystem.TrajectoryPercent.PASSED)
 			{
-			Robot.elevatorSubsystem.holdPosition(requestedPosition);
+				Robot.elevatorSubsystem.holdPosition(requestedPosition);
 			}
-			else if (Robot.driveSubsystem.getPercentComplete(.6) == DriveSubsystem.TrajectoryPercent.FAULT)
+			else if (Robot.driveSubsystem.getPercentComplete(targetPathPerc) == DriveSubsystem.TrajectoryPercent.FAULT)
 			{
-				System.out.println("ERROR GETTING TRAJECTORY");
-				Robot.elevatorSubsystem.disable();
+				System.out.println("ERROR GETTING TRAJECTORY PERCENT COMPLETE");
 			}
-			}
+		}
 	}
 
 	@Override
-	protected boolean isFinished() {
+	protected boolean isFinished() 
+	{
 		
 		//Basically checks to see if the there is not any joystick movement or any buttons pressed for the elevPositions
 		// Or just got past the top limit
 		 
 		double currPos = Robot.elevatorSubsystem.getElevatorNativeUnits();
 		
-		if (((requestedPosition == -1) && 
+		if (((requestedPosition == -1) && 	// Manual and inside deadband on joystick
 			 (Math.abs(Robot.oi.rightRampAxis.get()) < .06)) || 
 			Robot.oi.btnIdle.get() || 
-			((Robot.elevatorSubsystem.getElevatorCurrent() > RobotMap.ELEVATOR_MAX_DOWN_CURRENT) && 
+			((Robot.elevatorSubsystem.getElevatorCurrent() > RobotMap.ELEVATOR_MAX_DOWN_CURRENT) && // Current too high and going down manually
 			 (Robot.oi.rightRampAxis.get() < 0)) ||
-			((requestedPosition != -1) && 
+			((requestedPosition != -1) && 					// Specific position and done
 			 Robot.elevatorSubsystem.isMoveComplete(requestedPosition)) 
 			)
 		{
+			// Just continue to hold where we are about now
+			// Because it may take some time to reach idle we will force the position right
+			// now.
+			Robot.elevatorSubsystem.holdPosition((int) Robot.elevatorSubsystem.getElevatorNativeUnits());
 			return CommandUtils.stateChange(this, new Idle());
 		}
 	return false;

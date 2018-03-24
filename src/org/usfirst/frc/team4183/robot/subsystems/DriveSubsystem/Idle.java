@@ -32,7 +32,7 @@ public class Idle extends Command
     // Called just before this Command runs the first time
     protected void initialize() 
     {
-    	System.out.println(this.getClass().getSimpleName());
+    	System.out.println(this.getClass().getName() + " DRIVE START" + " " + System.currentTimeMillis()*10*10*10);
     	Robot.driveSubsystem.disable();
 
     }
@@ -111,6 +111,7 @@ public class Idle extends Command
     // Called once after isFinished returns true
     protected void end() 
     {    
+    	System.out.println(this.getClass().getName() + " DRIVE END" + " " + System.currentTimeMillis()*10*10*10);
     }
 
     // Called when another command which requires one or more of the same

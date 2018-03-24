@@ -51,11 +51,11 @@ public class AutoGameTasks extends CommandGroup
 			if (trajectory.name.toLowerCase().contains("scale"))
 			{
 				//sets the elevator to this state which only moves the elevator to the high position if the the robot has completed 60% of the path
-				addParallel(new Reposition(ElevatorSubsystem.ElevatorPresets.HIGH.getNativeTicks(),.6));
+				addParallel(new Reposition(ElevatorSubsystem.ElevatorPresets.HIGH.getNativeTicks(),0.6));
 			}
 			else if (trajectory.name.toLowerCase().contains("switch"))
 			{
-				addParallel(new Reposition(ElevatorSubsystem.ElevatorPresets.MIDDLE.getNativeTicks(),.25));
+				addParallel(new Reposition(ElevatorSubsystem.ElevatorPresets.MIDDLE.getNativeTicks(),0.6));
 			}
 			addSequential(new DriveProfile(trajectory));
 						
