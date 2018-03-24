@@ -36,6 +36,8 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 	Faults elevatorMotorAFaults = new Faults();
 	
 	private int test_elevator_ticks = 0;
+	
+	private int currentTicks = 0;
 		
 	public static enum ElevatorPresets
 	{
@@ -56,6 +58,16 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 		{
 			return this.nativeTicks;
 		}
+	}
+	
+	public void setCurrentTicks(int desiredTicks)
+	{
+		currentTicks = desiredTicks;
+	}
+	
+	public int getCurrentSetTicks()
+	{
+		return currentTicks;
 	}
 	
 	private static double testModePeriod_sec = 2.0;
@@ -142,7 +154,7 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 	{
 		double currPos = Robot.elevatorSubsystem.getElevatorNativeUnits();
 		double cmd = Robot.oi.rightRampAxis.get();
-		boolean dangerZone = (currPos < RobotMap.ELEVATOR_SAFE_ZONE);
+		boolean dangerZone = (currPos < RobotMap.ELEVATOR_DANGER_ZONE);
 		
 		boolean restrictCmd = (dangerZone && (cmd < 0));
 		SmartDashboard.putBoolean("Dangerzone", dangerZone);
@@ -277,13 +289,19 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 		if(Robot.diagInformation.getSelected() == DiagnosticsInformation.SUBSYSTEM_EXTENDED) {
 			SmartDashboard.putBoolean("ElevatorMotor", true);
 		}
-		if(getElevatorNativeUnits() > test_elevator_ticks+RobotMap.ELEVATOR_TEST_NATIVE_UNITS/2) {
+		if(getElevatorNativeUnits() < test_elevator_ticks+RobotMap.ELEVATOR_TEST_NATIVE_UNITS/2) {
 			SmartDashboard.putBoolean(getName() + "Diagnostics", false);
 			lastKnownState = DiagnosticsState.FAIL;
 			if(Robot.diagInformation.getSelected() == DiagnosticsInformation.SUBSYSTEM_EXTENDED)
 				SmartDashboard.putBoolean("ElevatorMotor", false);
+			setSystemPower(0);
 		}
-		elevatorMotorA.set(ControlMode.PercentOutput, 0.0);
+		else
+		{
+			holdPosition(test_elevator_ticks);
+		}
+		
+		
 		
 	}
 
@@ -308,11 +326,13 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 
 		}
 		elevatorMotorA.getFaults(elevatorMotorAFaults);
+		/*
 		if(elevatorMotorA.getSensorCollection().isRevLimitSwitchClosed())
 		{
 			elevatorMotorA.setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_LOOP, RobotMap.CONTROLLER_TIMEOUT_MS);
 			new Idle();
 		}
+		*/
 		
 	}
 	

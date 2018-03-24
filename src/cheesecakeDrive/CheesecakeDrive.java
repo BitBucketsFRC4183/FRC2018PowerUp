@@ -65,7 +65,7 @@ public class CheesecakeDrive
 	public void drive(double pwr, double stopTime_seconds)
 	{				
 		// Keep commanding the motors until the timer reaches the stop time
-		if (driveTimer.get() < stopTime_seconds && (driveTimer.get() > delay_sec))
+		if (driveTimer.get() < stopTime_seconds+delay_sec && (driveTimer.get() > delay_sec))
 		{
 			leftSpeedController.set(pwr);
 			rightSpeedController.set(pwr);
