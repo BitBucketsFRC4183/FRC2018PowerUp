@@ -26,7 +26,7 @@ public class ThroatPassOff extends Command {
     	Robot.intakeSubsystem.disable();	// Turn everything off and close it
     	//Robot.intakeSubsystem.intakeUpPivet();
     	Robot.intakeSubsystem.setIntakeOnlyNeutral(NeutralMode.Coast);
-    	System.out.println(this.getClass().getName() + " Start" + " " + System.currentTimeMillis()*10*10*10);
+    	System.out.println(this.getClass().getName() + " Start" + " " + System.currentTimeMillis()/1000);
     	}
 
     // Called repeatedly when this Command is scheduled to run
@@ -51,7 +51,7 @@ public class ThroatPassOff extends Command {
    
       // Called once after isFinished returns true
       protected void end() {
-    	System.out.println(this.getClass().getName() + " END" + " " + System.currentTimeMillis()*10*10*10);
+    	System.out.println(this.getClass().getName() + " END" + " " + System.currentTimeMillis()/1000);
         Robot.intakeSubsystem.disable();
         Robot.intakeSubsystem.setIntakeOnlyNeutral(NeutralMode.Brake);
       }

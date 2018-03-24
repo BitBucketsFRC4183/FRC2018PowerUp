@@ -32,7 +32,7 @@ public class UpShoot extends Command {
     {
       Robot.intakeSubsystem.setIntakeOnlySpeed(0);
       Robot.intakeSubsystem.intakeUpPivet();
-      System.out.println(this.getClass().getName() + " Start" + " " + System.currentTimeMillis()*10*10*10);
+      System.out.println(this.getClass().getName() + " Start" + " " + System.currentTimeMillis()/1000);
       }
  
     // Called repeatedly when this Command is scheduled to run
@@ -62,7 +62,7 @@ public class UpShoot extends Command {
       {
         if (timeSinceInitialized() > timeout_sec)
         {
-          return CommandUtils.stateChange(this, new UpHold());
+          return CommandUtils.autoStateChange(this, new UpHold());
         }
       }
       
@@ -71,7 +71,7 @@ public class UpShoot extends Command {
  
     // Called once after isFinished returns true
     protected void end() {
-      System.out.println(this.getClass().getName() + " END" + " " + System.currentTimeMillis()*10*10*10);
+      System.out.println(this.getClass().getName() + " END" + " " + System.currentTimeMillis()/1000);
       Robot.intakeSubsystem.disable();
     }
  

@@ -23,7 +23,7 @@ public class DownOut extends Command {
     {
       //Double check that the intake is down
       Robot.intakeSubsystem.intakeDownPivet();
-      System.out.println(this.getClass().getName() + " Start" + " " + System.currentTimeMillis()*10*10*10);
+      System.out.println(this.getClass().getName() + " Start" + " " + System.currentTimeMillis()/1000);
       }
  
     // Called repeatedly when this Command is scheduled to run
@@ -49,7 +49,7 @@ public class DownOut extends Command {
  
     // Called once after isFinished returns true
     protected void end() {
-    	System.out.println(this.getClass().getName() + " End" + " " + System.currentTimeMillis()*10*10*10);
+    	System.out.println(this.getClass().getName() + " End" + " " + System.currentTimeMillis()/1000);
       Robot.intakeSubsystem.disable();
     }
  

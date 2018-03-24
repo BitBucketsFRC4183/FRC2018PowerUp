@@ -148,7 +148,7 @@ public class PathPlans
     		new Waypoint(2.317,     -1.245-0.3048,     Pathfinder.d2r(0)),
     		
     		new Waypoint(3.222, -1.245+0.3-0.3048, 	   Pathfinder.d2r(45)),
-    		new Waypoint(3.405,          0-0.3048,     Pathfinder.d2r(100))
+    		new Waypoint(3.405,          0,     Pathfinder.d2r(100))
 	    		
     };
     

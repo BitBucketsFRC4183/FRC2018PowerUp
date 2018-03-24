@@ -26,7 +26,7 @@ public class Idle extends Command {
     	Robot.intakeSubsystem.setNeutral(NeutralMode.Coast);
     	Robot.intakeSubsystem.disable();	// Turn everything off and close it
     	Robot.intakeSubsystem.intakeUpPivet();
-    	System.out.println(this.getClass().getName() + "INTAKE START " + System.currentTimeMillis()*10*10*10);
+    	System.out.println(this.getClass().getName() + "INTAKE START " + System.currentTimeMillis()/1000);
     	}
 
     // Called repeatedly when this Command is scheduled to run
@@ -54,7 +54,7 @@ public class Idle extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
-    	System.out.println(this.getClass().getName() + " INTAKE END" + " " + System.currentTimeMillis()*10*10*10);
+    	System.out.println(this.getClass().getName() + " INTAKE END" + " " + System.currentTimeMillis()/1000);
     	Robot.intakeSubsystem.setNeutral(NeutralMode.Brake);
     	Robot.intakeSubsystem.disable();
     }
