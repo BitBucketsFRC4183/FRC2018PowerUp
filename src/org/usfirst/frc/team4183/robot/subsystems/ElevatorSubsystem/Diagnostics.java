@@ -1,6 +1,7 @@
 package org.usfirst.frc.team4183.robot.subsystems.ElevatorSubsystem;
 
 import org.usfirst.frc.team4183.robot.Robot;
+import org.usfirst.frc.team4183.robot.RobotMap;
 import org.usfirst.frc.team4183.utils.CommandUtils;
 
 import edu.wpi.first.wpilibj.command.Command;
@@ -12,6 +13,7 @@ public class Diagnostics extends Command {
 	
 	private int diagInitLoops;
 
+	
     public Diagnostics() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
@@ -26,15 +28,11 @@ public class Diagnostics extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	if(diagInitLoops < Robot.elevatorSubsystem.DIAG_LOOPS_RUN) {
-    		Robot.elevatorSubsystem.diagnosticsExecute();
-    		diagInitLoops++;
-    	}
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	if(diagInitLoops >= Robot.elevatorSubsystem.DIAG_LOOPS_RUN) {
+    	if(this.timeSinceInitialized() > RobotMap.ELEVATOR_TEST_TIMEOUT_SEC) {
     		Robot.elevatorSubsystem.diagnosticsCheck();
     		return CommandUtils.stateChange(this, new Idle());
     	}

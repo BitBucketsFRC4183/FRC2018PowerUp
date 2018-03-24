@@ -260,4 +260,6 @@ public class RobotMap
  */
    		public static final double MINIMUM_MOTOR_CURR = 1.25; 
    		public static final double MOTOR_TEST_PERCENT = 0.5;
+   		public static final double ELEVATOR_TEST_TIMEOUT_SEC = .1;
+   		public static final double ELEVATOR_TEST_NATIVE_UNITS = 300;
 }

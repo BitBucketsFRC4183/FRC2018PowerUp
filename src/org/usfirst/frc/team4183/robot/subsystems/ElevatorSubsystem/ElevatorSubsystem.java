@@ -34,6 +34,8 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 	private static SendableChooser<SubsystemTelemetryState> telemetryState;
 	
 	Faults elevatorMotorAFaults = new Faults();
+	
+	private int test_elevator_ticks = 0;
 		
 	public static enum ElevatorPresets
 	{
@@ -254,12 +256,12 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 
 	@Override
 	public void diagnosticsInit() {
-		
+		test_elevator_ticks = (int)getElevatorNativeUnits();
+		holdPosition((int)RobotMap.ELEVATOR_TEST_NATIVE_UNITS+test_elevator_ticks);
 	}
 	
 	@Override
 	public void diagnosticsExecute() {
-		elevatorMotorA.set(ControlMode.PercentOutput, RobotMap.MOTOR_TEST_PERCENT);
 	}
 	
 	@Override
@@ -275,7 +277,7 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 		if(Robot.diagInformation.getSelected() == DiagnosticsInformation.SUBSYSTEM_EXTENDED) {
 			SmartDashboard.putBoolean("ElevatorMotor", true);
 		}
-		if(elevatorMotorA.getOutputCurrent() <= RobotMap.MINIMUM_MOTOR_CURR) {
+		if(getElevatorNativeUnits() > test_elevator_ticks+RobotMap.ELEVATOR_TEST_NATIVE_UNITS/2) {
 			SmartDashboard.putBoolean(getName() + "Diagnostics", false);
 			lastKnownState = DiagnosticsState.FAIL;
 			if(Robot.diagInformation.getSelected() == DiagnosticsInformation.SUBSYSTEM_EXTENDED)
