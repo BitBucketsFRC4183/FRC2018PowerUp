@@ -193,11 +193,11 @@ public class PathPlans
 
     private static Waypoint[] leftStartLeftScalePath = new Waypoint[]
     {
-        new Waypoint(0,                     0,     Pathfinder.d2r(0)),
-        new Waypoint(0.864,             1.004-0.3048*2,     Pathfinder.d2r(30)),
-        new Waypoint(2.317,             1.550-0.3048*2,     Pathfinder.d2r(0)),
-        new Waypoint(5.508,             1.550-0.3048*3,     Pathfinder.d2r(0)),
-        new Waypoint(6.682,             0.376-0.3048*2,     Pathfinder.d2r(-45))
+        new Waypoint(0,                     0,                  Pathfinder.d2r(0)),
+        new Waypoint(0.864,             1.004/*-0.3048*2*/,     Pathfinder.d2r(45)),
+        new Waypoint(2.317,             1.550/*-0.3048*2*/,     Pathfinder.d2r(0)),
+        new Waypoint(5.508,             1.550/*-0.3048*3*/,     Pathfinder.d2r(0)),
+        new Waypoint(6.682,             0.376/*-0.3048*2*/,     Pathfinder.d2r(-45))
     };
     
     private static Waypoint[] rightStartLeftScalePath = new Waypoint[]
