@@ -23,7 +23,7 @@ public class DriveLock extends Command
     // Called just before this Command runs the first time
     protected void initialize() 
     {
-    	System.out.println(this.getClass().getSimpleName());
+    	System.out.println(this.getClass().getName() + " Start" + " " + System.currentTimeMillis()/1000);
     	Robot.lightingControl.set(LightingObjects.DRIVE_SUBSYSTEM,
                                   LightingControl.FUNCTION_ON,
                                   LightingControl.COLOR_GREEN,
@@ -70,6 +70,7 @@ public class DriveLock extends Command
     // Called once after isFinished returns true
     protected void end() 
     {
+    	System.out.println(this.getClass().getName() + " END" + " " + System.currentTimeMillis()/1000);
     }
 
     // Called when another command which requires one or more of the same

@@ -13,7 +13,7 @@ public class Lift extends Command{
 	
 	public void initialize()
 	{
-		System.out.println(this.getClass().getSimpleName());	
+		System.out.println(this.getClass().getName() + " Start" + " " + System.currentTimeMillis()/1000);
 	}
 	protected void execute()
 	{
@@ -38,7 +38,7 @@ public class Lift extends Command{
 	
 	protected void end()
 	{
-		
+		System.out.println(this.getClass().getName() + " END" + " " + System.currentTimeMillis()/1000);
 	}
 	
 	protected void interrupted()

@@ -8,6 +8,7 @@ import org.usfirst.frc.team4183.robot.RobotMap;
 import org.usfirst.frc.team4183.robot.subsystems.DriveSubsystem.*;
 import org.usfirst.frc.team4183.robot.subsystems.ElevatorSubsystem.ElevatorSubsystem;
 import org.usfirst.frc.team4183.robot.subsystems.ElevatorSubsystem.Reposition;
+import org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem.UpHold;
 import org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem.UpShoot;
 /**
  *
@@ -48,14 +49,18 @@ public class AutoGameTasks extends CommandGroup
 			//		Drive Profile (Just Short of Scale)
 			//		Raise Elevator
 			//		MoveBy remaining difference
-			if (trajectory.name.toLowerCase().contains("scale"))
+			addParallel(new UpHold());
+			if(!trajectory.name.toLowerCase().contains("moveonly"))
 			{
-				//sets the elevator to this state which only moves the elevator to the high position if the the robot has completed 60% of the path
-				addParallel(new Reposition(ElevatorSubsystem.ElevatorPresets.HIGH.getNativeTicks(),0.6));
-			}
-			else if (trajectory.name.toLowerCase().contains("switch"))
-			{
-				addParallel(new Reposition(ElevatorSubsystem.ElevatorPresets.MIDDLE.getNativeTicks(),0.6));
+				if (trajectory.name.toLowerCase().contains("scale"))
+				{
+					//sets the elevator to this state which only moves the elevator to the high position if the the robot has completed 60% of the path
+					addParallel(new Reposition(ElevatorSubsystem.ElevatorPresets.TOP.getNativeTicks(),0.75));
+				}
+				else if (trajectory.name.toLowerCase().contains("switch"))
+				{
+					addParallel(new Reposition(ElevatorSubsystem.ElevatorPresets.MIDDLE.getNativeTicks(),0.6));
+				}
 			}
 			addSequential(new DriveProfile(trajectory));
 						
@@ -64,7 +69,7 @@ public class AutoGameTasks extends CommandGroup
 			if (!trajectory.name.toLowerCase().contains("moveonly"))
 			{
 				addSequential(new UpShoot(1.0));
-				addSequential(new org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem.Idle());
+				addParallel(new org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem.Idle());
 			}
 
 			if (trajectory.name.toLowerCase().contains("scale"))
@@ -80,7 +85,7 @@ public class AutoGameTasks extends CommandGroup
 		// NOTE: There are some problems with the ClosedOut actually completing execution
 		// There appears to be an interrupted condition that causes the command to exit early
 		// and prevents this auto sequence from completing correctly
-		addSequential(new org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem.DownHold());
+		
 	}
 
 }

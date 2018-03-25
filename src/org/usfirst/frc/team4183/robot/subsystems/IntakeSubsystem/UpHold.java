@@ -89,11 +89,11 @@ public class UpHold extends Command {
       }
       else if (Robot.oi.btnOutIntake.get() && !Robot.elevatorSubsystem.outputDangerZoneInfo())
       {
-    	  return CommandUtils.stateChange(this, new UpShoot());
+    	  return CommandUtils.autoStateChange(this, new UpShoot());
       }
       else if (Robot.oi.btnIdle.get())
       {
-    	  return CommandUtils.stateChange(this, new Idle());
+    	  return CommandUtils.autoStateChange(this, new Idle());
       }
       
       return false;

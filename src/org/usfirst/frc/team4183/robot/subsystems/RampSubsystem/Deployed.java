@@ -15,6 +15,7 @@ public class Deployed extends Command {
 	protected void initalize()
 	{
 		Robot.rampSubsystem.disabled();
+		System.out.println(this.getClass().getName() + " Start" + " " + System.currentTimeMillis()/1000);
 	}
 	
 	protected void execute()
@@ -38,7 +39,7 @@ public class Deployed extends Command {
 
 	protected void end()
 	{
-		
+		System.out.println(this.getClass().getName() + " END" + " " + System.currentTimeMillis()/1000);
 	}
 	
 	protected void interrupted()
