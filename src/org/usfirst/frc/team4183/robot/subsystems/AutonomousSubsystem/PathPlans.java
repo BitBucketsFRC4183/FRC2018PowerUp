@@ -59,7 +59,7 @@ public class PathPlans
 
 	// For now, a single configuration is sufficient
 	// If we really need different ones then we will make them
-	static Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_QUINTIC, // Type of curve to fit
+	static Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, // Type of curve to fit
 													 Trajectory.Config.SAMPLES_LOW,     // Smooth fit (high) or fast fit (low)
 													 RobotMap.MOTION_PROFILE_PERIOD_MS / 1000.0, // Time between segments
 													 0.3048*6, 	    // Max speed m/s
@@ -268,6 +268,7 @@ public class PathPlans
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				System.out.println("Unable to write path plan files");
+				System.out.print(e.getMessage());
 			}
     	}
     }
@@ -487,16 +488,17 @@ public class PathPlans
 		{
 			RobotTrajectory selectedTrajectory = listofRobotTrajectories[a];
 			PrintWriter out
-			= new PrintWriter(new BufferedWriter(new FileWriter(selectedTrajectory.name)));
+			= new PrintWriter(new BufferedWriter(new FileWriter(System.getProperty("user.home")+"/PathData/"+selectedTrajectory.name+".csv")));
 			out.println(selectedTrajectory.center.length());
 			for(int b=0; b<selectedTrajectory.center.length(); b++)
 			{
 				Trajectory.Segment segL = selectedTrajectory.left.get(b);
 				Trajectory.Segment segR = selectedTrajectory.right.get(b);
-				out.println(segL.dt + "," + segL.position + "," + segL.velocity + "," + segR.position + "," + segR.velocity);
-				System.out.println(a + " of " + listofRobotTrajectories.length + "files completed");
+				//segL.position + "," + segL.velocity + "," + segR.position + "," + segR.velocity+","+
+				out.println((b+1)+","+segL.dt + "," + segL.x+","+segL.y+","+segR.x+","+segR.y);
 			}
 			out.close();
+			System.out.println((a+1) + " of " + listofRobotTrajectories.length + "files completed");
 		}		
 	}
 
