@@ -49,7 +49,11 @@ public class DownOff extends Command {
          else if (Robot.oi.btnInIntake.get()) 
          { 
            return CommandUtils.stateChange(this, new DownIn()); 
-         } 
+         }
+         else if (Robot.oi.btnLeftIntake.get())
+         {
+        	 return CommandUtils.stateChange(this, new DownOscillate());
+         }
     	return false;
     }
 
