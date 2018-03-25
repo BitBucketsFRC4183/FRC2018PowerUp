@@ -199,7 +199,7 @@ public class RobotMap
    		public static final double INTAKE_MOTOR_PERCENT = 0.8;
    		public static final double THROAT_MOTOR_PERCENT = 0.9;
    		public static final double INTAKE_MOTOR_HOLD_PERCENT = -.15;
-   		public static final double INTAKE_MOTOR_ASSIST_PERCENT = .15;
+   		public static final double INTAKE_MOTOR_ASSIST_PERCENT = .2;
    		public static final double THROAT_MOTOR_CURRENT_WITH_CUBE = 3;
    		
    		

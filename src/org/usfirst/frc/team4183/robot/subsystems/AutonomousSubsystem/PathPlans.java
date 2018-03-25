@@ -131,7 +131,7 @@ public class PathPlans
     {
     		new Waypoint(0,            0,       Pathfinder.d2r(0)),
     		new Waypoint(0.8382,       -0.6096, Pathfinder.d2r(-40)),
-    		new Waypoint(2.6138,      -1.0668,  Pathfinder.d2r(0))
+    		new Waypoint(2.6138+(0.5*0.3048),      -1.0668,  Pathfinder.d2r(0))
     };
     
     private static Waypoint[] centerStartLeftSwitchPath = new Waypoint[]
@@ -148,7 +148,7 @@ public class PathPlans
     		new Waypoint(2.317,     -1.245-0.3048,     Pathfinder.d2r(0)),
     		
     		new Waypoint(3.222, -1.245+0.3-0.3048, 	   Pathfinder.d2r(45)),
-    		new Waypoint(3.405,          0-0.3048,     Pathfinder.d2r(100))
+    		new Waypoint(3.405,          0,     Pathfinder.d2r(100))
 	    		
     };
     
@@ -162,7 +162,7 @@ public class PathPlans
     		new Waypoint(2.317,     1.245-0.3048,     Pathfinder.d2r(0)),
     		
     		new Waypoint(3.222,     1.245-0.3-0.3048, Pathfinder.d2r(-45)),
-    		new Waypoint(3.405,         0,            Pathfinder.d2r(-100))
+    		new Waypoint(3.405,         0-0.3048,            Pathfinder.d2r(-100))
     };
 
     private static Waypoint[] rightStartLeftSwitchPath = new Waypoint[]
@@ -206,16 +206,16 @@ public class PathPlans
         new Waypoint(0.864,            -1.004,     Pathfinder.d2r(-45)),
         new Waypoint(2.317,            -1.550,     Pathfinder.d2r(0)),
         new Waypoint(5.508,            -1.550,     Pathfinder.d2r(0)),
-        new Waypoint(6.682,            -0.376,     Pathfinder.d2r(45))
+        new Waypoint(6.682+(0.3048*0.75),            -0.376+(0.3048*0.75),     Pathfinder.d2r(60))
     };
 
     private static Waypoint[] leftStartLeftScalePath = new Waypoint[]
     {
         new Waypoint(0,                     0,     Pathfinder.d2r(0)),
-        new Waypoint(0.864,             1.004,     Pathfinder.d2r(45)),
-        new Waypoint(2.317,             1.550,     Pathfinder.d2r(0)),
-        new Waypoint(5.508,             1.550,     Pathfinder.d2r(0)),
-        new Waypoint(6.682,             0.376,     Pathfinder.d2r(-45))
+        new Waypoint(0.864,             1.004-0.3048*2,     Pathfinder.d2r(30)),
+        new Waypoint(2.317,             1.550-0.3048*2,     Pathfinder.d2r(0)),
+        new Waypoint(5.508,             1.550-0.3048*3,     Pathfinder.d2r(0)),
+        new Waypoint(6.682,             0.376-0.3048*2,     Pathfinder.d2r(-45))
     };
     
     private static Waypoint[] rightStartLeftScalePath = new Waypoint[]
@@ -456,7 +456,7 @@ public class PathPlans
 	    leftStartRightScaleTrajectory.right = modifier.getRightTrajectory();
 	    
 	//********
-	    leftStartMoveOnlyTrajectory = new RobotTrajectory("leftStartRightSwitchNoCross");
+	    leftStartMoveOnlyTrajectory = new RobotTrajectory("leftStartRightSwitchMoveOnly");
 	    leftStartMoveOnlyTrajectory.center = Pathfinder.generate(leftStartMoveOnlyPath, config);
 
 	    modifier = new TankModifier(leftStartMoveOnlyTrajectory.center).modify(RobotMap.inch2Meter(RobotMap.WHEEL_TRACK_INCHES));
@@ -466,7 +466,7 @@ public class PathPlans
 	    
 	    
 	 //********
-	    rightStartMoveOnlyTrajectory = new RobotTrajectory("rightStartLeftSwitchNoCross");
+	    rightStartMoveOnlyTrajectory = new RobotTrajectory("rightStartLeftSwitchMoveOnly");
 	    rightStartMoveOnlyTrajectory.center = Pathfinder.generate(rightStartMoveOnlyPath, config);
 	    modifier = new TankModifier(rightStartMoveOnlyTrajectory.center).modify(RobotMap.inch2Meter(RobotMap.WHEEL_TRACK_INCHES));
 	    

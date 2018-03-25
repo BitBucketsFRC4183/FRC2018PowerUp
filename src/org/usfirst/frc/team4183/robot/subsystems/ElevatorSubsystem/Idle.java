@@ -22,7 +22,7 @@ public class Idle extends Command{
 		Robot.oi.sbtnOpenMandible.release();
 		
 		holdPosition = (int) Robot.elevatorSubsystem.getElevatorNativeUnits();
-		System.out.println(this.getClass().getName() + "ELEVATOR START " + System.currentTimeMillis()*10*10*10);
+		System.out.println(this.getClass().getName() + "ELEVATOR START " + System.currentTimeMillis()/1000);
 		
 		//Robot.elevatorSubsystem.holdEncodPos(false);
 		//Robot.elevatorSubsystem.holdEncodPos(true);
@@ -73,7 +73,7 @@ public class Idle extends Command{
 
 	protected void end()
 	{
-		System.out.println(this.getClass().getName() + "ELEVATOR END " + System.currentTimeMillis()*10*10*10);
+		System.out.println(this.getClass().getName() + "ELEVATOR END " + System.currentTimeMillis()/1000);
 	}
 	
 	protected void interrupted()

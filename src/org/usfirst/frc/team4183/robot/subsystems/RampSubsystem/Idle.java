@@ -16,7 +16,7 @@ public class Idle extends Command{
 	{
 		Robot.rampSubsystem.disabled();
 		Robot.rampSubsystem.closeRamp();
-		System.out.println(this.getClass().getName());
+		System.out.println(this.getClass().getName() + " Start" + " " + System.currentTimeMillis()/1000);
 	}
 	
 	protected void execute()
@@ -40,6 +40,7 @@ public class Idle extends Command{
 	
 	protected void end()
 	{
+		System.out.println(this.getClass().getName() + " END" + " " + System.currentTimeMillis()/1000);
 		Robot.rampSubsystem.releaseRamp();
 	}
 	
