@@ -10,9 +10,11 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class DownIn extends Command {
+public class DownOscillate extends Command {
  
-    public DownIn() {
+	private boolean oscilate = true;
+	
+    public DownOscillate() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
       requires(Robot.intakeSubsystem);  
@@ -26,28 +28,29 @@ public class DownIn extends Command {
       }
  
     // Called repeatedly when this Command is scheduled to run
-    protected void execute() {   
-    	Robot.intakeSubsystem.setIntakeOnlySpeed(-RobotMap.INTAKE_MOTOR_PERCENT);
-    	//Robot.intakeSubsystem.setThroatSpeed(-RobotMap.THROAT_LEFT_HOLD_PERCENT);
+    protected void execute() {
+    	if (oscilate = true)
+    	{
+    		Robot.intakeSubsystem.setLeftIntakeSpeed(-RobotMap.INTAKE_MOTOR_PERCENT);
+    		Robot.intakeSubsystem.setRightIntakeSpeed(RobotMap.INTAKE_MOTOR_PERCENT);
+    	}
+    	else if (oscilate = false)
+    	{
+    		Robot.intakeSubsystem.setLeftIntakeSpeed(-RobotMap.INTAKE_MOTOR_PERCENT);
+    		Robot.intakeSubsystem.setRightIntakeSpeed(-RobotMap.INTAKE_MOTOR_PERCENT);
+    	}
+    	oscilate = !oscilate;
     }
  
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-      if (Robot.oi.btnOutIntake.get())
-      {
-        return CommandUtils.stateChange(this, new ThroatPassOff());
-      }
-      else if (!Robot.oi.btnInIntake.get())
+      if (!Robot.oi.btnLeftIntake.get())
       {
         return CommandUtils.stateChange(this, new DownHold());
       }
-      else if (Robot.oi.btnUpIntake.get())
-      {
-    	  return CommandUtils.stateChange(this, new UpHold());
-      }
       else if (Robot.oi.btnIdle.get())
       {
-    	  return CommandUtils.stateChange(this, new Idle());
+    	  return CommandUtils.stateChange(this, new DownOff());
       }
       
       return false;
