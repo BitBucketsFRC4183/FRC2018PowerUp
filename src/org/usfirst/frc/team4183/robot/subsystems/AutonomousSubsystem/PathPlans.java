@@ -31,18 +31,6 @@ public class PathPlans
 	// NOTE: All of Jaci's code assumes metric units (meters (m), m/s, m/s^2, m/s^3 etc)
 	// This will be important for converting trajectories into motion profiles
 
-	/// TODO: Need to consider cross over restrictions and choose... maybe options on scoring goal
-	public enum PathPlanChoice 
-	{
-		// This enumeration corresponds to the similarly named Path and Trajectory
-		NONE,
-		// NOTE: The test path plan is selected directly when needed
-		RIGHT_START_RIGHT_SWITCH,
-		RIGHT_START_LEFT_SWITCH,
-		CENTER_START_RIGHT_SWITCH
-	}
-	
-	private static SendableChooser<PathPlanChoice> pathChooser;
 	
 	private static SendableChooser<StartingPosition> startingPositionChooser;
 	
@@ -63,13 +51,7 @@ public class PathPlans
 	}
 	
 	private static SendableChooser<CrossingMode> crossingModeChooser;
-	
-	public enum TrustCenterBot
-	{
-		TRUST, DONT_TRUST
-	}
-	private static SendableChooser<TrustCenterBot> trustCenterChooser;
-	
+		
 	PathPlans()
 	{
 		
@@ -125,7 +107,7 @@ public class PathPlans
     };
     
     // *****************************************************************
-    // SWITCH PATHS
+    // SWITCH PATHS (Modifications shown as explicit arithmetic)
     // *****************************************************************
     private static Waypoint[] centerStartRightSwitchPath = new Waypoint[]
     {
@@ -198,7 +180,7 @@ public class PathPlans
     };
     
     // ***************************************************************************
-    // SCALE PATHS
+    // SCALE PATHS (Modifications shown as explicit arithmetic)
     // ***************************************************************************
     private static Waypoint[] rightStartRightScalePath = new Waypoint[]
     {
@@ -206,7 +188,7 @@ public class PathPlans
         new Waypoint(0.864,            -1.004,     Pathfinder.d2r(-45)),
         new Waypoint(2.317,            -1.550,     Pathfinder.d2r(0)),
         new Waypoint(5.508,            -1.550,     Pathfinder.d2r(0)),
-        new Waypoint(6.682+(0.3048*0.75),            -0.376+(0.3048*0.75),     Pathfinder.d2r(60))
+        new Waypoint(6.682+(0.3048*0.75), -0.376+(0.3048*0.75), Pathfinder.d2r(45+15))
     };
 
     private static Waypoint[] leftStartLeftScalePath = new Waypoint[]
@@ -312,24 +294,7 @@ public class PathPlans
     	crossingModeChooser.addDefault(  "DISABLE CROSSING",    CrossingMode.DISABLE_CROSSING);
     	crossingModeChooser.addObject(   "ENABLE CROSSING",     CrossingMode.ENABLE_CROSSING);
     	SmartDashboard.putData( "Crossing Mode", crossingModeChooser);
-    	
-    	/// TODO: This will be replaced with logic based on the above choices
-		pathChooser = new SendableChooser<PathPlanChoice>();
-		pathChooser.addDefault( "NONE",		PathPlanChoice.NONE);
-		pathChooser.addObject("RIGHT RIGHT", PathPlanChoice.RIGHT_START_RIGHT_SWITCH);
-		pathChooser.addObject("RIGHT LEFT", PathPlanChoice.RIGHT_START_LEFT_SWITCH);
-		pathChooser.addDefault("CENTER RIGHT",PathPlanChoice.CENTER_START_RIGHT_SWITCH);
-		SmartDashboard.putData( "Path Plan", pathChooser);
-		
-		trustCenterChooser = new SendableChooser<TrustCenterBot>();
-		trustCenterChooser.addDefault("DON'T TRUST", TrustCenterBot.DONT_TRUST);
-		trustCenterChooser.addObject("TRUST", TrustCenterBot.TRUST);
-		trustCenterChooser.addObject("DON'T TRUST", TrustCenterBot.DONT_TRUST);
-		SmartDashboard.putData("Trust Center Bot", trustCenterChooser);
-		
-    	/// TODO: May want to pre-compute these and store them as files to speed up startup
-    	
-	    
+    			
 	  //***********
     	testTrajectory0 = new RobotTrajectory("Test0");//determines the path
 	    testTrajectory0.center = Pathfinder.generate(testPath0, config);
@@ -479,11 +444,45 @@ public class PathPlans
     // set it back to false and then call this function.
     
    
-
+    /**
+     * writeTrajectoriesToFiles
+     *  
+	 * When called, will write each trajectory to a file
+	 * Each RobotTrajectory instance has a name member that can be used as the file name
+	 
+	 * Each RobotTrajectory instance has a left and right member containing Segments
+	 * An easier way to do this without needing to write a lot of code for each new trajectory is 
+	 * to make an array of the above RobotTrajectory objects and simply loop through that array
+	 * repeating the logic, below.
+     * 
+	 * Write the length as first value in file (integer then new line)
+	 * Loop through the segments 
+	 * 	Write dt, left.position, left.velocity, right.position, right.velocity (then new line)
+	 * 
+	 * Close file and move on to the next trajectory
+     */
 	public static void writeTrajectoriesToFiles() throws IOException
 	{
 		
-		RobotTrajectory[] listofRobotTrajectories = {testTrajectory0, rightStartRightSwitchTrajectory, leftStartLeftSwitchTrajectory, rightStartLeftSwitchTrajectory,leftStartRightSwitchTrajectory, centerStartRightSwitchTrajectory, rightStartRightScaleTrajectory, leftStartLeftScaleTrajectory,rightStartLeftScaleTrajectory, leftStartRightScaleTrajectory, leftStartMoveOnlyTrajectory, rightStartMoveOnlyTrajectory};
+		RobotTrajectory[] listofRobotTrajectories = 
+		{
+			testTrajectory0, 
+			
+			leftStartLeftSwitchTrajectory, 
+			leftStartRightSwitchTrajectory, 
+			leftStartLeftScaleTrajectory,
+			leftStartRightScaleTrajectory, 
+			leftStartMoveOnlyTrajectory, 
+
+			centerStartLeftSwitchTrajectory, 
+			centerStartRightSwitchTrajectory, 
+			
+			rightStartRightSwitchTrajectory, 
+			rightStartLeftSwitchTrajectory,
+			rightStartRightScaleTrajectory, 
+			rightStartLeftScaleTrajectory, 
+			rightStartMoveOnlyTrajectory
+		};
 		for(int a=0; a<listofRobotTrajectories.length; a++)
 		{
 			RobotTrajectory selectedTrajectory = listofRobotTrajectories[a];
@@ -498,21 +497,7 @@ public class PathPlans
 				System.out.println(a + " of " + listofRobotTrajectories.length + "files completed");
 			}
 			out.close();
-		}
-		// When called, will write each trajectory to a file
-		// Each RobotTrajectory instance has a name member that can be used as the file name
-		
-		// Each RobotTrajectory instance has a left and right member containing Segments
-		// An easier way to do this without needing to write a lot of code for each new trajectory is 
-		// to make an array of the above RobotTrajectory objects and simply loop through that array
-		// repeating the logic, below.
-
-		// Write the length as first value in file (integer then new line)
-		// Loop through the segments 
-		// 	Write dt, left.position, left.velocity, right.position, right.velocity (then new line)
-		
-		// Close file and move on to the next trajectory
-		
+		}		
 	}
 
 	public static RobotTrajectory getSelectedTrajectory() 

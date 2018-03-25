@@ -1,30 +1,19 @@
 package org.usfirst.frc.team4183.robot.subsystems.AutonomousSubsystem;
 
-import java.util.List;
-
 import org.usfirst.frc.team4183.robot.Robot;
-import org.usfirst.frc.team4183.robot.RobotMap;
 import org.usfirst.frc.team4183.robot.subsystems.BitBucketsSubsystem;
-import org.usfirst.frc.team4183.robot.subsystems.AutonomousSubsystem.PathPlans.PathPlanChoice;
 import org.usfirst.frc.team4183.utils.Positions;
 import org.usfirst.frc.team4183.utils.Positions.GenericPositions;
 
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import jaci.pathfinder.Trajectory;
-import jaci.pathfinder.followers.EncoderFollower;
 
 /**
  *
  */
 public class AutonomousSubsystem extends BitBucketsSubsystem 
 {
-	
-	//these are used for the pathFollower
-	private EncoderFollower pathTracker;
 	
 	public enum AutoChoices
 	{
