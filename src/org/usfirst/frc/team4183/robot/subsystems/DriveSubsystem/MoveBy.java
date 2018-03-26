@@ -41,7 +41,7 @@ public class MoveBy extends Command {
     protected boolean isFinished() 
     {
     	boolean timeout = (timeSinceInitialized() > timeout_sec);
-    	System.out.printf("Timeout is %s\n", timeout?"TRUE":"false");
+    	//System.out.printf("Timeout is %s\n", timeout?"TRUE":"false");
     	
     	if (timeout || Robot.driveSubsystem.isMoveComplete(distance_inches)) 
     	{

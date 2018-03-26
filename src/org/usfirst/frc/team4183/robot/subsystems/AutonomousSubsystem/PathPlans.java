@@ -66,6 +66,14 @@ public class PathPlans
 													 2.0, 			// Max acceleration m/s^2
 													 60.0);			// Max jerk m/s^3
 	
+	//used specifically for the LLSCALE
+	static Trajectory.Config config2 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, // Type of curve to fit
+			 Trajectory.Config.SAMPLES_LOW,     // Smooth fit (high) or fast fit (low)
+			 RobotMap.MOTION_PROFILE_PERIOD_MS / 1000.0, // Time between segments
+			 0.3048*4, 	    // Max speed m/s
+			 2.0, 			// Max acceleration m/s^2
+			 40.0);			// Max jerk m/s^3
+	
 	// Paths are defined as waypoints in x,y,heading
 	//
 	// heading is defined to be 0 parallel to the x-axis
@@ -194,10 +202,10 @@ public class PathPlans
     private static Waypoint[] leftStartLeftScalePath = new Waypoint[]
     {
         new Waypoint(0,                     0,                  Pathfinder.d2r(0)),
-        new Waypoint(0.864,             1.004/*-0.3048*2*/,     Pathfinder.d2r(45)),
-        new Waypoint(2.317,             1.550/*-0.3048*2*/,     Pathfinder.d2r(0)),
-        new Waypoint(5.508,             1.550/*-0.3048*3*/,     Pathfinder.d2r(0)),
-        new Waypoint(6.682,             0.376/*-0.3048*2*/,     Pathfinder.d2r(-45))
+        new Waypoint(1.155/*0.864*/,             0.648/*1.3*//*1.004*//*-0.3048*2*/,     Pathfinder.d2r(25)),
+        new Waypoint(2.706,             0.664/*-0.3048*2*/,     Pathfinder.d2r(-20)),
+        new Waypoint(5.705,             -0.427/*-0.3048*3*/,     Pathfinder.d2r(-20)),
+        new Waypoint(6.607,             -1.33/*-0.3048*2*/,     Pathfinder.d2r(-45))
     };
     
     private static Waypoint[] rightStartLeftScalePath = new Waypoint[]
@@ -390,7 +398,7 @@ public class PathPlans
 
 	//***********
 	    leftStartLeftScaleTrajectory = new RobotTrajectory("leftStartLeftScale");
-	    leftStartLeftScaleTrajectory.center = Pathfinder.generate(leftStartLeftScalePath, config);
+	    leftStartLeftScaleTrajectory.center = Pathfinder.generate(leftStartLeftScalePath, config2);
 
 	    // We don't need to store the modifier persistently
 	    modifier = new TankModifier(leftStartLeftScaleTrajectory.center).modify(RobotMap.inch2Meter(RobotMap.WHEEL_TRACK_INCHES));

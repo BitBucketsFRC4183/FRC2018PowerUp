@@ -31,8 +31,8 @@ public class DownOscillate extends Command {
     protected void execute() {
     	if (oscilate = true)
     	{
-    		Robot.intakeSubsystem.setLeftIntakeSpeed(-RobotMap.INTAKE_MOTOR_PERCENT);
-    		Robot.intakeSubsystem.setRightIntakeSpeed(RobotMap.INTAKE_MOTOR_PERCENT);
+    		Robot.intakeSubsystem.setLeftIntakeSpeed(-RobotMap.INTAKE_OSCILLATE_MOTOR_PERCENT);
+    		Robot.intakeSubsystem.setRightIntakeSpeed(RobotMap.INTAKE_OSCILLATE_MOTOR_PERCENT);
     	}
     	else if (oscilate = false)
     	{
