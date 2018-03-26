@@ -59,12 +59,20 @@ public class PathPlans
 
 	// For now, a single configuration is sufficient
 	// If we really need different ones then we will make them
-	static Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_QUINTIC, // Type of curve to fit
+	static Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, // Type of curve to fit
 													 Trajectory.Config.SAMPLES_LOW,     // Smooth fit (high) or fast fit (low)
 													 RobotMap.MOTION_PROFILE_PERIOD_MS / 1000.0, // Time between segments
 													 0.3048*6, 	    // Max speed m/s
 													 2.0, 			// Max acceleration m/s^2
 													 60.0);			// Max jerk m/s^3
+	
+	//used specifically for the LLSCALE
+	static Trajectory.Config config2 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, // Type of curve to fit
+			 Trajectory.Config.SAMPLES_LOW,     // Smooth fit (high) or fast fit (low)
+			 RobotMap.MOTION_PROFILE_PERIOD_MS / 1000.0, // Time between segments
+			 0.3048*4, 	    // Max speed m/s
+			 2.0, 			// Max acceleration m/s^2
+			 40.0);			// Max jerk m/s^3
 	
 	// Paths are defined as waypoints in x,y,heading
 	//
@@ -194,10 +202,10 @@ public class PathPlans
     private static Waypoint[] leftStartLeftScalePath = new Waypoint[]
     {
         new Waypoint(0,                     0,                  Pathfinder.d2r(0)),
-        new Waypoint(0.864,             1.004/*-0.3048*2*/,     Pathfinder.d2r(45)),
-        new Waypoint(2.317,             1.550/*-0.3048*2*/,     Pathfinder.d2r(0)),
-        new Waypoint(5.508,             1.550/*-0.3048*3*/,     Pathfinder.d2r(0)),
-        new Waypoint(6.682,             0.376/*-0.3048*2*/,     Pathfinder.d2r(-45))
+        new Waypoint(1.155/*0.864*/,             0.648/*1.3*//*1.004*//*-0.3048*2*/,     Pathfinder.d2r(25)),
+        new Waypoint(2.706,             0.664/*-0.3048*2*/,     Pathfinder.d2r(-20)),
+        new Waypoint(5.705,             -0.427/*-0.3048*3*/,     Pathfinder.d2r(-20)),
+        new Waypoint(6.607,             -1.33/*-0.3048*2*/,     Pathfinder.d2r(-45))
     };
     
     private static Waypoint[] rightStartLeftScalePath = new Waypoint[]
@@ -268,6 +276,7 @@ public class PathPlans
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				System.out.println("Unable to write path plan files");
+				System.out.print(e.getMessage());
 			}
     	}
     }
@@ -389,7 +398,7 @@ public class PathPlans
 
 	//***********
 	    leftStartLeftScaleTrajectory = new RobotTrajectory("leftStartLeftScale");
-	    leftStartLeftScaleTrajectory.center = Pathfinder.generate(leftStartLeftScalePath, config);
+	    leftStartLeftScaleTrajectory.center = Pathfinder.generate(leftStartLeftScalePath, config2);
 
 	    // We don't need to store the modifier persistently
 	    modifier = new TankModifier(leftStartLeftScaleTrajectory.center).modify(RobotMap.inch2Meter(RobotMap.WHEEL_TRACK_INCHES));
@@ -487,16 +496,17 @@ public class PathPlans
 		{
 			RobotTrajectory selectedTrajectory = listofRobotTrajectories[a];
 			PrintWriter out
-			= new PrintWriter(new BufferedWriter(new FileWriter(selectedTrajectory.name)));
+			= new PrintWriter(new BufferedWriter(new FileWriter(System.getProperty("user.home")+"/PathData/"+selectedTrajectory.name+".csv")));
 			out.println(selectedTrajectory.center.length());
 			for(int b=0; b<selectedTrajectory.center.length(); b++)
 			{
 				Trajectory.Segment segL = selectedTrajectory.left.get(b);
 				Trajectory.Segment segR = selectedTrajectory.right.get(b);
-				out.println(segL.dt + "," + segL.position + "," + segL.velocity + "," + segR.position + "," + segR.velocity);
-				System.out.println(a + " of " + listofRobotTrajectories.length + "files completed");
+				//segL.position + "," + segL.velocity + "," + segR.position + "," + segR.velocity+","+
+				out.println((b+1)+","+segL.dt + "," + segL.x+","+segL.y+","+segR.x+","+segR.y);
 			}
 			out.close();
+			System.out.println((a+1) + " of " + listofRobotTrajectories.length + "files completed");
 		}		
 	}
 

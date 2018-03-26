@@ -61,6 +61,7 @@ public class DriveProfile extends Command {
 	    	{
 	    		if (timeout)
 	    		{
+	    			System.out.println("DRIVE PROFILE TIMED OUT");
 	    		}
 	    		return CommandUtils.autoStateChange(this, new Idle());
 	    	}

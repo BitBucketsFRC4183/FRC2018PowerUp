@@ -18,8 +18,7 @@ public class Idle extends Command{
 	
 	protected void initialize()
 	{
-		Robot.elevatorSubsystem.disable();
-		Robot.oi.sbtnOpenMandible.release();
+		//Robot.elevatorSubsystem.disable();
 		
 		holdPosition = (int) Robot.elevatorSubsystem.getElevatorNativeUnits();
 		System.out.println(this.getClass().getName() + "ELEVATOR START " + System.currentTimeMillis()/1000);
@@ -45,7 +44,6 @@ public class Idle extends Command{
 		
 		else if (Math.abs(Robot.oi.rightRampAxis.get()) > .06)		/// TODO: Need comment here explaining that sharing joytick!
 		{														/// TODO: May want two instances with different names and put comment at definition
-			Robot.oi.sbtnOpenMandible.push();
 			return CommandUtils.stateChange(this, new Reposition());
 		}
 		else if (Robot.oi.btnElevatorTop.get())
