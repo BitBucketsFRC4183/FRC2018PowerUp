@@ -82,7 +82,6 @@ public class Robot extends IterativeRobot {
 		driveSubsystem = new DriveSubsystem();
 		intakeSubsystem = new IntakeSubsystem();
 		visionSubsystem = new VisionSubsystem();
-		//rampSubsystem = new RampSubsystem();		
 		elevatorSubsystem = new ElevatorSubsystem();
 				
 		imu = new NavxIMU();
@@ -104,7 +103,6 @@ public class Robot extends IterativeRobot {
         addSubsystemToDebug(intakeSubsystem);
         addSubsystemToDebug(visionSubsystem);
         addSubsystemToDebug(elevatorSubsystem);
-        //addSubsystemToDebug(rampSubsystem);
 
         addSubsystemToDebug(autonomousSubsystem);
         
@@ -113,7 +111,7 @@ public class Robot extends IterativeRobot {
         /// TODO: Consider moving to vision subsystem
         UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
         camera.setResolution(640, 480);
-        camera.setFPS(120);
+        camera.setFPS(120);				// May not work with all cameras
 	}
 	
 	private void setSubsystemsDebug() 
@@ -132,8 +130,6 @@ public class Robot extends IterativeRobot {
 		driveSubsystem.initialize();
 		intakeSubsystem.initialize();
 		elevatorSubsystem.initialize();
-		
-		/// TODO: climbing and or ramps
 	}
 	
 	@Override
