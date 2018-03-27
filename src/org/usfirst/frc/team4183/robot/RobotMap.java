@@ -267,4 +267,5 @@ public class RobotMap
    		public static final double MOTOR_TEST_PERCENT = 0.5;
    		public static final double ELEVATOR_TEST_TIMEOUT_SEC = .1;
    		public static final double ELEVATOR_TEST_NATIVE_UNITS = 300;
+   		public static final double TIMEOUT_GAME_INFO_SEC = 5;
 }

@@ -15,7 +15,7 @@ import org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem.UpShoot;
 public class AutoGameTasks extends CommandGroup
 {
 	
-	public AutoGameTasks()
+	public AutoGameTasks(double delay_sec)
 	{
 		 // Add Commands here:
         // e.g. addSequential(new Command1());
@@ -41,7 +41,12 @@ public class AutoGameTasks extends CommandGroup
 		{
 			// All trajectories can be delayed by a short amount if we need
 			// to avoid an alliance member that has less control over their auto
-			addSequential(new Delay((long) (1000 * SmartDashboard.getNumber("Auto Delay(sec)", 0))));
+			long delay = (long) (1000 * SmartDashboard.getNumber("Auto Delay(sec)", 0)-(1000*delay_sec));
+			if (delay < 0)
+			{
+				delay = 0;
+			}
+			addSequential(new Delay(delay));
 			
 			// Add a parallel lift command to trigger at some percentage (e.g., 60%) of trajectory completion
 			// NOTE: **** If **** this does not work correctly then we will need to use sequences follows:
