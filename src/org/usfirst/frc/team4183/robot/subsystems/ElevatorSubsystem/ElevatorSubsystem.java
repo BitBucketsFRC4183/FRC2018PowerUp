@@ -332,13 +332,19 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 
 		}
 		elevatorMotorA.getFaults(elevatorMotorAFaults);
-		/*
+
+		// Reset the encoder to zero each time the limit switch is reached
 		if(elevatorMotorA.getSensorCollection().isRevLimitSwitchClosed())
 		{
 			elevatorMotorA.setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_LOOP, RobotMap.CONTROLLER_TIMEOUT_MS);
-			new Idle();
+			
+			// In all modes except auto we want to reset the hold position to here
+			if (Robot.runMode != Robot.RunMode.AUTO)
+			{
+				new Idle();
+			}
 		}
-		*/
+		
 		
 	}
 	
