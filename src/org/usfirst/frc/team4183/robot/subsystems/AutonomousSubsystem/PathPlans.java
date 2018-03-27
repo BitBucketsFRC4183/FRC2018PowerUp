@@ -110,7 +110,7 @@ public class PathPlans
     {
     		new Waypoint(0,         0,                Pathfinder.d2r(0)),
     		new Waypoint(0.864,     0.699-0.3048,     Pathfinder.d2r(45)),
-    		new Waypoint(2.317,     1.245-0.3048,     Pathfinder.d2r(0)),
+    		new Waypoint(2.317+0.6,     1.245-0.3048,     Pathfinder.d2r(0)),
     		//Adjust the final position of this
     };
     
@@ -431,7 +431,7 @@ public class PathPlans
 	    
 	//********
 	    leftStartMoveOnlyTrajectory = new RobotTrajectory("leftStartRightSwitchMoveOnly");
-	    leftStartMoveOnlyTrajectory.center = Pathfinder.generate(leftStartMoveOnlyPath, config);
+	    leftStartMoveOnlyTrajectory.center = Pathfinder.generate(leftStartMoveOnlyPath, config2);
 
 	    modifier = new TankModifier(leftStartMoveOnlyTrajectory.center).modify(RobotMap.inch2Meter(RobotMap.WHEEL_TRACK_INCHES));
 	    
@@ -441,7 +441,7 @@ public class PathPlans
 	    
 	 //********
 	    rightStartMoveOnlyTrajectory = new RobotTrajectory("rightStartLeftSwitchMoveOnly");
-	    rightStartMoveOnlyTrajectory.center = Pathfinder.generate(rightStartMoveOnlyPath, config);
+	    rightStartMoveOnlyTrajectory.center = Pathfinder.generate(rightStartMoveOnlyPath, config2);
 	    modifier = new TankModifier(rightStartMoveOnlyTrajectory.center).modify(RobotMap.inch2Meter(RobotMap.WHEEL_TRACK_INCHES));
 	    
 	    rightStartMoveOnlyTrajectory.left = modifier.getLeftTrajectory();
@@ -600,6 +600,7 @@ public class PathPlans
 				else
 				{
 					System.out.println("NO SOLUTION: FMS ERROR");
+					trajectory = PathPlans.leftStartMoveOnlyTrajectory;
 					// NOTE: If FMS messes up, we won't move
 					/// TODO: Consider Exchange?
 				} // end if switch primary on center starts

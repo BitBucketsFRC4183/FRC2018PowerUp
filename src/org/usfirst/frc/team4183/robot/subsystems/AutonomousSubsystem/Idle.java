@@ -1,11 +1,14 @@
 package org.usfirst.frc.team4183.robot.subsystems.AutonomousSubsystem;
 
 import org.usfirst.frc.team4183.robot.Robot;
+import org.usfirst.frc.team4183.robot.RobotMap;
 import org.usfirst.frc.team4183.robot.subsystems.DriveSubsystem.AlignLock;
 import org.usfirst.frc.team4183.robot.subsystems.DriveSubsystem.DriveProfile;
 import org.usfirst.frc.team4183.utils.CommandUtils;
+import org.usfirst.frc.team4183.utils.Positions.GenericPositions;
 import org.usfirst.frc.team4183.utils.RobotTrajectory;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
@@ -20,6 +23,7 @@ import edu.wpi.first.wpilibj.command.Command;
 public class Idle extends Command {
 
 	static int counter = 0;
+	Timer timeOutGameInfo = new Timer();
     public Idle() 
     {
     	requires( Robot.autonomousSubsystem);
@@ -30,6 +34,8 @@ public class Idle extends Command {
     protected void initialize() 
     {
     	System.out.println(this.getClass().getName() + " Auto Start" + " " + System.currentTimeMillis()/1000);
+    	timeOutGameInfo.reset();
+    	timeOutGameInfo.start();
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -42,24 +48,33 @@ public class Idle extends Command {
     {
     	if (Robot.runMode == Robot.RunMode.AUTO)
     	{
-    		++counter;
-    		if (counter == 1) 
+    		if (counter == 0) 
     		{
     			// Choose auto mode
     			switch (Robot.autonomousSubsystem.getAutoChoice())
     			{
     			case PLAY_GAME:
-        			AutoGameTasks game= new AutoGameTasks();
-        			game.start();
+    				if (timeOutGameInfo.get() < RobotMap.TIMEOUT_GAME_INFO_SEC && Robot.autonomousSubsystem.getSwitchPosition() == GenericPositions.UNKNOWN)
+    				{
+    					System.out.println("Waiting for Game Data");
+    				}
+    				else
+    				{
+    					AutoGameTasks game= new AutoGameTasks(timeOutGameInfo.get());
+    					game.start();
+    					++counter;
+    				}
     				break;
     			case MOVE_TURN_TEST:
     				AutoMoveTurnTest move_turn = new AutoMoveTurnTest();
     				move_turn.start();
+    				++counter;
     				break;
     			case DRIVE_PROFILE_TEST:
     			
     			case OFF:
 				default:
+					++counter;
 					break;
     			}
 

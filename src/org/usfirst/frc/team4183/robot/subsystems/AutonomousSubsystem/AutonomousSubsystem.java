@@ -60,9 +60,13 @@ public class AutonomousSubsystem extends BitBucketsSubsystem
 			{
 				return GenericPositions.LEFT;
 			}
-			else
+			else if (gameData.charAt(0) == 'R')
 			{
 				return GenericPositions.RIGHT;
+			}
+			else
+			{
+				return GenericPositions.UNKNOWN;
 			}
 		}
 		else
@@ -81,9 +85,13 @@ public class AutonomousSubsystem extends BitBucketsSubsystem
 			{
 				return GenericPositions.LEFT;
 			}
-			else
+			else if (gameData.charAt(1) == 'R')
 			{
 				return GenericPositions.RIGHT;
+			}
+			else
+			{
+				return GenericPositions.UNKNOWN;
 			}
 		}
 		else
@@ -96,16 +104,6 @@ public class AutonomousSubsystem extends BitBucketsSubsystem
     {
         //NO, not here. setDefaultCommand(new Idle());
     	//Create a single instance only when auto starts
-    }
-    
-    public void pressOuttakeButton()
-    {
-    	Robot.oi.sbtnOuttakeThroat.push();
-    }
-    
-    public void releaseOuttakeButton()
-    {
-    	Robot.oi.sbtnOuttakeThroat.release();
     }
 
 	@Override
