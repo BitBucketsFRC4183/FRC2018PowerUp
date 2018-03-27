@@ -110,7 +110,7 @@ public class PathPlans
     {
     		new Waypoint(0,         0,                Pathfinder.d2r(0)),
     		new Waypoint(0.864,     0.699-0.3048,     Pathfinder.d2r(45)),
-    		new Waypoint(2.317,     1.245-0.3048,     Pathfinder.d2r(0)),
+    		new Waypoint(2.317+0.6,     1.245-0.3048,     Pathfinder.d2r(0)),
     		//Adjust the final position of this
     };
     

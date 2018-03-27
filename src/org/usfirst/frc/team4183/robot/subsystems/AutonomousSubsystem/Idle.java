@@ -35,6 +35,7 @@ public class Idle extends Command {
     {
     	System.out.println(this.getClass().getName() + " Auto Start" + " " + System.currentTimeMillis()/1000);
     	timeOutGameInfo.reset();
+    	timeOutGameInfo.start();
     }
 
     // Called repeatedly when this Command is scheduled to run
