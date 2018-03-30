@@ -37,29 +37,29 @@ public class DownHold extends Command {
     protected boolean isFinished() {
     	if(Robot.runMode == Robot.RunMode.TEST) {
     		if(Robot.intakeSubsystem.getDiagnosticsFlag()) {
-    			return CommandUtils.stateChange(this, new Diagnostics());
+    			return CommandUtils.autoStateChange(this, new Diagnostics());
     		}
     		
     	}
     	else if (Robot.oi.btnIdle.get())
     	{
-    		return CommandUtils.stateChange(this, new Idle());
+    		return CommandUtils.autoStateChange(this, new Idle());
     	}
     	 else if (Robot.oi.btnUpIntake.get()) 
          { 
-           return CommandUtils.stateChange(this, new UpHold()); 
+           return CommandUtils.autoStateChange(this, new UpHold()); 
          } 
          else if (Robot.oi.btnOutIntake.get()) 
          { 
-           return CommandUtils.stateChange(this, new DownOut()); 
+           return CommandUtils.autoStateChange(this, new DownOut()); 
          }   
          else if (Robot.oi.btnInIntake.get()) 
          { 
-           return CommandUtils.stateChange(this, new DownIn()); 
+           return CommandUtils.autoStateChange(this, new DownIn()); 
          }
          else if (Robot.oi.btnLeftIntake.get())
          {
-        	 return CommandUtils.stateChange(this, new DownOscillate());
+        	 return CommandUtils.autoStateChange(this, new DownOscillate());
          }
     	return false;
     }

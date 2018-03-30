@@ -35,19 +35,19 @@ public class DownIn extends Command {
     protected boolean isFinished() {
       if (Robot.oi.btnOutIntake.get())
       {
-        return CommandUtils.stateChange(this, new ThroatPassOff());
+        return CommandUtils.autoStateChange(this, new ThroatPassOff());
       }
       else if (!Robot.oi.btnInIntake.get())
       {
-        return CommandUtils.stateChange(this, new DownHold());
+        return CommandUtils.autoStateChange(this, new DownHold());
       }
       else if (Robot.oi.btnUpIntake.get())
       {
-    	  return CommandUtils.stateChange(this, new UpHold());
+    	  return CommandUtils.autoStateChange(this, new UpHold());
       }
       else if (Robot.oi.btnIdle.get())
       {
-    	  return CommandUtils.stateChange(this, new Idle());
+    	  return CommandUtils.autoStateChange(this, new Idle());
       }
       
       return false;

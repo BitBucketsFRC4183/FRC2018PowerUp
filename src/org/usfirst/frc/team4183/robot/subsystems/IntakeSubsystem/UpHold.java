@@ -82,11 +82,11 @@ public class UpHold extends Command {
     protected boolean isFinished() {
       if (Robot.oi.btnInIntake.get())
       {
-        return CommandUtils.stateChange(this, new ThroatPassOff());
+        return CommandUtils.autoStateChange(this, new ThroatPassOff());
       }
       else if (Robot.oi.btnDownIntake.get())
       {
-        return CommandUtils.stateChange(this, new DownHold());
+        return CommandUtils.autoStateChange(this, new DownHold());
       }
       else if (Robot.oi.btnOutIntake.get() && !Robot.elevatorSubsystem.outputDangerZoneInfo())
       {
