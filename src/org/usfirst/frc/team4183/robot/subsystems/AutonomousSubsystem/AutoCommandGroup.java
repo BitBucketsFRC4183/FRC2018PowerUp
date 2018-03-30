@@ -1,5 +1,6 @@
 package org.usfirst.frc.team4183.robot.subsystems.AutonomousSubsystem;
 
+import org.usfirst.frc.team4183.robot.Robot;
 import org.usfirst.frc.team4183.robot.RobotMap;
 import org.usfirst.frc.team4183.robot.subsystems.DriveSubsystem.MoveBy;
 import org.usfirst.frc.team4183.robot.subsystems.DriveSubsystem.TurnBy;
@@ -21,26 +22,25 @@ public class AutoCommandGroup{
     	if(backup_first) 
     	{
         	parent.addSequential(new MoveBy(-backup_in, 2.0));
-
+    		parent.addSequential(new Reposition(ElevatorSubsystem.ElevatorPresets.BOTTOM.getNativeTicks()));
     	}
     	else if(!backup_first) 
     	{
-    		parent.addParallel(new MoveBy(-backup_in, 2.0));
+    		parent.addParallel(new Reposition(ElevatorSubsystem.ElevatorPresets.BOTTOM.getNativeTicks()));
+    		parent.addSequential(new MoveBy(-backup_in, 2.0));
     	}
-		parent.addSequential(new Reposition(ElevatorSubsystem.ElevatorPresets.BOTTOM.getNativeTicks()));
-		parent.addParallel(new org.usfirst.frc.team4183.robot.subsystems.ElevatorSubsystem.Idle());
 		parent.addParallel(new DownIn());
-		parent.addSequential(new TurnBy(turn_degree, 1.0)); 
-		parent.addSequential(new MoveBy(forward_in, 2.0));
-		parent.addSequential(new Delay(1000));
-		parent.addParallel(new DownHold());
-		parent.addSequential(new MoveBy(-forward_in, 2.0));
-		parent.addParallel(new UpHold());
-		parent.addSequential(new Delay(300));
-		parent.addSequential(new TurnBy(-turn_degree, 1.0));
-		parent.addParallel(new Reposition(elevator_position));
-		parent.addSequential(new MoveBy(backup_in + final_offset, 1.5));
-		parent.addSequential(new UpShoot(RobotMap.SHORT_SHOT_SEC));
+		parent.addSequential(new TurnBy(turn_degree, 2.0)); 
+//		parent.addSequential(new MoveBy(forward_in, 2.0, 0.7));
+//		parent.addSequential(new Delay(500));
+//		parent.addParallel(new DownHold());
+//		parent.addSequential(new MoveBy(-forward_in, 2.0));
+//		parent.addParallel(new UpHold());
+//		parent.addSequential(new Delay(300));
+//		parent.addSequential(new TurnBy(-turn_degree, 2.0));
+//		parent.addParallel(new Reposition(elevator_position));
+//		parent.addSequential(new MoveBy(backup_in + final_offset, 2.0));
+//		parent.addSequential(new UpShoot(RobotMap.SHORT_SHOT_SEC));
     	
     }
 }

@@ -205,6 +205,8 @@ public class Robot extends IterativeRobot {
 		initializePhysicalSubsystems();
 		teleopInitTime = System.currentTimeMillis();
 		
+//		Robot.driveSubsystem.setMotionVelocity(1.0);
+		
 	}
 	
 	/**

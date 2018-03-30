@@ -330,6 +330,14 @@ public class DriveSubsystem extends BitBucketsSubsystem
     {
     	return leftFrontMotor.getActiveTrajectoryPosition();
     }
+    
+    public void setMotionVelocity(double fraction_full_speed) 
+    {
+    	leftFrontMotor.configMotionCruiseVelocity((int)(fraction_full_speed * RobotMap.DRIVE_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS), 
+					                                    RobotMap.CONTROLLER_TIMEOUT_MS);
+    	rightFrontMotor.configMotionCruiseVelocity((int)(fraction_full_speed * RobotMap.DRIVE_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS), 
+    													RobotMap.CONTROLLER_TIMEOUT_MS);
+    }
         
     /// TODO: Should provide more control, see junk bot example for an enumerated
     /// selector that can be different per axis
