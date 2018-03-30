@@ -60,8 +60,8 @@ public class IntakeSubsystem extends BitBucketsSubsystem {
 		
 		setNeutral(NeutralMode.Coast);
 		
-		leftIntakeMotor.setInverted(true);
-		rightIntakeMotor.setInverted(false);
+		leftIntakeMotor.setInverted(false);
+		rightIntakeMotor.setInverted(true);
 		
 		throatMotorA.configNeutralDeadband(0.0, RobotMap.CONTROLLER_TIMEOUT_MS);
 		throatMotorB.configNeutralDeadband(0.0, RobotMap.CONTROLLER_TIMEOUT_MS);

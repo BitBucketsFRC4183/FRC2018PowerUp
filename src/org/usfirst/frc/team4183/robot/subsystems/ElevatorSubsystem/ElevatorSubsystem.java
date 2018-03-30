@@ -37,11 +37,11 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 	
 	private int test_elevator_ticks = 0;
 	
-	private int currentTicks = 0;
+	private int currentTicks;
 		
 	public static enum ElevatorPresets
 	{
-		BOTTOM(15), MIDDLE(30000), HIGH(62000), TOP(95000);
+		BOTTOM(1), MIDDLE(30000), HIGH(66000), TOP(93500);
 		//BOTTOM(100), MIDDLE(47500), HIGH(117000), TOP(150000);
 		
 		private int nativeTicks;
@@ -82,6 +82,9 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 	public ElevatorSubsystem()
 	{
 		this.setName("ElevatorSubsystem");
+		
+		currentTicks = ElevatorPresets.BOTTOM.getNativeTicks() - 1;
+		
 		elevatorMotorA = new TalonSRX(RobotMap.ELEVATOR_MOTOR_A_ID);
 		elevatorMotorA.setSensorPhase(RobotMap.ELEVATOR_MOTOR_SENSOR_PHASE);
 		elevatorMotorA.setInverted(RobotMap.ELEVATOR_MOTOR_INVERSION);
