@@ -22,6 +22,7 @@ public class DownIn extends Command {
     protected void initialize() 
     {
       Robot.intakeSubsystem.intakeDownPivet();
+      Robot.intakeSubsystem.setIntakeOnlySpeed(-RobotMap.INTAKE_MOTOR_PERCENT);
       System.out.println(this.getClass().getName() + " Start" + " " + System.currentTimeMillis()/1000);
       }
  

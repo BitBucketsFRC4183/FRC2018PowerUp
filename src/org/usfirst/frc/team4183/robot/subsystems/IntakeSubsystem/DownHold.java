@@ -23,6 +23,9 @@ public class DownHold extends Command {
     {
     	Robot.intakeSubsystem.disable();	// Turn everything off and close it
     	Robot.intakeSubsystem.intakeDownPivet();
+    	Robot.intakeSubsystem.setLeftThroatSpeed(RobotMap.THROAT_LEFT_HOLD_PERCENT);
+    	Robot.intakeSubsystem.setRightThroatSpeed(RobotMap.THROAT_RIGHT_HOLD_PERCENT);
+    	Robot.intakeSubsystem.setIntakeOnlySpeed(RobotMap.INTAKE_MOTOR_HOLD_PERCENT);
     	System.out.println(this.getClass().getName() + " Start" + " " + System.currentTimeMillis()/1000);
     	}
 

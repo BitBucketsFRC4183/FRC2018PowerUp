@@ -77,14 +77,14 @@ public class AutoGameTasks extends CommandGroup
 				addSequential(new UpShoot(0.3));
 				if(trajectory.name.toLowerCase().contains("switch")) {
 					if(trajectory.name.toLowerCase().contains("left")) {
-						AutoCommandGroup.SecondCubeGroup(this, -60.0, 52.0, 45.0, ElevatorSubsystem.ElevatorPresets.MIDDLE.getNativeTicks(), 3.0, false);
-						AutoCommandGroup.SecondCubeGroup(this, -60.0, 34.5, 37.5, ElevatorSubsystem.ElevatorPresets.MIDDLE.getNativeTicks(), 3.0, false);
+						AutoCommandGroup.SecondCubeGroup(this, 60.0, 52.0, 45.0, ElevatorSubsystem.ElevatorPresets.MIDDLE.getNativeTicks(), 3.0, false);
+						AutoCommandGroup.SecondCubeGroup(this, 60.0, 34.5, 37.5, ElevatorSubsystem.ElevatorPresets.MIDDLE.getNativeTicks(), 3.0, false);
 					}
 					
 					else if(trajectory.name.toLowerCase().contains("right"))// the right one
 					{
-						AutoCommandGroup.SecondCubeGroup(this, 60.0, 52.0, 45.0, ElevatorSubsystem.ElevatorPresets.MIDDLE.getNativeTicks(), 3.0, false);
-						AutoCommandGroup.SecondCubeGroup(this, 60.0, 34.5, 37.5, ElevatorSubsystem.ElevatorPresets.MIDDLE.getNativeTicks(), 3.0, false);
+						AutoCommandGroup.SecondCubeGroup(this, -60.0, 52.0, 45.0, ElevatorSubsystem.ElevatorPresets.MIDDLE.getNativeTicks(), 3.0, false);
+						AutoCommandGroup.SecondCubeGroup(this, -60.0, 34.5, 37.5, ElevatorSubsystem.ElevatorPresets.MIDDLE.getNativeTicks(), 3.0, false);
 					}
 				} 
 				else if(trajectory.name.toLowerCase().contains("scale")) {
