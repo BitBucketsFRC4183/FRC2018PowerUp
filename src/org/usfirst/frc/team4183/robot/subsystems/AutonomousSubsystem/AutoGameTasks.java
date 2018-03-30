@@ -79,7 +79,7 @@ public class AutoGameTasks extends CommandGroup
 			if (trajectory.name.toLowerCase().contains("scale"))
 			{
 				// Back up
-				addSequential(new MoveBy(-12.0,1.0));
+				addSequential(new MoveBy(-24.0,1.0));
 				addSequential(new Reposition(ElevatorSubsystem.ElevatorPresets.BOTTOM.getNativeTicks()));
 				// TODO: If a two cube auto is desired then we would add the details here.
 			}			

@@ -644,6 +644,11 @@ public class PathPlans
 					} // end if scale secondary on right side start
 				} // end if switch primary on right side start
 			} // end if switch primary on any side start
+			else 
+			{
+				System.out.println("Confused selecting switch");
+				trajectory = PathPlans.rightStartMoveOnlyTrajectory;
+			}
 			break;
 			
 		case SCALE:
@@ -719,35 +724,28 @@ public class PathPlans
 					} // end if switch position secondary choices on right side start
 				} // end if scale positions primary choices on right side start		
 			} // end if scale primary on either side start
+			else 
+			{
+				System.out.println("Confused starting scale");
+				trajectory = PathPlans.rightStartMoveOnlyTrajectory;
+			}
 			break;
 			
 		case EXCHANGE:
-			if (startingPositionChooser.getSelected() == StartingPosition.CENTER)
-			{
-				/// TODO:
-			}
-			else
-			{
-				System.out.println("DRIVER POSITION ERROR: Can only do exchange from center");
-			}
-			break;
-			
 		case CROSS_LINE: //Done purposely
+		default:
 			if (startingPositionChooser.getSelected() == StartingPosition.LEFT)
 			{
 				System.out.println("CROSSING LINE ON LEFT SIDE");
 				trajectory = PathPlans.leftStartMoveOnlyTrajectory;
 			}
-			else if (startingPositionChooser.getSelected() == StartingPosition.LEFT)
+			else
 			{
 				System.out.println("CROSSING LINE ON RIGHT SIDE");
 				trajectory = PathPlans.rightStartMoveOnlyTrajectory;
 			}
 			// else center and we don't move
 			/// TODO: Maybe we should, but better negotiation with alliance is prefered
-			break;
-		default:
-			System.out.println("RETURNING DRIVE FORWARD");
 			break;
 		}
 		

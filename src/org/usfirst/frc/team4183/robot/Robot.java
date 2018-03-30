@@ -110,8 +110,8 @@ public class Robot extends IterativeRobot {
 		
         /// TODO: Consider moving to vision subsystem
         UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-        camera.setResolution(640, 480);
-        camera.setFPS(120);				// May not work with all cameras
+        //camera.setResolution(640, 480);
+        //camera.setFPS(120);				// May not work with all cameras
 	}
 	
 	private void setSubsystemsDebug() 

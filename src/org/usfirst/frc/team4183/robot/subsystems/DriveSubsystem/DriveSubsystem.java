@@ -88,17 +88,17 @@ public class DriveSubsystem extends BitBucketsSubsystem
 			// Make joystick scale chooser and put it on the dashboard
     		forwardJoystickScaleChooser = new SendableChooser<JoystickScale>();
     		forwardJoystickScaleChooser.addDefault( "Linear",    JoystickScale.LINEAR);
-    		forwardJoystickScaleChooser.addObject(  "Square",    JoystickScale.SQUARE);
-    		forwardJoystickScaleChooser.addObject(  "Cube",      JoystickScale.CUBE);
-    		forwardJoystickScaleChooser.addObject(  "Sine",      JoystickScale.SINE);
+//    		forwardJoystickScaleChooser.addObject(  "Square",    JoystickScale.SQUARE);
+//    		forwardJoystickScaleChooser.addObject(  "Cube",      JoystickScale.CUBE);
+//    		forwardJoystickScaleChooser.addObject(  "Sine",      JoystickScale.SINE);
 			   
 			SmartDashboard.putData( "Forward Joystick Scale", forwardJoystickScaleChooser);    	
 
 			turnJoystickScaleChooser = new SendableChooser<JoystickScale>();
-			turnJoystickScaleChooser.addDefault( "Linear",    JoystickScale.LINEAR);
-			turnJoystickScaleChooser.addObject(  "Square",    JoystickScale.SQUARE);
-			turnJoystickScaleChooser.addObject(  "Cube",      JoystickScale.CUBE);
-			turnJoystickScaleChooser.addObject(  "Sine",      JoystickScale.SINE);
+			turnJoystickScaleChooser.addDefault(  "Square",    JoystickScale.SQUARE);
+//			turnJoystickScaleChooser.addObject( "Linear",    JoystickScale.LINEAR);
+//			turnJoystickScaleChooser.addObject(  "Cube",      JoystickScale.CUBE);
+//			turnJoystickScaleChooser.addObject(  "Sine",      JoystickScale.SINE);
 			   
 			SmartDashboard.putData( "Turn Joystick Scale", turnJoystickScaleChooser);    	
 			

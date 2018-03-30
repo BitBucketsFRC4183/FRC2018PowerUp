@@ -47,7 +47,8 @@ public class AutonomousSubsystem extends BitBucketsSubsystem
 	
 	public AutoChoices getAutoChoice()
 	{
-		return autoChooser.getSelected();
+//		return autoChooser.getSelected();
+		return AutoChoices.PLAY_GAME;
 	}
 		
 	public Positions.GenericPositions getSwitchPosition()
