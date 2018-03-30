@@ -162,7 +162,7 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void autonomousInit() {
-		
+		System.out.println("AUTO INIT");
 		runMode = RunMode.AUTO;
 		oi.setAutoMode();
 		
@@ -198,6 +198,7 @@ public class Robot extends IterativeRobot {
 	}
 	@Override
 	public void teleopInit() {
+		System.out.println("TELEOP INIT");
 		runMode = RunMode.TELEOP;
 		oi.setTeleopMode();
 		

@@ -34,7 +34,6 @@ public class MoveBy extends Command {
     {
     	// Keep enforcing the current position request until we get there
     	Robot.driveSubsystem.move_inches(distance_inches);
-    	System.out.println("DISTANCE REMAINING"+ distance_inches);
     }
 
     // Make this return true when this Command no longer needs to run execute()

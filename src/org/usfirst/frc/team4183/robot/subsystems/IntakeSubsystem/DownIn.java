@@ -38,7 +38,7 @@ public class DownIn extends Command {
       {
         return CommandUtils.autoStateChange(this, new ThroatPassOff());
       }
-      else if (!Robot.oi.btnInIntake.get())
+      else if (!Robot.oi.btnInIntake.get() && Robot.runMode != Robot.RunMode.AUTO)
       {
         return CommandUtils.autoStateChange(this, new DownHold());
       }

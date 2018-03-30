@@ -18,6 +18,7 @@ public class Reposition extends Command{
 	
 	private int requestedPosition = -1; // Use -1 as indicator for joystick
 	private double targetPathPerc = -1; // Use -1 as indicator for normal control (vs path sync)
+	private int targetPos = 0;
 	
 	public Reposition()
 	{
@@ -30,18 +31,19 @@ public class Reposition extends Command{
 		requires(Robot.elevatorSubsystem);
 		targetPathPerc = -1;		// Don't sync to drive profile path
 		requestedPosition = targetPosition;	// Go to this position
-		Robot.elevatorSubsystem.setCurrentTicks(targetPosition);	// Remember where we were told to go
+		targetPos = targetPosition;
 	}
 	public Reposition(int targetPosition, double targetPathPercentComp)
 	{
 		requires(Robot.elevatorSubsystem);
 		targetPathPerc = targetPathPercentComp;	// Sync to drive profile path
 		requestedPosition = targetPosition;		// Go to this position
-		Robot.elevatorSubsystem.setCurrentTicks(targetPosition);	// Remember where we were told to go
+		targetPos = targetPosition;
 	}
 	
 	public void initialize()
 	{
+		Robot.elevatorSubsystem.setCurrentTicks(targetPos);	// Remember where we were told to go
 		System.out.println(this.getClass().getName() + " Start" + " " + System.currentTimeMillis()/1000);
 	}
 	

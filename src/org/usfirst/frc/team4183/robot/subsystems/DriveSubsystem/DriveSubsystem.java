@@ -734,7 +734,6 @@ public class DriveSubsystem extends BitBucketsSubsystem
 		int ticks = (int)inchesToNativeTicks(distance_inches);
 		int errorL = (int) Math.abs(ticks - leftFrontMotor.getSelectedSensorPosition(RobotMap.PRIMARY_PID_LOOP));
 		int errorR = (int) Math.abs(ticks - rightFrontMotor.getSelectedSensorPosition(RobotMap.PRIMARY_PID_LOOP));
-		System.out.printf("%d %d\n", errorL, errorR);
 		return (errorL  < RobotMap.DRIVE_MOTOR_MAX_CLOSED_LOOP_ERROR_TICKS) &&
 			   (errorR < RobotMap.DRIVE_MOTOR_MAX_CLOSED_LOOP_ERROR_TICKS);
 	}
