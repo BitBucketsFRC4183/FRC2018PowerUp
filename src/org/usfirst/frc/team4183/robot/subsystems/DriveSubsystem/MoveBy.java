@@ -13,6 +13,7 @@ public class MoveBy extends Command {
 
 	private double timeout_sec;
 	private double distance_inches;
+	private double percent_velocity;
 	
     public MoveBy(double inches, double aTimeout_sec) 
     {
@@ -20,6 +21,16 @@ public class MoveBy extends Command {
     	
     	distance_inches = inches;
     	timeout_sec = aTimeout_sec;
+    	percent_velocity = 1.0;
+    }
+    
+    public MoveBy(double inches, double aTimeout_sec, double percent_speed) 
+    {
+    	requires(Robot.driveSubsystem);
+    	
+    	distance_inches = inches;
+    	timeout_sec = aTimeout_sec;
+    	percent_velocity = percent_speed;
     }
 
     // Called just before this Command runs the first time
@@ -27,14 +38,16 @@ public class MoveBy extends Command {
     {
     	System.out.println(this.getClass().getName() + " Start" + " " + System.currentTimeMillis()/1000);
     	Robot.driveSubsystem.resetMotion();
+		Robot.driveSubsystem.setMotionVelocity(percent_velocity);
+
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() 
     {
+    	System.out.println("Target: " + distance_inches + "\tCurrent: " + Robot.driveSubsystem.getLeftNativeUnits() + " \t" + Robot.driveSubsystem.getRightNativeUnits());
     	// Keep enforcing the current position request until we get there
     	Robot.driveSubsystem.move_inches(distance_inches);
-    	System.out.println("DISTANCE REMAINING"+ distance_inches);
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -45,7 +58,7 @@ public class MoveBy extends Command {
     	
     	if (timeout || Robot.driveSubsystem.isMoveComplete(distance_inches)) 
     	{
-    		
+    		Robot.driveSubsystem.setMotionVelocity(1.0);
     		return CommandUtils.autoStateChange(this, new Idle());
     	}
     	

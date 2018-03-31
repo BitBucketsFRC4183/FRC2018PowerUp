@@ -33,8 +33,11 @@ public class TurnBy extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() 
     {
-    	// Keep enforcing the current position request until we get there
+    	System.out.println("Target: " + angle_deg + "\tCurrent: " + Robot.driveSubsystem.getLeftNativeUnits() + " \t" + Robot.driveSubsystem.getRightNativeUnits());
     	Robot.driveSubsystem.turn_degrees(angle_deg);
+
+    	// Keep enforcing the current position request until we get there
+    	
     }
 
     // Make this return true when this Command no longer needs to run execute()

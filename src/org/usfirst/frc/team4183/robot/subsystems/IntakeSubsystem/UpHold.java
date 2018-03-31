@@ -9,6 +9,7 @@ import org.usfirst.frc.team4183.utils.CommandUtils;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  
 /**
  *
@@ -64,7 +65,7 @@ public class UpHold extends Command {
     	{
     		if (Robot.elevatorSubsystem.getCurrentSetTicks() > ElevatorSubsystem.ElevatorPresets.BOTTOM.getNativeTicks())
     		{
-    			System.out.println("Entering intake assist block");
+
     			Robot.intakeSubsystem.setIntakeOnlySpeed(RobotMap.INTAKE_MOTOR_ASSIST_PERCENT);
     			//Robot.intakeSubsystem.setIntakeMotorsToSpeed(-RobotMap.INTAKE_MOTOR_HOLD_PERCENT, -RobotMap.INTAKE_MOTOR_HOLD_PERCENT);
     		}
@@ -82,11 +83,11 @@ public class UpHold extends Command {
     protected boolean isFinished() {
       if (Robot.oi.btnInIntake.get())
       {
-        return CommandUtils.stateChange(this, new ThroatPassOff());
+        return CommandUtils.autoStateChange(this, new ThroatPassOff());
       }
       else if (Robot.oi.btnDownIntake.get())
       {
-        return CommandUtils.stateChange(this, new DownHold());
+        return CommandUtils.autoStateChange(this, new DownHold());
       }
       else if (Robot.oi.btnOutIntake.get() && !Robot.elevatorSubsystem.outputDangerZoneInfo())
       {

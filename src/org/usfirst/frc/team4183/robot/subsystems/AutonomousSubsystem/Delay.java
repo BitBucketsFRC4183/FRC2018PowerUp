@@ -23,7 +23,7 @@ public class Delay extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	System.out.println(this.getClass().getSimpleName());
+		System.out.println(this.getClass().getName() + " Start" + " " + System.currentTimeMillis()/1000);
     }
 
     // Called repeatedly when this Command is scheduled to run

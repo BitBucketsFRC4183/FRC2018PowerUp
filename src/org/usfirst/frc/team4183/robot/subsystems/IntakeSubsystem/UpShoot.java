@@ -47,15 +47,15 @@ public class UpShoot extends Command {
       {
 	      if (!Robot.oi.btnOutIntake.get())
 	      {
-	        return CommandUtils.stateChange(this, new UpHold());
+	        return CommandUtils.autoStateChange(this, new UpHold());
 	      }
 	      if (Robot.oi.btnDownIntake.get())
 	      {
-	        return CommandUtils.stateChange(this, new DownHold());
+	        return CommandUtils.autoStateChange(this, new DownHold());
 	      }
 	      else if (Robot.oi.btnIdle.get())
 	      {
-	    	  return CommandUtils.stateChange(this, new Idle());
+	    	  return CommandUtils.autoStateChange(this, new Idle());
 	      }
       }
       else

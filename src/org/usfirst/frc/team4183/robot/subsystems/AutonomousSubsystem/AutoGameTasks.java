@@ -6,7 +6,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team4183.utils.*;
 import org.usfirst.frc.team4183.robot.subsystems.DriveSubsystem.*;
 import org.usfirst.frc.team4183.robot.subsystems.ElevatorSubsystem.ElevatorSubsystem;
+import org.usfirst.frc.team4183.robot.subsystems.ElevatorSubsystem.ElevatorSubsystem.ElevatorPresets;
 import org.usfirst.frc.team4183.robot.subsystems.ElevatorSubsystem.Reposition;
+import org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem.DownHold;
+import org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem.DownIn;
 import org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem.UpHold;
 import org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem.UpShoot;
 /**
@@ -72,17 +75,39 @@ public class AutoGameTasks extends CommandGroup
 			// Trajectories named "MoveOnly" or similar indicate that we should NOT eject the cube
 			if (!trajectory.name.toLowerCase().contains("moveonly"))
 			{
-				addSequential(new UpShoot(1.0));
-				addParallel(new org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem.Idle());
-			}
+				addSequential(new UpShoot(0.5));
+				if(trajectory.name.toLowerCase().contains("switch")) {
+					if(trajectory.name.toLowerCase().contains("left")) {
+						AutoCommandGroup.SecondCubeGroup(this, 60.0, 52.0, 51.0/*45.0*/, ElevatorSubsystem.ElevatorPresets.MIDDLE.getNativeTicks(), 3.0, false);
+//						AutoCommandGroup.SecondCubeGroup(this, 60.0, 34.5, 43.5/*37.5*/, ElevatorSubsystem.ElevatorPresets.MIDDLE.getNativeTicks(), 3.0, false);
+					}
+					
+					else if(trajectory.name.toLowerCase().contains("right"))// the right one
+					{
+						AutoCommandGroup.SecondCubeGroup(this, -60.0, 52.0, 45.0, ElevatorSubsystem.ElevatorPresets.MIDDLE.getNativeTicks(), 3.0, false);
+//						AutoCommandGroup.SecondCubeGroup(this, -60.0, 34.5, 37.5, ElevatorSubsystem.ElevatorPresets.MIDDLE.getNativeTicks(), 3.0, false);
+					}
+				} 
+				else if(trajectory.name.toLowerCase().contains("scale")) {
+					addSequential(new MoveBy(-24.0, 2.0));
+					addSequential(new Reposition(ElevatorPresets.BOTTOM.getNativeTicks()));
+//				
+					if(trajectory.name.toLowerCase().contains("left")) {
+//						AutoCommandGroup.SecondCubeGroup(this, 104.183, 24.0, 59.0, ElevatorSubsystem.ElevatorPresets.TOP.getNativeTicks(), 0.0, true);
+//						AutoCommandGroup.SecondCubeGroup(this,      88, 24.0, 76.5, ElevatorSubsystem.ElevatorPresets.TOP.getNativeTicks(), 0.0, true);
+					}
+					
+					else if(trajectory.name.toLowerCase().contains("right"))// the right one
+					{
+//						AutoCommandGroup.SecondCubeGroup(this, -104.183, 24.0, 59.0, ElevatorSubsystem.ElevatorPresets.TOP.getNativeTicks(), 0.0, true);
+//						AutoCommandGroup.SecondCubeGroup(this,    -88.0, 24.0, 76.5, ElevatorSubsystem.ElevatorPresets.TOP.getNativeTicks(), 0.0, true);
+					}
+				}
 
-			if (trajectory.name.toLowerCase().contains("scale"))
-			{
-				// Back up
-				addSequential(new MoveBy(-24.0,1.0));
-				addSequential(new Reposition(ElevatorSubsystem.ElevatorPresets.BOTTOM.getNativeTicks()));
-				// TODO: If a two cube auto is desired then we would add the details here.
-			}			
+				addParallel(new org.usfirst.frc.team4183.robot.subsystems.IntakeSubsystem.Idle());
+				
+			}
+		
 		}
 		
 		// Be explicit about getting the intake back into idle

@@ -22,6 +22,7 @@ public class DownIn extends Command {
     protected void initialize() 
     {
       Robot.intakeSubsystem.intakeDownPivet();
+      Robot.intakeSubsystem.setIntakeOnlySpeed(-RobotMap.INTAKE_MOTOR_PERCENT);
       System.out.println(this.getClass().getName() + " Start" + " " + System.currentTimeMillis()/1000);
       }
  
@@ -35,19 +36,19 @@ public class DownIn extends Command {
     protected boolean isFinished() {
       if (Robot.oi.btnOutIntake.get())
       {
-        return CommandUtils.stateChange(this, new ThroatPassOff());
+        return CommandUtils.autoStateChange(this, new ThroatPassOff());
       }
-      else if (!Robot.oi.btnInIntake.get())
+      else if (!Robot.oi.btnInIntake.get() && Robot.runMode != Robot.RunMode.AUTO)
       {
-        return CommandUtils.stateChange(this, new DownHold());
+        return CommandUtils.autoStateChange(this, new DownHold());
       }
       else if (Robot.oi.btnUpIntake.get())
       {
-    	  return CommandUtils.stateChange(this, new UpHold());
+    	  return CommandUtils.autoStateChange(this, new UpHold());
       }
       else if (Robot.oi.btnIdle.get())
       {
-    	  return CommandUtils.stateChange(this, new Idle());
+    	  return CommandUtils.autoStateChange(this, new Idle());
       }
       
       return false;

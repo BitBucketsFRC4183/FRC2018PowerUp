@@ -330,6 +330,14 @@ public class DriveSubsystem extends BitBucketsSubsystem
     {
     	return leftFrontMotor.getActiveTrajectoryPosition();
     }
+    
+    public void setMotionVelocity(double fraction_full_speed) 
+    {
+    	leftFrontMotor.configMotionCruiseVelocity((int)(fraction_full_speed * RobotMap.DRIVE_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS), 
+					                                    RobotMap.CONTROLLER_TIMEOUT_MS);
+    	rightFrontMotor.configMotionCruiseVelocity((int)(fraction_full_speed * RobotMap.DRIVE_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS), 
+    													RobotMap.CONTROLLER_TIMEOUT_MS);
+    }
         
     /// TODO: Should provide more control, see junk bot example for an enumerated
     /// selector that can be different per axis
@@ -734,7 +742,6 @@ public class DriveSubsystem extends BitBucketsSubsystem
 		int ticks = (int)inchesToNativeTicks(distance_inches);
 		int errorL = (int) Math.abs(ticks - leftFrontMotor.getSelectedSensorPosition(RobotMap.PRIMARY_PID_LOOP));
 		int errorR = (int) Math.abs(ticks - rightFrontMotor.getSelectedSensorPosition(RobotMap.PRIMARY_PID_LOOP));
-		System.out.printf("%d %d\n", errorL, errorR);
 		return (errorL  < RobotMap.DRIVE_MOTOR_MAX_CLOSED_LOOP_ERROR_TICKS) &&
 			   (errorR < RobotMap.DRIVE_MOTOR_MAX_CLOSED_LOOP_ERROR_TICKS);
 	}
