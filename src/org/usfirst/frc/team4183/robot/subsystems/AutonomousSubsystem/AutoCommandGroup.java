@@ -36,11 +36,11 @@ public class AutoCommandGroup{
 //		parent.addParallel(new DownHold());
 //		parent.addSequential(new MoveBy(-forward_in, 2.0));
 //		parent.addParallel(new UpHold());
-//		parent.addSequential(new Delay(300));
+//		parent.addSequential(new Delay(500));
 //		parent.addSequential(new TurnBy(-turn_degree, 2.0));
-//		parent.addParallel(new Reposition(elevator_position));
-//		parent.addSequential(new MoveBy(backup_in + final_offset, 2.0));
-//		parent.addSequential(new UpShoot(RobotMap.SHORT_SHOT_SEC));
+		//parent.addParallel(new Reposition(elevator_position));
+		//parent.addSequential(new MoveBy(backup_in + final_offset, 2.0));
+		//parent.addSequential(new UpShoot(RobotMap.SHORT_SHOT_SEC));
     	
     }
 }
