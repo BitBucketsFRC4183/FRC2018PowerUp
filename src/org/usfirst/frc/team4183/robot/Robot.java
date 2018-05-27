@@ -46,7 +46,7 @@ public class Robot extends IterativeRobot {
 	
 
 	// All robots will have these subsystems
-	// Other may be optional or interchangable
+	// Other may be optional or interchangeable
 	public static ClimberSubsystem climberSubsystem;
 	public static DriveSubsystem driveSubsystem;
 	public static IntakeSubsystem intakeSubsystem;
