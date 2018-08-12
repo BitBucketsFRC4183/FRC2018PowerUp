@@ -370,7 +370,7 @@ public class DriveSubsystem extends BitBucketsSubsystem
 		fwdStick = forwardJoystickScaleChooser.getSelected().rescale(fwdStick);
 		turnStick = turnJoystickScaleChooser.getSelected().rescale(turnStick);
 		
-		if(!Robot.oi.btnLowSensitiveDrive.get()) 
+		if(Robot.oi.btnLowSensitiveDrive.get()) 
 		{
 			fwdStick *= LOW_SENS_GAIN;
 			turnStick *= LOW_SENS_GAIN;
