@@ -117,6 +117,19 @@ public class Reposition extends Command{
 		 
 		double currPos = Robot.elevatorSubsystem.getElevatorNativeUnits();
 		
+		double rightRampAxisValue= Robot.oi.rightRampAxis.get();
+		boolean highcurrent= Robot.elevatorSubsystem.getElevatorCurrent()>RobotMap.ELEVATOR_MAX_DOWN_CURRENT;
+		boolean manualMode=false;
+		if(requestedPosition==-1) manualMode=true;
+		boolean reachedPosition = Robot.elevatorSubsystem.isMoveComplete(requestedPosition);
+		
+		SmartDashboard.putNumber("right Ramp Axis value", rightRampAxisValue);
+		SmartDashboard.putBoolean("Exceeding Max Current Value", highcurrent);
+		SmartDashboard.putBoolean("Manual Mode", manualMode);
+		SmartDashboard.putBoolean("Reached Position",reachedPosition);
+
+		
+		
 		if (((requestedPosition == -1) && 	// Manual and inside deadband on joystick
 			 (Math.abs(Robot.oi.rightRampAxis.get()) < .06)) || 
 			Robot.oi.btnIdle.get() || 
