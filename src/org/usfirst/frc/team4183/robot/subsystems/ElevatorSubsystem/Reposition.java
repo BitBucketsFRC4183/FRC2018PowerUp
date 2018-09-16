@@ -118,7 +118,7 @@ public class Reposition extends Command{
 		double currPos = Robot.elevatorSubsystem.getElevatorNativeUnits();
 		
 		double elevatorJoystickValue= Robot.oi.elevatorJoystick.get();
-		boolean highcurrent= Robot.elevatorSubsystem.getElevatorCurrent()>RobotMap.ELEVATOR_MAX_DOWN_CURRENT;
+		boolean highcurrent= Robot.elevatorSubsystem.getElevatorCurrent()>RobotMap.ELEVATOR_MAX_CURRENT;
 		boolean manualMode=false;
 		if(requestedPosition==-1) manualMode=true;
 		boolean reachedPosition = Robot.elevatorSubsystem.isMoveComplete(requestedPosition);
@@ -133,7 +133,7 @@ public class Reposition extends Command{
 		if (((requestedPosition == -1) && 	// Manual and inside deadband on joystick
 			 (Math.abs(Robot.oi.elevatorJoystick.get()) < RobotMap.ELEVATOR_JOYSTICK_DEADBAND)) || 
 			Robot.oi.btnIdle.get() || 
-			((Robot.elevatorSubsystem.getElevatorCurrent() > RobotMap.ELEVATOR_MAX_DOWN_CURRENT) && // Current too high and going down manually
+			((Robot.elevatorSubsystem.getElevatorCurrent() > RobotMap.ELEVATOR_MAX_CURRENT) && // Current too high and going down manually
 			 (Robot.oi.elevatorJoystick.get() < 0)) ||
 			((requestedPosition != -1) && 					// Specific position and done
 			 Robot.elevatorSubsystem.isMoveComplete(requestedPosition)) 

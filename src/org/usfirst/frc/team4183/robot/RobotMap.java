@@ -234,7 +234,7 @@ public class RobotMap
    		public static int    driveMotorIZone = 0;               // Read up on what this does
    		
    	/* ELEVATOR SUBSYSTEM */
-   		public static final double ELEVATOR_MAX_DOWN_CURRENT 		= 40;
+   		public static final double ELEVATOR_MAX_CURRENT 		= 40;
    		public static final double ELEVATOR_MOTOR_NEUTRAL_DEADBAND  = 0.000;
    		public static final int ELEVATOR_POSITION_TOLERANCE_NATIVE_TICKS = (int) (ELEVATOR_POSITION_TOLERANCE_INCH / ELEVATOR_INCHES_PER_NATIVE_TICKS); //50;	/// TODO: Convert from inches or meter tolerance
 
