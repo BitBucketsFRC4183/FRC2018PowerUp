@@ -186,6 +186,7 @@ public class RobotMap
    		public static final int    ELEVATOR_MOTOR_MOTION_ACCELERATION_NATIVE_TICKS = (int)(ELEVATOR_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS);
    		public static final double ELEVATOR_INCHES_PER_NATIVE_TICKS = ELEVATOR_SPROCKET_CIRCUMFERENCE_INCHES / ELEVATOR_MOTOR_NATIVE_TICKS_PER_REV;
    		public static final double ELEVATOR_POSITION_TOLERANCE_INCH = .25;
+   		public static final double ELEVATOR_JOYSTICK_DEADBAND=.15;
    		
    	/* RAMP SUBSYSTEM */
    		
@@ -233,7 +234,7 @@ public class RobotMap
    		public static int    driveMotorIZone = 0;               // Read up on what this does
    		
    	/* ELEVATOR SUBSYSTEM */
-   		public static final double ELEVATOR_MAX_DOWN_CURRENT 		= 20;
+   		public static final double ELEVATOR_MAX_DOWN_CURRENT 		= 40;
    		public static final double ELEVATOR_MOTOR_NEUTRAL_DEADBAND  = 0.000;
    		public static final int ELEVATOR_POSITION_TOLERANCE_NATIVE_TICKS = (int) (ELEVATOR_POSITION_TOLERANCE_INCH / ELEVATOR_INCHES_PER_NATIVE_TICKS); //50;	/// TODO: Convert from inches or meter tolerance
 

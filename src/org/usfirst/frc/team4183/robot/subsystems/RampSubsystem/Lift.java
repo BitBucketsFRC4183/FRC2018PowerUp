@@ -18,12 +18,12 @@ public class Lift extends Command{
 	protected void execute()
 	{
 		Robot.oi.btnDriveLock.push();
-		Robot.rampSubsystem.setRampSpeed(Robot.oi.leftRampAxis.get(), Robot.oi.rightRampAxis.get());
+		Robot.rampSubsystem.setRampSpeed(Robot.oi.leftRampAxis.get(), Robot.oi.elevatorJoystick.get());
 	}
 	
 	@Override
 	protected boolean isFinished() {
-		if (Robot.oi.leftRampAxis.get() == 0 || Robot.oi.rightRampAxis.get() == 0)
+		if (Robot.oi.leftRampAxis.get() == 0 || Robot.oi.elevatorJoystick.get() == 0)
 		{
 			return CommandUtils.stateChange(this, new Deployed());
 		}

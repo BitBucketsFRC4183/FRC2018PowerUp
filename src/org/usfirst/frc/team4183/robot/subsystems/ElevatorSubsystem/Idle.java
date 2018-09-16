@@ -1,6 +1,7 @@
 package org.usfirst.frc.team4183.robot.subsystems.ElevatorSubsystem;
 
 import org.usfirst.frc.team4183.robot.Robot;
+import org.usfirst.frc.team4183.robot.RobotMap;
 import org.usfirst.frc.team4183.utils.CommandUtils;
 import org.usfirst.frc.team4183.robot.subsystems.ElevatorSubsystem.ElevatorSubsystem.ElevatorPresets;
 
@@ -42,7 +43,7 @@ public class Idle extends Command{
 			}
 		}
 		
-		else if (Math.abs(Robot.oi.rightRampAxis.get()) > .06)		/// TODO: Need comment here explaining that sharing joytick!
+		else if (Math.abs(Robot.oi.elevatorJoystick.get()) > RobotMap.ELEVATOR_JOYSTICK_DEADBAND)		/// TODO: Need comment here explaining that sharing joytick!
 		{														/// TODO: May want two instances with different names and put comment at definition
 			return CommandUtils.stateChange(this, new Reposition());
 		}

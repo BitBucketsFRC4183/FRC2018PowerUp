@@ -67,7 +67,7 @@ public class OI {
 	
 	//Ramp and Elevator will share the left Joystick Y axis
 	public final LogicalAxis leftRampAxis = new ModalAxis(operatorController.aLeftY);
-	public final LogicalAxis rightRampAxis = new ModalAxis(operatorController.aRightY);
+	public final LogicalAxis elevatorJoystick = new ModalAxis(operatorController.aRightY);
 	
 	
 	

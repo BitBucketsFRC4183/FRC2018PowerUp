@@ -63,7 +63,7 @@ public class Reposition extends Command{
 			double currPos = Robot.elevatorSubsystem.getElevatorNativeUnits();
 			boolean dangerZone = (currPos < RobotMap.ELEVATOR_DANGER_ZONE);
 			
-			double cmd = Robot.oi.rightRampAxis.get();
+			double cmd = Robot.oi.elevatorJoystick.get();
 			
 			boolean restrictCmd = (dangerZone && (cmd < 0));
 			
@@ -117,13 +117,13 @@ public class Reposition extends Command{
 		 
 		double currPos = Robot.elevatorSubsystem.getElevatorNativeUnits();
 		
-		double rightRampAxisValue= Robot.oi.rightRampAxis.get();
+		double elevatorJoystickValue= Robot.oi.elevatorJoystick.get();
 		boolean highcurrent= Robot.elevatorSubsystem.getElevatorCurrent()>RobotMap.ELEVATOR_MAX_DOWN_CURRENT;
 		boolean manualMode=false;
 		if(requestedPosition==-1) manualMode=true;
 		boolean reachedPosition = Robot.elevatorSubsystem.isMoveComplete(requestedPosition);
 		
-		SmartDashboard.putNumber("right Ramp Axis value", rightRampAxisValue);
+		SmartDashboard.putNumber("Elevator Joystick Value", elevatorJoystickValue);
 		SmartDashboard.putBoolean("Exceeding Max Current Value", highcurrent);
 		SmartDashboard.putBoolean("Manual Mode", manualMode);
 		SmartDashboard.putBoolean("Reached Position",reachedPosition);
@@ -131,10 +131,10 @@ public class Reposition extends Command{
 		
 		
 		if (((requestedPosition == -1) && 	// Manual and inside deadband on joystick
-			 (Math.abs(Robot.oi.rightRampAxis.get()) < .06)) || 
+			 (Math.abs(Robot.oi.elevatorJoystick.get()) < RobotMap.ELEVATOR_JOYSTICK_DEADBAND)) || 
 			Robot.oi.btnIdle.get() || 
 			((Robot.elevatorSubsystem.getElevatorCurrent() > RobotMap.ELEVATOR_MAX_DOWN_CURRENT) && // Current too high and going down manually
-			 (Robot.oi.rightRampAxis.get() < 0)) ||
+			 (Robot.oi.elevatorJoystick.get() < 0)) ||
 			((requestedPosition != -1) && 					// Specific position and done
 			 Robot.elevatorSubsystem.isMoveComplete(requestedPosition)) 
 			)

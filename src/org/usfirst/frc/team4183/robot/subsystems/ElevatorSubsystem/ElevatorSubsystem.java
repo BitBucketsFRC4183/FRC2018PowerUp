@@ -156,7 +156,7 @@ public class ElevatorSubsystem extends BitBucketsSubsystem {
 	public boolean outputDangerZoneInfo()
 	{
 		double currPos = Robot.elevatorSubsystem.getElevatorNativeUnits();
-		double cmd = Robot.oi.rightRampAxis.get();
+		double cmd = Robot.oi.elevatorJoystick.get();
 		boolean dangerZone = (currPos < RobotMap.ELEVATOR_DANGER_ZONE);
 		
 		boolean restrictCmd = (dangerZone && (cmd < 0));

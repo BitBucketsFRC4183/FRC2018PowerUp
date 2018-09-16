@@ -25,7 +25,7 @@ public class Deployed extends Command {
 	
 	@Override
 	protected boolean isFinished() {
-		if (Robot.oi.leftRampAxis.get() != 0 || Robot.oi.rightRampAxis.get() != 0)
+		if (Robot.oi.leftRampAxis.get() != 0 || Robot.oi.elevatorJoystick.get() != 0)
 		{
 			return CommandUtils.stateChange(this, new Lift());
 		}
