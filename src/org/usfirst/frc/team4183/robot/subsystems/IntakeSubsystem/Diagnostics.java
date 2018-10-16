@@ -37,7 +37,7 @@ public class Diagnostics extends Command {
     protected boolean isFinished() {
     	if(diagInitLoops >= Robot.intakeSubsystem.DIAG_LOOPS_RUN) {
     		Robot.intakeSubsystem.diagnosticsCheck();
-    		return CommandUtils.stateChange(this, new DownHold());
+    		return CommandUtils.stateChange(this, new Idle());
     	}
         return false;
     }

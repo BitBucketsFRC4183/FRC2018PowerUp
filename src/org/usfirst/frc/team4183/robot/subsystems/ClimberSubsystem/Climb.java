@@ -24,8 +24,9 @@ public class Climb extends Command {
     protected void execute() {
     	double x = Robot.oi.leftRampAxis.get();
     	x *= x;
-    	if (x > 0.06)
+    	if (x > 0.15)
     	{
+    		if(Robot.oi.reverseClimb.get()) x*=-1;
     		Robot.climberSubsystem.setClimberPower(x);
     	}
     	else
