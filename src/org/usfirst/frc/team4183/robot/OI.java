@@ -42,6 +42,8 @@ public class OI {
 	public final LogicalButton btnRightIntake = new ModalButton(operatorController.bPovRight);
 	public final LogicalButton btnLeftIntake = new ModalButton(operatorController.bPovLeft);
 
+	public final LogicalButton climberOverride = new ModalButton(operatorController.bShare);
+	public final LogicalButton reverseClimb = new ModalButton(operatorController.bOptions);
 	
 	public final LogicalButton btnIdle = new ModalButton(operatorController.bTrackpad);
 	

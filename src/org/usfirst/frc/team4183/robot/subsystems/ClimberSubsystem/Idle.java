@@ -29,7 +29,7 @@ public class Idle extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	if(Robot.getTeleopTimeRemaining() <= 30.00 || SmartDashboard.getNumber("ClimberTimeOverride", 0) == 141367) {
+    	if(Robot.getTeleopTimeRemaining() <= 30.00|| Robot.oi.climberOverride.get()) {
     		return CommandUtils.stateChange(this, new Climb());
     	}
         return false;
